@@ -5,4 +5,4 @@ layout: post
 path: "/zubachev/"
 ---
 
-<div align="center"><img src="./layout.png"></div
+<div align="center"><img src="./layout.png"></div>
