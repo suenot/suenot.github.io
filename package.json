@@ -1,5 +1,5 @@
 {
-  "name": "Eugen Soloviov blog",
+  "name": "eugen-soloviov-blog",
   "private": true,
   "scripts": {
     "build": "gridsome build",
