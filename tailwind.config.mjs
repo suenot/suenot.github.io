@@ -12,7 +12,8 @@ export default {
         'muted': '#6B7280',
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        mono: ['SF Mono', 'Menlo', 'Cascadia Code', 'Consolas', 'Ubuntu Mono', 'monospace'],
       },
     },
   },
