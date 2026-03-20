@@ -1,0 +1,36 @@
+---
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#tech', label: 'Tech' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0A0A14]/80 backdrop-blur-md border-b border-white/5">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" class="font-mono text-violet-400 font-semibold text-sm tracking-wider">
+      suenot<span class="text-gray-600">.com</span>
+    </a>
+    <ul class="hidden sm:flex items-center gap-6">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a
+      href="https://github.com/suenot"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-sm text-violet-400 hover:text-violet-300 transition-colors font-mono"
+    >
+      github →
+    </a>
+  </div>
+</nav>

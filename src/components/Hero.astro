@@ -1,0 +1,91 @@
+---
+// Fetch GitHub stats at build time
+let repoCount = '450+';
+let starCount = '650+';
+
+try {
+  const userRes = await fetch('https://api.github.com/users/suenot', {
+    headers: { 'Accept': 'application/vnd.github.v3+json' }
+  });
+  const userData = await userRes.json();
+  repoCount = String(userData.public_repos ?? '450+');
+
+  // Paginate through all repos to sum stars
+  let totalStars = 0;
+  let page = 1;
+  while (true) {
+    const reposRes = await fetch(
+      `https://api.github.com/users/suenot/repos?per_page=100&page=${page}&type=owner`,
+      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+    );
+    const repos: { stargazers_count: number; fork: boolean }[] = await reposRes.json();
+    if (!Array.isArray(repos) || repos.length === 0) break;
+    totalStars += repos.filter(r => !r.fork).reduce((s, r) => s + r.stargazers_count, 0);
+    if (repos.length < 100) break;
+    page++;
+  }
+  starCount = totalStars > 0 ? String(totalStars) : '650+';
+} catch {
+  // fallback to hardcoded values
+}
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+  <!-- Background gradient -->
+  <div class="absolute inset-0 bg-gradient-to-br from-violet-950/30 via-transparent to-blue-950/20 pointer-events-none"></div>
+  <!-- Grid pattern -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 64px 64px;"></div>
+
+  <div class="relative max-w-5xl mx-auto px-6 text-center">
+    <!-- Status badge -->
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-mono mb-8">
+      <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+      Co-founder & CTO @ Reforms.ai
+    </div>
+
+    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-6">
+      <span class="text-white">Eugen</span>
+      <br />
+      <span class="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">Soloviov</span>
+    </h1>
+
+    <p class="text-xl sm:text-2xl text-gray-400 font-light max-w-2xl mx-auto mb-4">
+      Fullstack · DevOps · Algotrading Developer
+    </p>
+
+    <p class="text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
+      Building algorithmic trading platforms, HFT infrastructure,
+      and AI-powered developer tools. Trading since 2011.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a
+        href="#projects"
+        class="px-6 py-3 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-medium transition-colors duration-200"
+      >
+        View Projects
+      </a>
+      <a
+        href="#contact"
+        class="px-6 py-3 rounded-lg border border-white/10 hover:border-white/20 text-gray-300 hover:text-white font-medium transition-all duration-200"
+      >
+        Get in Touch
+      </a>
+    </div>
+
+    <!-- Stats row -->
+    <div class="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
+      {[
+        { value: '15+', label: 'Years in dev' },
+        { value: '15+', label: 'Years trading' },
+        { value: starCount, label: 'GitHub stars' },
+        { value: repoCount, label: 'GitHub repos' },
+      ].map((stat) => (
+        <div class="text-center">
+          <div class="text-2xl font-bold text-white">{stat.value}</div>
+          <div class="text-xs text-gray-600 mt-1">{stat.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

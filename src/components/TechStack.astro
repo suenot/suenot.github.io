@@ -1,0 +1,213 @@
+---
+import * as si from 'simple-icons';
+
+// Map tech names to simple-icons slugs
+const iconMap: Record<string, string> = {
+  'TypeScript': 'siTypescript',
+  'JavaScript': 'siJavascript',
+  'Python': 'siPython',
+  'Go': 'siGo',
+  'Swift': 'siSwift',
+  'Zig': 'siZig',
+  'Rust': 'siRust',
+  'Lua': 'siLua',
+  'C++': 'siCplusplus',
+  'C#': 'siCsharp',
+  'Kotlin': 'siKotlin',
+  'Haskell': 'siHaskell',
+  'PostgreSQL': 'siPostgresql',
+  'QuestDB': 'siQuestdb',
+  'Redis': 'siRedis',
+  'MongoDB': 'siMongodb',
+  'DuckDB': 'siDuckdb',
+  'MySQL': 'siMysql',
+  'SQLite': 'siSqlite',
+  'Apache Kafka': 'siApachekafka',
+  'Hasura': 'siHasura',
+  'GraphQL': 'siGraphql',
+  'React': 'siReact',
+  'Vue': 'siVuedotjs',
+  'Angular': 'siAngular',
+  'Svelte': 'siSvelte',
+  'Docker': 'siDocker',
+  'Kubernetes': 'siKubernetes',
+  'Terraform': 'siTerraform',
+  'Argo CD': 'siArgocd',
+  'Pulumi': 'siPulumi',
+  'Nginx': 'siNginx',
+  'Apache': 'siApache',
+  'Traefik': 'siTraefikproxy',
+  'Istio': 'siIstio',
+  'Prometheus': 'siPrometheus',
+  'Grafana': 'siGrafana',
+  'containerd': 'siContainerd',
+  'ClickHouse': 'siClickhouse',
+  'Apache ECharts': 'siApacheecharts',
+  'Electron': 'siElectron',
+  'Ionic': 'siIonic',
+  'Capacitor': 'siCapacitor',
+  'Binance': 'siBinance',
+};
+
+function getIcon(name: string): { path: string; hex: string } | null {
+  const key = iconMap[name];
+  if (!key) return null;
+  const icon = (si as Record<string, { path: string; hex: string } | undefined>)[key];
+  return icon ?? null;
+}
+
+const techCategories = [
+  {
+    name: 'Languages',
+    primary: true,
+    items: [
+      { name: 'TypeScript', color: '#3178C6' },
+      { name: 'JavaScript', color: '#EAD41C' },
+      { name: 'Python', color: '#3776AB' },
+      { name: 'Go', color: '#0095D5' },
+      { name: 'Swift', color: '#f05139' },
+      { name: 'Zig', color: '#F7A41D' },
+    ],
+  },
+  {
+    name: 'Languages (basics)',
+    items: [
+      { name: 'Rust', color: '#CE7F3E' },
+      { name: 'Lua', color: '#6E87C8' },
+      { name: 'C++', color: '#00599C' },
+      { name: 'C#', color: '#239120' },
+      { name: 'Kotlin', color: '#7F52FF' },
+      { name: 'Haskell', color: '#8b4b87' },
+    ],
+  },
+  {
+    name: 'Databases',
+    items: [
+      { name: 'PostgreSQL', color: '#336791' },
+      { name: 'QuestDB', color: '#FF6B35' },
+      { name: 'Redis', color: '#DD0031' },
+      { name: 'MongoDB', color: '#118e4b' },
+      { name: 'DuckDB', color: '#D4C000' },
+      { name: 'Parquet', color: '#326CE5' },
+      { name: 'Tarantool', color: '#FF6B35' },
+      { name: 'MySQL', color: '#4479A1' },
+      { name: 'SQLite', color: '#4A90D9' },
+      { name: 'ClickHouse', color: '#FFCC01' },
+      { name: 'Apache Kafka', color: '#231F20' },
+      { name: 'Hasura', color: '#3970fd' },
+    ],
+  },
+  {
+    name: 'API & Protocols',
+    items: [
+      { name: 'GraphQL', color: '#E10098' },
+      { name: 'gRPC', color: '#244c5a' },
+      { name: 'REST', color: '#009639' },
+      { name: 'WebSocket', color: '#4A90D9' },
+      { name: 'FIX Protocol', color: '#1E3A8A' },
+    ],
+  },
+  {
+    name: 'Frontend',
+    items: [
+      { name: 'React', color: '#61DAFB' },
+      { name: 'Vue', color: '#42b883' },
+      { name: 'Svelte', color: '#f96743' },
+      { name: 'Angular', color: '#DD0031' },
+      { name: 'SwiftUI', color: '#FA7343' },
+      { name: 'UIKit', color: '#147EFB' },
+      { name: 'Apache ECharts', color: '#AA344D' },
+      { name: 'React Stockcharts', color: '#61DAFB' },
+    ],
+  },
+  {
+    name: 'Cross-platform',
+    items: [
+      { name: 'Electron', color: '#47848F' },
+      { name: 'Ionic', color: '#3880FF' },
+      { name: 'Capacitor', color: '#119EFF' },
+    ],
+  },
+  {
+    name: 'Exchange APIs',
+    items: [
+      { name: 'CCXT', color: '#4CAF50' },
+      { name: 'Binance', color: '#F0B90B' },
+      { name: 'Bybit', color: '#F7A600' },
+      { name: 'GateIO', color: '#2354E6' },
+      { name: 'MEXC', color: '#1DA2B4' },
+      { name: 'Bitget', color: '#00CEA8' },
+      { name: 'Tinkoff Invest', color: '#FFDD2D' },
+    ],
+  },
+  {
+    name: 'DevOps & Infra',
+    items: [
+      { name: 'Docker', color: '#2496ED' },
+      { name: 'Docker Compose', color: '#2496ED' },
+      { name: 'Docker Swarm', color: '#2496ED' },
+      { name: 'Kubernetes', color: '#326CE5' },
+      { name: 'containerd', color: '#575757' },
+      { name: 'CRI-O', color: '#294172' },
+      { name: 'Nginx', color: '#009639' },
+      { name: 'Apache', color: '#D22128' },
+      { name: 'Traefik', color: '#24A1C1' },
+      { name: 'Istio', color: '#466BB0' },
+      { name: 'Ingress', color: '#326CE5' },
+      { name: 'Gateway API', color: '#326CE5' },
+      { name: 'Dokploy', color: '#7C3AED' },
+      { name: 'Terraform', color: '#7B42BC' },
+      { name: 'Argo CD', color: '#EF7B4D' },
+      { name: 'Pulumi', color: '#8A3391' },
+      { name: 'Prometheus', color: '#E6522C' },
+      { name: 'Grafana', color: '#F46800' },
+    ],
+  },
+];
+---
+
+<section id="tech" class="py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-violet-400 font-mono text-sm mb-3">02. tech stack</p>
+    <h2 class="text-3xl font-bold text-white mb-12">Technologies I use</h2>
+
+    <div class="space-y-10">
+      {techCategories.map((category) => (
+        <div>
+          <h3 class="text-xs font-mono text-gray-600 uppercase tracking-widest mb-4">
+            {category.name}
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {category.items.map((tech) => {
+              const icon = getIcon(tech.name);
+              return (
+                <span
+                  class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md border transition-all duration-200 hover:scale-105 cursor-default ${category.primary ? 'text-sm font-semibold' : 'text-xs font-medium'}`}
+                  style={`background-color: ${tech.color}18; border-color: ${tech.color}35; color: ${tech.color};`}
+                >
+                  {icon ? (
+                    <svg
+                      role="img"
+                      viewBox="0 0 24 24"
+                      class="w-3.5 h-3.5 flex-shrink-0"
+                      fill="currentColor"
+                      aria-label={tech.name}
+                    >
+                      <path d={icon.path} />
+                    </svg>
+                  ) : (
+                    <span
+                      class="w-2 h-2 rounded-full flex-shrink-0"
+                      style={`background-color: ${tech.color};`}
+                    />
+                  )}
+                  {tech.name}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

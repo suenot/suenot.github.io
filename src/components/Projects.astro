@@ -1,0 +1,541 @@
+---
+interface Project {
+  name: string;
+  desc: string;
+  tags: string[];
+  url: string;
+  status: string;
+  private?: boolean;
+}
+
+interface ProjectGroup {
+  category: string;
+  items: Project[];
+}
+
+const projects: ProjectGroup[] = [
+  {
+    category: 'Algorithmic Trading',
+    items: [
+      {
+        name: 'Marketmaker.cc',
+        desc: 'Algorithmic trading platform & scalping terminal. 60+ crypto exchanges, real-time data, backtesting engine.',
+        tags: ['Go', 'TypeScript', 'QuestDB', 'DuckDB'],
+        url: 'https://marketmaker.cc',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'StockAPIs.com',
+        desc: 'Crypto market data from 100+ exchanges, <100ms latency. AI agents for portfolio management and autonomous trading.',
+        tags: ['Python', 'QuestDB', 'Parquet', 'Redis'],
+        url: 'https://stockapis.com',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'Profitmaker.cc',
+        desc: 'Open-source trading terminal (frontend + backend) for self-hosting, expandable with modules.',
+        tags: ['TypeScript', 'React'],
+        url: 'https://profitmaker.cc',
+        status: 'active',
+      },
+      {
+        name: 'Trender',
+        desc: 'Multi-timeframe HMA crossover backtesting engine. Features confirmed_only, directional separation, adaptive fill with 1s drill-down.',
+        tags: ['Python', 'Backtesting'],
+        url: 'https://trender.marketmaker.cc',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'trading-ipc-bench',
+        desc: 'IPC benchmarks for algorithmic trading: shared memory, Unix sockets, NNG, ZeroMQ, gRPC, Aeron — p50/p95/p99 latency.',
+        tags: ['Go', 'C++', 'Benchmarks'],
+        url: 'https://github.com/suenot/trading-ipc-bench',
+        status: 'active',
+      },
+    ],
+  },
+  {
+    category: 'Trading Bots & Strategies',
+    items: [
+      {
+        name: 'Avellaneda-Stoikov',
+        desc: 'Implementation of the Avellaneda-Stoikov HFT market making model. Includes multiple versions and TigerBeetle integration.',
+        tags: ['Python', 'HFT', 'Market Making'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Frontrunner',
+        desc: 'Bybit frontrunner bot — order placement in 3–7ms, WebSocket subscriptions in 10–50ms. Implementations in Go, C++, and Rust.',
+        tags: ['Go', 'C++', 'Rust', 'HFT'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'simple-fast-fix-scalper',
+        desc: 'High-performance FIX protocol scalper in C++.',
+        tags: ['C++', 'FIX Protocol', 'HFT'],
+        url: 'https://github.com/suenot/simple-fast-fix-scalper',
+        status: 'paused',
+      },
+      {
+        name: 'vector-arbitrage',
+        desc: 'C++ vector arbitrage system for crypto exchanges.',
+        tags: ['C++', 'Arbitrage'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'solana-arbitrage',
+        desc: 'Arbitrage bot for Solana in Rust.',
+        tags: ['Rust', 'Solana', 'Arbitrage'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Upbit Listing Monitor',
+        desc: 'Monitors new listings on Upbit, auto-trades on Bybit/BingX. Written in Go.',
+        tags: ['Go', 'Listing', 'Bybit'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Binance Listing Rocket',
+        desc: 'Automated trading on Binance listing events.',
+        tags: ['Python', 'Listing', 'Binance'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Calculate Listing Profit',
+        desc: 'Downloads trade data around listing events, builds candlestick data, provides detailed profit scenario analysis.',
+        tags: ['Python', 'Analytics'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Markowitz Portfolio',
+        desc: 'Practical Modern Portfolio Theory for crypto portfolios — mean-variance optimization, efficient frontier.',
+        tags: ['Python', 'Portfolio'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'PolyTracker',
+        desc: 'Polymarket analytics with copy-trading, insider detection, and arbitrage scanner.',
+        tags: ['TypeScript', 'Python'],
+        url: 'https://github.com/suenot',
+        status: 'concept',
+        private: true,
+      },
+      {
+        name: 'copytrader',
+        desc: 'Copy trading platform for crypto exchanges.',
+        tags: ['TypeScript', 'gRPC'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'Pair Arbitrage (Binance)',
+        desc: 'Spot/futures pair arbitrage on Binance — metrics, signals, and bots for detecting correlation divergence.',
+        tags: ['Python', 'Binance', 'Arbitrage'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'deep-profitmaker',
+        desc: 'Trading architecture on pseudographs using Deep.Foundation.',
+        tags: ['TypeScript', 'Deep.Foundation'],
+        url: 'https://github.com/suenot/deep-profitmaker',
+        status: 'paused',
+      },
+      {
+        name: 'Tinkoff ETF Balancer Bot',
+        desc: 'Open-source bot for automatic ETF portfolio rebalancing via Tinkoff Invest API.',
+        tags: ['Python', 'Tinkoff'],
+        url: 'https://github.com/suenot/tinkoff-invest-etf-balancer-bot',
+        status: 'paused',
+      },
+    ],
+  },
+  {
+    category: 'HFT Infrastructure',
+    items: [
+      {
+        name: 'ZigBolt',
+        desc: 'High-performance messaging system in Zig — competitor to Aeron. Target: IPC RTT <100ns, 50M+ msg/sec.',
+        tags: ['Zig', 'HFT', 'IPC'],
+        url: 'https://github.com/suenot/zigbolt',
+        status: 'wip',
+      },
+      {
+        name: 'benchmarks-trading',
+        desc: 'Order placement latency benchmarks across exchanges after connection warming — ping, keep-alive, p50/p95/p99.',
+        tags: ['Go', 'Benchmarks', 'HFT'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'market-manipulator-detection',
+        desc: 'Rust library for detecting market manipulation patterns.',
+        tags: ['Rust', 'Analytics'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'candle_aggregator_benchmark',
+        desc: 'Rust OHLCV candle aggregator, batch aggregator, and generator with benchmarks.',
+        tags: ['Rust', 'OHLCV'],
+        url: 'https://github.com/suenot/candle_aggregator_benchmark',
+        status: 'paused',
+      },
+      {
+        name: 'hyperliquid-c',
+        desc: 'C adapter/SDK for Hyperliquid exchange API.',
+        tags: ['C', 'HFT', 'Hyperliquid'],
+        url: 'https://github.com/suenot/hyperliquid-c',
+        status: 'paused',
+      },
+      {
+        name: 'bingx-leverages',
+        desc: 'Python library for reverse-engineering BingX leverage tiers API.',
+        tags: ['Python', 'BingX'],
+        url: 'https://github.com/suenot',
+        status: 'active',
+        private: true,
+      },
+    ],
+  },
+  {
+    category: 'AI & Developer Tools',
+    items: [
+      {
+        name: 'aicommit',
+        desc: 'Rust CLI for AI-generated commit messages via OpenRouter. 105 releases, VS Code extension, jail/blacklist failover.',
+        tags: ['Rust', 'CLI', 'LLM'],
+        url: 'https://github.com/suenot/aicommit',
+        status: 'active',
+      },
+      {
+        name: 'SDKRouter',
+        desc: 'Unified OpenAI-compatible Python SDK for 300+ AI models with Pydantic structured output and cost tracking.',
+        tags: ['Python', 'Pydantic', 'OpenAI'],
+        url: 'https://github.com/suenot',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'DjangoCFG',
+        desc: 'Open-source Django framework with AI agents via Pydantic AI, MCP server, gRPC, WebSocket, vector search, crypto payments.',
+        tags: ['Python', 'Django', 'Pydantic AI'],
+        url: 'https://djangocfg.com',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'Cmdop',
+        desc: 'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace.',
+        tags: ['TypeScript', 'AI Agents'],
+        url: 'https://github.com/suenot',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'Claude Code Agent Manager',
+        desc: 'Tauri+Rust+React desktop app with PTY-based multi-project Claude sessions and CMDOP SDK integration.',
+        tags: ['Tauri', 'Rust', 'React'],
+        url: 'https://github.com/suenot',
+        status: 'wip',
+        private: true,
+      },
+      {
+        name: 'cmdop-claude',
+        desc: 'Python package — Claude integration for Cmdop, remote AI agent management via PyPI.',
+        tags: ['Python', 'Claude', 'PyPI'],
+        url: 'https://pypi.org/project/cmdop-claude/',
+        status: 'active',
+      },
+      {
+        name: 'local-llm-proxy',
+        desc: 'MCP server — local LLM proxy for Claude Code with auto-fallback to cloud models.',
+        tags: ['Python', 'MCP', 'LLM'],
+        url: 'https://github.com/suenot',
+        status: 'active',
+        private: true,
+      },
+    ],
+  },
+  {
+    category: 'Pet Projects',
+    items: [
+      {
+        name: 'Hlider',
+        desc: 'On-screen keyboard for Android/iOS by klava.org. Partner project.',
+        tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'],
+        url: 'https://hlider.klava.org/',
+        status: 'active',
+      },
+      {
+        name: 'OpenLastPass',
+        desc: 'Open-source password manager — Rust/Axum backend, React+TS frontend, Tauri desktop, React Native mobile, Argon2id/AES-256-GCM.',
+        tags: ['Rust', 'React', 'Tauri'],
+        url: 'https://github.com/suenot',
+        status: 'wip',
+        private: true,
+      },
+      {
+        name: 'candle-trade-visualizer',
+        desc: 'OHLCV candlestick chart visualizer for trading data.',
+        tags: ['TypeScript', 'Charts'],
+        url: 'https://github.com/suenot/candle-trade-visualizer',
+        status: 'paused',
+      },
+      {
+        name: 'MacChill',
+        desc: 'macOS menu bar app to monitor thermal pressure & auto-toggle Low Power Mode on Apple Silicon M1–M4.',
+        tags: ['Swift', 'SwiftUI', 'macOS'],
+        url: 'https://github.com/suenot/macchill',
+        status: 'active',
+      },
+      {
+        name: 'Vasya',
+        desc: 'The Telegram Client for Deep Focus — minimalist Telegram client (TypeScript + Rust backend).',
+        tags: ['TypeScript', 'Rust', 'Telegram'],
+        url: 'https://github.com/suenot/vasya',
+        status: 'active',
+      },
+      {
+        name: 'Sanctum',
+        desc: 'VSCode-like desktop editor for AES-256-GCM encrypted file vaults.',
+        tags: ['TypeScript', 'AES-256-GCM'],
+        url: 'https://github.com/suenot/sanctum',
+        status: 'active',
+      },
+      {
+        name: 'macpurge',
+        desc: 'Developer-focused macOS disk cleaner utility.',
+        tags: ['TypeScript', 'macOS'],
+        url: 'https://github.com/suenot',
+        status: 'paused',
+        private: true,
+      },
+      {
+        name: 'deadline-in-days',
+        desc: 'Deadline countdown app showing days remaining.',
+        tags: ['TypeScript'],
+        url: 'https://github.com/suenot/deadline-in-days',
+        status: 'paused',
+      },
+    ],
+  },
+  {
+    category: 'Publications',
+    items: [
+      {
+        name: 'The Algotrading Book',
+        desc: 'Online book about algorithmic trading — strategies, backtesting, infrastructure, and practical guides.',
+        tags: ['Content', 'Algotrading'],
+        url: 'https://the-algotrading-book-website.vercel.app/',
+        status: 'active',
+      },
+      {
+        name: 'Blog on Marketmaker.cc',
+        desc: 'Articles on backtesting methodology, QuestDB analytics, Monte Carlo bootstrap, anomaly detection, profit/loss asymmetry, and more.',
+        tags: ['Blog', 'Backtesting', 'Analytics'],
+        url: 'https://marketmaker.cc/en/blog/1/',
+        status: 'active',
+      },
+    ],
+  },
+  {
+    category: 'Contract & Freelance',
+    items: [
+      {
+        name: 'Deep.foundation & Deep.memo',
+        desc: 'Open source startups. Fullstack dev: pseudo-graph DB, event-driven architecture, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–present.',
+        tags: ['Node.js', 'React', 'GraphQL', 'Hasura'],
+        url: 'https://deep.foundation',
+        status: 'paused',
+      },
+      {
+        name: 'Dolphin.bi',
+        desc: 'Open-source crypto analytics marketplace. Sentiment analysis, ICO fundamental analysis. Went through Startupbootcamp. 2017–2018.',
+        tags: ['Vue', 'Python'],
+        url: 'https://www.crunchbase.com/organization/dolphin-bi',
+        status: 'rip',
+      },
+      {
+        name: 'Shakeapp',
+        desc: 'C2C/C2B sharing platform (car & home rental). React developer. 2020–2022.',
+        tags: ['React', 'Node.js', 'GraphQL', 'Hasura'],
+        url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app',
+        status: 'rip',
+      },
+      {
+        name: 'centrum-air.com',
+        desc: 'Website for a private airline in Uzbekistan. 2023.',
+        tags: ['React', 'Next.js'],
+        url: 'https://centrum-air.com',
+        status: 'left',
+      },
+    ],
+  },
+  {
+    category: 'Graveyard',
+    items: [
+      {
+        name: 'Kupi.network',
+        desc: 'Open-source crypto trading terminal supporting 130+ crypto exchanges. Two versions: React (class-based) and Vue 2. 2018–2019.',
+        tags: ['React', 'Vue', 'MobX'],
+        url: 'https://github.com/suenot/kupi-terminal',
+        status: 'rip',
+      },
+      {
+        name: 'Kupi.ru',
+        desc: 'Marketplace. Went through FRII acceleration. 2013.',
+        tags: ['PHP', 'JavaScript'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+      },
+      {
+        name: 'Kupi.net',
+        desc: 'Website builder startup. Partner. 2019–2020.',
+        tags: ['React', 'Django'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+      },
+      {
+        name: 'DeepChain',
+        desc: 'Blockchain on Cosmos SDK. 2024.',
+        tags: ['Go', 'Cosmos SDK'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+        private: true,
+      },
+      {
+        name: 'Dolphin.bi',
+        desc: 'Open-source crypto analytics marketplace. Sentiment analysis, ICO fundamental analysis, ICOFaces. ICO (unsuccessful). Went through Startupbootcamp. 2017–2018.',
+        tags: ['Vue', 'Python'],
+        url: 'https://www.crunchbase.com/organization/dolphin-bi',
+        status: 'rip',
+      },
+      {
+        name: 'Bursa.dex',
+        desc: 'Open-source decentralized exchange. Solidity smart contract, Web3.js, orderbook caching. Won BlockchainHack by Waves. 2017.',
+        tags: ['Solidity', 'React', 'Django'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+      },
+      {
+        name: 'de-core.net',
+        desc: 'Web development studio. Started as solo freelancer, grew to team of 3-7 devs. ~200 websites built. 2010-2016.',
+        tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+      },
+      {
+        name: 'Thermom',
+        desc: 'Partner in startup. Frontend for mobile app. Went through Bayer acceleration. 2016.',
+        tags: ['Vue', 'Ionic'],
+        url: 'https://github.com/suenot',
+        status: 'rip',
+      },
+    ],
+  },
+];
+
+const statusStyles: Record<string, string> = {
+  active: 'bg-green-500/10 text-green-400 border-green-500/20',
+  wip: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  concept: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  paused: 'bg-gray-500/10 text-gray-500 border-gray-500/20',
+  left: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+  rip: 'bg-gray-700/10 text-gray-600 border-gray-700/20',
+};
+
+const statusLabels: Record<string, string> = {
+  active: 'active',
+  wip: 'wip',
+  concept: 'concept',
+  paused: 'paused',
+  left: 'left',
+  rip: 'rip',
+};
+---
+
+<section id="projects" class="py-24 bg-[#0D0D1A]">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="text-violet-400 font-mono text-sm mb-3">03. projects</p>
+    <h2 class="text-3xl font-bold text-white mb-4">What I'm building</h2>
+    <p class="text-gray-500 mb-12 max-w-xl">
+      Across Reforms.ai products, open-source tools, and HFT infrastructure research.
+    </p>
+
+    <div class="space-y-12">
+      {projects.map((group) => (
+        <div>
+          <h3 class="text-xs font-mono text-gray-600 uppercase tracking-widest mb-6 pb-3 border-b border-white/5">
+            {group.category}
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            {group.items.map((project) => (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group block p-5 rounded-xl bg-white/[0.03] border border-white/5 hover:border-violet-500/30 hover:bg-violet-500/5 transition-all duration-200"
+              >
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <div class="flex items-center gap-2">
+                    <h4 class="text-white font-semibold group-hover:text-violet-300 transition-colors">
+                      {project.name}
+                    </h4>
+                    {project.private ? (
+                      <svg class="w-3.5 h-3.5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    ) : (
+                      <svg class="w-3.5 h-3.5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                        <line x1="6" y1="1" x2="6" y2="4" />
+                        <line x1="10" y1="1" x2="10" y2="4" />
+                        <line x1="14" y1="1" x2="14" y2="4" />
+                      </svg>
+                    )}
+                  </div>
+                  <span class={`flex-shrink-0 text-xs px-2 py-0.5 rounded-full border ${statusStyles[project.status]}`}>
+                    {statusLabels[project.status]}
+                  </span>
+                </div>
+                <p class="text-gray-500 text-sm leading-relaxed mb-4">{project.desc}</p>
+                <div class="flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <span class="text-xs px-2 py-0.5 rounded bg-white/5 text-gray-500 font-mono">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
