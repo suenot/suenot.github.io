@@ -1,0 +1,33 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  title: string;
+}
+
+const { headings, title } = Astro.props;
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+  <nav class="hidden lg:block sticky top-24 ml-8 w-56 shrink-0" aria-label={title}>
+    <h4 class="text-sm font-semibold text-gray-400 mb-3 font-mono">{title}</h4>
+    <ul class="space-y-2 text-sm">
+      {tocHeadings.map((heading) => (
+        <li class={heading.depth === 3 ? 'pl-3' : ''}>
+          <a
+            href={`#${heading.slug}`}
+            class="text-gray-500 hover:text-violet-300 transition-colors duration-200 leading-snug block"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

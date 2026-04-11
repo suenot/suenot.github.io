@@ -1,0 +1,185 @@
+---
+import Layout from './Layout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import TranslationLinks from '../components/TranslationLinks.astro';
+import TagList from '../components/TagList.astro';
+import { type Locale, locales } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  tags: string[];
+  locale: Locale;
+  slug: string;
+  availableLocales?: Locale[];
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags,
+  locale,
+  slug,
+  availableLocales = [],
+  headings,
+} = Astro.props;
+
+const t = useTranslations(locale);
+
+const formattedPubDate = pubDate.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedUpdatedDate = updatedDate?.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// BreadcrumbList JSON-LD
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `https://suenot.github.io/${locale}/` },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: `https://suenot.github.io/${locale}/blog/` },
+    { '@type': 'ListItem', position: 3, name: title },
+  ],
+};
+---
+
+<Layout
+  title={`${title} — Eugen Soloviov`}
+  description={description}
+  locale={locale}
+  ogImage={heroImage}
+  type="article"
+  publishedDate={pubDate}
+  modifiedDate={updatedDate}
+  tags={tags}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <article class="min-h-screen pt-24 pb-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <!-- Back link -->
+      <a
+        href={`/${locale}/blog/`}
+        class="inline-flex items-center text-sm text-gray-400 hover:text-violet-300 transition-colors mb-8"
+      >
+        {t('blog.backToBlog')}
+      </a>
+
+      {heroImage && (
+        <div class="aspect-video rounded-xl overflow-hidden mb-8 bg-surface-2">
+          <img src={heroImage} alt={title} class="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Main content -->
+        <div class="flex-1 min-w-0">
+          <header class="mb-8">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <time datetime={pubDate.toISOString()} class="text-sm text-gray-500 font-mono">
+                {t('blog.published')}: {formattedPubDate}
+              </time>
+              {updatedDate && (
+                <time datetime={updatedDate.toISOString()} class="text-sm text-gray-600 font-mono">
+                  {t('blog.updated')}: {formattedUpdatedDate}
+                </time>
+              )}
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">{title}</h1>
+            <div class="mb-4">
+              <TagList tags={tags} locale={locale} />
+            </div>
+            {availableLocales.length > 1 && (
+              <TranslationLinks
+                currentLocale={locale}
+                slug={slug}
+                availableLocales={availableLocales}
+                label={t('blog.translations')}
+              />
+            )}
+          </header>
+
+          <!-- Prose content -->
+          <div class="prose-container">
+            <slot />
+          </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <TableOfContents headings={headings} title={t('blog.toc')} />
+      </div>
+    </div>
+  </article>
+
+  <style>
+    .prose-container :global(h2) {
+      @apply text-2xl font-bold text-white mt-10 mb-4;
+    }
+    .prose-container :global(h3) {
+      @apply text-xl font-semibold text-white mt-8 mb-3;
+    }
+    .prose-container :global(h4) {
+      @apply text-lg font-semibold text-gray-200 mt-6 mb-2;
+    }
+    .prose-container :global(p) {
+      @apply text-gray-300 leading-relaxed mb-4;
+    }
+    .prose-container :global(a) {
+      @apply text-violet-400 hover:text-violet-300 underline decoration-violet-500/30 hover:decoration-violet-300 transition-colors;
+    }
+    .prose-container :global(ul), .prose-container :global(ol) {
+      @apply text-gray-300 mb-4 pl-6;
+    }
+    .prose-container :global(ul) {
+      @apply list-disc;
+    }
+    .prose-container :global(ol) {
+      @apply list-decimal;
+    }
+    .prose-container :global(li) {
+      @apply mb-1.5;
+    }
+    .prose-container :global(blockquote) {
+      @apply border-l-2 border-violet-500/30 pl-4 text-gray-400 italic my-4;
+    }
+    .prose-container :global(code) {
+      @apply bg-white/[0.05] px-1.5 py-0.5 rounded text-sm font-mono text-violet-300;
+    }
+    .prose-container :global(pre) {
+      @apply bg-surface-2 border border-white/5 rounded-lg p-4 overflow-x-auto my-4;
+    }
+    .prose-container :global(pre code) {
+      @apply bg-transparent px-0 py-0;
+    }
+    .prose-container :global(img) {
+      @apply rounded-lg my-4;
+    }
+    .prose-container :global(hr) {
+      @apply border-white/5 my-8;
+    }
+    .prose-container :global(table) {
+      @apply w-full text-sm my-4;
+    }
+    .prose-container :global(th) {
+      @apply text-left text-gray-400 font-mono py-2 px-3 border-b border-white/10;
+    }
+    .prose-container :global(td) {
+      @apply py-2 px-3 border-b border-white/5;
+    }
+  </style>
+</Layout>

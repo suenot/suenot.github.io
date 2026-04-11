@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags: string[];
+  heroImage?: string;
+  slug: string;
+  readMoreLabel: string;
+}
+
+const { title, description, pubDate, tags, heroImage, slug, readMoreLabel } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article class="group rounded-xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-violet-500/20 transition-all duration-300">
+  {heroImage && (
+    <div class="aspect-video bg-surface-2 overflow-hidden">
+      <img src={heroImage} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+    </div>
+  )}
+  <div class="p-5">
+    <time datetime={pubDate.toISOString()} class="text-xs text-gray-500 font-mono">{formattedDate}</time>
+    <h3 class="text-lg font-semibold text-white mt-2 mb-2 group-hover:text-violet-300 transition-colors">
+      <a href={slug} class="hover:underline">{title}</a>
+    </h3>
+    <p class="text-sm text-gray-400 leading-relaxed mb-4">{description}</p>
+    <div class="flex items-center justify-between">
+      <div class="flex flex-wrap gap-1.5">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="px-2 py-0.5 text-xs rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">{tag}</span>
+        ))}
+      </div>
+      <span class="text-xs text-violet-400 font-medium group-hover:text-violet-300">{readMoreLabel} →</span>
+    </div>
+  </div>
+</article>

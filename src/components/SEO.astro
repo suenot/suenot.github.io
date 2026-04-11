@@ -1,0 +1,92 @@
+---
+import { locales, defaultLocale, type Locale } from '../i18n/config';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  canonicalUrl?: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  tags?: string[];
+}
+
+const {
+  title,
+  description,
+  locale,
+  canonicalUrl,
+  ogImage,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  tags = [],
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://suenot.github.io';
+const currentUrl = canonicalUrl || new URL(Astro.url.pathname, siteUrl).toString();
+const imageUrl = ogImage ? new URL(ogImage, siteUrl).toString() : '';
+
+// Build hreflang links
+const hreflangLinks = locales.map((loc) => {
+  const path = Astro.url.pathname.replace(`/${locale}`, `/${loc}`);
+  return { locale: loc, url: `${siteUrl}${path}` };
+});
+// x-default points to default locale
+const xDefaultPath = Astro.url.pathname.replace(`/${locale}`, `/${defaultLocale}`);
+
+const jsonLd = type === 'article' && publishedDate
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      url: currentUrl,
+      datePublished: publishedDate.toISOString(),
+      ...(modifiedDate && { dateModified: modifiedDate.toISOString() }),
+      ...(imageUrl && { image: imageUrl }),
+      ...(tags.length > 0 && { keywords: tags.join(', ') }),
+      author: {
+        '@type': 'Person',
+        name: 'Eugen Soloviov',
+        url: siteUrl,
+      },
+    }
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Eugen Soloviov',
+      url: siteUrl,
+    };
+---
+
+<!-- Canonical -->
+<link rel="canonical" href={currentUrl} />
+
+<!-- Hreflang -->
+{hreflangLinks.map(({ locale: loc, url }) => (
+  <link rel="alternate" hreflang={loc} href={url} />
+))}
+<link rel="alternate" hreflang="x-default" href={`${siteUrl}${xDefaultPath}`} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={currentUrl} />
+<meta property="og:locale" content={locale} />
+{locales.filter((l) => l !== locale).map((loc) => (
+  <meta property="og:locale:alternate" content={loc} />
+))}
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageUrl && <meta name="twitter:image" content={imageUrl} />}
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

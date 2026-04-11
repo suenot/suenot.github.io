@@ -1,15 +1,27 @@
 ---
+import LanguageSelector from './LanguageSelector.astro';
+import { type Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = useTranslations(locale);
+
 const links = [
-  { href: '#about', label: 'About' },
-  { href: '#tech', label: 'Tech' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#contact', label: 'Contact' },
+  { href: `/${locale}/#about`, label: t('nav.about') },
+  { href: `/${locale}/#tech`, label: t('nav.tech') },
+  { href: `/${locale}/#projects`, label: t('nav.projects') },
+  { href: `/${locale}/#contact`, label: t('nav.contact') },
+  { href: `/${locale}/blog/`, label: t('nav.blog') },
 ];
 ---
 
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0A0A14]/80 backdrop-blur-md border-b border-white/5">
   <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="#" class="font-mono text-violet-400 font-semibold text-sm tracking-wider">
+    <a href={`/${locale}/`} class="font-mono text-violet-400 font-semibold text-sm tracking-wider">
       suenot<span class="text-gray-600">.com</span>
     </a>
     <ul class="hidden sm:flex items-center gap-6">
@@ -24,13 +36,16 @@ const links = [
         </li>
       ))}
     </ul>
-    <a
-      href="https://github.com/suenot"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="text-sm text-violet-400 hover:text-violet-300 transition-colors font-mono"
-    >
-      github →
-    </a>
+    <div class="flex items-center gap-4">
+      <LanguageSelector currentLocale={locale} />
+      <a
+        href="https://github.com/suenot"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm text-violet-400 hover:text-violet-300 transition-colors font-mono hidden sm:inline"
+      >
+        github →
+      </a>
+    </div>
   </div>
 </nav>

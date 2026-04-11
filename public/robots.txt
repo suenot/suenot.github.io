@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://suenot.github.io/sitemap-index.xml

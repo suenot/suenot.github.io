@@ -1,26 +1,49 @@
 ---
+import SEO from '../components/SEO.astro';
+import { type Locale, isRtl, defaultLocale } from '../i18n/config';
+
 interface Props {
   title?: string;
   description?: string;
+  locale?: Locale;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  tags?: string[];
 }
 
 const {
   title = 'Eugen Soloviov — Fullstack & Algotrading Developer',
   description = 'Co-founder & CTO of Reforms.ai. Building algorithmic trading platforms, HFT infrastructure, and AI-powered tools.',
+  locale = defaultLocale,
+  ogImage,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  tags,
 } = Astro.props;
+
+const dir = isRtl(locale) ? 'rtl' : 'ltr';
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang={locale} dir={dir} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta name="twitter:card" content="summary" />
     <title>{title}</title>
+    <SEO
+      title={title}
+      description={description}
+      locale={locale}
+      ogImage={ogImage}
+      type={type}
+      publishedDate={publishedDate}
+      modifiedDate={modifiedDate}
+      tags={tags}
+    />
   </head>
   <body class="bg-[#0A0A14] text-gray-100 font-sans antialiased">
     <slot />

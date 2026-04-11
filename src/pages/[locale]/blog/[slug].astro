@@ -1,0 +1,52 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import Nav from '../../../components/Nav.astro';
+import { locales, type Locale } from '../../../i18n/config';
+import { getCollection, render } from 'astro:content';
+
+export const getStaticPaths = (async () => {
+  const paths = [];
+  for (const locale of locales) {
+    const posts = await getCollection('blog', ({ id, data }) => {
+      return id.startsWith(`${locale}/`) && !data.draft;
+    });
+    for (const post of posts) {
+      const slug = post.id.replace(`${locale}/`, '').replace(/\.md$/, '');
+      paths.push({
+        params: { locale, slug },
+        props: { post },
+      });
+    }
+  }
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.params as { locale: Locale };
+const { post } = Astro.props;
+
+const { Content, headings } = await render(post);
+
+const slug = post.id.replace(`${locale}/`, '').replace(/\.md$/, '');
+const availableLocales: Locale[] = [];
+for (const loc of locales) {
+  const exists = await getCollection('blog', ({ id }) => id === `${loc}/${slug}.md`);
+  if (exists.length > 0) availableLocales.push(loc);
+}
+---
+
+<Nav locale={locale} />
+<BlogPost
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  heroImage={post.data.heroImage}
+  tags={post.data.tags}
+  locale={locale}
+  slug={slug}
+  availableLocales={availableLocales}
+  headings={headings}
+>
+  <Content />
+</BlogPost>

@@ -1,0 +1,60 @@
+---
+import { locales, localeNames, type Locale } from '../i18n/config';
+
+interface Props {
+  currentLocale: Locale;
+}
+
+const { currentLocale } = Astro.props;
+---
+
+<div class="relative" id="lang-selector">
+  <button
+    id="lang-toggle"
+    class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-mono"
+    aria-label="Select language"
+    aria-expanded="false"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+    </svg>
+    <span>{localeNames[currentLocale]}</span>
+    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 py-1 w-40 rounded-lg bg-surface-2 border border-white/10 shadow-xl z-50">
+    {locales.map((loc) => (
+      <a
+        href={Astro.url.pathname.replace(`/${currentLocale}`, `/${loc}`)}
+        class:list={[
+          'block px-3 py-2 text-sm transition-colors',
+          loc === currentLocale
+            ? 'text-violet-300 bg-violet-500/10'
+            : 'text-gray-400 hover:text-white hover:bg-white/[0.03]',
+        ]}
+      >
+        {localeNames[loc]}
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('lang-toggle');
+  const menu = document.getElementById('lang-menu');
+
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    menu?.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    const selector = document.getElementById('lang-selector');
+    if (selector && !selector.contains(e.target as Node)) {
+      toggle?.setAttribute('aria-expanded', 'false');
+      menu?.classList.add('hidden');
+    }
+  });
+</script>

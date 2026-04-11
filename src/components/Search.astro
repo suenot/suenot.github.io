@@ -1,0 +1,72 @@
+---
+interface Props {
+  placeholder: string;
+  noResultsText: string;
+}
+
+const { placeholder, noResultsText } = Astro.props;
+---
+
+<div class="relative">
+  <input
+    type="search"
+    id="blog-search"
+    placeholder={placeholder}
+    class="w-full px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-colors text-sm"
+  />
+  <div id="search-results" class="mt-2"></div>
+</div>
+
+<script>
+  interface PostData {
+    title: string;
+    description: string;
+    slug: string;
+    tags: string[];
+    pubDate: string;
+  }
+
+  const input = document.getElementById('blog-search') as HTMLInputElement;
+
+  function showAll() {
+    document.querySelectorAll('[data-blog-post]').forEach((el) => {
+      (el as HTMLElement).style.display = '';
+    });
+    const noResults = document.getElementById('no-results');
+    if (noResults) noResults.style.display = 'none';
+  }
+
+  function filterPosts(query: string) {
+    if (!query.trim()) {
+      showAll();
+      return;
+    }
+
+    const q = query.toLowerCase();
+    const posts = Array.from(document.querySelectorAll('[data-blog-post]')).map((el) => ({
+      title: (el as HTMLElement).dataset.title || '',
+      description: (el as HTMLElement).dataset.description || '',
+      tags: (el as HTMLElement).dataset.tags?.split(',') || [],
+    }));
+
+    let visibleCount = 0;
+    document.querySelectorAll('[data-blog-post]').forEach((el, i) => {
+      const post = posts[i];
+      const match =
+        post.title.toLowerCase().includes(q) ||
+        post.description.toLowerCase().includes(q) ||
+        post.tags.some((t) => t.toLowerCase().includes(q));
+      (el as HTMLElement).style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    const noResults = document.getElementById('no-results');
+    if (noResults) {
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  input?.addEventListener('input', (e) => {
+    filterPosts((e.target as HTMLInputElement).value);
+  });
+</script>
