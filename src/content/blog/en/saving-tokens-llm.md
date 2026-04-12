@@ -51,6 +51,10 @@ Skills are pre-configured prompts that load on demand and don't sit in context p
 
 Unlike MCP servers (which constantly load their instructions into context), skills activate only when needed. Before Opus 4.5, a lot of tokens were wasted on MCP — this has been fixed now, but the approach of "replacing MCP with skills and commands" is still relevant for saving tokens.
 
+### Caveman
+
+[Caveman](https://github.com/JuliusBrussee/caveman) is an open-source skill and plugin for Claude Code (and other agents): it makes the model reply in ultra-brief "caveman speak" while keeping technical accuracy — a concrete take on "shorter conversations are cheaper" from section 1. The repo's benchmarks average about **~65%** fewer **output** tokens; `caveman-compress` separately trims prose in memory files to save **input** tokens.
+
 ## 5. Chinese Models and Cheap Subscriptions
 
 Alibaba Cloud, Chinese subscriptions — in terms of price-per-token ratio, they win handily. A subscription for ~$30 gives you a token amount comparable to Anthropic's $200 plan.
