@@ -75,7 +75,7 @@ Alibaba Cloudや中国のサブスクリプションは、価格/トークン比
 
 ### cmdop-claude
 
-[cmdop-claude](https://pypi.org/project/cmdop-claude/) — markolofsenのアプローチ。グラフとしてマークルツリーを使用。基本アイデア：ほぼ無料の中国製LLMをバックグラウンドで動かし、`.claude`フォルダを整理 — メインモデル用のコンテキストを準備する。
+[cmdop-claude](https://pypi.org/project/cmdop-claude/) — [markolofsen](https://github.com/markolofsen)のアプローチ。グラフとしてマークルツリーを使用。基本アイデア：ほぼ無料の中国製LLMをバックグラウンドで動かし、`.claude`フォルダを整理 — メインモデル用のコンテキストを準備する。
 
 ## 7. エージェント管理フレームワーク
 
@@ -142,7 +142,7 @@ Nメッセージごとの自動コンパクトはフックで設定できない 
 
 解決策：送信前にスクリーンショットを幅約400pxに縮小する。テキストは読みやすく、トークン消費は大幅に減少。
 
-macOS向けの完成品がある — [Open Screenshot](https://openscreenshot.suenot.com/)。解像度が圧縮された形式でスクリーンショットを直接撮影でき、手動でリサイズする必要がない。
+macOS向けに私が作った [Open Screenshot](https://openscreenshot.suenot.com/) がある — 解像度が圧縮された形式でスクリーンショットを直接撮影でき、手動でリサイズする必要がない。ぜひ使ってみてください！
 
 ## 節約チェックリスト
 

@@ -75,7 +75,7 @@ A project by [ivansglazunov](https://github.com/ivansglazunov) — the author wo
 
 ### cmdop-claude
 
-[cmdop-claude](https://pypi.org/project/cmdop-claude/) — an approach by markolofsen. It uses Merkle trees from graph structures. The main idea: run nearly free Chinese LLMs in the background to organize the `.claude` folder — preparing context for the main model.
+[cmdop-claude](https://pypi.org/project/cmdop-claude/) — an approach by [markolofsen](https://github.com/markolofsen). It uses Merkle trees from graph structures. The main idea: run nearly free Chinese LLMs in the background to organize the `.claude` folder — preparing context for the main model.
 
 ## 7. Agent Management Frameworks
 
@@ -142,7 +142,7 @@ Claude supposedly compresses images by resolution according to documentation. In
 
 Solution: downsize screenshots to ~400px wide before sending. Text remains readable, but token consumption drops by an order of magnitude.
 
-For macOS there's a ready-made solution — [Open Screenshot](https://openscreenshot.suenot.com/). The utility takes screenshots in a resolution-compressed format right away, no manual resizing needed.
+For macOS I built [Open Screenshot](https://openscreenshot.suenot.com/) — a utility that takes screenshots in a resolution-compressed format right away. No manual resizing needed. Give it a try!
 
 ## Savings Checklist
 
