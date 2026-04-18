@@ -3,3 +3,5 @@ dist/
 .astro/
 .vercel/
 .env
+.DS_Store
+tasks/
