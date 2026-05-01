@@ -1,7 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BlogPost from '../../../layouts/BlogPost.astro';
-import Nav from '../../../components/Nav.astro';
 import { locales, type Locale } from '../../../i18n/config';
 import { getCollection, render } from 'astro:content';
 
@@ -35,7 +34,6 @@ for (const loc of locales) {
 }
 ---
 
-<Nav locale={locale} />
 <BlogPost
   title={post.data.title}
   description={post.data.description}

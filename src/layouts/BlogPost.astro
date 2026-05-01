@@ -70,7 +70,7 @@ const breadcrumbLd = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
-  <article class="min-h-screen pt-24 pb-16">
+  <div class="pt-24 pb-16">
     <div class="max-w-5xl mx-auto px-6">
       <!-- Back link -->
       <a
@@ -124,11 +124,7 @@ const breadcrumbLd = {
         <TableOfContents headings={headings} title={t('blog.toc')} />
       </div>
     </div>
-  </article>
-
-  <footer class="border-t border-white/5 py-8 text-center text-sm text-gray-400">
-    <p class="font-mono text-xs tracking-wider">{t('footer.tagline')}</p>
-  </footer>
+  </div>
 
   <style>
     .prose-container :global(h2) {

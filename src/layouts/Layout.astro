@@ -1,6 +1,8 @@
 ---
 import SEO from '../components/SEO.astro';
+import Nav from '../components/Nav.astro';
 import { type Locale, isRtl, defaultLocale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   title?: string;
@@ -25,6 +27,7 @@ const {
 } = Astro.props;
 
 const dir = isRtl(locale) ? 'rtl' : 'ltr';
+const t = useTranslations(locale);
 ---
 
 <!doctype html>
@@ -45,7 +48,13 @@ const dir = isRtl(locale) ? 'rtl' : 'ltr';
       tags={tags}
     />
   </head>
-  <body class="bg-[#0A0A14] text-gray-100 font-sans antialiased">
-    <slot />
+  <body class="bg-[#0A0A14] text-gray-100 font-sans antialiased flex flex-col min-h-screen">
+    <Nav locale={locale} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <footer class="border-t border-white/5 py-8 text-center text-sm text-gray-400">
+      <p class="font-mono text-xs tracking-wider">{t('footer.tagline')}</p>
+    </footer>
   </body>
 </html>
