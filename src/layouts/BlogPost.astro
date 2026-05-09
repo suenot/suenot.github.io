@@ -75,13 +75,13 @@ const breadcrumbLd = {
       <!-- Back link -->
       <a
         href={`/${locale}/blog/`}
-        class="inline-flex items-center text-sm text-gray-400 hover:text-violet-300 transition-colors mb-8"
+        class="inline-flex items-center text-body-sm text-silver hover:text-midnight transition-colors mb-8"
       >
         {t('blog.backToBlog')}
       </a>
 
       {heroImage && (
-        <div class="aspect-video rounded-xl overflow-hidden mb-8 bg-surface-2">
+        <div class="aspect-video rounded-image overflow-hidden mb-8 bg-gray-50">
           <img src={heroImage} alt={title} class="w-full h-full object-cover" />
         </div>
       )}
@@ -91,16 +91,16 @@ const breadcrumbLd = {
         <div class="flex-1 min-w-0">
           <header class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-              <time datetime={pubDate.toISOString()} class="text-sm text-gray-500 font-mono">
+              <time datetime={pubDate.toISOString()} class="text-caption text-smoke font-display font-semibold uppercase">
                 {t('blog.published')}: {formattedPubDate}
               </time>
               {updatedDate && (
-                <time datetime={updatedDate.toISOString()} class="text-sm text-gray-600 font-mono">
+                <time datetime={updatedDate.toISOString()} class="text-caption text-smoke font-display">
                   {t('blog.updated')}: {formattedUpdatedDate}
                 </time>
               )}
             </div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">{title}</h1>
+            <h1 class="text-3xl sm:text-4xl font-display font-bold text-midnight mb-4 tracking-[-0.035em]">{title}</h1>
             <div class="mb-4">
               <TagList tags={tags} locale={locale} />
             </div>
@@ -128,22 +128,22 @@ const breadcrumbLd = {
 
   <style>
     .prose-container :global(h2) {
-      @apply text-2xl font-bold text-white mt-10 mb-4;
+      @apply text-2xl font-bold text-midnight mt-10 mb-4 font-display tracking-[-0.035em];
     }
     .prose-container :global(h3) {
-      @apply text-xl font-semibold text-white mt-8 mb-3;
+      @apply text-xl font-semibold text-midnight mt-8 mb-3 font-display tracking-[-0.035em];
     }
     .prose-container :global(h4) {
-      @apply text-lg font-semibold text-gray-200 mt-6 mb-2;
+      @apply text-lg font-semibold text-carbon mt-6 mb-2 font-display;
     }
     .prose-container :global(p) {
-      @apply text-gray-300 leading-relaxed mb-4;
+      @apply text-carbon leading-relaxed mb-4;
     }
     .prose-container :global(a) {
-      @apply text-violet-400 hover:text-violet-300 underline decoration-violet-500/30 hover:decoration-violet-300 transition-colors;
+      @apply text-midnight underline decoration-mist hover:decoration-midnight transition-colors;
     }
     .prose-container :global(ul), .prose-container :global(ol) {
-      @apply text-gray-300 mb-4 pl-6;
+      @apply text-carbon mb-4 pl-6;
     }
     .prose-container :global(ul) {
       @apply list-disc;
@@ -155,31 +155,34 @@ const breadcrumbLd = {
       @apply mb-1.5;
     }
     .prose-container :global(blockquote) {
-      @apply border-l-2 border-violet-500/30 pl-4 text-gray-400 italic my-4;
+      @apply border-l-2 border-mist pl-4 text-smoke italic my-4;
     }
     .prose-container :global(code) {
-      @apply bg-white/[0.05] px-1.5 py-0.5 rounded text-sm font-mono text-violet-300;
+      @apply bg-accent-yellow/50 px-1.5 py-0.5 rounded text-sm font-mono text-carbon;
     }
     .prose-container :global(pre) {
-      @apply bg-surface-2 border border-white/5 rounded-lg p-4 overflow-x-auto my-4;
+      @apply bg-gray-50 border border-mist rounded-card p-4 overflow-x-auto my-4;
     }
     .prose-container :global(pre code) {
       @apply bg-transparent px-0 py-0;
     }
     .prose-container :global(img) {
-      @apply rounded-lg my-4;
+      @apply rounded-image my-4;
     }
     .prose-container :global(hr) {
-      @apply border-white/5 my-8;
+      @apply border-mist my-8;
     }
     .prose-container :global(table) {
       @apply w-full text-sm my-4;
     }
     .prose-container :global(th) {
-      @apply text-left text-gray-400 font-mono py-2 px-3 border-b border-white/10;
+      @apply text-left text-smoke font-display font-semibold py-2 px-3 border-b border-mist;
     }
     .prose-container :global(td) {
-      @apply py-2 px-3 border-b border-white/5;
+      @apply py-2 px-3 border-b border-mist/50;
+    }
+    .prose-container :global(strong) {
+      @apply text-midnight font-semibold;
     }
   </style>
 </Layout>

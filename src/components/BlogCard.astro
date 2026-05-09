@@ -18,24 +18,24 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
 });
 ---
 
-<article class="group rounded-xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-violet-500/20 transition-all duration-300">
+<article class="group rounded-card border border-mist overflow-hidden hover:border-silver transition-all duration-300">
   {heroImage && (
-    <div class="aspect-video bg-surface-2 overflow-hidden">
+    <div class="aspect-video bg-gray-50 overflow-hidden">
       <img src={heroImage} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
     </div>
   )}
   <div class="p-5">
-    <time datetime={pubDate.toISOString()} class="text-xs text-gray-500 font-mono">{formattedDate}</time>
-    <h3 class="text-lg font-semibold text-white mt-2 mb-2 group-hover:text-violet-300 transition-colors">
+    <time datetime={pubDate.toISOString()} class="text-caption text-smoke font-display font-semibold uppercase">{formattedDate}</time>
+    <h3 class="text-body font-display font-bold text-midnight mt-2 mb-2 group-hover:text-carbon transition-colors tracking-[-0.035em]">
       <a href={slug} class="hover:underline">{title}</a>
     </h3>
-    <p class="text-sm text-gray-400 leading-relaxed mb-4">{description}</p>
+    <p class="text-body-sm text-smoke leading-relaxed mb-4">{description}</p>
     <div class="flex flex-wrap gap-1.5 mb-3">
       {tags.slice(0, 3).map((tag) => (
-        <span class="px-2 py-0.5 text-xs rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">{tag}</span>
+        <span class="px-2 py-0.5 text-xs rounded-btn bg-accent-yellow text-carbon border border-mist">{tag}</span>
       ))}
     </div>
-    <a href={slug} class="inline-flex items-center gap-1.5 text-xs text-violet-400 font-medium group-hover:text-violet-300 transition-colors duration-200">
+    <a href={slug} class="inline-flex items-center gap-1.5 text-caption font-display font-semibold text-silver group-hover:text-midnight transition-colors duration-200 uppercase tracking-wider">
       <span>{readMoreLabel}</span>
       <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />

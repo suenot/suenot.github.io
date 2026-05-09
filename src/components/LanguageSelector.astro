@@ -11,7 +11,7 @@ const { currentLocale } = Astro.props;
 <div class="relative" id="lang-selector">
   <button
     id="lang-toggle"
-    class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-mono"
+    class="flex items-center gap-1.5 text-body-sm text-silver hover:text-midnight transition-colors font-display font-semibold tracking-[-0.035em]"
     aria-label="Select language"
     aria-expanded="false"
   >
@@ -23,15 +23,15 @@ const { currentLocale } = Astro.props;
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
   </button>
-  <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 py-1 w-40 rounded-lg bg-surface-2 border border-white/10 shadow-xl z-50">
+  <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 py-1 w-40 rounded-card bg-canvas border border-mist shadow-lg z-50">
     {locales.map((loc) => (
       <a
         href={Astro.url.pathname.replace(`/${currentLocale}`, `/${loc}`)}
         class:list={[
-          'block px-3 py-2 text-sm transition-colors',
+          'block px-3 py-2 text-body-sm transition-colors',
           loc === currentLocale
-            ? 'text-violet-300 bg-violet-500/10'
-            : 'text-gray-400 hover:text-white hover:bg-white/[0.03]',
+            ? 'text-midnight bg-accent-yellow font-semibold'
+            : 'text-silver hover:text-midnight hover:bg-gray-50',
         ]}
       >
         {localeNames[loc]}
