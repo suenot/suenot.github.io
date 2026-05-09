@@ -2,6 +2,7 @@
 title: "如何在 LLM 中节省 Token：Claude Code 实用指南"
 description: "Claude Code 中节省 Token 的实用方法：子代理、技能、钩子、国产模型、知识图谱和 RAG。帮你将成本降低 10 倍的清单。"
 pubDate: 2026-04-12
+heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
 ---

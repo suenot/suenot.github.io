@@ -2,6 +2,7 @@
 title: "Muxy — the terminal that saves your focus when juggling a dozen projects"
 description: "How Muxy helps vibecoders stay focused with 4–8 open projects. Comparison with Open Agent Manager and why native terminals beat web-based ones."
 pubDate: 2026-05-01
+heroImage: "/images/blog/muxy-terminal-hero.png"
 tags: ["terminal", "muxy", "vibecoding", "productivity", "tooling"]
 draft: false
 ---

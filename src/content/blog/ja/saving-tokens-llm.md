@@ -2,6 +2,7 @@
 title: "LLMでトークンを節約する方法：Claude Code実践ガイド"
 description: "Claude Codeでトークンを節約する実践的なアプローチ：サブエージェント、スキル、フック、中国製モデル、ナレッジグラフ、RAG。コストを10分の1に削減するチェックリスト。"
 pubDate: 2026-04-12
+heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
 ---

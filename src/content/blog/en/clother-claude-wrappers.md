@@ -2,6 +2,7 @@
 title: "Clother: clean wrappers around Claude Code without touching your global settings"
 description: "How to use jolehuit/clother to switch Claude Code between Z.AI, Kimi, MiniMax, OpenRouter, Alibaba, Ollama, LM Studio and custom providers via clother-* commands — without rewriting ~/.claude or global env vars."
 pubDate: 2026-04-19
+heroImage: "/images/blog/clother-claude-hero.png"
 tags: ["claude-code", "clother", "llm", "providers", "tooling"]
 draft: false
 ---

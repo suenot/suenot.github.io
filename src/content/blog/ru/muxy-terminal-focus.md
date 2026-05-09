@@ -2,6 +2,7 @@
 title: "Muxy — терминал, который спасёт ваш фокус при работе над десятком проектов"
 description: "Как Muxy помогает вайбкодерам держать фокус при 4–8 открытых проектах. Сравнение с Open Agent Manager и почему нативные терминалы лучше веба."
 pubDate: 2026-05-01
+heroImage: "/images/blog/muxy-terminal-hero.png"
 tags: ["terminal", "muxy", "vibecoding", "productivity", "tooling"]
 draft: false
 ---

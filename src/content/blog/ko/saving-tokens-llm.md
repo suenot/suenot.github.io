@@ -2,6 +2,7 @@
 title: "LLM에서 토큰 절약하기: Claude Code 실전 가이드"
 description: "Claude Code에서 토큰을 절약하는 실전 방법: subagent, skill, hook, 중국 모델, 지식 그래프와 RAG. 비용을 10배 줄이는 체크리스트."
 pubDate: 2026-04-12
+heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
 ---

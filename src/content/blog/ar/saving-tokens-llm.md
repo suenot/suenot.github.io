@@ -2,6 +2,7 @@
 title: "كيف توفر التوكنز في النماذج اللغوية: دليل عملي لـ Claude Code"
 description: "أساليب عملية لتوفير التوكنز في Claude Code: الوكلاء الفرعيون، والمهارات، والخطافات، والنماذج الصينية، ورسوم المعرفة، وRAG. قائمة مرجعية لتقليل التكاليف 10 أضعاف."
 pubDate: 2026-04-12
+heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
 ---

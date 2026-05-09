@@ -2,6 +2,7 @@
 title: "How to Save Tokens in LLM: A Practical Guide for Claude Code"
 description: "Practical approaches to saving tokens in Claude Code: subagents, skills, hooks, Chinese models, knowledge graphs, and RAG. A checklist to cut costs by 10x."
 pubDate: 2026-04-12
+heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
 ---
