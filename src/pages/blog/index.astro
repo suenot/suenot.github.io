@@ -1,21 +1,14 @@
 ---
-import type { GetStaticPaths } from 'astro';
-import Layout from '../../../layouts/Layout.astro';
-import BlogCard from '../../../components/BlogCard.astro';
-import TagList from '../../../components/TagList.astro';
-import Search from '../../../components/Search.astro';
-import { locales, type Locale } from '../../../i18n/config';
-import { useTranslations } from '../../../i18n/ui';
-import { getLocalePrefix } from '../../../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import TagList from '../../components/TagList.astro';
+import Search from '../../components/Search.astro';
+import { defaultLocale, type Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
 import { getCollection } from 'astro:content';
 
-export const getStaticPaths = (() => {
-  return locales.map((locale) => ({ params: { locale } }));
-}) satisfies GetStaticPaths;
-
-const { locale } = Astro.params as { locale: Locale };
+const locale = defaultLocale;
 const t = useTranslations(locale);
-const prefix = getLocalePrefix(locale);
 
 const allPosts = await getCollection('blog', ({ data, id }) => {
   return id.startsWith(`${locale}/`) && !data.draft;
@@ -62,7 +55,7 @@ function getSlug(id: string): string {
                 pubDate={post.data.pubDate}
                 tags={post.data.tags}
                 heroImage={post.data.heroImage}
-                slug={`${prefix}/blog/${getSlug(post.id)}/`}
+                slug={`/blog/${getSlug(post.id)}/`}
                 readMoreLabel={t('blog.readMore')}
               />
             </div>

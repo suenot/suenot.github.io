@@ -5,6 +5,7 @@ import TranslationLinks from '../components/TranslationLinks.astro';
 import TagList from '../components/TagList.astro';
 import { type Locale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
+import { getLocalePrefix } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -33,6 +34,7 @@ const {
 } = Astro.props;
 
 const t = useTranslations(locale);
+const prefix = getLocalePrefix(locale);
 
 const formattedPubDate = pubDate.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
   year: 'numeric',
@@ -51,8 +53,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: `https://suenot.github.io/${locale}/` },
-    { '@type': 'ListItem', position: 2, name: 'Blog', item: `https://suenot.github.io/${locale}/blog/` },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `https://suenot.github.io${prefix}/` },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: `https://suenot.github.io${prefix}/blog/` },
     { '@type': 'ListItem', position: 3, name: title },
   ],
 };
@@ -74,7 +76,7 @@ const breadcrumbLd = {
     <div class="max-w-5xl mx-auto px-6">
       <!-- Back link -->
       <a
-        href={`/${locale}/blog/`}
+        href={`${prefix}/blog/`}
         class="inline-flex items-center text-sm text-gray-400 hover:text-violet-300 transition-colors mb-8"
       >
         {t('blog.backToBlog')}

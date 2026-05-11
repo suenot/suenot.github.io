@@ -1,16 +1,11 @@
-import type { APIContext, GetStaticPaths } from 'astro';
+import type { APIContext } from 'astro';
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { locales, type Locale } from '../../../i18n/config';
-import { useTranslations } from '../../../i18n/ui';
-import { getLocalePrefix } from '../../../i18n/utils';
-
-export const getStaticPaths = (() => {
-  return locales.map((locale) => ({ params: { locale } }));
-}) satisfies GetStaticPaths;
+import { defaultLocale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
 
 export async function GET(context: APIContext) {
-  const locale = context.params.locale as Locale;
+  const locale = defaultLocale;
   const t = useTranslations(locale);
 
   const posts = await getCollection('blog', ({ id, data }) => {
@@ -29,7 +24,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `${getLocalePrefix(locale)}/blog/${post.id.replace(`${locale}/`, '').replace(/\.md$/, '')}/`,
+      link: `/blog/${post.id.replace(`${locale}/`, '').replace(/\.md$/, '')}/`,
       categories: post.data.tags,
     })),
     customData: `<language>${locale}</language>`,

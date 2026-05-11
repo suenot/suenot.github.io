@@ -1,18 +1,11 @@
 ---
-import type { GetStaticPaths } from 'astro';
-import Layout from '../../../../layouts/Layout.astro';
-import { locales, type Locale } from '../../../../i18n/config';
-import { useTranslations } from '../../../../i18n/ui';
-import { getLocalePrefix } from '../../../../i18n/utils';
+import Layout from '../../../layouts/Layout.astro';
+import { defaultLocale } from '../../../i18n/config';
+import { useTranslations } from '../../../i18n/ui';
 import { getCollection } from 'astro:content';
 
-export const getStaticPaths = (() => {
-  return locales.map((locale) => ({ params: { locale } }));
-}) satisfies GetStaticPaths;
-
-const { locale } = Astro.params as { locale: Locale };
+const locale = defaultLocale;
 const t = useTranslations(locale);
-const prefix = getLocalePrefix(locale);
 
 const allPosts = await getCollection('blog', ({ id, data }) => {
   return id.startsWith(`${locale}/`) && !data.draft;
@@ -43,7 +36,7 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {sortedTags.map(([tag, count]) => (
           <a
-            href={`${prefix}/blog/tags/${tag}/`}
+            href={`/blog/tags/${tag}/`}
             class="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-violet-500/20 transition-all"
           >
             <div class="text-white font-medium group-hover:text-violet-300 transition-colors">#{tag}</div>

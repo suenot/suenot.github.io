@@ -1,11 +1,36 @@
 ---
-import { locales, localeNames, type Locale } from '../i18n/config';
+import { locales, localeNames, defaultLocale, type Locale } from '../i18n/config';
 
 interface Props {
   currentLocale: Locale;
 }
 
 const { currentLocale } = Astro.props;
+
+/**
+ * Build the URL for switching to a different locale.
+ * Default locale (en) lives at / (no prefix).
+ * Other locales live at /ru/, /zh/, etc.
+ */
+function getLocaleUrl(targetLocale: Locale): string {
+  const pathname = Astro.url.pathname;
+
+  // Strip the current locale prefix from the path to get the "bare" path
+  let barePath: string;
+  if (currentLocale === defaultLocale) {
+    // Currently on root (no locale prefix), e.g. /blog/some-post/
+    barePath = pathname;
+  } else {
+    // Currently on /ru/blog/some-post/ → strip /ru
+    barePath = pathname.replace(`/${currentLocale}`, '') || '/';
+  }
+
+  // Build the target URL
+  if (targetLocale === defaultLocale) {
+    return barePath;
+  }
+  return `/${targetLocale}${barePath}`;
+}
 ---
 
 <div class="relative" id="lang-selector">
@@ -26,7 +51,7 @@ const { currentLocale } = Astro.props;
   <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 py-1 w-40 rounded-lg bg-surface-2 border border-white/10 shadow-xl z-50">
     {locales.map((loc) => (
       <a
-        href={Astro.url.pathname.replace(`/${currentLocale}`, `/${loc}`)}
+        href={getLocaleUrl(loc)}
         class:list={[
           'block px-3 py-2 text-sm transition-colors',
           loc === currentLocale
