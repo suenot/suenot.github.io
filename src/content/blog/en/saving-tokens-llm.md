@@ -66,7 +66,7 @@ In practice:
 - Global env variables are not modified — the required ones are passed only when launching the wrapper
 - Gemini also has cheap subscriptions that can be used similarly
 
-There's no ready-made solution yet to "bake all models from different providers directly into Claude," but wrappers cover 80% of needs. One such tool is [Clother](https://github.com/jolehuit/clother/) — it lets you run Claude Code with different model providers without touching global settings.
+There's no ready-made solution yet to "bake all models from different providers directly into Claude," but wrappers cover 80% of needs. One such tool is [Clother](https://github.com/jolehuit/clother/) — it lets you run Claude Code with different model providers without touching global settings. For a more integrated approach, check out [OpenClaude](/blog/openclaude-multi-provider) — a standalone CLI that lets you define all models in one config with automatic agent routing.
 
 ## 6. Knowledge Graphs and RAG: Cutting Tokens by 10x
 
