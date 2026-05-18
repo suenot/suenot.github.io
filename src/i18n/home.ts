@@ -145,7 +145,7 @@ export const home = {
       eyebrow: '05. projects',
       heading: "What I'm building",
       intro:
-        'Across Reforms.ai products, open-source tools, and HFT infrastructure research.',
+        'Across my own products, open-source tools, and HFT infrastructure research.',
       categories: {
         Trading: 'Trading',
         AI: 'AI',
@@ -272,7 +272,7 @@ export const home = {
   ru: {
     hero: {
       badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
-      tagline: 'Fullstack · DevOps · Алготрейдинг разработчик',
+      tagline: 'Fullstack · DevOps · Разработчик в алготрейдинге',
       description:
         'Создаю платформы для алгоритмической торговли, HFT-инфраструктуру и инструменты для разработчиков на базе AI. Торгую с 2011.',
       cta_projects: 'Смотреть проекты',
@@ -390,8 +390,8 @@ export const home = {
     },
     frontier: {
       eyebrow: '04. флагманские проекты',
-      heading: 'Где я веду',
-      intro: 'Две компании, где я занимаю руководящие позиции основателя.',
+      heading: 'Чем руковожу',
+      intro: 'Две компании, которые я сооснователь и которыми управляю.',
       status_active: 'active',
       roles: {
         'Marketmaker.cc': 'Co-founder & CEO',
@@ -406,9 +406,9 @@ export const home = {
     },
     projects: {
       eyebrow: '05. проекты',
-      heading: 'Что я строю',
+      heading: 'Над чем работаю',
       intro:
-        'Продукты Reforms.ai, open-source инструменты и исследования HFT-инфраструктуры.',
+        'Собственные продукты, open-source инструменты и исследования HFT-инфраструктуры.',
       categories: {
         Trading: 'Trading',
         AI: 'AI',
@@ -675,7 +675,7 @@ export const home = {
       eyebrow: '05. 项目',
       heading: '我正在构建的',
       intro:
-        '涵盖 Reforms.ai 产品、开源工具以及 HFT 基础设施研究。',
+        '涵盖我自己的产品、开源工具以及 HFT 基础设施研究。',
       categories: {
         Trading: '交易',
         AI: 'AI',
@@ -939,7 +939,7 @@ export const home = {
       eyebrow: '05. 프로젝트',
       heading: '제가 만들고 있는 것',
       intro:
-        'Reforms.ai 제품, 오픈소스 도구, HFT 인프라 연구 전반.',
+        '나만의 제품, 오픈소스 도구, HFT 인프라 연구 전반.',
       categories: {
         Trading: '트레이딩',
         AI: 'AI',
@@ -1204,7 +1204,7 @@ export const home = {
       eyebrow: '05. プロジェクト',
       heading: '構築しているもの',
       intro:
-        'Reforms.ai のプロダクト、オープンソースツール、HFT インフラの研究全般。',
+        '自分のプロダクト、オープンソースツール、HFT インフラの研究全般。',
       categories: {
         Trading: 'トレーディング',
         AI: 'AI',
@@ -1468,7 +1468,7 @@ export const home = {
       eyebrow: '05. المشاريع',
       heading: 'ما أبنيه',
       intro:
-        'منتجات Reforms.ai، وأدوات مفتوحة المصدر، وأبحاث بنية HFT التحتية.',
+        'منتجاتي الخاصة، أدوات مفتوحة المصدر، وأبحاث بنية HFT التحتية.',
       categories: {
         Trading: 'التداول',
         AI: 'AI',
