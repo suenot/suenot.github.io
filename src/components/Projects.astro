@@ -15,38 +15,14 @@ interface ProjectGroup {
 
 const projects: ProjectGroup[] = [
   {
-    category: 'Algorithmic Trading',
+    category: 'Trading',
     items: [
       {
-        name: 'Marketmaker.cc',
-        desc: 'Algorithmic trading platform & scalping terminal. 60+ crypto exchanges, real-time data, backtesting engine.',
-        tags: ['Go', 'TypeScript', 'QuestDB', 'DuckDB'],
-        url: 'https://marketmaker.cc',
+        name: 'ZigBolt',
+        desc: 'High-performance messaging system in Zig — competitor to Aeron. Target: IPC RTT <100ns, 50M+ msg/sec.',
+        tags: ['Zig', 'HFT', 'IPC'],
+        url: 'https://github.com/suenot/zigbolt',
         status: 'active',
-        private: true,
-      },
-      {
-        name: 'StockAPIs.com',
-        desc: 'Crypto market data from 100+ exchanges, <100ms latency. AI agents for portfolio management and autonomous trading.',
-        tags: ['Python', 'QuestDB', 'Parquet', 'Redis'],
-        url: 'https://stockapis.com',
-        status: 'active',
-        private: true,
-      },
-      {
-        name: 'Profitmaker.cc',
-        desc: 'Open-source trading terminal (frontend + backend) for self-hosting, expandable with modules.',
-        tags: ['TypeScript', 'React'],
-        url: 'https://profitmaker.cc',
-        status: 'active',
-      },
-      {
-        name: 'Trender',
-        desc: 'Multi-timeframe HMA crossover backtesting engine. Features confirmed_only, directional separation, adaptive fill with 1s drill-down.',
-        tags: ['Python', 'Backtesting'],
-        url: 'https://trender.marketmaker.cc',
-        status: 'active',
-        private: true,
       },
       {
         name: 'trading-ipc-bench',
@@ -55,11 +31,45 @@ const projects: ProjectGroup[] = [
         url: 'https://github.com/suenot/trading-ipc-bench',
         status: 'active',
       },
-    ],
-  },
-  {
-    category: 'Trading Bots & Strategies',
-    items: [
+      {
+        name: 'bingx-leverages',
+        desc: 'Python library for reverse-engineering BingX leverage tiers API.',
+        tags: ['Python', 'BingX'],
+        url: 'https://github.com/suenot',
+        status: 'active',
+        private: true,
+      },
+      {
+        name: 'StockAPIs.com',
+        desc: 'Crypto market data from 100+ exchanges, <100ms latency. AI agents for portfolio management and autonomous trading.',
+        tags: ['Python', 'QuestDB', 'Parquet', 'Redis'],
+        url: 'https://stockapis.com',
+        status: 'wip',
+        private: true,
+      },
+      {
+        name: 'Profitmaker.cc',
+        desc: 'Open-source trading terminal (frontend + backend) for self-hosting, expandable with modules.',
+        tags: ['TypeScript', 'React'],
+        url: 'https://profitmaker.cc',
+        status: 'wip',
+      },
+      {
+        name: 'Trender',
+        desc: 'High-performance tick-sim backtesting engine with Genetic Optimization (Optuna). Features 1s drill-down, distributed cluster (50+ threads), and 22+ candle building methods.',
+        tags: ['Python', 'Zig', 'DuckDB', 'Numba'],
+        url: 'https://trender.marketmaker.cc',
+        status: 'wip',
+        private: true,
+      },
+      {
+        name: 'PolyTracker',
+        desc: 'Polymarket analytics with copy-trading, insider detection, and arbitrage scanner.',
+        tags: ['TypeScript', 'Python'],
+        url: 'https://github.com/suenot',
+        status: 'concept',
+        private: true,
+      },
       {
         name: 'Avellaneda-Stoikov',
         desc: 'Implementation of the Avellaneda-Stoikov HFT market making model. Includes multiple versions and TigerBeetle integration.',
@@ -70,8 +80,8 @@ const projects: ProjectGroup[] = [
       },
       {
         name: 'Frontrunner',
-        desc: 'Bybit frontrunner bot — order placement in 3–7ms, WebSocket subscriptions in 10–50ms. Implementations in Go, C++, and Rust.',
-        tags: ['Go', 'C++', 'Rust', 'HFT'],
+        desc: 'Bybit HFT bot — L1/L50 orderbook analysis, adaptive deviation reduction, and hot connection warming. Order placement in 3–7ms.',
+        tags: ['Go', 'Rust', 'fasthttp', 'HFT'],
         url: 'https://github.com/suenot',
         status: 'paused',
         private: true,
@@ -100,9 +110,9 @@ const projects: ProjectGroup[] = [
         private: true,
       },
       {
-        name: 'Upbit Listing Monitor',
-        desc: 'Monitors new listings on Upbit, auto-trades on Bybit/BingX. Written in Go.',
-        tags: ['Go', 'Listing', 'Bybit'],
+        name: 'Listing Monitor',
+        desc: 'Event-driven monitors for Upbit/Bithumb listings. Sub-100ms signal extraction from Telegram via gRPC. Optimized in Rust and Zig.',
+        tags: ['Rust', 'Zig', 'gRPC', 'Listing'],
         url: 'https://github.com/suenot',
         status: 'paused',
         private: true,
@@ -129,14 +139,6 @@ const projects: ProjectGroup[] = [
         tags: ['Python', 'Portfolio'],
         url: 'https://github.com/suenot',
         status: 'paused',
-        private: true,
-      },
-      {
-        name: 'PolyTracker',
-        desc: 'Polymarket analytics with copy-trading, insider detection, and arbitrage scanner.',
-        tags: ['TypeScript', 'Python'],
-        url: 'https://github.com/suenot',
-        status: 'concept',
         private: true,
       },
       {
@@ -169,17 +171,12 @@ const projects: ProjectGroup[] = [
         url: 'https://github.com/suenot/tinkoff-invest-etf-balancer-bot',
         status: 'paused',
       },
-    ],
-  },
-  {
-    category: 'HFT Infrastructure',
-    items: [
       {
-        name: 'ZigBolt',
-        desc: 'High-performance messaging system in Zig — competitor to Aeron. Target: IPC RTT <100ns, 50M+ msg/sec.',
-        tags: ['Zig', 'HFT', 'IPC'],
-        url: 'https://github.com/suenot/zigbolt',
-        status: 'wip',
+        name: 'candle-trade-visualizer',
+        desc: 'OHLCV candlestick chart visualizer for trading data.',
+        tags: ['TypeScript', 'Charts'],
+        url: 'https://github.com/suenot/candle-trade-visualizer',
+        status: 'paused',
       },
       {
         name: 'benchmarks-trading',
@@ -211,18 +208,10 @@ const projects: ProjectGroup[] = [
         url: 'https://github.com/suenot/hyperliquid-c',
         status: 'paused',
       },
-      {
-        name: 'bingx-leverages',
-        desc: 'Python library for reverse-engineering BingX leverage tiers API.',
-        tags: ['Python', 'BingX'],
-        url: 'https://github.com/suenot',
-        status: 'active',
-        private: true,
-      },
     ],
   },
   {
-    category: 'AI & Developer Tools',
+    category: 'AI',
     items: [
       {
         name: 'aicommit',
@@ -248,21 +237,6 @@ const projects: ProjectGroup[] = [
         private: true,
       },
       {
-        name: 'Cmdop',
-        desc: 'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace.',
-        tags: ['TypeScript', 'AI Agents'],
-        url: 'https://github.com/suenot',
-        status: 'active',
-        private: true,
-      },
-      {
-        name: 'Open Agent Manager',
-        desc: 'Desktop terminal for parallel AI coding agent sessions. Project sidebar, real PTY terminal, prompt queue. Local, SSH, or CMDOP connections.',
-        tags: ['Tauri', 'Rust', 'React'],
-        url: 'http://open-agent-manager.suenot.com/',
-        status: 'wip',
-      },
-      {
         name: 'OpenScreenshot',
         desc: 'macOS screenshot tool for LLM context. Captures screen regions, auto-downscales to save tokens, sends PNG straight to clipboard.',
         tags: ['Swift', 'macOS', 'LLM'],
@@ -284,6 +258,13 @@ const projects: ProjectGroup[] = [
         status: 'active',
         private: true,
       },
+      {
+        name: 'Open Agent Manager',
+        desc: 'Desktop terminal for parallel AI coding agent sessions. Project sidebar, real PTY terminal, prompt queue. Local, SSH, or CMDOP connections.',
+        tags: ['Tauri', 'Rust', 'React'],
+        url: 'http://open-agent-manager.suenot.com/',
+        status: 'paused',
+      },
     ],
   },
   {
@@ -297,32 +278,10 @@ const projects: ProjectGroup[] = [
         status: 'active',
       },
       {
-        name: 'OpenLastPass',
-        desc: 'Open-source password manager — Rust/Axum backend, React+TS frontend, Tauri desktop, React Native mobile, Argon2id/AES-256-GCM.',
-        tags: ['Rust', 'React', 'Tauri'],
-        url: 'https://github.com/suenot',
-        status: 'wip',
-        private: true,
-      },
-      {
-        name: 'candle-trade-visualizer',
-        desc: 'OHLCV candlestick chart visualizer for trading data.',
-        tags: ['TypeScript', 'Charts'],
-        url: 'https://github.com/suenot/candle-trade-visualizer',
-        status: 'paused',
-      },
-      {
         name: 'MacChill',
         desc: 'macOS menu bar app to monitor thermal pressure & auto-toggle Low Power Mode on Apple Silicon M1–M4.',
         tags: ['Swift', 'SwiftUI', 'macOS'],
         url: 'https://github.com/suenot/macchill',
-        status: 'active',
-      },
-      {
-        name: 'Vasya',
-        desc: 'The Telegram Client for Deep Focus — minimalist Telegram client (TypeScript + Rust backend).',
-        tags: ['TypeScript', 'Rust', 'Telegram'],
-        url: 'https://github.com/suenot/vasya',
         status: 'active',
       },
       {
@@ -331,6 +290,21 @@ const projects: ProjectGroup[] = [
         tags: ['TypeScript', 'AES-256-GCM'],
         url: 'https://github.com/suenot/sanctum',
         status: 'active',
+      },
+      {
+        name: 'OpenLastPass',
+        desc: 'Open-source password manager — Rust/Axum backend, React+TS frontend, Tauri desktop, React Native mobile, Argon2id/AES-256-GCM.',
+        tags: ['Rust', 'React', 'Tauri'],
+        url: 'https://github.com/suenot',
+        status: 'wip',
+        private: true,
+      },
+      {
+        name: 'Vasya',
+        desc: 'The Telegram Client for Deep Focus — minimalist Telegram client (TypeScript + Rust backend).',
+        tags: ['TypeScript', 'Rust', 'Telegram'],
+        url: 'https://github.com/suenot/vasya',
+        status: 'paused',
       },
       {
         name: 'macpurge',
@@ -346,25 +320,6 @@ const projects: ProjectGroup[] = [
         tags: ['TypeScript'],
         url: 'https://github.com/suenot/deadline-in-days',
         status: 'paused',
-      },
-    ],
-  },
-  {
-    category: 'Publications',
-    items: [
-      {
-        name: 'The Algotrading Book',
-        desc: 'Online book about algorithmic trading — strategies, backtesting, infrastructure, and practical guides.',
-        tags: ['Content', 'Algotrading'],
-        url: 'https://the-algotrading-book-website.vercel.app/',
-        status: 'active',
-      },
-      {
-        name: 'Blog on Marketmaker.cc',
-        desc: 'Articles on backtesting methodology, QuestDB analytics, Monte Carlo bootstrap, anomaly detection, profit/loss asymmetry, and more.',
-        tags: ['Blog', 'Backtesting', 'Analytics'],
-        url: 'https://marketmaker.cc/en/blog/1/',
-        status: 'active',
       },
     ],
   },
@@ -463,6 +418,25 @@ const projects: ProjectGroup[] = [
       },
     ],
   },
+  {
+    category: 'Publications',
+    items: [
+      {
+        name: 'The Algotrading Book',
+        desc: 'Online book about algorithmic trading — strategies, backtesting, infrastructure, and practical guides.',
+        tags: ['Content', 'Algotrading'],
+        url: 'https://the-algotrading-book-website.vercel.app/',
+        status: 'active',
+      },
+      {
+        name: 'Blog on Marketmaker.cc',
+        desc: 'Articles on backtesting methodology, QuestDB analytics, Monte Carlo bootstrap, anomaly detection, profit/loss asymmetry, and more.',
+        tags: ['Blog', 'Backtesting', 'Analytics'],
+        url: 'https://marketmaker.cc/en/blog/1/',
+        status: 'active',
+      },
+    ],
+  },
 ];
 
 const statusStyles: Record<string, string> = {
@@ -484,9 +458,9 @@ const statusLabels: Record<string, string> = {
 };
 ---
 
-<section id="projects" class="py-24 bg-[#0D0D1A]">
+<section id="projects" class="py-24">
   <div class="max-w-5xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">03. projects</p>
+    <p class="text-violet-400 font-mono text-sm mb-3">05. projects</p>
     <h2 class="text-3xl font-bold text-white mb-4">What I'm building</h2>
     <p class="text-gray-400 mb-12 max-w-xl">
       Across Reforms.ai products, open-source tools, and HFT infrastructure research.

@@ -4,7 +4,9 @@ export const ui = {
   en: {
     'nav.about': 'About',
     'nav.tech': 'Tech',
+    'nav.frontier': 'Frontier',
     'nav.projects': 'Projects',
+    'nav.algotrading': 'Algotrading',
     'nav.contact': 'Contact',
     'nav.blog': 'Blog',
     'blog.title': 'Blog',
@@ -26,7 +28,9 @@ export const ui = {
   ru: {
     'nav.about': 'Обо мне',
     'nav.tech': 'Технологии',
+    'nav.frontier': 'Флагманы',
     'nav.projects': 'Проекты',
+    'nav.algotrading': 'Алготрейдинг',
     'nav.contact': 'Контакты',
     'nav.blog': 'Блог',
     'blog.title': 'Блог',
@@ -48,7 +52,9 @@ export const ui = {
   zh: {
     'nav.about': '关于',
     'nav.tech': '技术栈',
+    'nav.frontier': '旗舰',
     'nav.projects': '项目',
+    'nav.algotrading': '量化交易',
     'nav.contact': '联系',
     'nav.blog': '博客',
     'blog.title': '博客',
@@ -70,7 +76,9 @@ export const ui = {
   ko: {
     'nav.about': '소개',
     'nav.tech': '기술 스택',
+    'nav.frontier': '주요 프로젝트',
     'nav.projects': '프로젝트',
+    'nav.algotrading': '알고트레이딩',
     'nav.contact': '연락처',
     'nav.blog': '블로그',
     'blog.title': '블로그',
@@ -92,7 +100,9 @@ export const ui = {
   ja: {
     'nav.about': '概要',
     'nav.tech': '技術スタック',
+    'nav.frontier': '主要プロジェクト',
     'nav.projects': 'プロジェクト',
+    'nav.algotrading': 'アルゴトレード',
     'nav.contact': '連絡先',
     'nav.blog': 'ブログ',
     'blog.title': 'ブログ',
@@ -114,7 +124,9 @@ export const ui = {
   ar: {
     'nav.about': 'عن',
     'nav.tech': 'التقنيات',
+    'nav.frontier': 'المشاريع الرائدة',
     'nav.projects': 'المشاريع',
+    'nav.algotrading': 'التداول الخوارزمي',
     'nav.contact': 'اتصل',
     'nav.blog': 'المدونة',
     'blog.title': 'المدونة',
