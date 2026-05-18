@@ -30,7 +30,7 @@ export const home = {
       p2_suffix:
         '. Started with manual trading, gradually automated everything, and now focus on building HFT infrastructure and algorithmic trading platforms.',
       p3_prefix: 'Full-stack developer with deep expertise in ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. Based in Moscow.',
       focus_eyebrow: 'Current focus',
       focus: [
@@ -293,7 +293,7 @@ export const home = {
       p2_suffix:
         ' года. Начинал с ручной торговли, постепенно автоматизировал всё, а теперь фокусируюсь на HFT-инфраструктуре и платформах алготрейдинга.',
       p3_prefix: 'Full-stack разработчик с глубокой экспертизой в ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. Живу в Москве.',
       focus_eyebrow: 'Текущий фокус',
       focus: [
@@ -560,7 +560,7 @@ export const home = {
       p2_suffix:
         ' 年起就对加密货币和股票市场感兴趣。从手动交易起步，逐步实现全面自动化，目前专注于构建 HFT 基础设施和算法交易平台。',
       p3_prefix: '全栈开发者，精通 ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '。常驻莫斯科。',
       focus_eyebrow: '当前重点',
       focus: [
@@ -824,7 +824,7 @@ export const home = {
       p2_suffix:
         '년부터 암호화폐와 주식 시장에 관심을 가져왔습니다. 수동 트레이딩으로 시작해 점차 모든 것을 자동화했고, 지금은 HFT 인프라와 알고리즘 트레이딩 플랫폼 구축에 집중하고 있습니다.',
       p3_prefix: '풀스택 개발자로 ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: ' 에 깊은 전문성을 보유. 모스크바 거주.',
       focus_eyebrow: '현재 집중 분야',
       focus: [
@@ -1089,7 +1089,7 @@ export const home = {
       p2_suffix:
         ' 年から暗号通貨と株式市場に興味を持っています。手動トレーディングから始め、徐々にすべてを自動化し、現在は HFT インフラとアルゴリズム取引プラットフォームの構築に注力しています。',
       p3_prefix: 'フルスタック開発者として ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: ' に深い専門性を持ちます。モスクワ在住。',
       focus_eyebrow: '現在のフォーカス',
       focus: [
@@ -1353,7 +1353,7 @@ export const home = {
       p2_suffix:
         '. بدأت بالتداول اليدوي، ثم أتمتت كل شيء تدريجياً، وأركّز الآن على بناء بنية HFT ومنصّات التداول الخوارزمي.',
       p3_prefix: 'مطوّر full-stack بخبرة عميقة في ',
-      p3_langs: 'Python, TypeScript, Rust, Go, C++, Zig',
+      p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. مقيم في موسكو.',
       focus_eyebrow: 'التركيز الحالي',
       focus: [
