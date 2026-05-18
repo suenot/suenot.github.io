@@ -390,8 +390,8 @@ export const home = {
     },
     frontier: {
       eyebrow: '04. флагманские проекты',
-      heading: 'Чем руковожу',
-      intro: 'Две компании, которые я сооснователь и которыми управляю.',
+      heading: 'Стою у руля',
+      intro: 'Сооснователь обеих компаний — CEO и CTO.',
       status_active: 'active',
       roles: {
         'Marketmaker.cc': 'Co-founder & CEO',
