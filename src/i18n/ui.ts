@@ -23,7 +23,7 @@ export const ui = {
     'blog.toc': 'Table of Contents',
     'blog.published': 'Published',
     'blog.updated': 'Updated',
-    'footer.tagline': '// trading since 2011 · still backtesting',
+    'footer.tagline': '// I code because I was made for it',
   },
   ru: {
     'nav.about': 'Обо мне',
@@ -47,7 +47,7 @@ export const ui = {
     'blog.toc': 'Содержание',
     'blog.published': 'Опубликовано',
     'blog.updated': 'Обновлено',
-    'footer.tagline': '// торгую с 2011 · всё ещё бэктестирую',
+    'footer.tagline': '// я кодю, потому что создан для этого',
   },
   zh: {
     'nav.about': '关于',
@@ -71,7 +71,7 @@ export const ui = {
     'blog.toc': '目录',
     'blog.published': '发布于',
     'blog.updated': '更新于',
-    'footer.tagline': '// 自2011年交易 · 仍在回测',
+    'footer.tagline': '// 我写代码，因为我天生如此',
   },
   ko: {
     'nav.about': '소개',
@@ -95,7 +95,7 @@ export const ui = {
     'blog.toc': '목차',
     'blog.published': '게시일',
     'blog.updated': '수정일',
-    'footer.tagline': '// 2011년부터 트레이딩 · 아직도 백테스팅',
+    'footer.tagline': '// 나는 코딩하기 위해 태어났다',
   },
   ja: {
     'nav.about': '概要',
@@ -119,7 +119,7 @@ export const ui = {
     'blog.toc': '目次',
     'blog.published': '公開日',
     'blog.updated': '更新日',
-    'footer.tagline': '// 2011年からトレーディング · まだバックテスト中',
+    'footer.tagline': '// コーディングするために生まれてきた',
   },
   ar: {
     'nav.about': 'عن',
@@ -143,7 +143,7 @@ export const ui = {
     'blog.toc': 'جدول المحتويات',
     'blog.published': 'نُشر',
     'blog.updated': 'مُحدّث',
-    'footer.tagline': '// يتداول منذ 2011 · لا يزال يختبر',
+    'footer.tagline': '// أبرمج لأنني خُلقت لذلك',
   },
 } as const;
 
