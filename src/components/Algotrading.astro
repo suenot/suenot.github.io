@@ -1,167 +1,80 @@
 ---
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getHome } from '../i18n/home';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = defaultLocale } = Astro.props;
+const t = getHome(locale).algotrading;
+
+// Tag chips per section, keyed by section index (same order as t.sections)
+const sectionTags: { name: string; classes: string }[][] = [
+  // 0 Backtesting
+  [
+    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
+    { name: 'Zig', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
+    { name: 'Optuna', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
+  ],
+  // 1 Listings
+  [
+    { name: 'Rust', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
+    { name: 'Zig', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
+    { name: 'gRPC', classes: 'border-green-500/20 bg-green-500/5 text-green-300' },
+  ],
+  // 2 HFT
+  [
+    { name: 'Golang', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
+    { name: 'Rust', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
+    { name: 'C++', classes: 'border-red-500/20 bg-red-500/5 text-red-300' },
+  ],
+  // 3 Arbitrage Systems
+  [
+    { name: 'Go', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
+    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
+    { name: 'Next.js', classes: 'border-green-500/20 bg-green-500/5 text-green-300' },
+  ],
+  // 4 Portfolio Optimization
+  [
+    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
+    { name: 'SciPy', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
+    { name: 'Math', classes: 'border-gray-500/20 bg-gray-500/5 text-gray-300' },
+  ],
+];
 ---
 
 <section id="algotrading" class="py-24 bg-[#0A0A14]">
   <div class="max-w-5xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">02. algotrading</p>
-    <h2 class="text-3xl font-bold text-white mb-4">Trading Engineering & HFT</h2>
+    <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
+    <h2 class="text-3xl font-bold text-white mb-4">{t.heading}</h2>
     <p class="text-gray-400 mb-12 max-w-xl">
-      Deep expertise in building low-latency execution systems, high-fidelity backtesting engines, and automated listing monitors across multiple programming languages.
+      {t.intro}
     </p>
 
     <div class="space-y-16">
-      <!-- Trender -->
-      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-xl font-bold text-white">Backtesting</h3>
-          <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">Backtesting Engine</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/5 text-violet-300 font-mono">Python</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/20 bg-blue-500/5 text-blue-300 font-mono">Zig</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-orange-500/20 bg-orange-500/5 text-orange-300 font-mono">Optuna</span>
+      {t.sections.map((section, i) => (
+        <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
+          <div class="space-y-4">
+            <h3 class="text-xl font-bold text-white">{section.title}</h3>
+            <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">{section.subtitle}</p>
+            <div class="flex flex-wrap gap-2">
+              {(sectionTags[i] ?? []).map((tag) => (
+                <span class={`text-[10px] px-2 py-0.5 rounded border font-mono ${tag.classes}`}>{tag.name}</span>
+              ))}
+            </div>
+          </div>
+          <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
+            <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
+              {section.bullets.map((bullet) => (
+                <li class="flex gap-3">
+                  <span class="text-violet-500 mt-1">▹</span>
+                  <span set:html={bullet} />
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-        <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-          <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Developed a <strong>tick-sim engine</strong> that matches live bot behavior minute-by-minute, eliminating backtest-to-live drift.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Implemented <strong>Genetic Optimization</strong> using Optuna (TPE, CMA-ES) for parallel parameter searching across 50+ threads.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Engineered a distributed compute cluster (3 nodes) with an <strong>in-memory cache</strong>, accelerating backtests by 26x.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Added support for 22 candle building methods including <strong>Renko, Range, and Tick/Volume Imbalance bars</strong>.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Listings -->
-      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-xl font-bold text-white">Listings</h3>
-          <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">Event-Driven Execution</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded border border-orange-500/20 bg-orange-500/5 text-orange-300 font-mono">Rust</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/20 bg-blue-500/5 text-blue-300 font-mono">Zig</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-green-500/20 bg-green-500/5 text-green-300 font-mono">gRPC</span>
-          </div>
-        </div>
-        <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-          <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Built ultra-fast <strong>listing monitors</strong> in Rust and Zig, detecting new pairs via API and market-diff detection.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span>Developed low-latency, event-driven execution pipelines to automatically trade on high-volatility events.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- HFT -->
-      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-xl font-bold text-white">HFT</h3>
-          <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">High-Frequency Trading</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/20 bg-blue-500/5 text-blue-300 font-mono">Golang</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-orange-500/20 bg-orange-500/5 text-orange-300 font-mono">Rust</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-red-500/20 bg-red-500/5 text-red-300 font-mono">C++</span>
-          </div>
-        </div>
-        <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-          <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Frontrunning Algorithms:</strong> Developed low-latency orderbook analyzers processing L1 (10ms) and L50 (20ms) streams simultaneously to hunt manipulator orders via adaptive deviation reduction.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Market Making & Scalping:</strong> Implemented models like Avellaneda-Stoikov and high-performance FIX protocol scalpers.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Execution Optimization:</strong> Optimized execution paths using <strong>fasthttp</strong> and custom gRPC adapters, achieving order placement in 3-7ms.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- General Experience -->
-      <!-- Arbitrage -->
-      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-xl font-bold text-white">Arbitrage Systems</h3>
-          <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">Multi-Market Exploitation</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/20 bg-blue-500/5 text-blue-300 font-mono">Go</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/5 text-violet-300 font-mono">Python</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-green-500/20 bg-green-500/5 text-green-300 font-mono">Next.js</span>
-          </div>
-        </div>
-        <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-          <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Inter-exchange & Pair:</strong> Connected to 30+ exchanges. Built spot/futures arbitrage with two-stage correlation divergence approach and advanced limit-order management.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Kimchi Premium:</strong> Developed a real-time monitoring and trading platform for Korean exchanges (Upbit) using a Go backend and Next.js dashboard.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Prediction Markets:</strong> Built Polymarket bots for arbitrage and copy-trading, exploiting event-driven inefficiencies.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Statistical Arbitrage:</strong> Researched and implemented stat-arb models on pseudographs (including the Bellman-Ford algorithm).</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Portfolio Optimization -->
-      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-xl font-bold text-white">Portfolio Optimization</h3>
-          <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">Quantitative Modeling</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-[10px] px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/5 text-violet-300 font-mono">Python</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-orange-500/20 bg-orange-500/5 text-orange-300 font-mono">SciPy</span>
-            <span class="text-[10px] px-2 py-0.5 rounded border border-gray-500/20 bg-gray-500/5 text-gray-300 font-mono">Math</span>
-          </div>
-        </div>
-        <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-          <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Hierarchical Risk Parity (HRP):</strong> Implemented HRP using hierarchical clustering (dendrograms) and covariance matrices to allocate risk optimally.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Risk Management:</strong> Integrated Hull-White CVaR correction to scale returns based on current volatility, dynamically converting risky assets to cash.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Modern Portfolio Theory:</strong> Applied mean-variance optimization and efficient frontier modeling for crypto portfolios.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-violet-500 mt-1">▹</span>
-              <span><strong>Automated Balancers:</strong> Built a production Tinkoff ETF balancer bot for automated, rule-based portfolio rebalancing.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

@@ -1,5 +1,14 @@
 ---
 import * as si from 'simple-icons';
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getHome } from '../i18n/home';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = defaultLocale } = Astro.props;
+const t = getHome(locale).tech;
+type TechCategoryKey = keyof typeof t.categories;
 
 // Map tech names to simple-icons slugs
 const iconMap: Record<string, string> = {
@@ -202,14 +211,14 @@ const techCategories = [
 
 <section id="tech" class="py-24 bg-[#0D0D1A]">
   <div class="max-w-5xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">03. tech stack</p>
-    <h2 class="text-3xl font-bold text-white mb-12">Technologies I use</h2>
+    <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
+    <h2 class="text-3xl font-bold text-white mb-12">{t.heading}</h2>
 
     <div class="space-y-10">
       {techCategories.map((category) => (
         <div>
           <h3 class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4">
-            {category.name}
+            {t.categories[category.name as TechCategoryKey] ?? category.name}
           </h3>
           <div class="flex flex-wrap gap-2">
             {category.items.map((tech) => {

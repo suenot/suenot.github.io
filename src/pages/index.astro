@@ -8,18 +8,16 @@ import FrontierProjects from '../components/FrontierProjects.astro';
 import Algotrading from '../components/Algotrading.astro';
 import Contact from '../components/Contact.astro';
 import { defaultLocale } from '../i18n/config';
-import { useTranslations } from '../i18n/ui';
 
 const locale = defaultLocale;
-const t = useTranslations(locale);
 ---
 
 <Layout locale={locale}>
-  <Hero />
-  <About />
-  <Algotrading />
-  <TechStack />
-  <FrontierProjects />
-  <Projects />
-  <Contact />
+  <Hero locale={locale} />
+  <About locale={locale} />
+  <Algotrading locale={locale} />
+  <TechStack locale={locale} />
+  <FrontierProjects locale={locale} />
+  <Projects locale={locale} />
+  <Contact locale={locale} />
 </Layout>
