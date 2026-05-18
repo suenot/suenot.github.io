@@ -8,7 +8,7 @@ import type { Locale } from './config';
 export const home = {
   en: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · Algotrading Developer',
       description:
         'Building algorithmic trading platforms, HFT infrastructure, and AI-powered developer tools. Trading since 2011.',
@@ -131,8 +131,8 @@ export const home = {
       intro: 'Two companies where I hold founding leadership roles.',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
@@ -271,7 +271,7 @@ export const home = {
 
   ru: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · Разработчик в алготрейдинге',
       description:
         'Создаю платформы для алгоритмической торговли, HFT-инфраструктуру и инструменты для разработчиков на базе AI. Торгую с 2011.',
@@ -285,7 +285,7 @@ export const home = {
     about: {
       eyebrow: '01. обо мне',
       heading: 'Кто я',
-      p1_prefix: 'Я CEO ',
+      p1_prefix: 'Я — CEO ',
       p1_marketmaker_suffix: ' (платформа для алгоритмической торговли) и CTO ',
       p1_cmdop_suffix: '.',
       p2_prefix: 'Криптовалютами и фондовыми рынками интересуюсь с ',
@@ -321,13 +321,13 @@ export const home = {
     },
     algotrading: {
       eyebrow: '02. алготрейдинг',
-      heading: 'Trading Engineering и HFT',
+      heading: 'Разработка торговых систем и HFT',
       intro:
         'Глубокая экспертиза в построении систем исполнения с низкой латентностью, высокоточных движков бэктестинга и автоматических мониторов листингов на нескольких языках программирования.',
       sections: [
         {
           title: 'Бэктестинг',
-          subtitle: 'Backtesting Engine',
+          subtitle: 'Движок бэктестинга',
           bullets: [
             'Разработал <strong>tick-sim движок</strong>, который повторяет поведение живого бота по минутам, устраняя расхождения между бэктестом и live.',
             'Реализовал <strong>генетическую оптимизацию</strong> через Optuna (TPE, CMA-ES) для параллельного поиска параметров в 50+ потоков.',
@@ -337,7 +337,7 @@ export const home = {
         },
         {
           title: 'Листинги',
-          subtitle: 'Event-Driven Execution',
+          subtitle: 'Событийное исполнение',
           bullets: [
             'Создал сверхбыстрые <strong>мониторы листингов</strong> на Rust и Zig: детекция новых пар через API и market-diff анализ.',
             'Разработал event-driven пайплайны исполнения с низкой латентностью для автоматической торговли на высоковолатильных событиях.',
@@ -345,7 +345,7 @@ export const home = {
         },
         {
           title: 'HFT',
-          subtitle: 'High-Frequency Trading',
+          subtitle: 'Высокочастотный трейдинг',
           bullets: [
             '<strong>Frontrunning-алгоритмы:</strong> разработал анализаторы стакана с низкой латентностью, обрабатывающие L1 (10ms) и L50 (20ms) потоки одновременно для поиска заявок манипуляторов через адаптивное сокращение отклонений.',
             '<strong>Market Making и скальпинг:</strong> реализовал модели вроде Avellaneda-Stoikov и высокопроизводительные скальперы на FIX-протоколе.',
@@ -353,8 +353,8 @@ export const home = {
           ],
         },
         {
-          title: 'Arbitrage Systems',
-          subtitle: 'Multi-Market Exploitation',
+          title: 'Арбитражные системы',
+          subtitle: 'Использование разницы между рынками',
           bullets: [
             '<strong>Межбиржевой и парный арбитраж:</strong> подключился к 30+ биржам. Построил spot/futures арбитраж с двухступенчатым подходом по дивергенции корреляции и продвинутым управлением лимитными ордерами.',
             '<strong>Kimchi Premium:</strong> разработал платформу мониторинга и торговли в реальном времени для корейских бирж (Upbit) на Go-бэкенде и Next.js дашборде.',
@@ -364,7 +364,7 @@ export const home = {
         },
         {
           title: 'Оптимизация портфеля',
-          subtitle: 'Quantitative Modeling',
+          subtitle: 'Количественное моделирование',
           bullets: [
             '<strong>Hierarchical Risk Parity (HRP):</strong> реализовал HRP с иерархической кластеризацией (дендрограммы) и ковариационными матрицами для оптимального распределения риска.',
             '<strong>Риск-менеджмент:</strong> интегрировал коррекцию Hull-White CVaR для масштабирования доходностей по текущей волатильности с динамическим переводом рисковых активов в кэш.',
@@ -394,8 +394,8 @@ export const home = {
       intro: 'Сооснователь обеих компаний — CEO и CTO.',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
@@ -538,7 +538,7 @@ export const home = {
 
   zh: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · 量化交易开发者',
       description:
         '构建算法交易平台、HFT 基础设施以及 AI 驱动的开发者工具。自 2011 年起从事交易。',
@@ -661,8 +661,8 @@ export const home = {
       intro: '我担任创始领导角色的两家公司。',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
@@ -802,7 +802,7 @@ export const home = {
 
   ko: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · 알고트레이딩 개발자',
       description:
         '알고리즘 트레이딩 플랫폼, HFT 인프라, AI 기반 개발자 도구를 만듭니다. 2011년부터 트레이딩 중.',
@@ -925,8 +925,8 @@ export const home = {
       intro: '제가 창업 리더십을 맡고 있는 두 회사.',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
@@ -1067,7 +1067,7 @@ export const home = {
 
   ja: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · アルゴトレーディング開発者',
       description:
         'アルゴリズム取引プラットフォーム、HFTインフラ、AI 駆動の開発者ツールを構築。2011年からトレーディング。',
@@ -1190,8 +1190,8 @@ export const home = {
       intro: '創業メンバーとしてリーダーシップを担っている 2 社。',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
@@ -1331,7 +1331,7 @@ export const home = {
 
   ar: {
     hero: {
-      badge: 'Co-founder & CEO @ Marketmaker.cc | CTO @ Cmdop.com',
+      badge: 'CEO @ Marketmaker.cc | CTO @ Cmdop.com',
       tagline: 'Fullstack · DevOps · مطوّر تداول خوارزمي',
       description:
         'أبني منصات للتداول الخوارزمي وبنية تحتية لـ HFT وأدوات للمطورين مدعومة بالذكاء الاصطناعي. أتداول منذ 2011.',
@@ -1454,8 +1454,8 @@ export const home = {
       intro: 'شركتان أحمل فيهما أدواراً قيادية تأسيسية.',
       status_active: 'active',
       roles: {
-        'Marketmaker.cc': 'Co-founder & CEO',
-        'Cmdop.com': 'Co-founder & CTO',
+        'Marketmaker.cc': 'CEO',
+        'Cmdop.com': 'CTO',
       },
       descs: {
         'Marketmaker.cc':
