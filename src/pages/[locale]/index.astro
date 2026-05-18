@@ -7,6 +7,7 @@ import TechStack from '../../components/TechStack.astro';
 import Projects from '../../components/Projects.astro';
 import FrontierProjects from '../../components/FrontierProjects.astro';
 import Algotrading from '../../components/Algotrading.astro';
+import Communities from '../../components/Communities.astro';
 import Contact from '../../components/Contact.astro';
 import { locales, type Locale } from '../../i18n/config';
 
@@ -24,5 +25,6 @@ const { locale } = Astro.params as { locale: Locale };
   <TechStack locale={locale} />
   <FrontierProjects locale={locale} />
   <Projects locale={locale} />
+  <Communities locale={locale} />
   <Contact locale={locale} />
 </Layout>

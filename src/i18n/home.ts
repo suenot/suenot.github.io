@@ -261,8 +261,15 @@ export const home = {
           'Articles on backtesting methodology, QuestDB analytics, Monte Carlo bootstrap, anomaly detection, profit/loss asymmetry, and more.',
       },
     },
+    communities: {
+      eyebrow: '06. communities',
+      heading: 'My communities',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'Behind-the-scenes channel of klava.org' },
+      },
+    },
     contact: {
-      eyebrow: '06. contact',
+      eyebrow: '07. contact',
       heading: 'Get in touch',
       intro:
         'Open to interesting projects, collaboration, or just a chat about trading, HFT, or AI tooling.',
@@ -528,8 +535,15 @@ export const home = {
           'Статьи о методологии бэктестинга, аналитике QuestDB, Monte Carlo bootstrap, детекции аномалий, асимметрии прибыли/убытков и многом другом.',
       },
     },
+    communities: {
+      eyebrow: '06. сообщества',
+      heading: 'Мои сообщества',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'Закулисный канал klava.org' },
+      },
+    },
     contact: {
-      eyebrow: '06. контакты',
+      eyebrow: '07. контакты',
       heading: 'Связаться со мной',
       intro:
         'Открыт к интересным проектам, сотрудничеству или просто к разговору о трейдинге, HFT или AI-инструментах.',
@@ -792,8 +806,15 @@ export const home = {
           '关于回测方法学、QuestDB 分析、Monte Carlo bootstrap、异常检测、盈亏不对称等的文章。',
       },
     },
+    communities: {
+      eyebrow: '06. 社区',
+      heading: '我的社区',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'klava.org 的幕后频道' },
+      },
+    },
     contact: {
-      eyebrow: '06. 联系',
+      eyebrow: '07. 联系',
       heading: '联系方式',
       intro:
         '欢迎有趣的项目、合作机会，或就交易、HFT 或 AI 工具进行交流。',
@@ -1057,8 +1078,15 @@ export const home = {
           '백테스팅 방법론, QuestDB 분석, Monte Carlo bootstrap, 이상치 탐지, 손익 비대칭 등에 대한 글들.',
       },
     },
+    communities: {
+      eyebrow: '06. 커뮤니티',
+      heading: '내 커뮤니티',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'klava.org 비하인드 채널' },
+      },
+    },
     contact: {
-      eyebrow: '06. 연락처',
+      eyebrow: '07. 연락처',
       heading: '연락하기',
       intro:
         '흥미로운 프로젝트, 협업, 또는 트레이딩 / HFT / AI 툴링에 관한 대화 모두 환영합니다.',
@@ -1321,8 +1349,15 @@ export const home = {
           'バックテスト方法論、QuestDB アナリティクス、Monte Carlo bootstrap、異常検知、損益の非対称性などに関する記事。',
       },
     },
+    communities: {
+      eyebrow: '06. コミュニティ',
+      heading: 'マイコミュニティ',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'klava.org の舞台裏チャンネル' },
+      },
+    },
     contact: {
-      eyebrow: '06. 連絡先',
+      eyebrow: '07. 連絡先',
       heading: 'お問い合わせ',
       intro:
         '面白いプロジェクトやコラボレーション、トレーディング・HFT・AI ツールに関する雑談、いつでも歓迎します。',
@@ -1586,8 +1621,15 @@ export const home = {
           'مقالات عن منهجية backtesting، تحليلات QuestDB، Monte Carlo bootstrap، كشف الشذوذ، عدم تناظر الربح/الخسارة، وغيرها.',
       },
     },
+    communities: {
+      eyebrow: '06. المجتمعات',
+      heading: 'مجتمعاتي',
+      items: {
+        klavaorgwork: { name: 'klava.org work', desc: 'قناة كواليس klava.org' },
+      },
+    },
     contact: {
-      eyebrow: '06. اتصل',
+      eyebrow: '07. اتصل',
       heading: 'تواصل معي',
       intro:
         'منفتح على المشاريع المثيرة، أو التعاون، أو مجرّد دردشة عن التداول وHFT وأدوات الذكاء الاصطناعي.',
