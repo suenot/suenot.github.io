@@ -257,6 +257,8 @@ export const home = {
           'Partner in startup. Frontend for mobile app. Went through Bayer acceleration. 2016.',
         'The Algotrading Book':
           'Online book about algorithmic trading — strategies, backtesting, infrastructure, and practical guides.',
+        'Mathematics for Trading':
+          'Open-source book covering the math foundations traders need — statistics, linear algebra, optimization, and stochastic calculus for algorithmic and quantitative trading.',
         'Blog on Marketmaker.cc':
           'Articles on backtesting methodology, QuestDB analytics, Monte Carlo bootstrap, anomaly detection, profit/loss asymmetry, and more.',
       },
@@ -265,7 +267,7 @@ export const home = {
       eyebrow: '06. communities',
       heading: 'My communities',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'Behind-the-scenes channel of klava.org' },
+        klavaorgwork: { name: 'Keyboards: ergonomics & layouts', desc: 'Chat about designing ergonomic keyboards and keyboard layouts.' },
       },
     },
     contact: {
@@ -531,6 +533,8 @@ export const home = {
           'Партнёр в стартапе. Frontend мобильного приложения. Прошёл акселерацию Bayer. 2016.',
         'The Algotrading Book':
           'Онлайн-книга по алгоритмической торговле — стратегии, бэктестинг, инфраструктура и практические гайды.',
+        'Mathematics for Trading':
+          'Open-source книга по математике для трейдеров — статистика, линейная алгебра, оптимизация и стохастическое исчисление для алготрейдинга и количественного анализа.',
         'Blog on Marketmaker.cc':
           'Статьи о методологии бэктестинга, аналитике QuestDB, Monte Carlo bootstrap, детекции аномалий, асимметрии прибыли/убытков и многом другом.',
       },
@@ -539,7 +543,7 @@ export const home = {
       eyebrow: '06. сообщества',
       heading: 'Мои сообщества',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'Закулисный канал klava.org' },
+        klavaorgwork: { name: 'Клавиатуры: эргономика и раскладки', desc: 'Чат о разработке эргономичных клавиатур и раскладок.' },
       },
     },
     contact: {
@@ -802,6 +806,8 @@ export const home = {
           '创业合伙人。移动 App 前端。曾通过 Bayer 加速器。2016。',
         'The Algotrading Book':
           '关于算法交易的在线书籍 —— 策略、回测、基础设施与实用指南。',
+        'Mathematics for Trading':
+          '面向交易者的开源数学书 —— 统计学、线性代数、优化和随机微积分，覆盖算法交易与量化分析所需的数学基础。',
         'Blog on Marketmaker.cc':
           '关于回测方法学、QuestDB 分析、Monte Carlo bootstrap、异常检测、盈亏不对称等的文章。',
       },
@@ -810,7 +816,7 @@ export const home = {
       eyebrow: '06. 社区',
       heading: '我的社区',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'klava.org 的幕后频道' },
+        klavaorgwork: { name: '键盘：人体工学与布局', desc: '关于人体工学键盘与键盘布局设计的聊天群。' },
       },
     },
     contact: {
@@ -1074,6 +1080,8 @@ export const home = {
           '스타트업 파트너. 모바일 앱 프런트엔드. Bayer 액셀러레이션 통과. 2016.',
         'The Algotrading Book':
           '알고리즘 트레이딩에 관한 온라인 책 — 전략, 백테스팅, 인프라, 실전 가이드.',
+        'Mathematics for Trading':
+          '트레이더를 위한 오픈소스 수학 책 — 알고리즘 트레이딩과 퀀트 분석에 필요한 통계, 선형대수, 최적화, 확률 미적분 기초.',
         'Blog on Marketmaker.cc':
           '백테스팅 방법론, QuestDB 분석, Monte Carlo bootstrap, 이상치 탐지, 손익 비대칭 등에 대한 글들.',
       },
@@ -1082,7 +1090,7 @@ export const home = {
       eyebrow: '06. 커뮤니티',
       heading: '내 커뮤니티',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'klava.org 비하인드 채널' },
+        klavaorgwork: { name: '키보드: 인체공학 & 레이아웃', desc: '인체공학 키보드와 키보드 레이아웃 설계에 대한 채팅.' },
       },
     },
     contact: {
@@ -1345,6 +1353,8 @@ export const home = {
           'スタートアップのパートナー。モバイルアプリのフロントエンド。Bayer アクセラレーションを通過。2016。',
         'The Algotrading Book':
           'アルゴリズム取引に関するオンライン書籍 — 戦略、バックテスト、インフラ、実践ガイド。',
+        'Mathematics for Trading':
+          'トレーダー向けのオープンソース数学書 — アルゴ取引や定量分析に必要な統計、線形代数、最適化、確率微積分の基礎。',
         'Blog on Marketmaker.cc':
           'バックテスト方法論、QuestDB アナリティクス、Monte Carlo bootstrap、異常検知、損益の非対称性などに関する記事。',
       },
@@ -1353,7 +1363,7 @@ export const home = {
       eyebrow: '06. コミュニティ',
       heading: 'マイコミュニティ',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'klava.org の舞台裏チャンネル' },
+        klavaorgwork: { name: 'キーボード：人間工学とレイアウト', desc: 'エルゴノミクスキーボードとキーボードレイアウト設計についてのチャット。' },
       },
     },
     contact: {
@@ -1617,6 +1627,8 @@ export const home = {
           'شريك في شركة ناشئة. واجهة أمامية لتطبيق موبايل. اجتاز تسريع Bayer. 2016.',
         'The Algotrading Book':
           'كتاب إلكتروني عن التداول الخوارزمي — استراتيجيات، backtesting، بنية تحتية، وأدلّة عملية.',
+        'Mathematics for Trading':
+          'كتاب مفتوح المصدر في الرياضيات للمتداولين — الإحصاء، الجبر الخطي، التحسين، وحساب التفاضل العشوائي اللازم للتداول الخوارزمي والتحليل الكمي.',
         'Blog on Marketmaker.cc':
           'مقالات عن منهجية backtesting، تحليلات QuestDB، Monte Carlo bootstrap، كشف الشذوذ، عدم تناظر الربح/الخسارة، وغيرها.',
       },
@@ -1625,7 +1637,7 @@ export const home = {
       eyebrow: '06. المجتمعات',
       heading: 'مجتمعاتي',
       items: {
-        klavaorgwork: { name: 'klava.org work', desc: 'قناة كواليس klava.org' },
+        klavaorgwork: { name: 'لوحات المفاتيح: الإرغونومية والتخطيطات', desc: 'دردشة حول تصميم لوحات المفاتيح الإرغونومية وتخطيطاتها.' },
       },
     },
     contact: {
