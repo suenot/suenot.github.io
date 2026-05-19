@@ -269,6 +269,7 @@ export const home = {
       eyebrow: '06. communities',
       heading: 'My communities',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: 'My personal dev blog — notes on trading, HFT, AI tooling, and side projects.' },
         klavaorg: { name: 'klava.org', desc: 'Main klava.org community group.' },
         klavaorgwork: { name: 'Keyboards: ergonomics & layouts', desc: 'Chat about designing ergonomic keyboards and keyboard layouts.' },
       },
@@ -548,6 +549,7 @@ export const home = {
       eyebrow: '06. сообщества',
       heading: 'Мои сообщества',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: 'Мой личный dev-блог — заметки о трейдинге, HFT, AI-инструментах и пет-проектах.' },
         klavaorg: { name: 'klava.org', desc: 'Основная группа сообщества klava.org.' },
         klavaorgwork: { name: 'Клавиатуры: эргономика и раскладки', desc: 'Чат о разработке эргономичных клавиатур и раскладок.' },
       },
@@ -824,6 +826,7 @@ export const home = {
       eyebrow: '06. 社区',
       heading: '我的社区',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: '我的个人开发博客 — 关于交易、HFT、AI 工具与副业项目的笔记。' },
         klavaorg: { name: 'klava.org', desc: 'klava.org 主要社区群组。' },
         klavaorgwork: { name: '键盘：人体工学与布局', desc: '关于人体工学键盘与键盘布局设计的聊天群。' },
       },
@@ -1101,6 +1104,7 @@ export const home = {
       eyebrow: '06. 커뮤니티',
       heading: '내 커뮤니티',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: '내 개인 개발 블로그 — 트레이딩, HFT, AI 도구, 사이드 프로젝트에 대한 메모.' },
         klavaorg: { name: 'klava.org', desc: 'klava.org 메인 커뮤니티 그룹.' },
         klavaorgwork: { name: '키보드: 인체공학 & 레이아웃', desc: '인체공학 키보드와 키보드 레이아웃 설계에 대한 채팅.' },
       },
@@ -1377,6 +1381,7 @@ export const home = {
       eyebrow: '06. コミュニティ',
       heading: 'マイコミュニティ',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: '個人開発ブログ — トレーディング、HFT、AI ツール、サイドプロジェクトのメモ。' },
         klavaorg: { name: 'klava.org', desc: 'klava.org のメインコミュニティグループ。' },
         klavaorgwork: { name: 'キーボード：人間工学とレイアウト', desc: 'エルゴノミクスキーボードとキーボードレイアウト設計についてのチャット。' },
       },
@@ -1654,6 +1659,7 @@ export const home = {
       eyebrow: '06. المجتمعات',
       heading: 'مجتمعاتي',
       items: {
+        suenot_dev: { name: 'suenot_dev', desc: 'مدونتي الشخصية للتطوير — ملاحظات عن التداول وHFT وأدوات الذكاء الاصطناعي والمشاريع الجانبية.' },
         klavaorg: { name: 'klava.org', desc: 'مجموعة مجتمع klava.org الرئيسية.' },
         klavaorgwork: { name: 'لوحات المفاتيح: الإرغونومية والتخطيطات', desc: 'دردشة حول تصميم لوحات المفاتيح الإرغونومية وتخطيطاتها.' },
       },
