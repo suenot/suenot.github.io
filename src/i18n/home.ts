@@ -224,6 +224,8 @@ export const home = {
           'Desktop terminal for parallel AI coding agent sessions. Project sidebar, real PTY terminal, prompt queue. Local, SSH, or CMDOP connections.',
         Hlider:
           'On-screen keyboard for Android/iOS by klava.org. Partner project.',
+        'karabiner-visualizer':
+          'Web visualizer for Karabiner-Elements configs — view your macOS keyboard remaps as an interactive layout.',
         MacChill:
           'macOS menu bar app to monitor thermal pressure & auto-toggle Low Power Mode on Apple Silicon M1–M4.',
         Sanctum:
@@ -499,6 +501,8 @@ export const home = {
           'Десктопный терминал для параллельных сессий AI-кодинг-агентов. Сайдбар проектов, реальный PTY-терминал, очередь промптов. Локальные, SSH или CMDOP-подключения.',
         Hlider:
           'Экранная клавиатура для Android/iOS от klava.org. Партнёрский проект.',
+        'karabiner-visualizer':
+          'Веб-визуализатор конфигов Karabiner-Elements — интерактивный просмотр кастомных раскладок клавиатуры на macOS.',
         MacChill:
           'macOS menu-bar приложение для мониторинга термального давления и авто-переключения Low Power Mode на Apple Silicon M1–M4.',
         Sanctum:
@@ -775,6 +779,8 @@ export const home = {
           '用于并行 AI 编程代理会话的桌面终端。项目侧边栏、真实 PTY 终端、提示队列。支持本地、SSH 或 CMDOP 连接。',
         Hlider:
           'klava.org 出品的 Android/iOS 屏幕键盘。合作项目。',
+        'karabiner-visualizer':
+          'Karabiner-Elements 配置的网页可视化工具——以交互式布局查看 macOS 键盘重映射。',
         MacChill:
           'macOS 菜单栏应用，监测 Apple Silicon M1–M4 的热压力并自动切换低电量模式。',
         Sanctum:
@@ -1050,6 +1056,8 @@ export const home = {
           '병렬 AI 코딩 에이전트 세션을 위한 데스크톱 터미널. 프로젝트 사이드바, 실제 PTY 터미널, 프롬프트 큐. 로컬, SSH, CMDOP 연결 지원.',
         Hlider:
           'klava.org의 Android/iOS 화면 키보드. 파트너 프로젝트.',
+        'karabiner-visualizer':
+          'Karabiner-Elements 설정 웹 시각화 도구 — macOS 키보드 리매핑을 인터랙티브 레이아웃으로 확인.',
         MacChill:
           'Apple Silicon M1–M4의 열 압력을 모니터링하고 저전력 모드를 자동 전환하는 macOS 메뉴바 앱.',
         Sanctum:
@@ -1324,6 +1332,8 @@ export const home = {
           '並列 AI コーディングエージェントセッションのためのデスクトップターミナル。プロジェクトサイドバー、本物の PTY ターミナル、プロンプトキュー。ローカル、SSH、または CMDOP 接続。',
         Hlider:
           'klava.org による Android/iOS 用オンスクリーンキーボード。パートナープロジェクト。',
+        'karabiner-visualizer':
+          'Karabiner-Elements 設定のウェブビジュアライザー — macOS のキーボード再マッピングをインタラクティブなレイアウトで確認。',
         MacChill:
           'Apple Silicon M1–M4 の熱圧力を監視し、低電力モードを自動切り替えする macOS メニューバーアプリ。',
         Sanctum:
@@ -1599,6 +1609,8 @@ export const home = {
           'طرفية سطح مكتب لجلسات وكلاء AI برمجية متوازية. شريط جانبي للمشاريع، طرفية PTY حقيقية، طابور برومبتات. اتصالات محلية أو SSH أو CMDOP.',
         Hlider:
           'لوحة مفاتيح على الشاشة لـ Android/iOS من klava.org. مشروع شراكة.',
+        'karabiner-visualizer':
+          'أداة ويب لتصور إعدادات Karabiner-Elements — استعرض تعيينات لوحة مفاتيح macOS كتخطيط تفاعلي.',
         MacChill:
           'تطبيق menu bar على macOS لمراقبة الضغط الحراري وتبديل وضع الطاقة المنخفضة آلياً على Apple Silicon M1-M4.',
         Sanctum:
