@@ -267,6 +267,7 @@ export const home = {
       eyebrow: '06. communities',
       heading: 'My communities',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'Main klava.org community group.' },
         klavaorgwork: { name: 'Keyboards: ergonomics & layouts', desc: 'Chat about designing ergonomic keyboards and keyboard layouts.' },
       },
     },
@@ -543,6 +544,7 @@ export const home = {
       eyebrow: '06. сообщества',
       heading: 'Мои сообщества',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'Основная группа сообщества klava.org.' },
         klavaorgwork: { name: 'Клавиатуры: эргономика и раскладки', desc: 'Чат о разработке эргономичных клавиатур и раскладок.' },
       },
     },
@@ -816,6 +818,7 @@ export const home = {
       eyebrow: '06. 社区',
       heading: '我的社区',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'klava.org 主要社区群组。' },
         klavaorgwork: { name: '键盘：人体工学与布局', desc: '关于人体工学键盘与键盘布局设计的聊天群。' },
       },
     },
@@ -1090,6 +1093,7 @@ export const home = {
       eyebrow: '06. 커뮤니티',
       heading: '내 커뮤니티',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'klava.org 메인 커뮤니티 그룹.' },
         klavaorgwork: { name: '키보드: 인체공학 & 레이아웃', desc: '인체공학 키보드와 키보드 레이아웃 설계에 대한 채팅.' },
       },
     },
@@ -1363,6 +1367,7 @@ export const home = {
       eyebrow: '06. コミュニティ',
       heading: 'マイコミュニティ',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'klava.org のメインコミュニティグループ。' },
         klavaorgwork: { name: 'キーボード：人間工学とレイアウト', desc: 'エルゴノミクスキーボードとキーボードレイアウト設計についてのチャット。' },
       },
     },
@@ -1637,6 +1642,7 @@ export const home = {
       eyebrow: '06. المجتمعات',
       heading: 'مجتمعاتي',
       items: {
+        klavaorg: { name: 'klava.org', desc: 'مجموعة مجتمع klava.org الرئيسية.' },
         klavaorgwork: { name: 'لوحات المفاتيح: الإرغونومية والتخطيطات', desc: 'دردشة حول تصميم لوحات المفاتيح الإرغونومية وتخطيطاتها.' },
       },
     },
