@@ -53,8 +53,20 @@ const stats = [
 ---
 
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-  <!-- Background gradient -->
+  <!-- Background gradient (fallback for no-WebGL / reduced-motion) -->
   <div class="absolute inset-0 bg-gradient-to-br from-violet-950/30 via-transparent to-blue-950/20 pointer-events-none"></div>
+  <!-- WebGL shader canvas (aurora) -->
+  <canvas
+    id="hero-shader-canvas"
+    class="absolute inset-0 w-full h-full pointer-events-none opacity-50 mix-blend-screen"
+    aria-hidden="true"
+  ></canvas>
+  <!-- Readability scrim: darkens area behind the text -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(10,10,20,0.78) 0%, rgba(10,10,20,0.45) 45%, transparent 75%);"
+    aria-hidden="true"
+  ></div>
   <!-- Grid pattern -->
   <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 64px 64px;"></div>
 
@@ -66,9 +78,9 @@ const stats = [
     </div>
 
     <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-6">
-      <span class="text-white">Eugen</span>
+      <span class="text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.6)]">Eugen</span>
       <br />
-      <span class="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">Soloviov</span>
+      <span class="bg-gradient-to-r from-fuchsia-300 via-pink-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_2px_24px_rgba(0,0,0,0.6)]">Soloviov</span>
     </h1>
 
     <p class="text-xl sm:text-2xl text-gray-400 font-light max-w-2xl mx-auto mb-4">
@@ -105,3 +117,222 @@ const stats = [
     </div>
   </div>
 </section>
+
+<script>
+  // Lightweight WebGL aurora shader for the hero background.
+  // Designed for low-end hardware: 0.5x render resolution, ~30fps cap,
+  // pauses when off-screen or tab hidden, respects prefers-reduced-motion.
+  (() => {
+    const canvas = document.getElementById('hero-shader-canvas') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    const gl = canvas.getContext('webgl', {
+      antialias: false,
+      alpha: true,
+      premultipliedAlpha: false,
+      powerPreference: 'low-power',
+    }) as WebGLRenderingContext | null;
+    if (!gl) return;
+
+    const vertSrc = `
+      attribute vec2 a_pos;
+      void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+    `;
+
+    // Cheap aurora: two stacked sine bands warped by a tiny noise.
+    // No loops over noise octaves — keeps fragment cost minimal.
+    const fragSrc = `
+      precision mediump float;
+      uniform vec2 u_res;
+      uniform float u_time;
+      uniform vec2 u_mouse;     // UV space, smoothed
+      uniform float u_mouseAmp; // 0..1, fades in after first move
+
+      // Hash + value noise (single octave, very cheap)
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        float a = hash(i);
+        float b = hash(i + vec2(1.0, 0.0));
+        float c = hash(i + vec2(0.0, 1.0));
+        float d = hash(i + vec2(1.0, 1.0));
+        return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+      }
+
+      void main() {
+        vec2 uv = gl_FragCoord.xy / u_res.xy;
+        float aspect = u_res.x / u_res.y;
+        vec2 p = uv;
+        p.x *= aspect;
+
+        // Mouse in aspect-corrected space; distance-based falloff
+        vec2 m = u_mouse;
+        m.x *= aspect;
+        vec2 toMouse = p - m;
+        float d2 = dot(toMouse, toMouse);
+        // Soft attractor radius ~0.35 (squared 0.1225)
+        float pull = exp(-d2 * 8.0) * u_mouseAmp;
+
+        float t = u_time * 0.08;
+
+        // Bands warp toward cursor: their y center is pulled by 'pull'
+        float warp = noise(p * 1.4 + vec2(t, -t * 0.7)) * 0.35;
+        float yA = 0.55 + warp + sin(p.x * 1.7 + t * 1.3) * 0.12;
+        float yB = 0.30 - warp * 0.6 + cos(p.x * 1.1 - t) * 0.10;
+        // Lift bands toward mouse y (small offset)
+        yA = mix(yA, m.y / aspect, pull * 0.35);
+        yB = mix(yB, m.y / aspect, pull * 0.25);
+
+        float bandA = exp(-pow((p.y - yA) * 3.2, 2.0));
+        float bandB = exp(-pow((p.y - yB) * 4.0, 2.0));
+
+        // Palette: violet -> blue, matching site theme
+        vec3 violet = vec3(0.55, 0.30, 0.95);
+        vec3 blue   = vec3(0.20, 0.45, 0.95);
+        vec3 cyan   = vec3(0.30, 0.80, 1.00);
+        vec3 deep   = vec3(0.05, 0.02, 0.15);
+
+        vec3 col = deep;
+        col += violet * bandA * (0.85 + pull * 0.4);
+        col += blue   * bandB * (0.75 + pull * 0.3);
+
+        // Soft cursor halo — adds a cyan glow under the pointer
+        float halo = exp(-d2 * 25.0) * u_mouseAmp;
+        col += cyan * halo * 0.55;
+
+        // Subtle vertical falloff so bottom isn't too bright
+        col *= smoothstep(-0.2, 0.6, 1.0 - uv.y) * 0.6 + 0.4;
+
+        // INVERTED vignette: darker in the center (where text lives),
+        // brighter at the edges so the aurora frames the content.
+        vec2 cv = uv - 0.5;
+        cv.x *= aspect;
+        float r = length(cv);
+        float centerDim = smoothstep(0.0, 0.55, r);   // 0 in center -> 1 at edge
+        float edgeFade  = smoothstep(1.15, 0.55, length(uv - 0.5)); // soft outer fade
+        col *= centerDim * edgeFade;
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    function compile(type: number, src: string): WebGLShader | null {
+      const s = gl!.createShader(type);
+      if (!s) return null;
+      gl!.shaderSource(s, src);
+      gl!.compileShader(s);
+      if (!gl!.getShaderParameter(s, gl!.COMPILE_STATUS)) {
+        gl!.deleteShader(s);
+        return null;
+      }
+      return s;
+    }
+
+    const vs = compile(gl.VERTEX_SHADER, vertSrc);
+    const fs = compile(gl.FRAGMENT_SHADER, fragSrc);
+    if (!vs || !fs) return;
+
+    const prog = gl.createProgram();
+    if (!prog) return;
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+      gl.STATIC_DRAW,
+    );
+    const loc = gl.getAttribLocation(prog, 'a_pos');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    const uRes = gl.getUniformLocation(prog, 'u_res');
+    const uTime = gl.getUniformLocation(prog, 'u_time');
+    const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+    const uMouseAmp = gl.getUniformLocation(prog, 'u_mouseAmp');
+
+    // Mouse: target (raw) and current (smoothed) positions in 0..1 UV.
+    // y is flipped so it matches gl_FragCoord (origin bottom-left).
+    const target = { x: 0.5, y: 0.5 };
+    const current = { x: 0.5, y: 0.5 };
+    let amp = 0;            // smoothed activation [0..1]
+    let targetAmp = 0;      // 1 when pointer is over the section
+    const section = canvas.parentElement; // the <section>
+    function onMove(e: PointerEvent) {
+      if (!section) return;
+      const r = section.getBoundingClientRect();
+      target.x = (e.clientX - r.left) / r.width;
+      target.y = 1.0 - (e.clientY - r.top) / r.height;
+      targetAmp = 1;
+    }
+    function onLeave() { targetAmp = 0; }
+    if (section) {
+      section.addEventListener('pointermove', onMove, { passive: true });
+      section.addEventListener('pointerleave', onLeave, { passive: true });
+    }
+
+    // 0.5x resolution; cap pixel cost on hi-DPI screens too.
+    const RENDER_SCALE = 0.5;
+    function resize() {
+      const w = Math.max(1, Math.floor(canvas!.clientWidth * RENDER_SCALE));
+      const h = Math.max(1, Math.floor(canvas!.clientHeight * RENDER_SCALE));
+      if (canvas!.width !== w || canvas!.height !== h) {
+        canvas!.width = w;
+        canvas!.height = h;
+        gl!.viewport(0, 0, w, h);
+      }
+    }
+
+    let visible = true;
+    let inView = true;
+    const io = new IntersectionObserver(
+      (entries) => { inView = entries[0]?.isIntersecting ?? true; },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
+    window.addEventListener('resize', resize, { passive: true });
+
+    const FRAME_MS = 1000 / 30; // cap ~30fps
+    let last = 0;
+    const start = performance.now();
+
+    function frame(now: number) {
+      requestAnimationFrame(frame);
+      if (!visible || !inView) return;
+      if (now - last < FRAME_MS) return;
+      last = now;
+      // Lerp mouse + amplitude so motion feels organic, not jittery.
+      current.x += (target.x - current.x) * 0.12;
+      current.y += (target.y - current.y) * 0.12;
+      amp += (targetAmp - amp) * 0.06;
+      resize();
+      gl!.uniform2f(uRes, canvas!.width, canvas!.height);
+      gl!.uniform1f(uTime, (now - start) * 0.001);
+      gl!.uniform2f(uMouse, current.x, current.y);
+      gl!.uniform1f(uMouseAmp, amp);
+      gl!.drawArrays(gl!.TRIANGLES, 0, 6);
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
+
+<style>
+  #hero-shader-canvas {
+    /* Let the browser scale the small canvas smoothly. */
+    image-rendering: auto;
+  }
+</style>
