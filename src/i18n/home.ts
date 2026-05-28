@@ -226,6 +226,8 @@ export const home = {
           'On-screen keyboard for Android/iOS by klava.org. Partner project.',
         'karabiner-visualizer':
           'Web visualizer for Karabiner-Elements configs — view your macOS keyboard remaps as an interactive layout.',
+        'distract-blocker':
+          'Quiet Chrome MV3 extension that blocks distracting sites — side panel UI, 21-language i18n, custom shortcut, and a guardian mascot.',
         MacChill:
           'macOS menu bar app to monitor thermal pressure & auto-toggle Low Power Mode on Apple Silicon M1–M4.',
         Sanctum:
@@ -504,6 +506,8 @@ export const home = {
           'Экранная клавиатура для Android/iOS от klava.org. Партнёрский проект.',
         'karabiner-visualizer':
           'Веб-визуализатор конфигов Karabiner-Elements — интерактивный просмотр кастомных раскладок клавиатуры на macOS.',
+        'distract-blocker':
+          'Тихое Chrome-расширение (MV3) для блокировки отвлекающих сайтов — side-panel UI, 21 язык, кастомный шорткат и хранитель-маскот.',
         MacChill:
           'macOS menu-bar приложение для мониторинга термального давления и авто-переключения Low Power Mode на Apple Silicon M1–M4.',
         Sanctum:
@@ -783,6 +787,8 @@ export const home = {
           'klava.org 出品的 Android/iOS 屏幕键盘。合作项目。',
         'karabiner-visualizer':
           'Karabiner-Elements 配置的网页可视化工具——以交互式布局查看 macOS 键盘重映射。',
+        'distract-blocker':
+          '安静的 Chrome MV3 扩展，用于屏蔽分心网站——侧边栏 UI、21 种语言、自定义快捷键和守护吉祥物。',
         MacChill:
           'macOS 菜单栏应用，监测 Apple Silicon M1–M4 的热压力并自动切换低电量模式。',
         Sanctum:
@@ -1061,6 +1067,8 @@ export const home = {
           'klava.org의 Android/iOS 화면 키보드. 파트너 프로젝트.',
         'karabiner-visualizer':
           'Karabiner-Elements 설정 웹 시각화 도구 — macOS 키보드 리매핑을 인터랙티브 레이아웃으로 확인.',
+        'distract-blocker':
+          '집중을 방해하는 사이트를 차단하는 조용한 Chrome MV3 확장 — 사이드 패널 UI, 21개 언어, 사용자 단축키, 수호 마스코트.',
         MacChill:
           'Apple Silicon M1–M4의 열 압력을 모니터링하고 저전력 모드를 자동 전환하는 macOS 메뉴바 앱.',
         Sanctum:
@@ -1338,6 +1346,8 @@ export const home = {
           'klava.org による Android/iOS 用オンスクリーンキーボード。パートナープロジェクト。',
         'karabiner-visualizer':
           'Karabiner-Elements 設定のウェブビジュアライザー — macOS のキーボード再マッピングをインタラクティブなレイアウトで確認。',
+        'distract-blocker':
+          '気を散らすサイトをブロックする静かな Chrome MV3 拡張機能 — サイドパネル UI、21 言語、カスタムショートカット、守護マスコット付き。',
         MacChill:
           'Apple Silicon M1–M4 の熱圧力を監視し、低電力モードを自動切り替えする macOS メニューバーアプリ。',
         Sanctum:
@@ -1616,6 +1626,8 @@ export const home = {
           'لوحة مفاتيح على الشاشة لـ Android/iOS من klava.org. مشروع شراكة.',
         'karabiner-visualizer':
           'أداة ويب لتصور إعدادات Karabiner-Elements — استعرض تعيينات لوحة مفاتيح macOS كتخطيط تفاعلي.',
+        'distract-blocker':
+          'إضافة Chrome MV3 هادئة لحجب المواقع المشتّتة — واجهة في اللوحة الجانبية، 21 لغة، اختصار مخصّص، وتعويذة حارسة.',
         MacChill:
           'تطبيق menu bar على macOS لمراقبة الضغط الحراري وتبديل وضع الطاقة المنخفضة آلياً على Apple Silicon M1-M4.',
         Sanctum:
