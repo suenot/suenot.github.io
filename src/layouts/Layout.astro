@@ -2,6 +2,7 @@
 import Analytics from '@vercel/analytics/astro';
 import SEO from '../components/SEO.astro';
 import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { type Locale, isRtl, defaultLocale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
@@ -28,7 +29,8 @@ const {
 } = Astro.props;
 
 const dir = isRtl(locale) ? 'rtl' : 'ltr';
-const t = useTranslations(locale);
+useTranslations(locale);
+const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/feed.xml`;
 ---
 
 <!doctype html>
@@ -37,6 +39,7 @@ const t = useTranslations(locale);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`Eugen Soloviov — Blog (${locale})`} href={rssHref} />
     <title>{title}</title>
     <SEO
       title={title}
@@ -54,9 +57,7 @@ const t = useTranslations(locale);
     <main class="flex-1">
       <slot />
     </main>
-    <footer class="border-t border-white/5 py-8 text-center text-sm text-gray-400">
-      <p class="font-mono text-xs tracking-wider">{t('footer.tagline')}</p>
-    </footer>
+    <Footer locale={locale} />
     <Analytics />
   </body>
 </html>
