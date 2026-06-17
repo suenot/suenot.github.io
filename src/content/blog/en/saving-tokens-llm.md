@@ -2,6 +2,7 @@
 title: "How to Save Tokens in LLM: A Practical Guide for Claude Code"
 description: "Practical approaches to saving tokens in Claude Code: subagents, skills, hooks, Chinese models, knowledge graphs, and RAG. A checklist to cut costs by 10x."
 pubDate: 2026-04-12
+updatedDate: 2026-06-17
 heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
@@ -82,6 +83,8 @@ A project by [ivansglazunov](https://github.com/ivansglazunov) — the author wo
 
 [cmdop-claude](https://pypi.org/project/cmdop-claude/) — an approach by [markolofsen](https://github.com/markolofsen). It uses Merkle trees from graph structures. The main idea: run nearly free Chinese LLMs in the background to organize the `.claude` folder — preparing context for the main model.
 
+> For a ready-made global knowledge-graph setup — [graphify](https://github.com/safishamsi/graphify) with an OpenRouter backend so semantic indexing doesn't eat Claude tokens — see §11, alongside rtk.
+
 ## 7. Agent Management Frameworks
 
 ### Superpowers
@@ -149,6 +152,37 @@ Solution: downsize screenshots to ~400px wide before sending. Text remains reada
 
 For macOS I built [Open Screenshot](https://openscreenshot.suenot.com/) — a utility that takes screenshots in a resolution-compressed format right away. No manual resizing needed. Give it a try!
 
+## 11. Ready-to-Go Setup Out of the Box: rtk + graphify
+
+Two tools I keep enabled globally — each attacking its own cost driver from §1: **rtk** cuts input from commands, **graphify** eliminates "read the entire repository" from context. Neither requires its own API key (graphify runs semantic indexing through cheap OpenRouter, not through Claude tokens). Together with caveman (§4) you get a complete stack: command input + repository context + model output.
+
+**I've packaged the full setup in a dedicated repository — [`suenot/claude-code-token-savers`](https://github.com/suenot/claude-code-token-savers)** (scripts, patches, hooks, `setup.sh`).
+
+### rtk — command output compression
+
+[rtk](https://github.com/rtk-ai/rtk) (Rust Token Killer) is a CLI proxy: it filters, deduplicates, and trims the output of 100+ commands (git, docker, pytest, cargo…) by **60–90%** before that output ever reaches context. Single binary, no dependencies, <10 ms overhead, no LLM involved.
+
+```bash
+brew install rtk
+rtk init -g --auto-patch   # installs a global PreToolUse hook for Claude Code
+# restart Claude Code; verify: git status
+```
+
+The hook transparently rewrites `git status` → `rtk git status`. It's the same technique as in §9 (filtering test output with a hook), but applied to a hundred commands at once.
+
+### graphify — a knowledge graph instead of reading the whole repo
+
+[graphify](https://github.com/safishamsi/graphify) turns code and docs into a knowledge graph (nodes, communities, god-nodes) that you **query** (`/graphify query "…"`) instead of dumping files into context — a practical implementation of the idea from §6. The key trick: **semantic extraction runs through OpenRouter (`deepseek/deepseek-v4-flash`), not through Claude tokens** — building a graph for a mid-sized project costs ~$0.10 on OpenRouter and zero session tokens.
+
+What's included in the ready-made setup (the repo above, `graphify/` folder, `./setup.sh`):
+
+- OpenRouter backend (`~/.graphify/providers.json`, model switchable via `GRAPHIFY_OPENROUTER_MODEL`);
+- **SessionStart hook with auto-watch**: if a graph exists — watches for changes and updates it; if the project isn't initialised — simply prints "run `/graphify .`" (so that an accidentally opened root or huge folder doesn't silently consume tokens);
+- a clean **no-media toggle** (`touch ~/.graphify/no-media`) — keeps images/PDFs/videos out of the graph without fussing with ignore files;
+- a security fix: `.graphifyignore` no longer "shadows" `.gitignore` (merge instead of replace, [PR #1364](https://github.com/safishamsi/graphify/pull/1364) upstreamed), plus a pre-commit guard that prevents committing a graph that accidentally captured a `.gitignore`-listed file.
+
+> Caveman (§4) handles the third layer — **the model's own output**. rtk + graphify + caveman = command input, repository context, and model output, respectively. For writing-heavy tasks, caveman is best turned off ("normal mode") — its terse style gets in the way of editing.
+
 ## Savings Checklist
 
 | Approach | Savings |
@@ -162,6 +196,8 @@ For macOS I built [Open Screenshot](https://openscreenshot.suenot.com/) — a ut
 | Disabling reasoning for simple tasks | 1.5–2x |
 | `--bare` mode for subagents | 1.5–2x per launch |
 | Frameworks with plan approval | Indirect, via fewer reworks |
+| rtk — command output compression (PreToolUse hook) | 1.5–3x on git/docker/pytest/logs |
+| graphify — knowledge graph instead of full context (semantics on OpenRouter) | up to 10x on large-repo navigation; build ~$0.10, not Claude tokens |
 
 ---
 

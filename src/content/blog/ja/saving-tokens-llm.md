@@ -2,6 +2,7 @@
 title: "LLMでトークンを節約する方法：Claude Code実践ガイド"
 description: "Claude Codeでトークンを節約する実践的なアプローチ：サブエージェント、スキル、フック、中国製モデル、ナレッジグラフ、RAG。コストを10分の1に削減するチェックリスト。"
 pubDate: 2026-04-12
+updatedDate: 2026-06-17
 heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
@@ -82,6 +83,8 @@ Alibaba Cloudや中国のサブスクリプションは、価格/トークン比
 
 [cmdop-claude](https://pypi.org/project/cmdop-claude/) — [markolofsen](https://github.com/markolofsen)のアプローチ。グラフとしてマークルツリーを使用。基本アイデア：ほぼ無料の中国製LLMをバックグラウンドで動かし、`.claude`フォルダを整理 — メインモデル用のコンテキストを準備する。
 
+> ナレッジグラフのグローバル設定 — [graphify](https://github.com/safishamsi/graphify)（OpenRouterをバックエンドにして意味論処理でClaudeのトークンを消費しない）— は§11でrtkと合わせて解説する。
+
 ## 7. エージェント管理フレームワーク
 
 ### Superpowers
@@ -149,6 +152,37 @@ Nメッセージごとの自動コンパクトはフックで設定できない 
 
 macOS向けに私が作った [Open Screenshot](https://openscreenshot.suenot.com/) がある — 解像度が圧縮された形式でスクリーンショットを直接撮影でき、手動でリサイズする必要がない。ぜひ使ってみてください！
 
+## 11. すぐ使える設定：rtk + graphify
+
+グローバルで常時有効にしている2つのツール — それぞれ§1の別々の項目に効く。**rtk** はコマンド出力の入力トークンを削り、**graphify** は「リポジトリ全体を読め」というコンテキストを排除する。どちらも独自のAPIキー不要（graphifyはセマンティクス処理を高コストなClaudeトークンではなく安価なOpenRouter経由で実行する）。caveman（§4）と組み合わせると完結したスタックになる：コマンド入力 + リポジトリコンテキスト + モデル出力の3層を網羅。
+
+**すぐ使える設定は専用リポジトリにまとめてある — [`suenot/claude-code-token-savers`](https://github.com/suenot/claude-code-token-savers)**（スクリプト、パッチ、フック、`setup.sh`）。
+
+### rtk — コマンド出力の圧縮
+
+[rtk](https://github.com/rtk-ai/rtk)（Rust Token Killer）はCLIプロキシ：git、docker、pytest、cargoなど100以上のコマンドの出力をコンテキストに入る前にフィルタリング・重複除去・切り詰めし、**60〜90%** 削減する。単一バイナリ、依存なし、オーバーヘッド10ms未満、LLM不使用。
+
+```bash
+brew install rtk
+rtk init -g --auto-patch   # Claude Code向けグローバルPreToolUse-フックをインストール
+# Claude Codeを再起動して確認：git status
+```
+
+フックが透過的に `git status` → `rtk git status` へ書き換える。§9（フックによるテスト出力フィルタリング）と同じ手法を、一度に100以上のコマンドに適用したものだ。
+
+### graphify — リポジトリ全読み込みの代わりにナレッジグラフ
+
+[graphify](https://github.com/safishamsi/graphify) はコードとドキュメントをナレッジグラフ（ノード、コミュニティ、god-nodes）に変換し、ファイルをコンテキストに流し込む代わりに **クエリ** (`/graphify query "…"`) で必要な情報だけを取り出せる — §6のアイデアを実践した形だ。重要なポイント：**セマンティック抽出はOpenRouter（`deepseek/deepseek-v4-flash`）経由で実行され、Claudeのトークンを消費しない** — 中規模プロジェクトのグラフ構築コストはOpenRouterで~$0.10、セッショントークンはゼロ。
+
+上記リポジトリ（`graphify/`フォルダ、`./setup.sh`）に含まれる設定内容：
+
+- OpenRouterバックエンド（`~/.graphify/providers.json`、モデルは`GRAPHIFY_OPENROUTER_MODEL`で変更可）
+- **SessionStart-フックによる自動watch**：グラフが存在すれば変更を監視して更新し、未初期化のプロジェクトでは「`/graphify .` を実行してください」と表示するだけ（うっかり開いたルートや巨大フォルダがトークンを食い尽くさないよう配慮）
+- シンプルな **no-media** トグル（`touch ~/.graphify/no-media`）— ignoreファイルを手動編集せずに画像・PDF・動画をグラフから除外
+- セキュリティ修正：`.graphifyignore` が `.gitignore` を「上書き」しなくなった（置換ではなくマージ、[PR #1364](https://github.com/safishamsi/graphify/pull/1364) としてアップストリームに提出済み）、さらに `.gitignore` 対象ファイルがグラフに含まれた状態でコミットされないよう pre-commit-guard を追加。
+
+> Caveman（§4）が3層目を担う — **モデル自身の出力**。rtk + graphify + caveman = コマンド入力、リポジトリコンテキスト、モデル出力をそれぞれカバー。ただし文章編集作業では caveman はオフにした方がいい（「normal mode」）— 簡潔すぎる出力スタイルが校正の邪魔になる。
+
 ## 節約チェックリスト
 
 | アプローチ | 節約効果 |
@@ -162,6 +196,8 @@ macOS向けに私が作った [Open Screenshot](https://openscreenshot.suenot.co
 | 単純タスクでreasoningを無効化 | 1.5〜2倍 |
 | サブエージェントに`--bare`モード | 毎回の起動で1.5〜2倍 |
 | プラン承認付きフレームワーク | 間接的 — やり直しの削減 |
+| rtk — コマンド出力の圧縮（PreToolUse-フック） | git/docker/pytest/ログで1.5〜3倍 |
+| graphify — 全コンテキストの代わりにグラフ（セマンティクスはOpenRouter） | 大規模リポジトリのナビゲーションで最大10倍；構築~$0.10、Claudeトークン不使用 |
 
 ---
 
