@@ -29,7 +29,7 @@ draft: false
 
 Замерил `moonshotai/kimi-k2.6` через шлюз: сквозная скорость генерации **примерно 60 ток/с**. Для децентрализованной сети по такой цене — более чем рабочие цифры.
 
-## Шаг 0. Получить ключ
+## Получить ключ
 
 1. Регистрируетесь на **[gonkagate.com/en/pricing](https://gonkagate.com/en/pricing)** — $10 падают на баланс автоматически.
 2. Создаете API-ключ. Он начинается с `gp-...` и **показывается один раз** — сохраните сразу.
@@ -102,7 +102,7 @@ opencode debug config --pure
 
 ## Настройка для Hermes Agent
 
-[Hermes Agent](https://github.com/nousresearch/hermes-agent) от Nous Research — провайдер-агностичный терминальный агент с памятью между сессиями. Тоже цепляется к GonkaGate за один шаг.
+[Hermes Agent](https://github.com/nousresearch/hermes-agent) от Nous Research — терминальный агент, который работает с любым провайдером моделей и помнит контекст между сессиями. Тоже цепляется к GonkaGate за один шаг.
 
 **Требования:** Hermes Agent `v2026.5.16` / `v0.14.0`+ в `PATH`, Node.js ≥ `22.14.0`, ключ `gp-...`, интерактивный терминал (TTY), Linux/macOS/WSL2.
 
