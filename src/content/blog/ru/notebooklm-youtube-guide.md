@@ -246,7 +246,7 @@ video-maker дополнительно: **Poppler** (`brew install poppler`), **
 
 ## Что ещё есть: другие open-source инструменты для видео
 
-Мои инструменты решают конкретную задачу: слайды + нарратив → YouTube. Но экосистема видеоавтоматизации шире. Вот два проекта, которые стоит знать:
+Мои инструменты решают конкретную задачу: слайды + нарратив → YouTube. Но экосистема видеоавтоматизации шире. Вот ещё несколько проектов, которые стоит знать:
 
 ### video-use: монтаж видео через Claude Code
 
@@ -279,6 +279,18 @@ video-maker дополнительно: **Poppler** (`brew install poppler`), **
 
 В отличие от платных аналогов (Opus Clip, CapCut, Vizard, Klap, Descript), OpenShorts полностью бесплатный, open source, без водяных знаков и лимитов на загрузку. Вы платите только за AI API (Gemini, fal.ai, ElevenLabs), и у большинства из них есть бесплатные тарифы.
 
+### OpenMontage: агентная видеостудия из коробки
+
+[OpenMontage](https://github.com/calesthio/OpenMontage) — агентная система производства видео: 12 пайплайнов, 52 инструмента и 500+ скиллов, которые превращают твой AI-ассистент (Claude Code, Cursor, Copilot) в полноценную студию. Конвейер: исследование темы через веб-поиск → сценарий и озвучка → подбор ассетов (AI-картинки, сток, открытые архивы Archive.org / NASA / Wikimedia) → монтаж → сборка через Remotion (React) или HyperFrames (HTML/GSAP). Делает не только анимацию из статичных картинок, а реальный монтаж из настоящих кадров. Python + Remotion, лицензия AGPLv3, ~12k звезд. Идейно ближе всего к video-use, но шире — это целый production-pipeline.
+
+### palmier-pro: видеоредактор, заточенный под AI
+
+[palmier-pro](https://github.com/palmier-io/palmier-pro) — нативный macOS-видеоредактор (Swift, только Apple Silicon), где AI-агент монтирует вместе с тобой в одном проекте через MCP: подключаешь Claude Code, Cursor или Codex — агент правит таймлайн, а генеративные модели (Seedance, Kling) создают кадры прямо в редакторе. Лицензия GPLv3: сам редактор и MCP-сервер открыты, закрыта только генеративная часть (по подписке). Это связка "ручной таймлайн + агент" — в отличие от чисто-консольного video-use. ~7k звезд.
+
+### printfilm: студия коротких драм и моушн-комиксов
+
+[printfilm](https://github.com/yuanzhongqiao/printfilm) (он же AI Motion Comic & Video Workbench) — среда для производства коротких драм, моушн-комиксов и раскадровок. Конвейер: сценарий → раскадровка → ассеты персонажей и сцен → ключевые кадры → видео. Это не видеомодель, а оркестратор поверх внешних text/image/video-моделей. Стек React 19 + Electron (десктоп), ~2.3k звезд, есть продукт-сайт printfilm.com, origin китайский. Важно: файла лицензии в репозитории нет — по умолчанию all-rights-reserved, для форка кода это стоит учитывать.
+
 ## Ограничения
 
 Несколько вещей, которые стоит знать:
@@ -296,6 +308,9 @@ video-maker дополнительно: **Poppler** (`brew install poppler`), **
 - 🔧 [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — генерирует метаданные для YouTube
 - 🎬 [video-use](https://github.com/browser-use/video-use) — монтаж видео через Claude Code
 - 🎬 [OpenShorts](https://github.com/mutonby/openshorts) — полная платформа для шортсов и AI-видео
+- 🎬 [OpenMontage](https://github.com/calesthio/OpenMontage) — агентная видеостудия для AI-ассистента (12 пайплайнов, 52 инструмента)
+- 🎬 [palmier-pro](https://github.com/palmier-io/palmier-pro) — macOS-видеоредактор с AI-агентом через MCP
+- 🎬 [printfilm](https://github.com/yuanzhongqiao/printfilm) — студия коротких драм и моушн-комиксов
 
 > **Важно:** `video-maker` и `video-youtube-prepare` — это не готовые коробочные продукты, а **шаблоны-заготовки**. Они работают из коробки для базового сценария, но задуманы так, чтобы вы донастроили их под свои цели — любым AI-агентом (Claude Code, Codex, Cursor и т.д.). Форкните, адаптируйте под свой бренд, стиль описаний и формат контента.
 
