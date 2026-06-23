@@ -1,33 +1,35 @@
 ---
 title: "How to Save Tokens in LLM: A Practical Guide for Claude Code"
-description: "Practical approaches to saving tokens in Claude Code: subagents, skills, hooks, Chinese models, knowledge graphs, and RAG. A checklist to cut costs by 10x."
+description: "Working approaches to saving tokens in Claude Code and Opus 4.7: subagents, skills, hooks, Chinese models, knowledge graphs, RAG, xhigh effort, session management, summarization on a cheap model, input compression (headroom, mcp-compressor). A checklist to cut costs by 10x."
 pubDate: 2026-04-12
-updatedDate: 2026-06-17
+updatedDate: 2026-06-23
 heroImage: "/images/blog/saving-tokens-hero.png"
-tags: ["llm", "claude-code", "optimization", "tokens"]
+tags: ["llm", "claude-code", "optimization", "tokens", "opus-4.7"]
 draft: false
 ---
 
 # How to Save Tokens in LLM: A Practical Guide for Claude Code
 
-Burning through 10 subscriptions at $200 each is not the problem. The problem is doing it meaningfully. Below are practical approaches to saving tokens that I use in my daily work with Claude Code.
+Burning through 10 subscriptions at $200 each is not the problem. The problem is doing it meaningfully. Below are the working approaches to saving tokens that I use in my daily work with Claude Code.
 
 ## 1. How We Actually Pay
 
-Claude Code charges for **input** and **output** tokens. Input is everything that goes into context: system prompts, chat history, files, screenshots. Output is what the model generates.
+Claude Code charges for **input** and **output** tokens. Input is everything that goes into context: the system prompt, chat history, files, screenshots. Output is what the model generates.
 
-Each message in a chat adds the entire accumulated context to the input. If you're using Opus with a 1M context, every message is billed as if you're sending the entire million tokens again. Output also contributes to context bloat — it grows with every response.
+Each message in a chat adds the entire accumulated context to the input. Claude Code now offers a 1M context for Opus (see the [official session management guide](https://claude.com/blog/using-claude-code-session-management-and-1m-context)) — which means every message in a large session is billed as if you were resending the entire million tokens. Output also contributes to filling up the context — it grows with every response.
 
 **Bottom line:** shorter conversations are cheaper. Smaller context is cheaper. Less model "thinking" is cheaper.
 
+> ⚠️ **The Opus 4.7 migration surprise.** 4.7 has an [updated tokenizer](https://www.anthropic.com/news/claude-opus-4-7): the same text now maps to **×1.0–1.35** the tokens compared to 4.6. On top of that, in agentic sessions the model thinks more on later turns — output grows. If you moved to 4.7 and the bill "suddenly" went up, it's not a bug, it's the new pricing. Re-measure your budgets on real traffic.
+
 ## 2. Subagents Are a Must-Have
 
-The main process (lead) shouldn't do anything itself. Its job is to coordinate and delegate. All the work is done by subagents with **small contexts**.
+The main process (the lead) shouldn't do anything itself. Its job is to coordinate and delegate. All the work is done by subagents with **small contexts**.
 
 Why:
 
 - The lead process context stays within 100–200K and doesn't grow
-- Subagent finishes — context gets cleared
+- A subagent finishes — its context gets cleared
 - You can run dozens of agents in parallel
 
 How to set it up:
@@ -39,27 +41,86 @@ Main process (Opus, 200K context)
 └── Agent 3 (Haiku, short context) — refactoring
 ```
 
-For bulk tasks (e.g., processing 8000 scripts) — one script, one subagent, Haiku model. This is radically cheaper than running everything through a single chat.
+For bulk tasks (e.g., processing 8000 scripts) — one script, one subagent, the Haiku model. This is radically cheaper than running everything through a single chat.
 
-## 3. Context and Hallucinations — a Non-Linear Relationship
+> 🆕 **Opus 4.7 spawns fewer subagents by default.** Anthropic says it plainly in their [best practices](https://claude.com/blog/best-practices-for-using-claude-opus-4-7-with-claude-code): the model has become more "frugal" and prefers to do the work itself. If you have a scenario where fanning out across files genuinely saves money, spell it out explicitly: "Spawn multiple subagents in the same turn when fanning out across items or reading multiple files. Do not spawn a subagent for work you can complete directly in a single response."
 
-Opus with a 100K context works more accurately than Opus with a 1M context. At 1M context, hallucinations increase non-linearly. So a large context is **both more expensive and worse** in quality.
+**Anthropic's mental test before launching a subagent:** "will I need the intermediate tool output again — or only the final output?" If only the output, it's a perfect candidate for a subagent: all the noise stays in the child context, and only the result comes back to the parent.
 
-Conclusion: keep contexts compact. Better to have 5 chats at 100K each than 1 chat at 500K.
+## 3. Context rot: context and hallucinations — a non-linear relationship
 
-## 4. Skills Do the Trick
+This phenomenon has an official term — **context rot**. Anthropic [defines it like this](https://claude.com/blog/using-claude-code-session-management-and-1m-context): model quality degrades as context grows, because attention gets spread across more tokens and old, irrelevant content starts interfering with the current task.
+
+Opus with a 100K context works more accurately than Opus with a 1M context. In other words, a large context is **both more expensive and worse** in quality.
+
+A particularly nasty thing is **autocompact at a bad moment**: automatic context compression kicks in when you've already crept up to the limit, and that's exactly the moment when, due to context rot, the model is at the low point of its intelligence. The summaries come out crooked, key details fall out.
+
+Conclusion: keep contexts compact. Better 5 chats at 100K each than 1 chat at 500K. And don't wait for autocompact to fire.
+
+## 4. Session management: rewind, compact, clear, /usage
+
+With the release of the 1M context, Anthropic [laid out in detail](https://claude.com/blog/using-claude-code-session-management-and-1m-context) that **every turn in Claude Code is a branching point**. You don't have one path ("write another message"), but five:
+
+| Situation | What to use | Why |
+| --- | --- | --- |
+| Same task, context still needed | **Continue** | Everything in the window still works, you don't pay for rebuilding |
+| Claude went the wrong way | **`/rewind` (Esc Esc)** | Keeps useful file reads, discards the failed attempt |
+| Session bloated with stale debug/exploration | **`/compact`** | Cheap; Claude decides what matters (you can give hints) |
+| Starting a genuinely new task | **`/clear`** | Zero rot; you control what carries over |
+| The next step will produce a lot of junk output but you only need the result | **Subagent** | The noise stays in the child context, only the result comes back to the parent |
+
+**Practical rules:**
+
+- **New task = new session.** This is Anthropic's basic rule of thumb.
+- **`/rewind` beats "try it differently."** If Claude read 5 files and went down a dead-end path, don't write "doesn't work, try X." Roll back to the moment right after the file reads and reformulate: "don't use approach A, foo doesn't export that, go straight through B." Useful file reads are kept, the failure drops out of context.
+- **`/compact` vs `/clear`.** `/compact` is an auto-summary, lossy, steerable with an instruction: `/compact focus on the auth refactor, drop the test debugging`. `/clear` is you writing the brief yourself ("refactoring the auth middleware, constraint X, files A and B, approach Y was rejected"). Slower — but the context is exactly what you decided to keep.
+- **Run `/compact` proactively**, while the model hasn't yet hit the wall. You have 1M — there's plenty of time. Don't wait for autocompact at the low point of intelligence.
+- **The `/usage` slash command** shows your actual spend — use it to calibrate your behavior.
+
+### Who pays for `/compact`: the summarization is done by your expensive model
+
+A non-obvious point: both `/compact` and autocompact are executed by **the same model selected in the session**. If you're coding on Opus, then "re-read and condense" a million tokens of Opus history will be at the full price of Opus. This is a purely technical summarization that you pay for at the flagship rate.
+
+What people do about it (worst to best):
+
+1. **Switching the model before compression is almost always a trap.** `/model` to Haiku/Sonnet → `/compact` → back to Opus. In theory the compression is cheaper. In practice, switching the model in a live session **resets the prompt cache**: the accumulated Opus cache burns, the new model has to re-read the entire history from scratch, and you'll be charged more for that read than you saved. Plus Sonnet/Haiku have a 200K window versus Opus's 500K–1M — on a large context the smaller model simply "goes blind" (`Context window exceeded`). The trick is only justified on small contexts, where the cache is tiny anyway.
+
+2. **A proxy that intercepts the summarization request.** A local proxy on `ANTHROPIC_BASE_URL` (the same mechanism as the wrappers in §6): regular requests go to Opus, while the service request for compression — recognized by its system prompt or context size — is intercepted and routed to cheap Haiku or to nearly free Gemini Flash / GPT-4o-mini via OpenRouter. To Claude Code this is invisible. The main session's cache is **left untouched**: the summarization request reads the whole history anyway and barely benefits from the cache, so handing it to a cheap model is pure savings.
+
+3. **An external agent + `/clear` (the cheapest).** In an adjacent terminal you run a separate CLI agent on a cheap model: it reads the history and the project's changed files and writes a short `context_summary.md`. In Claude Code — `/clear` (context to zero), then "let's continue based on @context_summary.md." Opus sees only a tiny digest. The manual "save it to .md" principle, taken to its logical conclusion.
+
+   A convenient candidate for this agent role is [opencode](https://opencode.ai): a full-fledged terminal agent with a headless mode and the choice of any cheap model right at request time.
+
+   ```bash
+   # the cheap agent writes the digest without touching the Opus session's tokens
+   opencode run -m openrouter/google/gemini-flash \
+     "Read the git log and changed files, assemble context_summary.md: key decisions, current state, next steps"
+   ```
+
+   `--format json` gives machine-readable output, `opencode serve` + `opencode run --attach …` removes the cold start on frequent calls. This can be **hooked up** (§11): `PreCompact`/`Stop` triggers `opencode run` on Haiku/Gemini Flash — the dirty summarization is done by a penny-priced agent on the side, and Opus doesn't burn tokens re-reading its own history. An important caveat: a hook can't call `/clear` itself (the thing that actually zeroes the spend) — it will prepare the digest automatically, but you trigger the context reset yourself. Conceptually it's the same thing [cmdop-claude](https://pypi.org/project/cmdop-claude/) from §7 does in the background, only as a ready-made tool that you can also ask to run ordinary subtasks on a cheap model, offloading the main session.
+
+> ⚠️ **The cache is the main pitfall of the whole scheme.** Any trick that switches the model in a live session burns the prompt cache and the session id: you accumulated 200K on Opus, switched to Sonnet — the entire Opus cache is gone, the new model re-reads everything from scratch at the subscription rate. That's why method (1) is usually pointless, and (2) and (3) win precisely because they **don't touch the main session** — the cheap model works on the side. If you need compression without nuking the cache right inside the session — see `CacheAligner` in headroom (§13).
+
+## 5. Skills Do the Trick
 
 Skills are pre-configured prompts that load on demand and don't sit in context permanently. Many frameworks prepare/download skills as the first step in their workflow.
 
-Unlike MCP servers (which constantly load their instructions into context), skills activate only when needed. Before Opus 4.5, a lot of tokens were wasted on MCP — this has been fixed now, but the approach of "replacing MCP with skills and commands" is still relevant for saving tokens.
+Unlike MCP servers (which constantly load their instructions into context), skills activate only when needed. Before Opus 4.5, a lot of tokens were wasted on MCP — this has been fixed now, but the "replace MCP with skills and commands" approach is still relevant for saving tokens.
 
 ### Caveman
 
-[Caveman](https://github.com/JuliusBrussee/caveman) is an open-source skill and plugin for Claude Code (and other agents): it makes the model reply in ultra-brief "caveman speak" while keeping technical accuracy — a concrete take on "shorter conversations are cheaper" from section 1. The repo's benchmarks average about **~65%** fewer **output** tokens; `caveman-compress` separately trims prose in memory files to save **input** tokens.
+[Caveman](https://github.com/JuliusBrussee/caveman) is an open-source skill and plugin for Claude Code (and other agents): it asks the model to reply ultra-briefly in caveman-speak style while keeping technical accuracy — a concrete take on "shorter conversations are cheaper" from §1. The repo's benchmarks average about **65%** fewer **output** tokens; separately there's `caveman-compress` for compressing prose in memory files to save **input**.
 
-## 5. Chinese Models and Cheap Subscriptions
+### If you really do need MCP — compress its surface
 
-Alibaba Cloud, Chinese subscriptions — in terms of price-per-token ratio, they win handily. A subscription for ~$30 gives you a token amount comparable to Anthropic's $200 plan.
+MCP servers load the descriptions of all their tools into context at startup. If dropping MCP entirely isn't an option, there are proxies that cut this overhead:
+
+- [mcp-compressor](https://github.com/atlassian-labs/mcp-compressor) by Atlassian Labs — a proxy that shows the agent a compressed "surface" of the tools and only hands over the full schema once a specific tool is actually selected. Compression levels from low to max, OAuth available. Hits bloated tool definitions directly.
+- [Context7](https://github.com/upstash/context7) by Upstash — an MCP that, on request, pulls up-to-date, version-accurate library documentation straight into the prompt instead of you dumping whole docs into context (or the model hallucinating an outdated API). Documentation as an on-demand tool rather than a wall of text in context.
+
+## 6. Chinese Models and Cheap Subscriptions
+
+Alibaba Cloud, Chinese subscriptions — in terms of price-per-token, they win handily. A subscription for ~$30 gives you a token amount comparable to Anthropic's $200 plan.
 
 In practice:
 
@@ -67,25 +128,25 @@ In practice:
 - Global env variables are not modified — the required ones are passed only when launching the wrapper
 - Gemini also has cheap subscriptions that can be used similarly
 
-There's no ready-made solution yet to "bake all models from different providers directly into Claude," but wrappers cover 80% of needs. One such tool is [Clother](https://github.com/jolehuit/clother/) — it lets you run Claude Code with different model providers without touching global settings. For a more integrated approach, check out [OpenClaude](/blog/openclaude-multi-provider) — a standalone CLI that lets you define all models in one config with automatic agent routing.
+There's no ready-made solution yet to "bake all models from different providers directly into Claude," but wrappers cover 80% of needs. One such tool is [Clother](https://github.com/jolehuit/clother/) — it lets you run Claude Code with different model providers without touching global settings.
 
-## 6. Knowledge Graphs and RAG: Cutting Tokens by 10x
+## 7. Knowledge Graphs and RAG: Cutting Tokens by 10x
 
 ### LightRAG
 
-[LightRAG](https://github.com/HKUDS/LightRAG) — an approach that combines knowledge graphs and LLMs. It can reduce token consumption by up to 10x by structuring the retrieval of relevant information instead of loading the entire context.
+[LightRAG](https://github.com/HKUDS/LightRAG) is an approach that combines knowledge graphs and LLMs. It can reduce token consumption by up to 10x by structuring the retrieval of relevant information instead of loading the entire context.
 
-### a8e
+### væd.ai
 
-A project by [ivansglazunov](https://github.com/ivansglazunov) — the author works in hermit mode and doesn't publish much, so it's hard to see the project in action. It works as a **librarian-RAG**: throws all incoming data into a database. The idea is to connect graphs and LLMs for more accurate and cheaper context retrieval. The approach is similar to the technologies described in [this video](https://www.youtube.com/watch?v=5-nrGj8qKqQ).
+[væd.ai](https://github.com/vaed-ai/vaed-ai) (formerly a8e) by [ivansglazunov](https://github.com/ivansglazunov) — a single associative field instead of tables and collections: every entity and relation lives in one reactive graph via the `æ()` operator, synced with any storage (IndexedDB, PostgreSQL, FS, blockchain). For token savings the point is the same as with LightRAG: connect the graph and the LLM and pull the relevant slice of context rather than dumping everything into the window. The project is already public: `npm i vaed-ai`, Unlicense (public domain). For a deeper take on the idea, see [this video](https://www.youtube.com/watch?v=5-nrGj8qKqQ).
 
 ### cmdop-claude
 
-[cmdop-claude](https://pypi.org/project/cmdop-claude/) — an approach by [markolofsen](https://github.com/markolofsen). It uses Merkle trees from graph structures. The main idea: run nearly free Chinese LLMs in the background to organize the `.claude` folder — preparing context for the main model.
+[cmdop-claude](https://pypi.org/project/cmdop-claude/) is an approach by [markolofsen](https://github.com/markolofsen). From graph structures it uses Merkle trees. The core idea: run nearly free Chinese LLMs in the background to keep the `.claude` folder in order — preparing context for the main model.
 
-> For a ready-made global knowledge-graph setup — [graphify](https://github.com/safishamsi/graphify) with an OpenRouter backend so semantic indexing doesn't eat Claude tokens — see §11, alongside rtk.
+> A ready-made global knowledge-graph setup — [graphify](https://github.com/safishamsi/graphify) with an OpenRouter backend so semantic indexing doesn't eat Claude tokens — I cover in §13, alongside rtk.
 
-## 7. Agent Management Frameworks
+## 8. Agent Management Frameworks
 
 ### Superpowers
 
@@ -93,21 +154,53 @@ A popular framework for Claude Code with a set of ready-made skills, patterns, a
 
 ### AI Factory
 
-[ai-factory](https://github.com/lee-to/ai-factory) — an interesting framework for managing AI agents. Combined with [aif-handoff](https://github.com/lee-to/aif-handoff) it provides a frontend with kanban boards and filters.
+[ai-factory](https://github.com/lee-to/ai-factory) is an interesting framework for managing AI agents. Combined with [aif-handoff](https://github.com/lee-to/aif-handoff) it provides a frontend with kanban boards and filters.
 
-Key idea: a human sets the initial tasks, AI decomposes them, but **work doesn't start without human approval of the finished plan**. This saves tokens (no rework) and gives you control.
+Key idea: a human sets the initial tasks, AI decomposes them, but **work doesn't start without human approval of the finished plan**. This both saves tokens (no rework) and gives you control.
 
-## 8. Practical Tips
+## 9. Effort levels in Opus 4.7: `xhigh` is the default, `max` is an anti-pattern
 
-**High effort and reasoning** can be disabled to reduce costs. Not every task requires the model to "think deeply."
+With Opus 4.7 [a new `xhigh` level appeared](https://www.anthropic.com/news/claude-opus-4-7) between `high` and `max`. And in Claude Code it's now **the default for all plans**. The old intuition "crank it to `max` and it'll be smarter" no longer holds.
+
+Anthropic [recommends this](https://claude.com/blog/best-practices-for-using-claude-opus-4-7-with-claude-code):
+
+| Level | When to use |
+| --- | --- |
+| `low` / `medium` | Cost-/latency-sensitive, narrow tasks. At the same level, 4.7 is already stronger than 4.6 — and **low-effort 4.7 ≈ medium-effort 4.6** in quality. Direct savings. |
+| `high` | Parallel sessions or when you want to lower spend without a big quality drop. |
+| `xhigh` (default) | Best for most coding and agentic tasks. Strong autonomy + intelligence, **without the runaway tokens that `max` produces** on long runs. |
+| `max` | **Don't use it by default.** Diminishing returns, prone to overthinking. Anthropic says it plainly: "use it deliberately for tasks like testing the model's maximum ceiling in evals and for extremely intelligence-sensitive and non-cost-sensitive uses". |
+
+**Key takeaway.** If you upgraded from 4.6 — don't carry over the old effort mechanically. Experiment: what you ran at `high` on 4.6 often works at `medium` on 4.7 for less money.
+
+### Adaptive thinking: there's no more fixed budget
+
+Extended Thinking with a fixed thinking budget isn't supported in 4.7. Instead there's **adaptive thinking**: the model decides at each step whether to "think," and how much.
+
+It's controlled by the prompt:
+
+- Want more reasoning: "Think carefully and step-by-step before responding; this problem is harder than it looks."
+- Want savings: "Prioritize responding quickly rather than thinking deeply. When in doubt, respond directly." — you lose some accuracy on hard steps, but save tokens.
+
+## 10. Practical Tips
+
+**Describe the task fully on the first turn.** Anthropic [says it plainly](https://claude.com/blog/best-practices-for-using-claude-opus-4-7-with-claude-code): "treat Claude as a capable engineer you delegate to, not a pair-programmer you guide line by line." A good spec with intent, constraints, acceptance criteria, and file paths — in the first message. Clarifications smeared across 10 turns are not only more expensive (each turn adds reasoning overhead) but also **lower the quality of the result** on 4.7.
+
+**Auto mode for trusted long tasks.** Claude Code Max gained an auto mode (Shift+Tab) — Claude makes decisions for you, interrupting less often. Fewer approval iterations = fewer tokens.
 
 **Skills over MCP.** Before Opus 4.5, replacing MCP with skills gave noticeable savings. The difference is smaller now, but for bulk tasks the approach still works.
 
 **Subagent model management.** You can specify which model a subagent should use. For routine tasks — Haiku, for complex ones — Sonnet or Opus.
 
+**Response length is now calibrated automatically.** Opus 4.7 is shorter on simple requests and longer on open-ended analysis — less verbose by default. If you strictly need a certain length or style, specify it explicitly. Anthropic's tip: positive style examples work better than "don't do this."
+
+**Fewer tools, more reasoning.** Opus 4.7 reaches for tools less often by default. If your scenario needs aggressive file search/reading, spell out when and why, otherwise the model will save turns by guessing.
+
+**Task budgets (API).** The Claude Platform gained [task budgets in public beta](https://www.anthropic.com/news/claude-opus-4-7) — you can cap the token budget for an entire long run rather than praying the model doesn't run away on its own.
+
 **`--bare` mode — clean launch.** The `--bare` flag starts Claude Code without hooks, LSP, plugin sync, auto-memory, background preloading, and — most importantly — **without auto-discovery of CLAUDE.md**. All of this normally gets loaded into the system prompt and burns tokens before the first message. In bare mode, the context starts minimal, and the necessary data can be passed precisely via `--system-prompt`, `--append-system-prompt`, `--add-dir`, or `--mcp-config`. Ideal for bulk subagents where extra preprompting is pure waste.
 
-## 9. Hooks — Automatic Savings
+## 11. Hooks — Automatic Savings
 
 Hooks are scripts that trigger on events inside Claude Code. They're configured in `.claude/settings.json` and let you automate routines that save tokens.
 
@@ -121,7 +214,7 @@ Hooks are scripts that trigger on events inside Claude Code. They're configured 
 
 ### Examples of Useful Hooks
 
-**Test output filtering.** The official Anthropic example — a `PreToolUse` hook for Bash that trims long test output, keeping only failed tests and the summary. Instead of 500 lines of logs, only 10 lines make it into context — direct token savings.
+**Test output filtering.** The official Anthropic example — a `PreToolUse` hook for Bash that trims long test output, keeping only the failed tests and the summary. Instead of 500 lines of log, only 10 lines make it into context — direct token savings.
 
 ```json
 {
@@ -134,33 +227,35 @@ Hooks are scripts that trigger on events inside Claude Code. They're configured 
 }
 ```
 
-**Auto-formatting after write.** A `PostToolUse` hook for Write/Edit — running `prettier` or `black` after every file save. The model doesn't need to spend tokens on code formatting — it writes logic, and the hook handles formatting.
+**Auto-formatting after write.** A `PostToolUse` hook for Write/Edit — running `prettier` or `black` after every file save. The model doesn't need to spend tokens on code formatting — it writes the logic, and the hook does the formatting.
 
 **Protection against destructive commands.** A `PreToolUse` hook for Bash that blocks `rm -rf`, `DROP TABLE`, and similar commands. Doesn't save tokens directly, but protects against costly mistakes and rework.
 
-**Saving context before compact.** A `PreCompact` hook — before context compression, you can save key decisions and state to a file so they aren't lost after compaction.
+**Saving context before compact.** A `PreCompact` hook — before context compression, you can save key decisions and state to a file so they aren't lost after compaction. A powerful trick is to hand the summarization itself to **an external agent on a cheap model** (e.g., `opencode run -m …`, see §4): the hook writes the digest with the hands of a penny-priced model, instead of forcing Opus to re-read its own history at the flagship rate.
 
 ### What Hooks Cannot Do
 
 Auto-compact every Nth message can't be configured through hooks — it's a built-in Claude Code feature. But you can use the `PreCompact` hook to control what gets preserved during compression.
 
-## 10. Screenshots — the Hidden Token Eater
+## 12. Screenshots — the Hidden Token Eater
 
-Claude supposedly compresses images by resolution according to documentation. In practice — no noticeable compression. On a 4K monitor, a single screenshot is expensive.
+According to the docs, Claude compresses images by resolution. In practice — no noticeable compression. On a 4K monitor, a single screenshot is expensive.
 
-Solution: downsize screenshots to ~400px wide before sending. Text remains readable, but token consumption drops by an order of magnitude.
+> ⚠️ **With Opus 4.7 the situation is even worse.** The model now accepts images up to **2576px on the long side (~3.75 MP)** — more than three times larger than previous models. Anthropic says it plainly in the [announcement footnote](https://www.anthropic.com/news/claude-opus-4-7): "higher-resolution images consume more tokens, users who don't require the extra detail can downsample images before sending them to the model". In other words, the routine vision upgrade simultaneously became a bill upgrade.
+
+Solution: downsize screenshots to ~400px wide before sending. The text stays readable, and you spend an order of magnitude fewer tokens.
 
 For macOS I built [Open Screenshot](https://openscreenshot.suenot.com/) — a utility that takes screenshots in a resolution-compressed format right away. No manual resizing needed. Give it a try!
 
-## 11. Ready-to-Go Setup Out of the Box: rtk + graphify
+## 13. Ready-to-Go Setup Out of the Box: rtk + graphify
 
-Two tools I keep enabled globally — each attacking its own cost driver from §1: **rtk** cuts input from commands, **graphify** eliminates "read the entire repository" from context. Neither requires its own API key (graphify runs semantic indexing through cheap OpenRouter, not through Claude tokens). Together with caveman (§4) you get a complete stack: command input + repository context + model output.
+Two tools I keep enabled globally — each attacking its own cost driver from §1: **rtk** cuts input from commands, **graphify** removes "read the entire repository" from context. Neither requires its own API key (graphify runs semantics through cheap OpenRouter, not through Claude tokens). Together with caveman (§5) you get a complete stack: command input + repository context + model output.
 
 **I've packaged the full setup in a dedicated repository — [`suenot/claude-code-token-savers`](https://github.com/suenot/claude-code-token-savers)** (scripts, patches, hooks, `setup.sh`).
 
 ### rtk — command output compression
 
-[rtk](https://github.com/rtk-ai/rtk) (Rust Token Killer) is a CLI proxy: it filters, deduplicates, and trims the output of 100+ commands (git, docker, pytest, cargo…) by **60–90%** before that output ever reaches context. Single binary, no dependencies, <10 ms overhead, no LLM involved.
+[rtk](https://github.com/rtk-ai/rtk) (Rust Token Killer) is a CLI proxy: it filters, deduplicates, and trims the output of 100+ commands (git, docker, pytest, cargo…) by **60–90%** before that output ever reaches context. Single binary, no dependencies, <10 ms overhead, no LLM.
 
 ```bash
 brew install rtk
@@ -168,37 +263,75 @@ rtk init -g --auto-patch   # installs a global PreToolUse hook for Claude Code
 # restart Claude Code; verify: git status
 ```
 
-The hook transparently rewrites `git status` → `rtk git status`. It's the same technique as in §9 (filtering test output with a hook), but applied to a hundred commands at once.
+The hook transparently rewrites `git status` → `rtk git status`. It's the same technique as in §11 (filtering test output with a hook), but applied to a hundred commands at once.
 
 ### graphify — a knowledge graph instead of reading the whole repo
 
-[graphify](https://github.com/safishamsi/graphify) turns code and docs into a knowledge graph (nodes, communities, god-nodes) that you **query** (`/graphify query "…"`) instead of dumping files into context — a practical implementation of the idea from §6. The key trick: **semantic extraction runs through OpenRouter (`deepseek/deepseek-v4-flash`), not through Claude tokens** — building a graph for a mid-sized project costs ~$0.10 on OpenRouter and zero session tokens.
+[graphify](https://github.com/safishamsi/graphify) turns code and docs into a knowledge graph (nodes, communities, god-nodes) that you **query** (`/graphify query "…"`) instead of dumping files into context — a practical embodiment of the idea from §7. The key trick: **semantic extraction runs through OpenRouter (`deepseek/deepseek-v4-flash`), not through Claude tokens** — building a graph for a mid-sized project costs ~$0.10 on OpenRouter and zero session tokens.
 
-What's included in the ready-made setup (the repo above, `graphify/` folder, `./setup.sh`):
+What's in the ready-made setup (the repo above, `graphify/` folder, `./setup.sh`):
 
-- OpenRouter backend (`~/.graphify/providers.json`, model switchable via `GRAPHIFY_OPENROUTER_MODEL`);
-- **SessionStart hook with auto-watch**: if a graph exists — watches for changes and updates it; if the project isn't initialised — simply prints "run `/graphify .`" (so that an accidentally opened root or huge folder doesn't silently consume tokens);
+- OpenRouter backend (`~/.graphify/providers.json`, the model is switchable via `GRAPHIFY_OPENROUTER_MODEL`);
+- **SessionStart hook with auto-watch**: if a graph exists — it watches for changes and updates it; if the project isn't initialized — it just prints "run `/graphify .`" (so that an accidentally opened root/huge folder doesn't eat tokens);
 - a clean **no-media toggle** (`touch ~/.graphify/no-media`) — keeps images/PDFs/videos out of the graph without fussing with ignore files;
-- a security fix: `.graphifyignore` no longer "shadows" `.gitignore` (merge instead of replace, [PR #1364](https://github.com/safishamsi/graphify/pull/1364) upstreamed), plus a pre-commit guard that prevents committing a graph that accidentally captured a `.gitignore`-listed file.
+- a security fix: `.graphifyignore` no longer "shadows" `.gitignore` (merge instead of replace, [PR #1364](https://github.com/safishamsi/graphify/pull/1364) upstreamed), plus a pre-commit guard that prevents committing a graph that captured a `.gitignore`-listed file.
 
-> Caveman (§4) handles the third layer — **the model's own output**. rtk + graphify + caveman = command input, repository context, and model output, respectively. For writing-heavy tasks, caveman is best turned off ("normal mode") — its terse style gets in the way of editing.
+> Caveman (§5) finishes off the third layer — **the model's own output**. rtk + graphify + caveman = command input, repository context, and model output, respectively. For writing-heavy tasks, caveman is best turned off ("normal mode") — its terse style gets in the way of editing.
+
+### headroom — compressing the entire input (and where it clashes with the stack)
+
+[headroom](https://github.com/headroomlabs-ai/headroom) by Headroom Labs goes further than rtk: it compresses not just command output but the entire input — tool output, logs, files, code, RAG chunks, history — by a claimed **60–95%**. Under the hood is a pipeline of specialized compressors: `SmartCrusher` (JSON/arrays), `CodeCompressor` (AST parsing for Python/JS/Go/Rust/Java/C++), `Kompress-base` (a trained model for prose), and a router that figures out the input type itself. Two important aces:
+
+- **CacheAligner** — stabilizes prefixes so that Anthropic/OpenAI's native KV cache still hits. That is, headroom deliberately solves that very burning-cache problem from §4.
+- **CCR (reversible compression)** — originals are cached locally, and if the model genuinely needs the full version, it calls the `headroom_retrieve` tool. Compression without irreversible data loss.
+
+It installs and wraps Claude Code like this:
+
+```bash
+pip install "headroom-ai[all]"
+headroom wrap claude        # there are --memory and --code-graph flags for Claude Code
+```
+
+There are several modes: library (`compress(messages)`), an HTTP proxy on `localhost:8787`, a CLI wrapper (`headroom wrap`), and an MCP server.
+
+**Will it conflict with an already-installed stack (rtk + graphify + caveman + Clother)?** It depends on the mode:
+
+| With what | Verdict |
+| --- | --- |
+| **Clother / any wrapper on `ANTHROPIC_BASE_URL`** | ⚠️ Conflict in **proxy mode**: both headroom-proxy and Clother want to claim `ANTHROPIC_BASE_URL`. You can't hang two proxies on one base URL (without chaining). Pick one — or run headroom as `wrap`/MCP/library rather than as a proxy. |
+| **rtk** | Duplication, not breakage. Both compress command output, but at different layers: rtk is a lightweight Rust hook (<10 ms, no LLM), headroom is heavier (AST/model) but broader. It's sensible to split them: rtk on commands, headroom on files/code/RAG. You can enable both on the same thing, but headroom will re-chew the already-trimmed rtk output — not harmful, but pointless. |
+| **graphify** | ✅ No overlap. graphify cuts input from "read the entire repository," headroom cuts tool output and files. They complement each other. |
+| **caveman** | ✅ No overlap. caveman compresses the model's **output**, headroom the **input**. Opposite sides of the barricade. |
+
+I'm not running it in production yet, but as "heavy artillery" on top of rtk/graphify it's the number-one candidate, especially for `CacheAligner` (see §4 on the burning cache).
 
 ## Savings Checklist
 
-| Approach | Savings |
-|----------|---------|
-| Subagents with short contexts | 2–5x on long sessions |
-| Chinese models for routine tasks | 5–10x by price ($30 vs $200) |
-| Skills over persistent MCP | 1.5–2x |
-| Hooks for output filtering | 1.5–3x on tasks with tests/logs |
-| Compact screenshots | 1.5–2x on visual tasks |
-| Graphs/RAG over full context | up to 3–5x |
-| Disabling reasoning for simple tasks | 1.5–2x |
-| `--bare` mode for subagents | 1.5–2x per launch |
-| Frameworks with plan approval | Indirect, via fewer reworks |
-| rtk — command output compression (PreToolUse hook) | 1.5–3x on git/docker/pytest/logs |
-| graphify — knowledge graph instead of full context (semantics on OpenRouter) | up to 10x on large-repo navigation; build ~$0.10, not Claude tokens |
+
+| Approach                                          | Savings                                          |
+| ----------------------------------------------- | ------------------------------------------------- |
+| Subagents with short contexts               | 2–5x on long sessions                           |
+| Chinese models for routine tasks                     | 5–10x by price ($30 vs $200)                       |
+| Skills over persistent MCP                   | 1.5–2x                                            |
+| Hooks for output filtering                      | 1.5–3x on tasks with tests/logs                |
+| Compact screenshots (especially with 4.7)           | 2–3x on visual tasks                        |
+| Graphs/RAG over full context              | up to 3–5x                                           |
+| Lowering Opus 4.7 effort (low/medium instead of high) | 1.5–3x at comparable quality                  |
+| Dropping `max` in favor of `xhigh` by default      | up to 2x on long agentic runs               |
+| `/rewind` instead of "try it differently"               | 1.3–2x: discards junk, keeps file reads    |
+| `/compact` proactively (before autocompact)          | preserves quality, fewer repeat passes     |
+| Full spec on the first turn (Opus 4.7)             | 1.3–1.7x: fewer turns, less reasoning overhead |
+| `--bare` mode for subagents                   | 1.5–2x per launch                            |
+| Adaptive thinking prompt "respond quickly"       | 1.2–1.5x on simple tasks                     |
+| Task budgets (API)                              | protection against runaway tokens on long runs          |
+| Frameworks with plan approval                   | indirectly, via fewer reworks               |
+| rtk — command output compression (PreToolUse hook)     | 1.5–3x on git/docker/pytest/logs                 |
+| graphify — graph instead of full context (semantics on OpenRouter) | up to 10x on large-repo navigation; build ~$0.10, not Claude tokens |
+| `/compact` summarization on a cheap model (proxy / external agent like opencode) | compression at Haiku price instead of Opus, without nuking the main session cache |
+| headroom — compressing the entire input (tool output/files/code/RAG) | 60–95% on input; `CacheAligner` protects the KV cache, `CCR` is reversible |
+| mcp-compressor — compressing the MCP surface (schema on demand) | cuts the tool-definition overhead from MCP servers |
+
 
 ---
 
-*You can burn through as many as you want — even 10 accounts at $200 is not the limit. But that's not a measure of efficiency. The goal is to cut costs by at least 10x without sacrificing quality.*
+*You can burn through as many as you want — and 10 accounts at $200 is not the limit. But that's not a measure of efficiency. The goal is to cut costs by at least 10x without sacrificing quality.*

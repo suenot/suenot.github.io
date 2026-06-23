@@ -246,7 +246,7 @@ You can say "generate a video from these files" and the agent will do everything
 
 ## Beyond Slides: Other Open-Source Video Tools
 
-My tools solve a specific problem: slides + narration → YouTube. But the video automation ecosystem is broader. Here are two projects worth knowing:
+My tools solve a specific problem: slides + narration → YouTube. But the video automation ecosystem is broader. Here are a few more projects worth knowing:
 
 ### video-use: Video Editing via Claude Code
 
@@ -279,6 +279,18 @@ Plus one-click auto-publishing to TikTok, Instagram, and YouTube simultaneously,
 
 Unlike paid alternatives (Opus Clip, CapCut, Vizard, Klap, Descript), OpenShorts is completely free, open source, no watermarks, no upload limits. You only pay for AI APIs (Gemini, fal.ai, ElevenLabs), and most have generous free tiers.
 
+### OpenMontage: Agentic Video Studio Out of the Box
+
+[OpenMontage](https://github.com/calesthio/OpenMontage) is an agentic video production system: 12 pipelines, 52 tools, and 500+ skills that turn your AI assistant (Claude Code, Cursor, Copilot) into a full studio. The pipeline: topic research via web search → script and voiceover → asset selection (AI images, stock, open archives from Archive.org / NASA / Wikimedia) → editing → composition via Remotion (React) or HyperFrames (HTML/GSAP). It produces real edits from actual footage, not just animated stills. Python + Remotion, AGPLv3, ~12k stars. Closest in spirit to video-use, but broader — a whole production pipeline.
+
+### palmier-pro: A Video Editor Built for AI
+
+[palmier-pro](https://github.com/palmier-io/palmier-pro) is a native macOS video editor (Swift, Apple Silicon only) where an AI agent edits alongside you in the same project via MCP: connect Claude Code, Cursor, or Codex — the agent works the timeline while generative models (Seedance, Kling) create frames right in the editor. GPLv3: the editor and MCP server are open source, only the generative part is closed (subscription). It's the "manual timeline + agent" combo, unlike the CLI-only video-use. ~7k stars.
+
+### printfilm: A Studio for Short Dramas and Motion Comics
+
+[printfilm](https://github.com/yuanzhongqiao/printfilm) (aka AI Motion Comic & Video Workbench) is a workbench for producing short dramas, motion comics, and storyboards. The pipeline: script → storyboard → character and scene assets → keyframes → video. It's not a video model but an orchestrator on top of external text/image/video models. Stack: React 19 + Electron (desktop), ~2.3k stars, with a product site at printfilm.com; Chinese-origin. Note: there's no license file in the repo — all-rights-reserved by default, worth keeping in mind if you want to fork the code.
+
 ## Limitations
 
 A few things to keep in mind:
@@ -296,6 +308,9 @@ All tools are open source:
 - 🔧 [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — generates YouTube metadata
 - 🎬 [video-use](https://github.com/browser-use/video-use) — video editing via Claude Code
 - 🎬 [OpenShorts](https://github.com/mutonby/openshorts) — full platform for shorts and AI video
+- 🎬 [OpenMontage](https://github.com/calesthio/OpenMontage) — agentic video studio for your AI assistant (12 pipelines, 52 tools)
+- 🎬 [palmier-pro](https://github.com/palmier-io/palmier-pro) — macOS video editor with an AI agent via MCP
+- 🎬 [printfilm](https://github.com/yuanzhongqiao/printfilm) — studio for short dramas and motion comics
 
 > **Important:** `video-maker` and `video-youtube-prepare` are not turnkey products — they're **starter templates**. They work out of the box for the basic scenario, but they're designed for you to customize with any AI agent (Claude Code, Codex, Cursor, etc.). Fork them, adapt to your brand, description style, and content format.
 
