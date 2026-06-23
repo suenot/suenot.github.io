@@ -2,6 +2,7 @@
 title: "无需邮件服务器，在自有域名上收发邮件：用 Cloudflare 收信，用 Resend 发信，再让 AI 智能体替你写邮件"
 description: "如何在一个晚上搭好一个能用的 you@yourdomain.com 邮箱，完全不需要邮件服务器：通过免费的 Cloudflare Email Routing 收信并转发到 Gmail，通过基于 Amazon SES 的 Resend API 发信，外加一个彩蛋——让 Claude Code 通过 API 给你发邮件。文中讲清楚：为什么收信和发信不冲突，真实的 Cloudflare 和 Resend API 调用，以及我踩过的那些坑。"
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---

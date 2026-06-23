@@ -2,6 +2,7 @@
 title: "Email on your own domain without a mail server: receive via Cloudflare, send via Resend, and let an AI agent write the emails"
 description: "How to assemble a working you@yourdomain.com mailbox in one evening with no mail server at all: receive mail through free Cloudflare Email Routing forwarded to Gmail, send through the Resend API on top of Amazon SES, and as a bonus — Claude Code that emails you over the API. Inside: why receiving and sending don't conflict, real Cloudflare and Resend API calls, and the gotchas I hit."
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---

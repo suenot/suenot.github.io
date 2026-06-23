@@ -2,6 +2,7 @@
 title: "بريد إلكتروني على نطاقك الخاص بدون خادم بريد: استقبل عبر Cloudflare، أرسل عبر Resend، ودع وكيل ذكاء اصطناعي يكتب الرسائل"
 description: "كيف تجمّع صندوق بريد you@yourdomain.com يعمل فعلياً في مساء واحد بدون أي خادم بريد على الإطلاق: استقبل البريد عبر خدمة Cloudflare Email Routing المجانية المعاد توجيهها إلى Gmail، أرسل عبر واجهة Resend المبنية على Amazon SES، وكمكافأة — Claude Code الذي يراسلك عبر الـ API. في الداخل: لماذا لا يتعارض الاستقبال مع الإرسال، استدعاءات حقيقية لواجهتي Cloudflare وResend، والمطبات التي واجهتها."
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---

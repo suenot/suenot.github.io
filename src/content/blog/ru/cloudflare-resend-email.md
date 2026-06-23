@@ -2,6 +2,7 @@
 title: "Почта на своем домене без почтового сервера: прием через Cloudflare, отправка через Resend, письма шлет AI-агент"
 description: "Как за вечер собрать рабочую почту you@yourdomain.com без единого почтового сервера: прием писем через бесплатный Cloudflare Email Routing с пересылкой в Gmail, отправка через Resend API поверх Amazon SES, и бонусом — Claude Code, который сам шлет вам письма по API. Внутри: почему прием и отправка не конфликтуют, реальные вызовы Cloudflare и Resend API, и подводные камни, на которые я напоролся."
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---

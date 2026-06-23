@@ -2,6 +2,7 @@
 title: "メールサーバーなしで独自ドメインのメールを：Cloudflareで受信、Resendで送信、そしてAIエージェントにメールを書かせる"
 description: "メールサーバーをまったく使わずに、動作する you@yourdomain.com のメールボックスを一晩で組み立てる方法：無料のCloudflare Email Routingで受信してGmailに転送し、Amazon SESの上に構築されたResend APIで送信する。おまけに、API経由であなたにメールを送るClaude Codeも。なぜ受信と送信が衝突しないのか、実際のCloudflareとResendのAPI呼び出し、そして私がはまった落とし穴まで解説。"
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---

@@ -2,6 +2,7 @@
 title: "메일 서버 없이 내 도메인으로 이메일 운영하기: Cloudflare로 수신, Resend로 발송, 그리고 AI 에이전트가 메일을 쓰게 하기"
 description: "메일 서버 하나 없이 하루 저녁이면 동작하는 you@yourdomain.com 메일함을 조립하는 방법: 무료 Cloudflare Email Routing으로 메일을 받아 Gmail로 포워딩하고, Amazon SES 위에 올라간 Resend API로 발송하며, 보너스로 API를 통해 당신에게 메일을 보내는 Claude Code까지. 수신과 발송이 충돌하지 않는 이유, 실제 Cloudflare와 Resend API 호출, 그리고 내가 부딪힌 함정들을 담았다."
 pubDate: 2026-06-23
+heroImage: "/images/blog/cloudflare-resend-hero.png"
 tags: ["cloudflare", "resend", "email", "dns", "claude-code", "automation"]
 draft: false
 ---
