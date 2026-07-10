@@ -1,6 +1,6 @@
 ---
 title: "如何在 LLM 中节省 Token：Claude Code 实用指南"
-description: "Claude Code 中节省 Token 的实用方法：子代理、技能、钩子、国产模型、知识图谱和 RAG。帮你将成本降低 10 倍的清单。"
+description: "Claude Code 中节省 Token 的实用方法：子代理、技能、钩子、国产模型、知识图谱、RAG，以及服务端节省（Tool Search、上下文编辑、提示缓存、Batches API）。帮你将成本降低 10 倍的清单。"
 pubDate: 2026-04-12
 updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
@@ -201,6 +201,61 @@ ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
 
 **它和整套方案的冲突点。** pxpipe 会占用 `ANTHROPIC_BASE_URL`——也就是 Clother 和其他任何封装工具用的同一个位置——所以在不做链式串联的情况下，你无法在一个 base URL 上挂两个代理。在最前面挑一个代理，然后把基于钩子的工具（rtk、graphify、caveman）叠加在上面。它是这里最激进的输入压缩器——当真正拖垮你的是请求侧的账单（系统提示 + 工具文档 + 长历史）时，它最值得一试。
 
+## 12. 服务端与 API 层面的节省（Claude Code 已经替你做了什么——又有什么没做）
+
+上面所有内容都是*你*自己加装的。但还有一整层节省发生在 **Anthropic 那一侧**——其中一部分已经在 Claude Code 中替你打开，另一部分只有在你基于原始 API/SDK 构建时才能用上。分清哪个是哪个，能让你不至于去装一个工具来解决平台早已解决的问题——也不至于误以为某个功能已经开启，而其实并没有。
+
+### 高级工具使用：Tool Search、Programmatic Tool Calling——默认已开启
+
+Anthropic 的 [advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use) 套件（2025 年 11 月）是这份清单里单项收益最大的，而好消息是**你无需配置**：
+
+- **Tool Search Tool**（`defer_loading`）。不再在每个请求里把每个工具的完整 schema 都塞进系统提示，而是只给模型看工具的*名称*，只有真正需要的工具才拉取完整定义。Anthropic 给出的数字：在大型工具集上 **77K → 8.7K Token（约 85%）**。**在 Claude Code 里这已经默认生效**——连接了大量 MCP 服务器和插件时，多出来的工具只以名称形式存在，直到被调用，模型才按需拉取 schema。**没有开关可拨：它随规模自动生效**，你连接的工具越多，省得越多。唯一需要你操心的情况是**自定义 harness / Agent SDK 应用**——那里得你自己实现（把工具标记为 `defer_loading: true`），或至少确认你的 harness 做了延迟加载，否则你又回到了每一轮为每个 schema 付费的状态。
+- **Programmatic Tool Calling。** 模型在执行容器里写代码来调用工具，并在结果进入上下文*之前*就把它们过滤掉——而不是让每个原始工具结果都在窗口里往返一趟。在工具密集的代理运行中通常能省 **20–40%**（还附带准确率提升）。这一项目前仍是 API 原生（beta），在 Claude Code 里还不是自动的。
+
+> **要点：** 那约 85% 的工具 schema 节省在 Claude Code 里已经归你所有——无需额外设置。只有当你自己写 harness 时才需要操心它。
+
+### 上下文编辑（`clear_tool_uses`）——一个 API 功能；Claude Code 给了你它自己的版本
+
+Anthropic 的 [context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing)（beta header `context-management-2025-06-27`，策略 `clear_tool_uses_20250919`）会在上下文越过阈值后自动清除最旧的工具结果，每个换成一段简短的占位符。在 Anthropic 的 100 轮评测中，这在本会因上下文耗尽而崩溃的运行上带来了 **84% 的 Token 削减**。
+
+但是：**这个原始旋钮在 Claude Code 里并未暴露**（已有公开请求希望把它开放出来）。Claude Code 给你的替代品是 **microcompact**——它自动把大块的工具输出卸载到磁盘，只保留最近结果的热尾巴外加路径引用——与 `/compact` 和 autocompact 一起静默运行。所以那个*行为*（裁剪陈旧的工具输出）已经自动替你覆盖了；那个*具体的 API 参数*只有在你直接基于 Anthropic API/SDK 构建时才能用上。别在 Claude Code 里找 `clear_tool_uses` 设置了——你已经拿到了内置版本。
+
+### 主动式提示缓存——缓存读取便宜 90%，且大体上自动
+
+[Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) 已 GA 且是基础能力：一次缓存读取只需 **0.10× 输入（−90%）**。两种 TTL——5 分钟（默认）和 1 小时（扩展）。**Claude Code 已经在积极地替你缓存**；你能控制的是缓存*是否命中*：
+
+- 让上下文的前部保持**字节级稳定**——系统提示、工具定义和 `CLAUDE.md` 不应在两轮之间变动，否则前缀缓存就会失效，模型只能从头重读。
+- 不要在会话中途重排工具或重写靠前的上下文（这正是那个「烧缓存」的陷阱：一旦前缀变了，累积的缓存就付诸东流）。
+- Opus 4.8 在这方面有帮助：它允许 `role:"system"` 消息出现在用户轮*之后*，于是你可以**在不破坏已缓存前缀的前提下**追加指令，并且它把可缓存提示的下限降到了 **1,024 Token**。
+
+### Message Batches API——离线批量任务直接打 5 折
+
+对于非交互式的批量工作——§2 里"8000 个脚本、每个一个子代理"的场景，或批量摘要 / 分类 / 评测——[Message Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing) 会异步运行它们（24 小时内出结果，通常快得多），**输入和输出都直接打 5 折**，而且它**能与提示缓存叠加**（缓存读取再省 90%）。
+
+**问题在于：Claude Code 本身没有批处理模式。** 它是一个交互式 REPL——每一轮都是实时的全价请求，没有"以半价排队 8000 个任务"的按钮。这 50% 的折扣在下一层，也就是原始 API 上，你只有离开 CLI 才能拿到：
+
+- 直接用 **Anthropic API / SDK**——`client.messages.batches.create(...)`（Python/TS）。你可以在这里自己写批量脚本，或基于 **Claude Agent SDK** 而非交互式 CLI 来构建。
+- **AWS Bedrock**——"Batch Inference"。
+- **Google Vertex AI**——"Batch Prediction"。
+- （其他家也是同样的套路：**OpenAI** 有等价的 Batch API，同样 −50%。）
+
+所以经验法则：**交互式编码 → Claude Code（缓存挑大梁）；离线批量 → 降到 API/SDK 或 Bedrock/Vertex 去批处理。** 硬把批量标注塞进交互式 CLI，就是把那 50% 白白扔掉。
+
+### 便宜的卫生习惯：`/context`、精简的 CLAUDE.md、以及关掉闲置的 MCP 服务器
+
+- **`/context`** 会逐项打印出是什么在填满你的窗口——系统提示、系统工具、MCP 工具、记忆文件（`CLAUDE.md`）、自定义代理、消息。跑一下就知道谁是大户。
+- **臃肿的 `CLAUDE.md` 是对每条消息的征税**——一个 10K Token 的记忆文件会随每一轮重新发送。保持精简，把任务相关的指令推到**技能**里（按需加载）。
+- **每个闲置的 MCP 服务器都会在每个请求里为它的工具定义计费。** 通过 `/mcp`（或像 `cctoggle` 这样的开关）断开你没在用的。Tool Search 缓解了这一点，但压根不用某个服务器，仍然比延迟加载它更便宜。
+
+### Structured Outputs——干掉重试和前言
+
+[Structured Outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)（beta）用受约束解码来保证 schema 合法的 JSON（`output_format`，或在工具上设 `strict: true`）。节省是间接但真实的：不再有无效 JSON 的重试往返（一次解析失败的代价就超过该功能约 2–3% 的 schema 开销），并且它去掉了模型本会包裹在答案外面的那一大段絮叨式推理。
+
+### 两件不必费心的事
+
+- **`token-efficient-tools-2025-02-19` header 已成历史。** 它只在 **Claude 3.7 Sonnet** 上削减工具调用的输出 Token；每个 Claude 4+ 模型（包括 Opus 4.7/4.8）都**默认**做 token-efficient 的工具使用，所以这个 header 今天是个空操作。别加它。
+- **LLMLingua-2**（微软的提示压缩器，2–5×）确实存在且好用，但它只是个*引擎*，用来填补输入压缩这类活儿——也就是 §11 的 **pxpipe** 那种输入压缩工具已经在做的事——而不是一个要跟它并列另装的独立方法。
+
 ## 节省 Token 清单
 
 | 方法 | 节省幅度 |
@@ -217,6 +272,12 @@ ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
 | rtk——压缩命令输出（PreToolUse 钩子） | git/docker/pytest/日志节省 1.5–3 倍 |
 | graphify——用图谱替代完整上下文（语义处理走 OpenRouter） | 大型仓库导航最高节省 10 倍；构建约 $0.10，不消耗 Claude Token |
 | pxpipe——把请求（系统提示/工具文档/历史）渲染成密集 PNG | 通过视觉通道在输入端节省 ~59–70%；对字节级精确数值有损，Opus 需 opt-in |
+| Tool Search / `defer_loading`（Claude Code 中自动） | 工具 schema Token 最高省约 85%；零配置——随规模自动生效 |
+| 上下文编辑 / microcompact（Claude Code 中自动） | 长代理运行最高节省 84%；API 旋钮 `clear_tool_uses` 仅通过原始 SDK 可用 |
+| 主动式提示缓存（稳定前缀，1 小时 TTL） | 缓存读取 0.10×（−90%）；大体自动，保持前缀字节级稳定 |
+| Message Batches API（离线批量，非 Claude Code） | 输入+输出直接 −50%；经 API/SDK、Bedrock、Vertex——可与缓存叠加 |
+| `/context` + 精简 CLAUDE.md + 关掉闲置 MCP 服务器 | 靠裁剪记忆文件和闲置工具定义，每条消息省下数千 Token |
+| Structured Outputs（`strict` JSON） | 消除解析重试往返和絮叨前言 |
 
 ---
 
