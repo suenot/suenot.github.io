@@ -1,6 +1,6 @@
 ---
 title: "LLM에서 토큰 절약하기: Claude Code 실전 가이드"
-description: "Claude Code에서 토큰을 절약하는 실전 방법: subagent, skill, hook, 중국 모델, 지식 그래프와 RAG. 비용을 10배 줄이는 체크리스트."
+description: "Claude Code에서 토큰을 절약하는 실전 방법: subagent, skill, hook, 중국 모델, 지식 그래프와 RAG, 서버 사이드 절약(Tool Search, context editing, prompt caching, Batches API). 비용을 10배 줄이는 체크리스트."
 pubDate: 2026-04-12
 updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
@@ -201,6 +201,61 @@ ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
 
 **스택과 충돌하는 지점.** pxpipe는 `ANTHROPIC_BASE_URL`을 차지합니다 — Clother를 비롯한 다른 래퍼가 사용하는 바로 그 슬롯입니다 — 따라서 체이닝 없이는 하나의 base URL에 두 개의 프록시를 걸 수 없습니다. 앞단에는 프록시 하나만 고르고, 훅 기반 도구(rtk, graphify, caveman)를 그 위에 쌓으세요. 여기서 가장 급진적인 input 압축기이며 — 요청 측 비용(시스템 프롬프트 + 도구 문서 + 긴 기록)이 실제로 발목을 잡을 때 시도해 볼 만합니다.
 
+## 12. 서버 사이드 및 API 레벨 절약 (Claude Code가 이미 하는 것 — 그리고 하지 않는 것)
+
+위의 모든 것은 *여러분이* 직접 붙이는 것들입니다. 하지만 절약의 한 층 전체는 **Anthropic 쪽 와이어 너머**에 존재합니다 — 그중 일부는 Claude Code에서 이미 켜져 있고, 일부는 원시 API/SDK 위에 직접 구축해야만 닿을 수 있습니다. 어느 쪽인지 아는 것이, 플랫폼이 이미 해결한 문제를 고치려고 도구를 설치하는 일 — 그리고 켜져 있지 않은 기능이 켜져 있다고 가정하는 일 — 을 막아줍니다.
+
+### 고급 도구 사용: Tool Search, Programmatic Tool Calling — 기본으로 이미 켜짐
+
+Anthropic의 [advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use) 제품군(2025년 11월)은 이 목록에서 가장 큰 단일 이득이며, 좋은 소식은 **여러분이 설정할 것이 없다**는 점입니다:
+
+- **Tool Search Tool** (`defer_loading`). 모든 요청마다 모든 도구의 전체 스키마를 시스템 프롬프트에 쏟아붓는 대신, 모델에는 도구 *이름*만 보여지고 실제로 필요한 도구에 한해서만 전체 정의를 가져옵니다. Anthropic 수치: 대형 도구 세트에서 **77K → 8.7K 토큰(약 85%)**. **Claude Code에서는 이미 기본으로 활성화**되어 있습니다 — 많은 MCP 서버와 플러그인이 연결되어 있어도 추가 도구는 호출되기 전까지 이름만으로 대기하며, 모델이 필요할 때 스키마를 가져옵니다. **켤 설정이 없습니다: 규모에 따라 작동**하며, 연결된 도구가 많을수록 더 많이 절약됩니다. 신경 써야 하는 유일한 경우는 **커스텀 하네스 / Agent SDK 앱**입니다 — 거기서는 직접 구현하거나(도구에 `defer_loading: true` 표시) 최소한 하네스가 지연 로딩을 하는지 확인해야 하며, 그러지 않으면 매 턴마다 모든 스키마 비용을 다시 내게 됩니다.
+- **Programmatic Tool Calling.** 모델이 실행 컨테이너에서 코드를 작성해 도구를 호출하고 그 결과를 컨텍스트에 닿기 *전에* 필터링합니다 — 모든 원시 도구 결과가 창을 왕복하는 대신에 말이죠. 도구 사용이 많은 에이전트 실행에서 일반적으로 **20–40%**(정확도 향상은 덤). 이것은 아직 API 네이티브(베타)이며 Claude Code에서는 아직 자동이 아닙니다.
+
+> **핵심:** 약 85%의 도구 스키마 절약은 Claude Code에서 이미 여러분의 것입니다 — 추가 설정 없이. 자체 하네스를 작성하는 경우에만 신경 쓰면 됩니다.
+
+### Context editing (`clear_tool_uses`) — API 기능; Claude Code는 자체 버전을 제공
+
+Anthropic의 [context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing)(베타 헤더 `context-management-2025-06-27`, 전략 `clear_tool_uses_20250919`)은 컨텍스트가 임계치를 넘으면 가장 오래된 도구 결과를 자동으로 지우고 각각을 짧은 플레이스홀더로 교체합니다. Anthropic의 100턴 평가에서 이는, 그러지 않았다면 컨텍스트 고갈로 죽었을 실행에서 **84% 토큰 감소**였습니다.
+
+하지만: **그 원시 노브는 Claude Code에 노출되지 않습니다**(이를 표면화하려는 공개 요청이 있습니다). Claude Code가 대신 제공하는 것은 **microcompact**입니다 — 큰 도구 출력을 자동으로 디스크에 오프로드하고 최근 결과의 뜨거운 꼬리와 경로 참조만 유지하며, `/compact` 및 autocompact와 함께 조용히 실행됩니다. 즉 오래된 도구 출력을 잘라내는 *동작*은 자동으로 커버되고, *특정 API 파라미터*는 Anthropic API/SDK 위에 직접 구축할 때만 닿을 수 있습니다. Claude Code에서 `clear_tool_uses` 설정을 찾지 마세요 — 이미 하우스 버전을 얻고 있습니다.
+
+### 능동적 prompt caching — 캐시 읽기 90% 할인, 그리고 대부분 자동
+
+[Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)은 GA이며 기본 토대입니다: 캐시 읽기 비용은 **0.10× input(−90%)**. 두 가지 TTL — 5분(기본)과 1시간(확장). **Claude Code는 이미 여러분을 위해 적극적으로 캐싱합니다**; 여러분이 통제하는 것은 캐시가 *적중하느냐*입니다:
+
+- 컨텍스트 앞부분을 **바이트 단위로 안정적**으로 유지하세요 — 시스템 프롬프트, 도구 정의, `CLAUDE.md`는 턴 사이에 흔들려서는 안 되며, 그렇지 않으면 프리픽스 캐시가 빗나가 모델이 처음부터 다시 읽습니다.
+- 세션 중간에 도구를 재정렬하거나 앞쪽 컨텍스트를 다시 쓰지 마세요(프리픽스를 재작성하면 캐시가 통째로 날아가는 바로 그 함정입니다).
+- Opus 4.8이 여기서 도움을 줍니다: `role:"system"` 메시지가 사용자 턴 *뒤에* 나타날 수 있게 하여, 캐시된 프리픽스를 깨뜨리지 **않고** 지시를 덧붙일 수 있으며, 캐시 가능한 최소 프롬프트를 **1,024 토큰**으로 낮췄습니다.
+
+### Message Batches API — 오프라인 대량 작업에 일괄 50% 할인
+
+비대화형 대량 작업 — §2의 "8000개 스크립트, 각각 subagent 하나" 시나리오, 또는 대량 요약/분류/평가 —에는 [Message Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing)가 이를 비동기로 실행하며(결과는 24시간 이내, 보통 훨씬 빠름) **input과 output 모두에 일괄 50% 할인**을 적용하고, **prompt caching과 중첩**됩니다(캐시 읽기에 추가로 90%).
+
+**함정: Claude Code 자체에는 배치 모드가 없습니다.** 이것은 대화형 REPL입니다 — 모든 턴이 살아 있는 전액 요청이며, "8000개 작업을 반값에 큐잉"하는 버튼은 없습니다. 50% 할인은 한 층 아래 원시 API에 있으며, CLI를 떠나야만 닿을 수 있습니다:
+
+- **Anthropic API / SDK** 직접 — `client.messages.batches.create(...)`(Python/TS). 여기서 대량 패스를 직접 스크립팅하거나, 대화형 CLI 대신 **Claude Agent SDK** 위에 구축합니다.
+- **AWS Bedrock** — "Batch Inference".
+- **Google Vertex AI** — "Batch Prediction".
+- (다른 곳도 같은 패턴: **OpenAI**에도 −50%의 동등한 Batch API가 있습니다.)
+
+그래서 경험칙: **대화형 코딩 → Claude Code(캐싱이 무거운 일을 처리); 오프라인 대량 작업 → API/SDK나 Bedrock/Vertex로 내려가 배치.** 대화형 CLI를 통해 대량 라벨링을 억지로 밀어붙이면 그 50%를 테이블에 남겨두게 됩니다.
+
+### 저렴한 위생: `/context`, 군살 없는 CLAUDE.md, 유휴 MCP 서버 제거
+
+- **`/context`**는 무엇이 창을 채우고 있는지 토큰 단위로 분해해 출력합니다 — 시스템 프롬프트, 시스템 도구, MCP 도구, 메모리 파일(`CLAUDE.md`), 커스텀 에이전트, 메시지. 실행해서 누가 먹보인지 확인하세요.
+- **비대해진 `CLAUDE.md`는 매 메시지에 부과되는 세금입니다** — 10K 토큰짜리 메모리 파일은 매 턴마다 다시 전송됩니다. 군살 없이 유지하고, 작업별 지시는 **skill**(필요 시 로드)로 밀어넣으세요.
+- **모든 유휴 MCP 서버는 매 요청마다 도구 정의를 과금합니다.** 사용하지 않는 것은 `/mcp`(또는 `cctoggle` 같은 토글)로 연결 해제하세요. Tool Search가 이를 완화하지만, 서버를 아예 쓰지 않는 것이 지연 로딩보다 여전히 저렴합니다.
+
+### Structured Outputs — 재시도와 서론을 없애기
+
+[Structured Outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)(베타)는 제약 디코딩을 사용해 스키마에 유효한 JSON을 보장합니다(`output_format`, 또는 도구에 `strict: true`). 절약은 간접적이지만 실질적입니다: 유효하지 않은 JSON 재시도 왕복이 없고(한 번의 파싱 실패가 이 기능의 약 2–3% 스키마 오버헤드보다 비쌉니다), 모델이 답변을 감쌀 장황한 서술형 추론을 걷어냅니다.
+
+### 신경 쓸 필요 없는 두 가지
+
+- **`token-efficient-tools-2025-02-19` 헤더는 과거의 것입니다.** 이것은 **Claude 3.7 Sonnet에서만** 도구 호출 출력 토큰을 줄였습니다; 모든 Claude 4+ 모델(Opus 4.7/4.8 포함)은 토큰 효율적 도구 사용을 **기본으로** 하므로, 이 헤더는 오늘날 무의미(no-op)합니다. 추가하지 마세요.
+- **LLMLingua-2**(Microsoft의 프롬프트 압축기, 2–5×)는 실제로 훌륭하지만, 이는 input 압축이라는 동일한 작업에 끼워 넣는 *엔진*일 뿐입니다 — pxpipe(§11)를 비롯한 input 압축 도구가 이미 그 자리를 채우고 있으니, 그것들과 나란히 설치할 별도의 방법이 아닙니다.
+
 ## 절약 체크리스트
 
 | 방법 | 절약 효과 |
@@ -217,6 +272,12 @@ ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
 | rtk — 명령어 출력 압축 (PreToolUse 훅) | git/docker/pytest/로그에서 1.5–3배 |
 | graphify — 전체 컨텍스트 대신 그래프 (시맨틱은 OpenRouter 처리) | 대형 저장소 탐색에서 최대 10배; 구축 비용 ~$0.10, Claude 토큰 아님 |
 | pxpipe — 요청(시스템 프롬프트/도구 문서/기록)을 밀도 높은 PNG로 렌더링 | 비전 채널로 input에서 ~59–70%; 바이트 단위 정확성에서는 손실, Opus는 opt-in |
+| Tool Search / `defer_loading` (Claude Code 자동) | 도구 스키마 토큰 최대 ~85%; 설정 제로 — 규모에 따라 작동 |
+| Context editing / microcompact (Claude Code 자동) | 긴 에이전트 실행에서 최대 84%; API 노브 `clear_tool_uses`는 원시 SDK로만 |
+| 능동적 prompt caching (안정적 프리픽스, 1시간 TTL) | 캐시 읽기 0.10× (−90%); 대부분 자동, 프리픽스를 바이트 단위로 안정 유지 |
+| Message Batches API (오프라인 대량, Claude Code 아님) | input+output 일괄 −50%; API/SDK, Bedrock, Vertex 경유 — 캐싱과 중첩 |
+| `/context` + 군살 없는 CLAUDE.md + 유휴 MCP 서버 제거 | 메모리 파일과 유휴 도구 정의를 걷어내 메시지당 수천 토큰 |
+| Structured Outputs (`strict` JSON) | 파싱 재시도 왕복과 장황한 서론 제거 |
 
 ---
 
