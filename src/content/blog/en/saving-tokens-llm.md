@@ -1,6 +1,6 @@
 ---
 title: "How to Save Tokens in LLM: A Practical Guide for Claude Code"
-description: "Working approaches to saving tokens in Claude Code and Opus 4.7: subagents, skills, hooks, Chinese models, knowledge graphs, RAG, xhigh effort, session management, summarization on a cheap model, input compression (headroom, pxpipe, mcp-compressor). A checklist to cut costs by 10x."
+description: "Working approaches to saving tokens in Claude Code and Opus 4.7/4.8: subagents, skills, hooks, Chinese models, knowledge graphs, RAG, xhigh effort, session management, summarization on a cheap model, input compression (headroom, pxpipe, mcp-compressor), and server-side savings (Tool Search, context editing, prompt caching, Batches API). A checklist to cut costs by 10x."
 pubDate: 2026-04-12
 updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
@@ -323,6 +323,61 @@ The dashboard at `127.0.0.1:47821` shows tokens saved, every text→image conver
 
 **Where it clashes with the stack.** Same caveat as headroom-proxy: pxpipe claims `ANTHROPIC_BASE_URL`, so it can't coexist on the same base URL with Clother or a headroom proxy without chaining — pick one proxy in front, and stack the hook-based tools (rtk, graphify, caveman) on top. It's the most radical input-compressor of the bunch, and the one worth trying when the request-side bill (system prompt + tool docs + long history) is what's actually killing you.
 
+## 14. Server-Side and API-Level Savings (What Claude Code Already Does — and What It Doesn't)
+
+Everything above is stuff *you* bolt on. But a whole layer of savings lives on **Anthropic's side of the wire** — some of it already switched on for you in Claude Code, some of it only reachable if you build on the raw API/SDK. Knowing which is which stops you from installing a tool to fix a problem the platform already solved — and from assuming a feature is on when it isn't.
+
+### Advanced tool use: Tool Search, Programmatic Tool Calling — already on by default
+
+Anthropic's [advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use) suite (Nov 2025) is the biggest single win on this list, and the good news is **you don't configure it**:
+
+- **Tool Search Tool** (`defer_loading`). Instead of dumping every tool's full schema into the system prompt on every request, the model is shown just the tool *names* and pulls the full definition only for the tools it actually needs. Anthropic's number: **77K → 8.7K tokens (~85%)** on a large tool set. **In Claude Code this is already active by default** — with many MCP servers and plugins connected, the extra tools sit as names-only until called, and the model fetches a schema on demand. **No setting to flip: it kicks in by scale**, the more tools you have connected the more it saves. The only case where you have to think about it is a **custom harness / Agent SDK app** — there you implement it yourself (mark tools `defer_loading: true`) or at least verify your harness does the deferring, otherwise you're back to paying for every schema on every turn.
+- **Programmatic Tool Calling.** The model writes code in an execution container that calls tools and filters their results *before* they hit context — instead of every raw tool result round-tripping through the window. Typical **20–40%** on tool-heavy agent runs (plus an accuracy bump). This one is still API-native (beta) and not automatic in Claude Code yet.
+
+> **Takeaway:** the ~85% tool-schema saving is already yours in Claude Code — no extra setup. Only worry about it if you're writing your own harness.
+
+### Context editing (`clear_tool_uses`) — an API feature; Claude Code gives you its own version
+
+Anthropic's [context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing) (beta header `context-management-2025-06-27`, strategy `clear_tool_uses_20250919`) auto-clears the oldest tool results once context crosses a threshold, swapping each for a short placeholder. In Anthropic's 100-turn eval that was an **84% token reduction** on a run that would otherwise die of context exhaustion.
+
+But: **that raw knob is not exposed in Claude Code** (there's an open request to surface it). What Claude Code gives you instead is **microcompact** — it automatically offloads large tool outputs to disk and keeps only a hot tail of recent results plus path references — running silently alongside `/compact` and autocompact. So the *behavior* (pruning stale tool output) is covered for you automatically; the *specific API parameter* is only reachable if you build directly on the Anthropic API/SDK. Don't go looking for a `clear_tool_uses` setting in Claude Code — you already get the house version.
+
+### Proactive prompt caching — 90% off the cached read, and mostly automatic
+
+[Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) is GA and foundational: a cached read costs **0.10× input (−90%)**. Two TTLs — 5-minute (default) and 1-hour (extended). **Claude Code already caches aggressively for you**; what you control is whether the cache *hits*:
+
+- Keep the front of the context **byte-stable** — the system prompt, tool definitions, and `CLAUDE.md` should not churn between turns, or the prefix cache misses and the model re-reads from scratch.
+- Don't reorder tools or rewrite early context mid-session (this is exactly the §4 "burning cache" trap).
+- Opus 4.8 helps here: it lets a `role:"system"` message appear *after* a user turn, so you can append instructions **without** busting the cached prefix, and it lowered the minimum cacheable prompt to **1,024 tokens**.
+
+### Message Batches API — flat 50% off for offline bulk
+
+For non-interactive bulk work — the "8000 scripts, one subagent each" scenario from §2, or bulk summarization / classification / evals — the [Message Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing) runs them async (results within 24h, usually much sooner) at a **flat 50% discount on both input and output**, and it **stacks with prompt caching** (another 90% on cached reads).
+
+**The catch: Claude Code itself has no batch mode.** It's an interactive REPL — every turn is a live, full-price request, there's no "queue 8000 jobs at half price" button. The 50% discount lives one layer down, on the raw API, and you reach it only by leaving the CLI:
+
+- **Anthropic API / SDK** directly — `client.messages.batches.create(...)` (Python/TS). This is where you'd script the bulk pass yourself, or build it on the **Claude Agent SDK** rather than the interactive CLI.
+- **AWS Bedrock** — "Batch Inference".
+- **Google Vertex AI** — "Batch Prediction".
+- (Same pattern elsewhere: **OpenAI** has an equivalent Batch API at −50%.)
+
+So the rule of thumb: **interactive coding → Claude Code (caching does the heavy lifting); offline bulk → drop to the API/SDK or Bedrock/Vertex and batch it.** Trying to force bulk labeling through the interactive CLI leaves that 50% on the table.
+
+### Cheap hygiene: `/context`, a lean CLAUDE.md, and dropping idle MCP servers
+
+- **`/context`** prints a token-by-token breakdown of what's filling your window — system prompt, system tools, MCP tools, memory files (`CLAUDE.md`), custom agents, messages. Run it to see who the hog is.
+- **A bloated `CLAUDE.md` is a tax on every message** — a 10K-token memory file is re-sent with every turn. Keep it lean; push task-specific instructions into **skills** (loaded on demand) instead.
+- **Every idle MCP server bills its tool definitions on every request.** Disconnect the ones you're not using via `/mcp` (or a toggle like `cctoggle`). Tool Search softens this, but not using a server at all is still cheaper than deferring it.
+
+### Structured Outputs — kill the retries and the preamble
+
+[Structured Outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) (beta) uses constrained decoding to guarantee schema-valid JSON (`output_format`, or `strict: true` on tools). The saving is indirect but real: no invalid-JSON retry round-trips (a single failed parse costs more than the feature's ~2–3% schema overhead), and it strips the verbose narrated reasoning the model would otherwise wrap around its answer.
+
+### Two things NOT to bother with
+
+- **The `token-efficient-tools-2025-02-19` header is history.** It cut tool-call output tokens on **Claude 3.7 Sonnet only**; every Claude 4+ model (including Opus 4.7/4.8) does token-efficient tool use **by default**, so the header is a no-op today. Don't add it.
+- **LLMLingua-2** (Microsoft's prompt compressor, 2–5×) is real and good, but it's the *engine* that slots into the same job **headroom** (§13) already fills — not a separate method to install alongside it.
+
 ## Savings Checklist
 
 
@@ -349,6 +404,12 @@ The dashboard at `127.0.0.1:47821` shows tokens saved, every text→image conver
 | headroom — compressing the entire input (tool output/files/code/RAG) | 60–95% on input; `CacheAligner` protects the KV cache, `CCR` is reversible |
 | pxpipe — rendering the request (system prompt/tool docs/history) as dense PNGs | ~59–70% on input via the vision channel; lossy on byte-exact values, Opus opt-in |
 | mcp-compressor — compressing the MCP surface (schema on demand) | cuts the tool-definition overhead from MCP servers |
+| Tool Search / `defer_loading` (auto in Claude Code) | up to ~85% of tool-schema tokens; zero setup — kicks in by scale |
+| Context editing / microcompact (auto in Claude Code) | up to 84% on long agent runs; API knob `clear_tool_uses` only via raw SDK |
+| Proactive prompt caching (stable prefix, 1h TTL) | 0.10× on cached reads (−90%); mostly automatic, keep the prefix byte-stable |
+| Message Batches API (offline bulk, not Claude Code) | flat −50% input+output; via API/SDK, Bedrock, Vertex — stacks with caching |
+| `/context` + lean CLAUDE.md + drop idle MCP servers | thousands of tokens per message from trimming memory files and idle tool defs |
+| Structured Outputs (`strict` JSON) | removes parse-retry round-trips and verbose preamble |
 
 
 ---
