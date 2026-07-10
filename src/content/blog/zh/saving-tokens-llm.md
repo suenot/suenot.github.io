@@ -2,7 +2,7 @@
 title: "如何在 LLM 中节省 Token：Claude Code 实用指南"
 description: "Claude Code 中节省 Token 的实用方法：子代理、技能、钩子、国产模型、知识图谱和 RAG。帮你将成本降低 10 倍的清单。"
 pubDate: 2026-04-12
-updatedDate: 2026-06-17
+updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
@@ -183,6 +183,24 @@ rtk init -g --auto-patch   # 为 Claude Code 安装全局 PreToolUse 钩子
 
 > Caveman（§4）补上第三层——**模型自身的输出**。rtk + graphify + caveman = 命令输入、仓库上下文、模型输出，三层各司其职。注意：在处理纯文本内容时，caveman 最好关闭（"normal mode"）——过于简洁的风格会妨碍文字编辑。
 
+### pxpipe——把请求渲染成图片（§10 反过来用）
+
+[pxpipe](https://github.com/teamchong/pxpipe)（作者 [teamchong](https://github.com/teamchong)）从一个出人意料的角度攻击输入端。在 §10 里截图是敌人——一张图片会吃掉大量 Token。pxpipe 把这个逻辑反了过来：一张图片的 Token 成本由它的**像素尺寸**决定，而不是里面塞了多少文字。在真实的 Claude Code 流量中，密集内容（代码、JSON、工具输出）每个图像 Token 约能装下 ~3.1 个字符，而每个文本 Token 只能装下 ~1 个字符。于是它把每个请求中体量庞大、几乎不变的部分——系统提示、工具文档、较早的历史——在请求离开你的机器之前**渲染成密集的 PNG**。模型通过 Anthropic computer use 早已依赖的同一条视觉通道来读取它们。号称效果：**输入账单降低约 ~59–70%**，而真正经得起考验的指标就是 Token 削减量本身，按每个请求对照免费的 `count_tokens` 反事实来测量。
+
+它是一个代理，而且——先回答那个显而易见的问题——集成方式**已经是原生的**：不需要插件，不需要钩子，只用 Claude Code 内置的 `ANTHROPIC_BASE_URL`。
+
+```bash
+npm install -g pxpipe-proxy   # or on demand: npx pxpipe-proxy
+pxpipe                                            # proxy on 127.0.0.1:47821
+ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
+```
+
+`127.0.0.1:47821` 上的仪表盘会显示已节省的 Token、每一次 text→image 转换的并排对比、一个实时的 kill switch，并把每个事件记录到 `~/.pxpipe/events.jsonl`。只有**请求**会被压缩——响应照常流式返回。
+
+> ⚠️ **它是有损的，而且失手时不出声。** 从图片里读出的精确字节级数值（十六进制字符串、ID、哈希、密钥）可能被**编造**出来，而不是报错。所以最近几轮对话会自动保留为文本，而对字节级精确度有要求的工作应该交给运行在非白名单模型上的子代理（`CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`），它会以文本形式透传。它还高度依赖读取方：在 Fable 5 读取方上它在文本针测试中能拿到约 ~100/100，但 Opus 会误读图像化的内容——这也是 pxpipe 让 Opus 保持 opt-in 的原因。
+
+**它和整套方案的冲突点。** pxpipe 会占用 `ANTHROPIC_BASE_URL`——也就是 Clother 和其他任何封装工具用的同一个位置——所以在不做链式串联的情况下，你无法在一个 base URL 上挂两个代理。在最前面挑一个代理，然后把基于钩子的工具（rtk、graphify、caveman）叠加在上面。它是这里最激进的输入压缩器——当真正拖垮你的是请求侧的账单（系统提示 + 工具文档 + 长历史）时，它最值得一试。
+
 ## 节省 Token 清单
 
 | 方法 | 节省幅度 |
@@ -198,6 +216,7 @@ rtk init -g --auto-patch   # 为 Claude Code 安装全局 PreToolUse 钩子
 | 使用带计划审批的框架 | 间接节省，通过减少返工 |
 | rtk——压缩命令输出（PreToolUse 钩子） | git/docker/pytest/日志节省 1.5–3 倍 |
 | graphify——用图谱替代完整上下文（语义处理走 OpenRouter） | 大型仓库导航最高节省 10 倍；构建约 $0.10，不消耗 Claude Token |
+| pxpipe——把请求（系统提示/工具文档/历史）渲染成密集 PNG | 通过视觉通道在输入端节省 ~59–70%；对字节级精确数值有损，Opus 需 opt-in |
 
 ---
 

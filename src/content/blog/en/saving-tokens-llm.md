@@ -1,8 +1,8 @@
 ---
 title: "How to Save Tokens in LLM: A Practical Guide for Claude Code"
-description: "Working approaches to saving tokens in Claude Code and Opus 4.7: subagents, skills, hooks, Chinese models, knowledge graphs, RAG, xhigh effort, session management, summarization on a cheap model, input compression (headroom, mcp-compressor). A checklist to cut costs by 10x."
+description: "Working approaches to saving tokens in Claude Code and Opus 4.7: subagents, skills, hooks, Chinese models, knowledge graphs, RAG, xhigh effort, session management, summarization on a cheap model, input compression (headroom, pxpipe, mcp-compressor). A checklist to cut costs by 10x."
 pubDate: 2026-04-12
-updatedDate: 2026-06-23
+updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens", "opus-4.7"]
 draft: false
@@ -305,6 +305,24 @@ There are several modes: library (`compress(messages)`), an HTTP proxy on `local
 
 I'm not running it in production yet, but as "heavy artillery" on top of rtk/graphify it's the number-one candidate, especially for `CacheAligner` (see §4 on the burning cache).
 
+### pxpipe — rendering the request as images (§12 turned inside out)
+
+[pxpipe](https://github.com/teamchong/pxpipe) by [teamchong](https://github.com/teamchong) attacks input from an unexpected angle. In §12 a screenshot is the enemy — an image eats tokens. pxpipe flips that: an image's token cost is fixed by its **pixel dimensions**, not by how much text is packed inside it. On real Claude Code traffic dense content (code, JSON, tool output) packs ~3.1 chars per image-token versus ~1 char per text-token. So it takes the bulky, static parts of every request — the system prompt, tool docs, older history — and **renders them into dense PNGs** before the request leaves your machine. The model reads them through the same vision channel Anthropic's computer use already relies on. Claimed result: a **~59–70% lower input bill**, and the durable metric is the token cut itself, measured per-request against a free `count_tokens` counterfactual.
+
+It's a proxy, and — to answer the obvious question — the integration is **already native**: no plugin, no hook, just Claude Code's built-in `ANTHROPIC_BASE_URL`.
+
+```bash
+npm install -g pxpipe-proxy   # or on demand: npx pxpipe-proxy
+pxpipe                                            # proxy on 127.0.0.1:47821
+ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
+```
+
+The dashboard at `127.0.0.1:47821` shows tokens saved, every text→image conversion side by side, a live kill switch, and logs each event to `~/.pxpipe/events.jsonl`. Only the **request** is compressed — responses stream normally.
+
+> ⚠️ **It's lossy, and the misses are silent.** Exact byte-level values (hex strings, IDs, hashes, secrets) read out of an image can be **confabulated** rather than errored on. So recent turns stay as text automatically, and byte-exact work should be routed to a subagent on a non-allowlisted model (`CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`), which passes through as text. It also depends heavily on the reader: on the Fable 5 reader it hits ~100/100 on text needles, but Opus misreads imaged content — which is why pxpipe keeps Opus opt-in.
+
+**Where it clashes with the stack.** Same caveat as headroom-proxy: pxpipe claims `ANTHROPIC_BASE_URL`, so it can't coexist on the same base URL with Clother or a headroom proxy without chaining — pick one proxy in front, and stack the hook-based tools (rtk, graphify, caveman) on top. It's the most radical input-compressor of the bunch, and the one worth trying when the request-side bill (system prompt + tool docs + long history) is what's actually killing you.
+
 ## Savings Checklist
 
 
@@ -329,6 +347,7 @@ I'm not running it in production yet, but as "heavy artillery" on top of rtk/gra
 | graphify — graph instead of full context (semantics on OpenRouter) | up to 10x on large-repo navigation; build ~$0.10, not Claude tokens |
 | `/compact` summarization on a cheap model (proxy / external agent like opencode) | compression at Haiku price instead of Opus, without nuking the main session cache |
 | headroom — compressing the entire input (tool output/files/code/RAG) | 60–95% on input; `CacheAligner` protects the KV cache, `CCR` is reversible |
+| pxpipe — rendering the request (system prompt/tool docs/history) as dense PNGs | ~59–70% on input via the vision channel; lossy on byte-exact values, Opus opt-in |
 | mcp-compressor — compressing the MCP surface (schema on demand) | cuts the tool-definition overhead from MCP servers |
 
 
