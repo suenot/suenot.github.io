@@ -130,6 +130,17 @@ In practice:
 
 There's no ready-made solution yet to "bake all models from different providers directly into Claude," but wrappers cover 80% of needs. One such tool is [Clother](https://github.com/jolehuit/clother/) — it lets you run Claude Code with different model providers without touching global settings.
 
+### Two different things: launchers vs routing proxies
+
+It's worth drawing a line that trips people up, because it decides what can coexist:
+
+- **A launcher (like Clother)** is *clothing*. It only sets environment variables — provider, model, `ANTHROPIC_BASE_URL` — at the moment Claude Code starts, without touching your global config. It runs **no server**, it does **not** sit in the request path, it does **not** intercept anything. It just *chooses* what Claude Code points at. So a launcher never "conflicts" with a proxy — it's the thing you'd use to launch Claude Code pointed *at* a proxy.
+- **A routing proxy** is a real server that owns the `ANTHROPIC_BASE_URL` endpoint, receives every request, and translates the Anthropic Messages API into some other provider's dialect before forwarding. This is how you teach Claude Code to actually *speak to* non-Anthropic models.
+
+Claude Code only talks the Anthropic Messages API. To run it on GPT/Codex/Gemini/Qwen you point `ANTHROPIC_BASE_URL` at a translating proxy. The one that specifically fronts **Codex/ChatGPT** is [link-assistant/router](https://github.com/link-assistant/router) — a Rust proxy that reads your `~/.codex/auth.json` OAuth and translates Anthropic → OpenAI Responses API (also Gemini via `~/.gemini`, Qwen via `~/.qwen`). You set `ANTHROPIC_BASE_URL=http://127.0.0.1:8080/api/latest/anthropic` and `ANTHROPIC_API_KEY=la_sk_…`, and Claude Code thinks it's talking to Anthropic while Codex answers.
+
+> ⚠️ **Only one server can own `ANTHROPIC_BASE_URL` at a time.** The *proxies* — a routing proxy, pxpipe, a headroom proxy — genuinely compete for that single endpoint; run one, or **chain** them (each proxy's upstream points at the next). A **launcher like Clother does not count** — it isn't a server, so it never occupies the slot. Native **subagent model overrides** (`CLAUDE_CODE_SUBAGENT_MODEL`, or `model:` in an agent's frontmatter) are the zero-proxy way to keep the flagship on planning/review and push routine work to a cheap model.
+
 ## 7. Knowledge Graphs and RAG: Cutting Tokens by 10x
 
 ### LightRAG
@@ -143,6 +154,23 @@ There's no ready-made solution yet to "bake all models from different providers 
 ### cmdop-claude
 
 [cmdop-claude](https://pypi.org/project/cmdop-claude/) is an approach by [markolofsen](https://github.com/markolofsen). From graph structures it uses Merkle trees. The core idea: run nearly free Chinese LLMs in the background to keep the `.claude` folder in order — preparing context for the main model.
+
+### CodeGraph — the hyped code-symbol graph (a.k.a. "cdegraph")
+
+The tool everyone's pointing at right now is [CodeGraph](https://github.com/colbymchenry/codegraph) (~59K stars, very actively maintained). It builds a **tree-sitter symbol graph** of your codebase — symbols, call paths, dependencies — into a local `.codegraph/` index (SQLite + FTS5) that auto-syncs on file changes, and serves it to the agent as an **MCP server**. Instead of grepping and reading whole files, the model asks the graph for the exact symbols and call paths it needs. Reported: **~57% fewer tokens, ~71% fewer tool calls**, all 100% local.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
+codegraph init   # wires the MCP server into Claude Code / Cursor / Codex / opencode
+```
+
+**CodeGraph vs graphify — do they clash?** No, they overlap without breaking. CodeGraph is a *live, queryable symbol index* delivered as MCP, tree-sitter, code-only, deterministic. graphify (§13) is a *persistent semantic/knowledge graph* of the whole project (code **+** docs/PDF/images), semantics extracted on cheap OpenRouter, delivered as a skill + hooks. Neither touches `ANTHROPIC_BASE_URL`, so they don't fight over the proxy slot; CodeGraph just adds its tool definitions to context (Tool Search, §14, softens that). If you want one live "don't read the whole repo" index, CodeGraph is the strongest single add today.
+
+### Serena, claude-context, Repomix — the rest of the retrieval family
+
+- **[Serena](https://github.com/oraios/serena)** — an **LSP-based** semantic retrieval + editing MCP (symbol-level, language-server-accurate). `uvx --from git+https://github.com/oraios/serena serena start-mcp-server`. Overlaps CodeGraph — pick one primary code-retrieval MCP so you're not paying for two sets of tool definitions.
+- **[claude-context](https://github.com/zilliztech/claude-context)** by Zilliz — hybrid semantic + BM25 code search over a Milvus/Zilliz **vector DB**, as MCP. `claude mcp add claude-context -- npx @zilliz/claude-context-mcp@latest`. The heaviest option (needs external infra) but the most RAG-grade search.
+- **[Repomix](https://github.com/yamadashy/repomix)** — not resident and zero-conflict: a one-shot CLI that packs a repo into a single AI-friendly file, with `--compress` (tree-sitter squeeze) and `--token-budget`. `npx repomix`. Great for handing a whole small repo to a model in one controlled, budgeted dump.
 
 > A ready-made global knowledge-graph setup — [graphify](https://github.com/safishamsi/graphify) with an OpenRouter backend so semantic indexing doesn't eat Claude tokens — I cover in §13, alongside rtk.
 
@@ -298,7 +326,7 @@ There are several modes: library (`compress(messages)`), an HTTP proxy on `local
 
 | With what | Verdict |
 | --- | --- |
-| **Clother / any wrapper on `ANTHROPIC_BASE_URL`** | ⚠️ Conflict in **proxy mode**: both headroom-proxy and Clother want to claim `ANTHROPIC_BASE_URL`. You can't hang two proxies on one base URL (without chaining). Pick one — or run headroom as `wrap`/MCP/library rather than as a proxy. |
+| **Clother (a launcher, not a proxy)** | ✅ No conflict — this was a common misconception. Clother only *sets env vars* at launch; it runs no server and never occupies `ANTHROPIC_BASE_URL`. You'd use Clother to *launch* Claude Code pointed at headroom, not instead of it. The real single-owner rule is among **running proxies** — headroom-proxy, pxpipe, a routing proxy (§6): one owner, or chain them. |
 | **rtk** | Duplication, not breakage. Both compress command output, but at different layers: rtk is a lightweight Rust hook (<10 ms, no LLM), headroom is heavier (AST/model) but broader. It's sensible to split them: rtk on commands, headroom on files/code/RAG. You can enable both on the same thing, but headroom will re-chew the already-trimmed rtk output — not harmful, but pointless. |
 | **graphify** | ✅ No overlap. graphify cuts input from "read the entire repository," headroom cuts tool output and files. They complement each other. |
 | **caveman** | ✅ No overlap. caveman compresses the model's **output**, headroom the **input**. Opposite sides of the barricade. |
@@ -321,7 +349,7 @@ The dashboard at `127.0.0.1:47821` shows tokens saved, every text→image conver
 
 > ⚠️ **It's lossy, and the misses are silent.** Exact byte-level values (hex strings, IDs, hashes, secrets) read out of an image can be **confabulated** rather than errored on. So recent turns stay as text automatically, and byte-exact work should be routed to a subagent on a non-allowlisted model (`CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`), which passes through as text. It also depends heavily on the reader: on the Fable 5 reader it hits ~100/100 on text needles, but Opus misreads imaged content — which is why pxpipe keeps Opus opt-in.
 
-**Where it clashes with the stack.** Same caveat as headroom-proxy: pxpipe claims `ANTHROPIC_BASE_URL`, so it can't coexist on the same base URL with Clother or a headroom proxy without chaining — pick one proxy in front, and stack the hook-based tools (rtk, graphify, caveman) on top. It's the most radical input-compressor of the bunch, and the one worth trying when the request-side bill (system prompt + tool docs + long history) is what's actually killing you.
+**Where it clashes with the stack.** Same caveat as headroom-proxy: pxpipe claims `ANTHROPIC_BASE_URL`, so it can't coexist on the same base URL with a headroom proxy or a routing proxy (§6) without chaining — pick one proxy in front, and stack the hook-based tools (rtk, graphify, caveman) on top. (A launcher like Clother is fine — it isn't a server, so it just points Claude Code *at* pxpipe.) It's the most radical input-compressor of the bunch, and the one worth trying when the request-side bill (system prompt + tool docs + long history) is what's actually killing you.
 
 ## 14. Server-Side and API-Level Savings (What Claude Code Already Does — and What It Doesn't)
 
@@ -368,6 +396,7 @@ So the rule of thumb: **interactive coding → Claude Code (caching does the hea
 - **`/context`** prints a token-by-token breakdown of what's filling your window — system prompt, system tools, MCP tools, memory files (`CLAUDE.md`), custom agents, messages. Run it to see who the hog is.
 - **A bloated `CLAUDE.md` is a tax on every message** — a 10K-token memory file is re-sent with every turn. Keep it lean; push task-specific instructions into **skills** (loaded on demand) instead.
 - **Every idle MCP server bills its tool definitions on every request.** Disconnect the ones you're not using via `/mcp` (or a toggle like `cctoggle`). Tool Search softens this, but not using a server at all is still cheaper than deferring it.
+- **If you run many MCP servers, put them behind a lazy-loading gateway.** [mcp-gateway](https://github.com/RaiAnsar/mcp-gateway) proxies N servers behind a handful of tools and loads each server's schema only on demand (a claimed ~95% cut to tool-definition tokens). It's complementary, not a duplicate of mcp-compressor: the gateway hides *schemas*, mcp-compressor shrinks *responses*. With CodeGraph + Context7 + others connected, it directly offsets the tool-def cost of adding them.
 
 ### Structured Outputs — kill the retries and the preamble
 
@@ -400,6 +429,9 @@ So the rule of thumb: **interactive coding → Claude Code (caching does the hea
 | Frameworks with plan approval                   | indirectly, via fewer reworks               |
 | rtk — command output compression (PreToolUse hook)     | 1.5–3x on git/docker/pytest/logs                 |
 | graphify — graph instead of full context (semantics on OpenRouter) | up to 10x on large-repo navigation; build ~$0.10, not Claude tokens |
+| CodeGraph ("cdegraph") — live tree-sitter symbol graph via MCP | ~57% fewer tokens / ~71% fewer tool calls; 100% local, no proxy conflict |
+| Repomix — one-shot repo pack with `--compress` / `--token-budget` | budgeted whole-repo dump; zero-conflict CLI, no resident hook/proxy |
+| mcp-gateway — lazy-load schemas for many MCP servers | ~95% cut to tool-definition tokens; complements mcp-compressor |
 | `/compact` summarization on a cheap model (proxy / external agent like opencode) | compression at Haiku price instead of Opus, without nuking the main session cache |
 | headroom — compressing the entire input (tool output/files/code/RAG) | 60–95% on input; `CacheAligner` protects the KV cache, `CCR` is reversible |
 | pxpipe — rendering the request (system prompt/tool docs/history) as dense PNGs | ~59–70% on input via the vision channel; lossy on byte-exact values, Opus opt-in |
