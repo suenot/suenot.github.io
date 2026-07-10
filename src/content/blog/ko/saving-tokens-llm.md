@@ -2,7 +2,7 @@
 title: "LLM에서 토큰 절약하기: Claude Code 실전 가이드"
 description: "Claude Code에서 토큰을 절약하는 실전 방법: subagent, skill, hook, 중국 모델, 지식 그래프와 RAG. 비용을 10배 줄이는 체크리스트."
 pubDate: 2026-04-12
-updatedDate: 2026-06-17
+updatedDate: 2026-07-10
 heroImage: "/images/blog/saving-tokens-hero.png"
 tags: ["llm", "claude-code", "optimization", "tokens"]
 draft: false
@@ -183,6 +183,24 @@ rtk init -g --auto-patch   # Claude Code용 글로벌 PreToolUse 훅 설치
 
 > Caveman(§4)이 세 번째 레이어를 마무리합니다 — **모델 자체의 output**. rtk + graphify + caveman = 명령어 input, 저장소 컨텍스트, 모델 output 각각. 단, 텍스트 작업에서는 caveman을 끄는 게 낫습니다(«normal mode») — 간결한 스타일이 편집을 방해합니다.
 
+### pxpipe — 요청을 이미지로 렌더링 (§10을 뒤집기)
+
+[pxpipe](https://github.com/teamchong/pxpipe) — [teamchong](https://github.com/teamchong)의 프로젝트로, 예상치 못한 각도에서 input을 공략합니다. §10에서 스크린샷은 적이었습니다 — 이미지는 토큰을 잡아먹으니까요. pxpipe는 이를 뒤집습니다: 이미지의 토큰 비용은 그 안에 얼마나 많은 텍스트가 담겼는지가 아니라 **픽셀 크기**로 고정됩니다. 실제 Claude Code 트래픽에서 밀도 높은 콘텐츠(코드, JSON, 도구 출력)는 이미지 토큰당 약 3.1자를 담는 반면, 텍스트 토큰당은 약 1자에 불과합니다. 그래서 pxpipe는 모든 요청에서 부피가 크고 정적인 부분 — 시스템 프롬프트, 도구 문서, 오래된 기록 —을 요청이 머신을 떠나기 전에 **밀도 높은 PNG로 렌더링**합니다. 모델은 Anthropic의 computer use가 이미 의존하는 것과 동일한 비전 채널을 통해 이를 읽습니다. 주장하는 결과: **input 비용 약 59–70% 절감**, 그리고 지속적인 지표는 무료 `count_tokens` 반사실과 요청마다 비교해 측정한 토큰 절감량 그 자체입니다.
+
+프록시이며 — 당연한 질문에 답하자면 — 통합은 **이미 네이티브**입니다: 플러그인도 훅도 없이, Claude Code에 내장된 `ANTHROPIC_BASE_URL`만 사용합니다.
+
+```bash
+npm install -g pxpipe-proxy   # or on demand: npx pxpipe-proxy
+pxpipe                                            # proxy on 127.0.0.1:47821
+ANTHROPIC_BASE_URL=http://127.0.0.1:47821 claude  # point Claude Code at it
+```
+
+`127.0.0.1:47821`의 대시보드는 절약된 토큰, 모든 텍스트→이미지 변환을 나란히, 실시간 kill switch를 보여주며, 각 이벤트를 `~/.pxpipe/events.jsonl`에 기록합니다. **요청**만 압축됩니다 — 응답은 정상적으로 스트리밍됩니다.
+
+> ⚠️ **손실 압축이며, 놓친 부분은 조용히 넘어갑니다.** 이미지에서 읽어낸 정확한 바이트 수준 값(16진수 문자열, ID, 해시, 시크릿)은 오류를 내는 대신 **환각으로 지어낼** 수 있습니다. 그래서 최근 턴은 자동으로 텍스트로 유지되며, 바이트 단위 정확성이 필요한 작업은 allowlist에 없는 모델의 subagent(`CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`)로 라우팅해 텍스트로 통과시켜야 합니다. 또한 리더에 크게 좌우됩니다: Fable 5 리더에서는 텍스트 needle에 대해 약 100/100을 기록하지만, Opus는 이미지화된 콘텐츠를 잘못 읽습니다 — 그래서 pxpipe는 Opus를 opt-in으로 유지합니다.
+
+**스택과 충돌하는 지점.** pxpipe는 `ANTHROPIC_BASE_URL`을 차지합니다 — Clother를 비롯한 다른 래퍼가 사용하는 바로 그 슬롯입니다 — 따라서 체이닝 없이는 하나의 base URL에 두 개의 프록시를 걸 수 없습니다. 앞단에는 프록시 하나만 고르고, 훅 기반 도구(rtk, graphify, caveman)를 그 위에 쌓으세요. 여기서 가장 급진적인 input 압축기이며 — 요청 측 비용(시스템 프롬프트 + 도구 문서 + 긴 기록)이 실제로 발목을 잡을 때 시도해 볼 만합니다.
+
 ## 절약 체크리스트
 
 | 방법 | 절약 효과 |
@@ -198,6 +216,7 @@ rtk init -g --auto-patch   # Claude Code용 글로벌 PreToolUse 훅 설치
 | 계획 승인이 있는 프레임워크 | 간접적 — 재작업 감소를 통해 |
 | rtk — 명령어 출력 압축 (PreToolUse 훅) | git/docker/pytest/로그에서 1.5–3배 |
 | graphify — 전체 컨텍스트 대신 그래프 (시맨틱은 OpenRouter 처리) | 대형 저장소 탐색에서 최대 10배; 구축 비용 ~$0.10, Claude 토큰 아님 |
+| pxpipe — 요청(시스템 프롬프트/도구 문서/기록)을 밀도 높은 PNG로 렌더링 | 비전 채널로 input에서 ~59–70%; 바이트 단위 정확성에서는 손실, Opus는 opt-in |
 
 ---
 
