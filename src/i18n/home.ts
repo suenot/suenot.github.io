@@ -208,6 +208,29 @@ export const home = {
         candle_aggregator_benchmark:
           'Rust OHLCV candle aggregator, batch aggregator, and generator with benchmarks.',
         'hyperliquid-c': 'C adapter/SDK for Hyperliquid exchange API.',
+        'listingapis.com':
+          'Listing announcements API for crypto exchanges — data platform plus dashboard.',
+        Warehouse:
+          'Market-data warehouse on Go + IPFS: collectors, distributed storage, web UI.',
+        Kimchi:
+          'Kimchi-premium tracker: spread between Korean and global crypto markets.',
+        Researcher:
+          'Research aggregator: scrapers for papers, YouTube and GitHub repos, indexed with Meilisearch.',
+        Metrics:
+          'Catalog of ~2500 trading indicators and metrics — FastAPI backend, Next.js frontend.',
+        Visual:
+          'Node-graph composer for strategies: React Flow over the metrics module library.',
+        Popularity:
+          'Popularity tracker for crypto assets: parsers across social and market sources.',
+        CRM: 'Hedge-fund CRM: investor pipeline, Telegram integration, Postgres.',
+        GPUs: 'GPU price aggregator: rental and cloud GPU offers from all providers, compared in one place.',
+        Solver:
+          'MCP-powered solver service: FastAPI backend + Next.js UI for agent-driven task solving.',
+        asdf: 'Typing arena: speed-typing races and stats — Go backend, Next.js frontend.',
+        'auth-service':
+          'Self-hosted SSO for every marketmaker.cc service — Go + Next.js, forwardAuth via Traefik.',
+        Backups:
+          'Backup dashboard over restic: schedules, snapshots and restore status across all servers.',
         aicommit:
           'Rust CLI for AI-generated commit messages via OpenRouter. 105 releases, VS Code extension, jail/blacklist failover.',
         SDKRouter:
@@ -488,6 +511,29 @@ export const home = {
         candle_aggregator_benchmark:
           'Rust агрегатор OHLCV-свечей, батч-агрегатор и генератор с бенчмарками.',
         'hyperliquid-c': 'C-адаптер/SDK для API биржи Hyperliquid.',
+        'listingapis.com':
+          'API анонсов листингов на криптобиржах — платформа данных и дашборд.',
+        Warehouse:
+          'Хранилище рыночных данных на Go + IPFS: коллекторы, распределенное хранение, веб-интерфейс.',
+        Kimchi:
+          'Трекер kimchi-премии: спред между корейским и мировым крипторынком.',
+        Researcher:
+          'Агрегатор ресерча: скраперы статей, YouTube и GitHub-репозиториев, индекс на Meilisearch.',
+        Metrics:
+          'Каталог из ~2500 торговых индикаторов и метрик — бэкенд FastAPI, фронтенд Next.js.',
+        Visual:
+          'Нодовый композер стратегий: React Flow поверх библиотеки модулей из metrics.',
+        Popularity:
+          'Трекер популярности криптоактивов: парсеры социальных и рыночных источников.',
+        CRM: 'CRM для хедж-фонда: воронка инвесторов, интеграция с Telegram, Postgres.',
+        GPUs: 'Агрегатор цен на GPU: аренда и облачные предложения от всех провайдеров в одном месте.',
+        Solver:
+          'Solver-сервис на MCP: бэкенд FastAPI + интерфейс Next.js для решения задач агентами.',
+        asdf: 'Арена печати: гонки на скорость и статистика — бэкенд на Go, фронтенд на Next.js.',
+        'auth-service':
+          'Собственный SSO для всех сервисов marketmaker.cc — Go + Next.js, forwardAuth через Traefik.',
+        Backups:
+          'Дашборд бэкапов поверх restic: расписания, снапшоты и статус восстановления по всем серверам.',
         aicommit:
           'Rust CLI для AI-генерации коммит-сообщений через OpenRouter. 105 релизов, расширение для VS Code, jail/blacklist failover.',
         SDKRouter:
@@ -769,6 +815,22 @@ export const home = {
         candle_aggregator_benchmark:
           'Rust OHLCV K 线聚合器、批量聚合器与生成器，附带基准测试。',
         'hyperliquid-c': 'Hyperliquid 交易所 API 的 C 适配器/SDK。',
+        'listingapis.com': '加密交易所上币公告 API——数据平台与仪表盘。',
+        Warehouse: '基于 Go + IPFS 的行情数据仓库：采集器、分布式存储、Web 界面。',
+        Kimchi: '泡菜溢价追踪器：韩国与全球加密市场之间的价差。',
+        Researcher:
+          '研究聚合器：论文、YouTube 与 GitHub 仓库爬虫，使用 Meilisearch 建立索引。',
+        Metrics: '约 2500 个交易指标与度量的目录——FastAPI 后端，Next.js 前端。',
+        Visual: '策略节点图编排器：在 metrics 模块库之上的 React Flow。',
+        Popularity: '加密资产热度追踪器：社交与市场来源的解析器。',
+        CRM: '对冲基金 CRM：投资者管道、Telegram 集成、Postgres。',
+        GPUs: 'GPU 价格聚合器：把各家供应商的租赁与云 GPU 报价集中对比。',
+        Solver: '基于 MCP 的求解服务：FastAPI 后端 + Next.js 界面，由智能体驱动解题。',
+        asdf: '打字竞技场：速度竞赛与统计——Go 后端，Next.js 前端。',
+        'auth-service':
+          '自建 SSO，服务于全部 marketmaker.cc 服务——Go + Next.js，通过 Traefik forwardAuth。',
+        Backups:
+          '基于 restic 的备份仪表盘：所有服务器的计划、快照与恢复状态。',
         aicommit:
           '通过 OpenRouter 用 AI 生成提交信息的 Rust CLI。105 个版本，VS Code 扩展，jail/blacklist 故障转移。',
         SDKRouter:
@@ -1049,6 +1111,26 @@ export const home = {
         candle_aggregator_benchmark:
           'Rust OHLCV 캔들 집계기, 배치 집계기, 제너레이터 및 벤치마크.',
         'hyperliquid-c': 'Hyperliquid 거래소 API용 C 어댑터/SDK.',
+        'listingapis.com':
+          '암호화폐 거래소 상장 공지 API — 데이터 플랫폼과 대시보드.',
+        Warehouse:
+          'Go + IPFS 기반 시장 데이터 웨어하우스: 수집기, 분산 저장, 웹 UI.',
+        Kimchi: '김치 프리미엄 트래커: 한국과 글로벌 암호화폐 시장 간 스프레드.',
+        Researcher:
+          '리서치 애그리게이터: 논문, YouTube, GitHub 저장소 스크래퍼 + Meilisearch 색인.',
+        Metrics:
+          '약 2500개 트레이딩 지표 및 메트릭 카탈로그 — FastAPI 백엔드, Next.js 프런트엔드.',
+        Visual: '전략용 노드 그래프 컴포저: metrics 모듈 라이브러리 위의 React Flow.',
+        Popularity: '암호자산 인기도 트래커: 소셜 및 시장 소스 파서.',
+        CRM: '헤지펀드 CRM: 투자자 파이프라인, Telegram 연동, Postgres.',
+        GPUs: 'GPU 가격 애그리게이터: 모든 공급자의 임대 및 클라우드 GPU 견적을 한곳에서 비교.',
+        Solver:
+          'MCP 기반 솔버 서비스: FastAPI 백엔드 + Next.js UI로 에이전트가 과제를 해결.',
+        asdf: '타이핑 아레나: 속도 대결과 통계 — Go 백엔드, Next.js 프런트엔드.',
+        'auth-service':
+          '모든 marketmaker.cc 서비스를 위한 자체 SSO — Go + Next.js, Traefik forwardAuth.',
+        Backups:
+          'restic 기반 백업 대시보드: 모든 서버의 일정, 스냅샷, 복구 상태.',
         aicommit:
           'OpenRouter를 통해 AI로 커밋 메시지를 생성하는 Rust CLI. 105개 릴리스, VS Code 확장, jail/blacklist 페일오버.',
         SDKRouter:
@@ -1328,6 +1410,27 @@ export const home = {
         candle_aggregator_benchmark:
           'Rust 製の OHLCV ローソク足アグリゲータ、バッチアグリゲータ、ジェネレータとベンチマーク。',
         'hyperliquid-c': 'Hyperliquid 取引所 API の C アダプタ/SDK。',
+        'listingapis.com':
+          '暗号資産取引所の上場アナウンス API — データ基盤とダッシュボード。',
+        Warehouse:
+          'Go + IPFS による市場データウェアハウス：コレクター、分散ストレージ、Web UI。',
+        Kimchi: 'キムチプレミアムのトラッカー：韓国市場と世界市場のスプレッド。',
+        Researcher:
+          'リサーチアグリゲーター：論文・YouTube・GitHub リポジトリのスクレイパーと Meilisearch 索引。',
+        Metrics:
+          '約 2500 のトレーディング指標・メトリクスのカタログ — FastAPI バックエンド、Next.js フロントエンド。',
+        Visual:
+          '戦略のノードグラフコンポーザー：metrics のモジュール群の上に React Flow。',
+        Popularity: '暗号資産の人気度トラッカー：ソーシャルと市場ソースのパーサー。',
+        CRM: 'ヘッジファンド向け CRM：投資家パイプライン、Telegram 連携、Postgres。',
+        GPUs: 'GPU 価格アグリゲーター：各プロバイダのレンタル・クラウド GPU の価格を一箇所で比較。',
+        Solver:
+          'MCP ベースのソルバーサービス：FastAPI バックエンド + Next.js UI でエージェントが課題を解く。',
+        asdf: 'タイピングアリーナ：速度レースと統計 — Go バックエンド、Next.js フロントエンド。',
+        'auth-service':
+          'marketmaker.cc 全サービス向けの自前 SSO — Go + Next.js、Traefik の forwardAuth。',
+        Backups:
+          'restic ベースのバックアップダッシュボード：全サーバーのスケジュール、スナップショット、リストア状況。',
         aicommit:
           'OpenRouter 経由で AI がコミットメッセージを生成する Rust CLI。105 リリース、VS Code 拡張、jail/blacklist フェイルオーバー。',
         SDKRouter:
@@ -1608,6 +1711,28 @@ export const home = {
         candle_aggregator_benchmark:
           'مجمّع شموع OHLCV بـ Rust، مجمّع دفعات، ومولّد مع قياسات أداء.',
         'hyperliquid-c': 'محوّل/SDK بـ C لـ API بورصة Hyperliquid.',
+        'listingapis.com':
+          'واجهة برمجية لإعلانات إدراج العملات في منصات التداول — منصة بيانات ولوحة تحكم.',
+        Warehouse:
+          'مستودع بيانات السوق على Go + IPFS: جامعات بيانات، تخزين موزّع، واجهة ويب.',
+        Kimchi: 'متتبّع علاوة الكيمتشي: الفارق بين السوق الكوري والأسواق العالمية.',
+        Researcher:
+          'مجمّع أبحاث: كاشطات للأوراق البحثية ويوتيوب ومستودعات GitHub، مفهرسة عبر Meilisearch.',
+        Metrics:
+          'كتالوج يضم نحو 2500 مؤشر ومقياس تداول — خلفية FastAPI وواجهة Next.js.',
+        Visual:
+          'مؤلّف رسوم عقدية للاستراتيجيات: React Flow فوق مكتبة وحدات metrics.',
+        Popularity:
+          'متتبّع شعبية الأصول الرقمية: محلّلات لمصادر اجتماعية وسوقية.',
+        CRM: 'نظام CRM لصندوق تحوّط: مسار المستثمرين، تكامل Telegram، Postgres.',
+        GPUs: 'مجمّع أسعار وحدات GPU: عروض التأجير والسحابة من كل المزوّدين في مكان واحد.',
+        Solver:
+          'خدمة حلّ قائمة على MCP: خلفية FastAPI وواجهة Next.js لحل المهام عبر الوكلاء.',
+        asdf: 'حلبة كتابة: سباقات سرعة وإحصاءات — خلفية Go وواجهة Next.js.',
+        'auth-service':
+          'نظام SSO ذاتي الاستضافة لكل خدمات marketmaker.cc — Go + Next.js عبر forwardAuth في Traefik.',
+        Backups:
+          'لوحة نسخ احتياطي فوق restic: الجداول واللقطات وحالة الاستعادة عبر كل الخوادم.',
         aicommit:
           'أداة CLI بـ Rust لتوليد رسائل commit بالذكاء الاصطناعي عبر OpenRouter. 105 إصدارات، امتداد لـ VS Code، وآلية jail/blacklist.',
         SDKRouter:
