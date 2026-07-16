@@ -1,6 +1,6 @@
 ---
 title: "How to Make YouTube Videos with NotebookLM: A Complete Guide"
-description: "Step-by-step tutorial: use NotebookLM to generate audio and slides, then assemble everything into a ready-to-upload YouTube video with subtitles, chapter timestamps and metadata — no video editors, no editing at all."
+description: "Step-by-step tutorial: use NotebookLM to generate audio and slides, then assemble everything into a YouTube video with subtitles, chapter timestamps and metadata — and publish it automatically through a browser session. No video editors, no API keys, no manual upload."
 pubDate: 2026-05-09
 heroImage: "/images/blog/notebooklm-youtube-hero.png"
 tags: ["notebooklm", "youtube", "automation", "video", "ai", "open-source", "tooling"]
@@ -28,13 +28,13 @@ In other words, NotebookLM handles the hardest part — content creation. All th
 Before we dive into the process, here are example videos made with this workflow:
 
 - 🎬 [Анализ Плато: Как отличить надежный оптимум от переобучения](https://www.youtube.com/watch?v=IoMk1tCYpC0) — a **video-maker** example: a PDF presentation + audio (from NotebookLM) assembled into a finished video with synced slides
-- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — a **video-youtube-prepare** example: NotebookLM generated the finished video, and the script prepared metadata for it (title, description, tags, timestamps, subtitles)
+- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — a **video-metadata** example: NotebookLM generated the finished video, and the script prepared metadata for it (title, description, tags, timestamps, subtitles)
 
 In both cases — no video editors, no manual work. Everything assembled automatically.
 
-## Two Scenarios: Which One Are You?
+## The Tools: Which One Are You?
 
-Depending on what NotebookLM gave you, you'll use one of two tools:
+Depending on what NotebookLM gave you, you'll start with one of two build tools — and then a third tool publishes the result to YouTube for you:
 
 ### Scenario 1: You have audio + slides → need to build a video
 
@@ -46,7 +46,7 @@ This is when NotebookLM generated an audio narration and a PDF presentation sepa
 
 NotebookLM can generate finished videos too. But for YouTube that's not enough: you need a title, description, tags, chapter timestamps, subtitles. All of this can be generated automatically.
 
-**Tool:** [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare)
+**Tool:** [video-metadata](https://github.com/suenot/video-metadata)
 
 Let's walk through both.
 
@@ -148,8 +148,8 @@ The key insight: you already have a blog article for every video. The article ha
 ### Installation and Running
 
 ```bash
-git clone https://github.com/suenot/video-youtube-prepare.git
-cd video-youtube-prepare
+git clone https://github.com/suenot/video-metadata.git
+cd video-metadata
 pip install openai-whisper
 
 python scripts/prepare_metadata.py \
@@ -179,6 +179,72 @@ YouTube tags should be thematic phrases (2–4 words), not single words. The too
 
 No external APIs — everything comes from your content. Article-derived tags often outperform manually researched ones because they use the exact terminology your target audience searches for.
 
+## Scenario 3: Publishing to YouTube — Automatically
+
+Originally this guide ended with a manual step: open YouTube Studio, upload the file, paste the metadata by hand. Not anymore. The final stage is now automated too.
+
+**Tool:** [video-publisher](https://github.com/suenot/video-publisher)
+
+video-publisher takes the finished video and the metadata JSON and **publishes them to YouTube for you** — by driving YouTube Studio through an anti-detect [Camoufox](https://camoufox.com) browser session. **No Data API, no OAuth, no API keys.** It reuses a browser profile you log into once, so there's nothing to configure in Google Cloud.
+
+### How It Works
+
+```bash
+git clone https://github.com/suenot/video-publisher.git
+cd video-publisher
+
+# Use Python 3.11–3.13 (not 3.14 — Camoufox needs Playwright ≤ 1.51)
+python3.11 -m venv venv && venv/bin/pip install -r requirements.txt
+venv/bin/python -m camoufox fetch          # one-time: download the browser
+
+# One-time: sign into the TARGET YouTube account (persists locally)
+venv/bin/python login.py
+```
+
+Then publish a `video-maker` bundle in one command:
+
+```bash
+venv/bin/python publish.py \
+    --video     ../video-maker/output/SLUG/SLUG.mp4 \
+    --metadata  ../video-maker/output/SLUG/SLUG_metadata.json \
+    --thumbnail ../video-maker/output/SLUG/SLUG_thumbnail.png \
+    --channel-handle @your-channel \
+    --visibility private
+```
+
+The tool:
+
+1. Opens YouTube Studio in a logged-in Camoufox session — no login prompts, no API keys
+2. Selects the target channel (by `--channel-handle` or `--channel-id`), so it works with brand channels
+3. Pre-checks the video length against the 15-minute unverified-channel limit — and stops **before** wasting an upload if it would be rejected as "Processing abandoned"
+4. Uploads the video, sets title / description / tags from the metadata JSON, and attaches the thumbnail
+5. Handles the "Verify it's you" gate gracefully (clear it once with `--keep-open`)
+6. Verifies the upload actually published, and returns a clear exit code
+
+By default it publishes as a **private** draft (`--visibility private`) so you can review before going public — pass `--visibility unlisted` or `public` when you're ready. Safety by design: nothing goes live by accident.
+
+> **Keep your session private.** The tool logs into your real account through a persistent browser profile. That profile — cookies, fingerprint, `debug/` screenshots — must never be committed or shared. The repo ships a `.gitignore` for exactly these; respect it. Automating YouTube can also rate-limit or suspend an account, so use your own account, one session at a time, at your own risk.
+
+### The Complete Content Factory
+
+Chain the three tools and a blog article becomes a published YouTube video with zero manual editing and zero manual uploading:
+
+```
+article + NotebookLM audio/slides
+      │
+      ▼
+  video-maker      → builds the MP4 (synced slides + subtitles + thumbnail)
+      │
+      ▼
+  video-metadata   → title, description, tags, chapter timestamps, SRT
+      │
+      ▼
+  video-publisher  → uploads and publishes to YouTube (browser, no API keys)
+      │
+      ▼
+   YouTube 🎬
+```
+
 ## The Full Workflow: From Idea to YouTube in 30 Minutes
 
 | Step | What you do | Time |
@@ -186,12 +252,10 @@ No external APIs — everything comes from your content. Article-derived tags of
 | 1 | Upload material to NotebookLM | 2 min |
 | 2 | Generate audio and slides | 5 min |
 | 3 | Download files and place in `input/` | 1 min |
-| 4 | Run `run_pipeline.sh` | 10–15 min (waiting) |
-| 5 | Open YouTube Studio, upload video | 2 min |
-| 6 | Copy metadata from `.txt` file | 2 min |
-| 7 | Upload subtitles and thumbnail | 1 min |
+| 4 | Run `run_pipeline.sh` (video-maker + video-metadata) | 10–15 min (waiting) |
+| 5 | Run `publish.py` (video-publisher) — uploads and publishes for you | 2 min |
 
-**Total: ~30 minutes**, of which 15 are just waiting for the script. This used to take 2+ hours of manual work.
+**Total: ~25 minutes**, most of which is just waiting for the scripts — and the only manual actions are a few clicks in NotebookLM. Uploading to YouTube Studio, pasting metadata, attaching subtitles and thumbnail are all automated now. This used to take 2+ hours of manual work.
 
 ## Technical Details
 
@@ -305,14 +369,15 @@ A few things to keep in mind:
 All tools are open source:
 
 - 🔧 [video-maker](https://github.com/suenot/video-maker) — builds video from audio + PDF
-- 🔧 [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — generates YouTube metadata
+- 🔧 [video-metadata](https://github.com/suenot/video-metadata) — generates YouTube metadata
+- 🔧 [video-publisher](https://github.com/suenot/video-publisher) — publishes to YouTube via a browser session (no API keys)
 - 🎬 [video-use](https://github.com/browser-use/video-use) — video editing via Claude Code
 - 🎬 [OpenShorts](https://github.com/mutonby/openshorts) — full platform for shorts and AI video
 - 🎬 [OpenMontage](https://github.com/calesthio/OpenMontage) — agentic video studio for your AI assistant (12 pipelines, 52 tools)
 - 🎬 [palmier-pro](https://github.com/palmier-io/palmier-pro) — macOS video editor with an AI agent via MCP
 - 🎬 [printfilm](https://github.com/yuanzhongqiao/printfilm) — studio for short dramas and motion comics
 
-> **Important:** `video-maker` and `video-youtube-prepare` are not turnkey products — they're **starter templates**. They work out of the box for the basic scenario, but they're designed for you to customize with any AI agent (Claude Code, Codex, Cursor, etc.). Fork them, adapt to your brand, description style, and content format.
+> **Important:** `video-maker`, `video-metadata`, and `video-publisher` are not turnkey products — they're **starter templates**. They work out of the box for the basic scenario, but they're designed for you to customize with any AI agent (Claude Code, Codex, Cursor, etc.). Fork them, adapt to your brand, description style, and content format.
 
 ---
 

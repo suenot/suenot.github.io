@@ -1,6 +1,6 @@
 ---
 title: "Как делать YouTube-видео с помощью NotebookLM: полный гайд"
-description: "Пошаговое руководство: берём NotebookLM для генерации аудио и слайдов, склеиваем всё в готовое YouTube-видео с субтитрами, таймкодами и метаданными — без видеоредакторов и вообще без монтажа."
+description: "Пошаговое руководство: берём NotebookLM для генерации аудио и слайдов, склеиваем всё в готовое YouTube-видео с субтитрами, таймкодами глав и метаданными — и публикуем автоматически через сессию браузера. Без видеоредакторов, без API-ключей, без ручной загрузки."
 pubDate: 2026-05-09
 heroImage: "/images/blog/notebooklm-youtube-hero.png"
 tags: ["notebooklm", "youtube", "automation", "video", "ai", "open-source", "tooling"]
@@ -28,13 +28,13 @@ draft: false
 Прежде чем углубляться в процесс, вот примеры видео, сделанных по этому воркфлоу:
 
 - 🎬 [Анализ Плато: Как отличить надежный оптимум от переобучения](https://www.youtube.com/watch?v=IoMk1tCYpC0) — пример работы **video-maker**: презентация (PDF) + аудио (NotebookLM) склеены в готовое видео с синхронизированными слайдами
-- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — пример работы **video-youtube-prepare**: NotebookLM сгенерировал готовое видео, а скрипт подготовил для него метаданные (заголовок, описание, теги, таймкоды, субтитры)
+- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — пример работы **video-metadata**: NotebookLM сгенерировал готовое видео, а скрипт подготовил для него метаданные (заголовок, описание, теги, таймкоды, субтитры)
 
 В обоих случаях — без видеоредакторов и ручной работы. Всё собирается автоматически.
 
-## Два сценария: какой ваш?
+## Инструменты: какой ваш?
 
-В зависимости от того, что вам дал NotebookLM, используется один из двух инструментов:
+В зависимости от того, что вам дал NotebookLM, вы начнете с одного из двух инструментов сборки — а затем третий инструмент сам публикует результат на YouTube:
 
 ### Сценарий 1: У вас есть аудио + слайды → нужно собрать видео
 
@@ -46,7 +46,7 @@ draft: false
 
 NotebookLM умеет генерировать и готовые видео. Но для YouTube этого мало: нужен заголовок, описание, теги, таймкоды, субтитры. Всё это можно сгенерировать автоматически.
 
-**Инструмент:** [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare)
+**Инструмент:** [video-metadata](https://github.com/suenot/video-metadata)
 
 Давайте разберём оба.
 
@@ -148,8 +148,8 @@ output/
 ### Установка и запуск
 
 ```bash
-git clone https://github.com/suenot/video-youtube-prepare.git
-cd video-youtube-prepare
+git clone https://github.com/suenot/video-metadata.git
+cd video-metadata
 pip install openai-whisper
 
 python scripts/prepare_metadata.py \
@@ -179,6 +179,72 @@ YouTube-теги должны быть тематическими фразами
 
 Никаких внешних API — всё берётся из вашего контента. Теги, извлечённые из статьи, часто попадают точнее вручную подобранных, потому что используют ту же терминологию, что и целевая аудитория.
 
+## Сценарий 3: Публикация на YouTube — автоматически
+
+Изначально этот гайд заканчивался ручным шагом: открыть YouTube Studio, загрузить файл, вставить метаданные руками. Больше нет. Финальный этап теперь тоже автоматизирован.
+
+**Инструмент:** [video-publisher](https://github.com/suenot/video-publisher)
+
+video-publisher берет готовое видео и JSON с метаданными и **публикует их на YouTube за вас** — управляя YouTube Studio через антидетект-сессию браузера [Camoufox](https://camoufox.com). **Никакого Data API, никакого OAuth, никаких API-ключей.** Он переиспользует профиль браузера, в который вы залогинились один раз, так что в Google Cloud настраивать нечего.
+
+### Как это работает
+
+```bash
+git clone https://github.com/suenot/video-publisher.git
+cd video-publisher
+
+# Use Python 3.11–3.13 (not 3.14 — Camoufox needs Playwright ≤ 1.51)
+python3.11 -m venv venv && venv/bin/pip install -r requirements.txt
+venv/bin/python -m camoufox fetch          # one-time: download the browser
+
+# One-time: sign into the TARGET YouTube account (persists locally)
+venv/bin/python login.py
+```
+
+Затем публикуете бандл от `video-maker` одной командой:
+
+```bash
+venv/bin/python publish.py \
+    --video     ../video-maker/output/SLUG/SLUG.mp4 \
+    --metadata  ../video-maker/output/SLUG/SLUG_metadata.json \
+    --thumbnail ../video-maker/output/SLUG/SLUG_thumbnail.png \
+    --channel-handle @your-channel \
+    --visibility private
+```
+
+Инструмент:
+
+1. Открывает YouTube Studio в залогиненной сессии Camoufox — без запросов логина, без API-ключей
+2. Выбирает нужный канал (по `--channel-handle` или `--channel-id`), так что работает и с бренд-каналами
+3. Заранее проверяет длину видео против лимита в 15 минут для неверифицированных каналов — и останавливается **до** того, как впустую потратит загрузку, если ее отклонят как "Processing abandoned"
+4. Загружает видео, задает заголовок / описание / теги из JSON с метаданными и прикрепляет миниатюру
+5. Аккуратно обрабатывает экран "Verify it's you" (пройдите его один раз с `--keep-open`)
+6. Проверяет, что загрузка действительно опубликовалась, и возвращает понятный код выхода
+
+По умолчанию публикует как **приватный** черновик (`--visibility private`), чтобы вы могли все проверить перед выходом в паблик — передайте `--visibility unlisted` или `public`, когда будете готовы. Безопасность заложена в дизайн: ничего не уходит в паблик случайно.
+
+> **Держите свою сессию приватной.** Инструмент логинится в ваш реальный аккаунт через постоянный профиль браузера. Этот профиль — куки, отпечаток, скриншоты `debug/` — нельзя коммитить или передавать кому-либо. В репозитории есть `.gitignore` ровно для этого; уважайте его. Автоматизация YouTube может также привести к rate-limit или блокировке аккаунта, так что используйте свой аккаунт, по одной сессии за раз, на свой страх и риск.
+
+### Полная фабрика контента
+
+Свяжите три инструмента в цепочку — и блог-статья превращается в опубликованное YouTube-видео без ручного монтажа и без ручной загрузки:
+
+```
+article + NotebookLM audio/slides
+      │
+      ▼
+  video-maker      → builds the MP4 (synced slides + subtitles + thumbnail)
+      │
+      ▼
+  video-metadata   → title, description, tags, chapter timestamps, SRT
+      │
+      ▼
+  video-publisher  → uploads and publishes to YouTube (browser, no API keys)
+      │
+      ▼
+   YouTube 🎬
+```
+
 ## Полный воркфлоу: от идеи до YouTube за 30 минут
 
 | Шаг | Что делаете | Время |
@@ -186,12 +252,10 @@ YouTube-теги должны быть тематическими фразами
 | 1 | Загружаете материал в NotebookLM | 2 мин |
 | 2 | Генерируете аудио и слайды | 5 мин |
 | 3 | Скачиваете файлы и кладёте в `input/` | 1 мин |
-| 4 | Запускаете `run_pipeline.sh` | 10–15 мин (ждёте) |
-| 5 | Открываете YouTube Studio, загружаете видео | 2 мин |
-| 6 | Копируете метаданные из `.txt` файла | 2 мин |
-| 7 | Загружаете субтитры и миниатюру | 1 мин |
+| 4 | Запускаете `run_pipeline.sh` (video-maker + video-metadata) | 10–15 мин (ждёте) |
+| 5 | Запускаете `publish.py` (video-publisher) — загружает и публикует за вас | 2 мин |
 
-**Итого: ~30 минут**, из которых 15 — ожидание скрипта. Раньше то же самое занимало 2+ часа ручной работы.
+**Итого: ~25 минут**, большая часть которых — просто ожидание скриптов, а единственные ручные действия — пара кликов в NotebookLM. Загрузка в YouTube Studio, вставка метаданных, прикрепление субтитров и миниатюры теперь автоматизированы. Раньше то же самое занимало 2+ часа ручной работы.
 
 ## Технические детали
 
@@ -305,14 +369,15 @@ video-maker дополнительно: **Poppler** (`brew install poppler`), **
 Все инструменты — open source:
 
 - 🔧 [video-maker](https://github.com/suenot/video-maker) — собирает видео из аудио + PDF
-- 🔧 [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — генерирует метаданные для YouTube
+- 🔧 [video-metadata](https://github.com/suenot/video-metadata) — генерирует метаданные для YouTube
+- 🔧 [video-publisher](https://github.com/suenot/video-publisher) — публикует на YouTube через сессию браузера (без API-ключей)
 - 🎬 [video-use](https://github.com/browser-use/video-use) — монтаж видео через Claude Code
 - 🎬 [OpenShorts](https://github.com/mutonby/openshorts) — полная платформа для шортсов и AI-видео
 - 🎬 [OpenMontage](https://github.com/calesthio/OpenMontage) — агентная видеостудия для AI-ассистента (12 пайплайнов, 52 инструмента)
 - 🎬 [palmier-pro](https://github.com/palmier-io/palmier-pro) — macOS-видеоредактор с AI-агентом через MCP
 - 🎬 [printfilm](https://github.com/yuanzhongqiao/printfilm) — студия коротких драм и моушн-комиксов
 
-> **Важно:** `video-maker` и `video-youtube-prepare` — это не готовые коробочные продукты, а **шаблоны-заготовки**. Они работают из коробки для базового сценария, но задуманы так, чтобы вы донастроили их под свои цели — любым AI-агентом (Claude Code, Codex, Cursor и т.д.). Форкните, адаптируйте под свой бренд, стиль описаний и формат контента.
+> **Важно:** `video-maker`, `video-metadata` и `video-publisher` — это не готовые коробочные продукты, а **шаблоны-заготовки**. Они работают из коробки для базового сценария, но задуманы так, чтобы вы донастроили их под свои цели — любым AI-агентом (Claude Code, Codex, Cursor и т.д.). Форкните, адаптируйте под свой бренд, стиль описаний и формат контента.
 
 ---
 

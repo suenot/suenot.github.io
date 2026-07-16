@@ -1,6 +1,6 @@
 ---
 title: "كيف تصنع فيديوهات يوتيوب باستخدام NotebookLM: دليل شامل"
-description: "دليل خطوة بخطوة: استخدم NotebookLM لتوليد الصوت والشرائح، ثم اجمعها تلقائياً في فيديو يوتيوب جاهز مع ترجمة وفهرس زمني وبيانات وصفية — بدون برامج تحرير فيديو."
+description: "دليل خطوة بخطوة: استخدم NotebookLM لتوليد الصوت والشرائح، ثم اجمعها تلقائياً في فيديو يوتيوب جاهز مع ترجمة وفهرس زمني وبيانات وصفية — وانشره تلقائياً عبر جلسة متصفح. بدون برامج تحرير فيديو، بدون مفاتيح API، بدون رفع يدوي."
 pubDate: 2026-05-09
 heroImage: "/images/blog/notebooklm-youtube-hero.png"
 tags: ["notebooklm", "youtube", "automation", "video", "ai", "open-source", "tooling"]
@@ -24,11 +24,13 @@ draft: false
 ## كيف تبدو النتيجة
 
 - 🎬 [Анализ Плато: Как отличить надежный оптимум от переобучения](https://www.youtube.com/watch?v=IoMk1tCYpC0) — مثال **video-maker**: عرض PDF + صوت (NotebookLM) تم تجميعهما في فيديو جاهز مع شرائح متزامنة
-- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — مثال **video-youtube-prepare**: NotebookLM أنتج الفيديو الجاهز، والسكربت حضّر البيانات الوصفية (العنوان، الوصف، الوسوم، الفهرس الزمني، الترجمة)
+- 🎬 [Walk-Forward Optimization: The Only Honest Strategy Test](https://www.youtube.com/watch?v=y_cC6LWXFKM) — مثال **video-metadata**: NotebookLM أنتج الفيديو الجاهز، والسكربت حضّر البيانات الوصفية (العنوان، الوصف، الوسوم، الفهرس الزمني، الترجمة)
 
 في كلتا الحالتين — بدون برامج تحرير فيديو وبدون عمل يدوي. كل شيء يُجمّع تلقائياً.
 
-## سيناريوان: أيهما أنت؟
+## الأدوات: أيها أنت؟
+
+حسب ما أعطاك إياه NotebookLM، ستبدأ بإحدى أداتي البناء — ثم تتولى أداة ثالثة نشر النتيجة على يوتيوب نيابة عنك:
 
 ### السيناريو 1: لديك صوت + شرائح ← تحتاج لبناء فيديو
 
@@ -36,7 +38,7 @@ draft: false
 
 ### السيناريو 2: لديك فيديو جاهز ← تحتاج بيانات وصفية ليوتيوب
 
-**الأداة:** [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare)
+**الأداة:** [video-metadata](https://github.com/suenot/video-metadata)
 
 ## السيناريو 1: بناء فيديو من الصوت والشرائح
 
@@ -75,8 +77,8 @@ bash scripts/run_pipeline.sh en
 ## السيناريو 2: تحضير البيانات الوصفية لفيديو جاهز
 
 ```bash
-git clone https://github.com/suenot/video-youtube-prepare.git
-cd video-youtube-prepare
+git clone https://github.com/suenot/video-metadata.git
+cd video-metadata
 pip install openai-whisper
 
 python scripts/prepare_metadata.py \
@@ -86,6 +88,72 @@ python scripts/prepare_metadata.py \
     --whisper-model base
 ```
 
+## السيناريو 3: النشر على يوتيوب — تلقائياً
+
+في الأصل كان هذا الدليل ينتهي بخطوة يدوية: افتح YouTube Studio، ارفع الملف، الصق البيانات الوصفية يدوياً. لم يعد الأمر كذلك. المرحلة الأخيرة أصبحت الآن آلية أيضاً.
+
+**الأداة:** [video-publisher](https://github.com/suenot/video-publisher)
+
+تأخذ video-publisher الفيديو الجاهز وملف البيانات الوصفية JSON و**تنشرهما على يوتيوب نيابة عنك** — عبر قيادة YouTube Studio من خلال جلسة متصفح [Camoufox](https://camoufox.com) المضاد للكشف. **بدون Data API، بدون OAuth، بدون مفاتيح API.** تعيد استخدام ملف تعريف متصفح تسجّل الدخول إليه مرة واحدة، فلا شيء تحتاج لإعداده في Google Cloud.
+
+### كيف تعمل
+
+```bash
+git clone https://github.com/suenot/video-publisher.git
+cd video-publisher
+
+# Use Python 3.11–3.13 (not 3.14 — Camoufox needs Playwright ≤ 1.51)
+python3.11 -m venv venv && venv/bin/pip install -r requirements.txt
+venv/bin/python -m camoufox fetch          # one-time: download the browser
+
+# One-time: sign into the TARGET YouTube account (persists locally)
+venv/bin/python login.py
+```
+
+ثم انشر حزمة `video-maker` بأمر واحد:
+
+```bash
+venv/bin/python publish.py \
+    --video     ../video-maker/output/SLUG/SLUG.mp4 \
+    --metadata  ../video-maker/output/SLUG/SLUG_metadata.json \
+    --thumbnail ../video-maker/output/SLUG/SLUG_thumbnail.png \
+    --channel-handle @your-channel \
+    --visibility private
+```
+
+الأداة:
+
+1. تفتح YouTube Studio في جلسة Camoufox مسجّلة الدخول — بدون مطالبات تسجيل دخول، بدون مفاتيح API
+2. تختار القناة المستهدفة (عبر `--channel-handle` أو `--channel-id`)، فتعمل مع قنوات العلامات التجارية
+3. تتحقق مسبقاً من طول الفيديو مقابل حد 15 دقيقة للقنوات غير الموثقة — وتتوقف **قبل** إهدار عملية رفع إذا كان سيُرفض بسبب "Processing abandoned"
+4. ترفع الفيديو، وتضبط العنوان / الوصف / الوسوم من ملف البيانات الوصفية JSON، وترفق الصورة المصغرة
+5. تتعامل بسلاسة مع بوابة "Verify it's you" (اجتزها مرة واحدة بـ `--keep-open`)
+6. تتحقق من أن الرفع نُشر فعلاً، وتعيد رمز خروج واضحاً
+
+افتراضياً تنشر كمسودة **خاصة** (`--visibility private`) حتى تراجعها قبل الإعلان — مرّر `--visibility unlisted` أو `public` عندما تكون جاهزاً. الأمان بحكم التصميم: لا شيء يُنشر علناً بالخطأ.
+
+> **حافظ على خصوصية جلستك.** تسجّل الأداة الدخول إلى حسابك الحقيقي عبر ملف تعريف متصفح دائم. هذا الملف — الكوكيز، البصمة، لقطات `debug/` — يجب ألا يُرفع أو يُشارك أبداً. المستودع يأتي بملف `.gitignore` لهذا الغرض بالضبط؛ احترمه. أتمتة يوتيوب قد تحدّ من معدل الحساب أو تعلّقه، لذا استخدم حسابك الخاص، جلسة واحدة في كل مرة، على مسؤوليتك.
+
+### مصنع المحتوى الكامل
+
+اربط الأدوات الثلاث ويتحول مقال المدونة إلى فيديو يوتيوب منشور بدون أي تحرير يدوي وبدون أي رفع يدوي:
+
+```
+article + NotebookLM audio/slides
+      │
+      ▼
+  video-maker      → builds the MP4 (synced slides + subtitles + thumbnail)
+      │
+      ▼
+  video-metadata   → title, description, tags, chapter timestamps, SRT
+      │
+      ▼
+  video-publisher  → uploads and publishes to YouTube (browser, no API keys)
+      │
+      ▼
+   YouTube 🎬
+```
+
 ## سير العمل الكامل: من الفكرة إلى يوتيوب في 30 دقيقة
 
 | الخطوة | ما تفعله | الوقت |
@@ -93,12 +161,10 @@ python scripts/prepare_metadata.py \
 | 1 | رفع المواد إلى NotebookLM | دقيقتان |
 | 2 | توليد الصوت والشرائح | 5 دقائق |
 | 3 | تحميل الملفات ووضعها في `input/` | دقيقة |
-| 4 | تشغيل `run_pipeline.sh` | 10-15 دقيقة |
-| 5 | رفع الفيديو في YouTube Studio | دقيقتان |
-| 6 | نسخ البيانات الوصفية | دقيقتان |
-| 7 | رفع الترجمة والصورة المصغرة | دقيقة |
+| 4 | تشغيل `run_pipeline.sh` (video-maker + video-metadata) | 10-15 دقيقة (انتظار) |
+| 5 | تشغيل `publish.py` (video-publisher) — يرفع وينشر نيابة عنك | دقيقتان |
 
-**المجموع: حوالي 30 دقيقة**. سابقاً كان يتطلب أكثر من ساعتين من العمل اليدوي.
+**المجموع: حوالي 25 دقيقة**، معظمها مجرد انتظار للسكربتات — والإجراءات اليدوية الوحيدة هي بضع نقرات في NotebookLM. الرفع إلى YouTube Studio ولصق البيانات الوصفية وإرفاق الترجمة والصورة المصغرة كلها آلية الآن. كان هذا يتطلب سابقاً أكثر من ساعتين من العمل اليدوي.
 
 ## ما وراء الشرائح: أدوات فيديو مفتوحة المصدر أخرى
 
@@ -122,11 +188,12 @@ python scripts/prepare_metadata.py \
 ## جميع الأدوات
 
 - 🔧 [video-maker](https://github.com/suenot/video-maker) — يبني فيديو من صوت + PDF
-- 🔧 [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — يولد بيانات يوتيوب الوصفية
+- 🔧 [video-metadata](https://github.com/suenot/video-metadata) — يولد بيانات يوتيوب الوصفية
+- 🔧 [video-publisher](https://github.com/suenot/video-publisher) — ينشر على يوتيوب عبر جلسة متصفح (بدون مفاتيح API)
 - 🎬 [video-use](https://github.com/browser-use/video-use) — تحرير الفيديو عبر Claude Code
 - 🎬 [OpenShorts](https://github.com/mutonby/openshorts) — منصة كاملة للشورتات والفيديو بالذكاء الاصطناعي
 
-> **ملاحظة مهمة:** `video-maker` و `video-youtube-prepare` ليسا منتجين جاهزين للاستخدام مباشرة، بل **قوالب بداية**. يعملان مباشرة للسيناريو الأساسي، لكنهما مصممان لتخصيصهما بأي وكيل ذكاء اصطناعي (Claude Code، Codex، Cursor وغيرها). انسخهما وكيّفهما حسب علامتك التجارية وأسلوب محتواك.
+> **ملاحظة مهمة:** `video-maker` و `video-metadata` و `video-publisher` ليست منتجات جاهزة للاستخدام مباشرة، بل **قوالب بداية**. يعملان مباشرة للسيناريو الأساسي، لكنهما مصممان لتخصيصهما بأي وكيل ذكاء اصطناعي (Claude Code، Codex، Cursor وغيرها). انسخهما وكيّفهما حسب علامتك التجارية وأسلوب محتواك.
 
 ---
 
