@@ -2,6 +2,7 @@
 title: "Teaching Kimi to Speak Claude Code: A Field Guide to Tool-Format Translation"
 description: "Every utility that translates tool-calling formats between LLM providers — LiteLLM, Bifrost, Portkey, claude-code-router, Vercel AI SDK, first-party /anthropic endpoints — what each one actually does, and the three failure classes none of them have solved. Plus the conclusion I arrived at: stop adapting context downward to each model, and build a harness that orchestrates harnesses instead."
 pubDate: 2026-07-13
+heroImage: "/images/blog/llm-tool-format-sync-hero.png"
 tags: ["llm", "claude-code", "tool-calling", "harness", "proxy", "kimi", "orchestration"]
 draft: false
 ---

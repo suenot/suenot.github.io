@@ -2,6 +2,7 @@
 title: "The Harness, Not the Model: Why the Same LLM Burns 4× the Tokens Without the Right Scaffolding"
 description: "A token-efficiency reading of the 'harness > model' thesis: the same model solved 6.7% of tasks bare vs 68% with the right harness — at 4× fewer tokens. What a harness is, why it's where the token bill actually lives, and what the Life-Harness and Meta-Harness papers prove. Plus how your Claude Code stack (subagents, skills, hooks, graphs) already is a harness."
 pubDate: 2026-07-10
+heroImage: "/images/blog/harness-hero.png"
 tags: ["harness", "claude-code", "tokens", "llm", "agents", "optimization"]
 draft: false
 ---
