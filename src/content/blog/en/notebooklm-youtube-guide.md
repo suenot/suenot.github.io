@@ -9,6 +9,8 @@ draft: false
 
 # How to Make YouTube Videos with NotebookLM: A Complete Guide
 
+🎬 **Watch on YouTube:** [NotebookLM → YouTube: The Zero-Edit Video Factory](https://www.youtube.com/watch?v=1_CM7NVL0Do)
+
 If you've ever wanted to start publishing videos on YouTube but stopped at the thought of video editors, editing timelines, and hours of manual work — this article is for you.
 
 I'll show you how to go from an idea to a published YouTube video in about 30 minutes using **Google NotebookLM** and a couple of open-source scripts. No After Effects. No Premiere. No DaVinci Resolve. No video editor at all.
