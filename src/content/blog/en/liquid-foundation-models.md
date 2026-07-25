@@ -8,7 +8,7 @@ draft: false
 
 # Liquid Foundation Models: Continuous-Time AI for the Edge
 
-<!-- TODO: 🎬 Watch on YouTube: <link after publish> -->
+🎬 **Watch on YouTube:** [Liquid Foundation Models: Continuous-Time AI for the Edge](https://www.youtube.com/watch?v=RGJqjEezWGk)
 
 The story of how a 2-millimeter nematode with 302 neurons launched a $4.5B company says something uncomfortable about the trajectory of AI. While the industry burns cities-worth of electricity to push transformer parameters ever higher, Liquid AI asked a different question: what if the problem isn't scale, but architecture?
 
