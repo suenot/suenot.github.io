@@ -8,6 +8,8 @@ draft: false
 
 # Gigatoken: How Tokenization Went from Megabytes to Gigabytes per Second
 
+🎬 **Watch on YouTube:** [Gigatoken: How Tokenization Went from Megabytes to Gigabytes](https://www.youtube.com/watch?v=NXCsPMTp85c)
+
 *Research source: [Cloud-Codes explainer](https://youtu.be/vFtJeZ7ifTA)*
 
 Before an LLM can generate a single token, your text has to be chopped into pieces first. This runs on every prompt, every training job, every fine-tuning pass — and it's been slower than it should for years. This week, one developer shipped a tokenizer that runs 100-1000x faster than OpenAI's tiktoken and Hugging Face's tokenizers. Same output, identical token IDs, just three orders of magnitude faster.

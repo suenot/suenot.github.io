@@ -8,7 +8,7 @@ draft: false
 
 # Kimi K3 and the Sputnik Moment: How Open Weights Broke the AI Monopoly
 
-<!-- TODO: 🎬 Watch on YouTube: <link after publish> -->
+🎬 **Watch on YouTube:** [Kimi K3: The Open-Source 'Sputnik Moment' for Frontier Models](https://www.youtube.com/watch?v=CsbQaYArBfQ)
 
 For two years the story was simple: frontier intelligence lived behind closed APIs, and open models were a generation or two behind. Kimi K3 shattered that story. An open-weight model from a Chinese startup, built under sanctions, matching the labs that claimed monopoly on the future. This isn't just another model release — it's a Sputnik moment.
 

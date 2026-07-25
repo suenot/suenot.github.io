@@ -8,7 +8,7 @@ draft: false
 
 # Claude Opus 5: More Performance for Less Money
 
-<!-- TODO: 🎬 Watch on YouTube: <link after publish> -->
+🎬 **Watch on YouTube:** [Claude Opus 5 Review: Anthropic's Frontier Reasoning Model](https://www.youtube.com/watch?v=SFkO8as1vDw)
 
 For years the rule in AI was simple: if you wanted frontier intelligence, you paid for it. High capability meant high cost — no exceptions. Anthropic's Opus 5 breaks that trade-off. It delivers better results than its strongest rivals on coding, reasoning, and automation benchmarks — while charging less for the privilege.
 

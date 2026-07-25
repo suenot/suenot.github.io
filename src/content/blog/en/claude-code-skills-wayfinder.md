@@ -8,7 +8,7 @@ draft: false
 
 # Claude Code Skills: Wayfinder, Specifications, and the Skills-Driven Agent Workflow
 
-<!-- TODO: 🎬 Watch on YouTube: <link after publish> -->
+🎬 **Watch on YouTube:** [Claude Code Skills & Wayfinder: Agent Tool Discovery Explained](https://www.youtube.com/watch?v=fzljXADV9cM)
 
 Using AI agents without structure quickly hits the same wall: context overflow, lost architecture, and agents that drift off-prompt when sessions stretch too long. The **Skills 1.1 update** for Claude Code introduces a different approach — a structured development cycle where **Skills** are packaged instructions the model loads on demand, **Wayfinder** navigates through uncertainty by breaking large goals into ticketed dependencies, and **Specifications** replace PRDs as the semantic anchor for technical scoping.
 
