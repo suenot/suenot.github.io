@@ -65,40 +65,6 @@ function getIcon(name: string): { path: string; hex: string } | null {
   return icon ?? null;
 }
 
-// WCAG 2.1 relative luminance (proper sRGB linearization)
-function srgbLuminance(hex: string): number {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  const lin = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-}
-
-// Lighten hex color to ensure WCAG AA contrast (4.5:1) on #0A0A14 background
-const BG_LUM = srgbLuminance('#0A0A14'); // ~0.003
-function lightenForContrast(hex: string): string {
-  const lum = srgbLuminance(hex);
-  const ratio = (lum + 0.05) / (BG_LUM + 0.05);
-  if (ratio >= 7) return hex;
-  // Iteratively mix with white until contrast >= 4.5
-  let factor = 0;
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  for (let i = 1; i <= 20; i++) {
-    factor = i * 0.05;
-    const nr = Math.round(r + (255 - r) * factor);
-    const ng = Math.round(g + (255 - g) * factor);
-    const nb = Math.round(b + (255 - b) * factor);
-    const newHex = `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`;
-    const newLum = srgbLuminance(newHex);
-    if ((newLum + 0.05) / (BG_LUM + 0.05) >= 7) {
-      return newHex;
-    }
-  }
-  return '#ffffff';
-}
-
 const techCategories = [
   {
     name: 'Languages',
@@ -209,49 +175,76 @@ const techCategories = [
 ];
 ---
 
-<section id="tech" class="py-24 bg-[#0D0D1A]">
-  <div class="max-w-6xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
-    <h2 class="text-3xl font-bold text-white mb-12">{t.heading}</h2>
+<section id="tech" class="tech terminal-section" aria-labelledby="tech-heading">
+  <div class="terminal-container tech__layout">
+    <header class="tech__header">
+      <p class="terminal-kicker">{t.eyebrow} / CAPABILITY MATRIX</p>
+      <h2 id="tech-heading" class="terminal-heading">{t.heading}</h2>
+      <div class="tech__legend" aria-hidden="true">
+        <span>PRIMARY / HIGH</span><span>SECONDARY / OPERATIONAL</span>
+      </div>
+    </header>
 
-    <div class="space-y-10">
-      {techCategories.map((category) => (
-        <div>
-          <h3 class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4">
-            {t.categories[category.name as TechCategoryKey] ?? category.name}
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {category.items.map((tech) => {
+    <div class="tech__matrix">
+      {techCategories.map((category, categoryIndex) => (
+        <section class:list={["tech__category", { "tech__category--primary": category.primary }]}>
+          <header>
+            <span>{String(categoryIndex + 1).padStart(2, '0')}</span>
+            <h3>{t.categories[category.name as TechCategoryKey] ?? category.name}</h3>
+            <span>{category.items.length} UNITS</span>
+          </header>
+          <ul>
+            {category.items.map((tech, techIndex) => {
               const icon = getIcon(tech.name);
-              const textColor = lightenForContrast(tech.color);
               return (
-                <span
-                  class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md border transition-all duration-200 hover:scale-105 cursor-default ${category.primary ? 'text-sm font-semibold' : 'text-xs font-medium'}`}
-                  style={`background-color: ${tech.color}18; border-color: ${tech.color}35; color: ${textColor};`}
-                >
+                <li>
+                  <span class="tech__id">{String(categoryIndex + 1).padStart(2, '0')}.{String(techIndex + 1).padStart(2, '0')}</span>
                   {icon ? (
-                    <svg
-                      role="img"
-                      viewBox="0 0 24 24"
-                      class="w-3.5 h-3.5 flex-shrink-0"
-                      fill="currentColor"
-                      aria-label={tech.name}
-                    >
-                      <path d={icon.path} />
-                    </svg>
-                  ) : (
-                    <span
-                      class="w-2 h-2 rounded-full flex-shrink-0"
-                      style={`background-color: ${tech.color};`}
-                    />
-                  )}
-                  {tech.name}
-                </span>
+                    <svg role="img" viewBox="0 0 24 24" aria-label={tech.name}><path d={icon.path} /></svg>
+                  ) : <span class="tech__fallback" aria-hidden="true">+</span>}
+                  <span class="tech__name">{tech.name}</span>
+                </li>
               );
             })}
-          </div>
-        </div>
+          </ul>
+        </section>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .tech { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .tech__layout { display: grid; grid-template-columns: minmax(18rem, .58fr) minmax(0, 1.42fr); }
+  .tech__header { position: sticky; inset-block-start: 4rem; align-self: start; min-block-size: min(48rem, 92dvh); padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 3.5vw, 3.75rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .tech__header .terminal-heading { max-inline-size: 9ch; margin-block-start: 1.25rem; font-size: clamp(3.6rem, 6vw, 7rem); line-height: .84; }
+  .tech__legend { position: absolute; inset-inline: clamp(1rem, 3.5vw, 3.75rem); inset-block-end: 2rem; display: grid; gap: .65rem; color: var(--terminal-muted, #747a75); font: .57rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .tech__legend span::before { content: "□"; margin-inline-end: .7rem; color: #ff3b30; }
+  .tech__matrix { min-width: 0; }
+  .tech__category { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .tech__category > header { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; padding: 1rem 1.4rem; color: var(--terminal-muted, #8b908c); font: .58rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; }
+  .tech__category header h3 { color: var(--terminal-fg, #e7e9e3); font: inherit; }
+  .tech__category ul { display: grid; grid-template-columns: repeat(3, 1fr); border-block-start: 1px solid var(--terminal-line, #303431); }
+  .tech__category li { display: grid; grid-template-columns: 2.25rem 1rem 1fr; gap: .65rem; align-items: center; min-block-size: 3.4rem; padding: .8rem 1rem; border-inline-end: 1px solid var(--terminal-line, #303431); border-block-end: 1px solid var(--terminal-line, #303431); color: var(--terminal-muted, #969b97); font: .65rem/1.25 var(--font-mono, monospace); }
+  .tech__category li:nth-child(3n) { border-inline-end: 0; }
+  .tech__category li:hover { color: var(--terminal-fg, #e7e9e3); background: #151816; }
+  .tech__category--primary li { min-block-size: 4.25rem; color: var(--terminal-fg, #e7e9e3); }
+  .tech__category svg { inline-size: .85rem; block-size: .85rem; fill: currentColor; }
+  .tech__id { color: #5d625e; font-size: .5rem; }
+  .tech__fallback { color: #ff3b30; }
+  @media (max-width: 900px) {
+    .tech__layout { grid-template-columns: 1fr; }
+    .tech__header { position: relative; inset-block-start: auto; min-block-size: 24rem; border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
+  }
+  @media (max-width: 620px) {
+    .tech__category ul { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .tech__category li { grid-template-columns: 2rem 1rem minmax(0, 1fr); }
+    .tech__name { overflow-wrap: anywhere; }
+    .tech__category li:nth-child(3n) { border-inline-end: 1px solid var(--terminal-line, #303431); }
+    .tech__category li:nth-child(2n) { border-inline-end: 0; }
+  }
+  @media (max-width: 400px) {
+    .tech__category ul { grid-template-columns: 1fr; }
+    .tech__category li { border-inline-end: 0 !important; }
+  }
+</style>

@@ -4,16 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        accent: '#7C3AED',
-        'accent-light': '#A78BFA',
-        'surface': '#0F0F1A',
-        'surface-2': '#1A1A2E',
-        'surface-3': '#16213E',
-        'muted': '#6B7280',
+        accent: '#FF3B30',
+        'accent-light': '#FF6B62',
+        'surface': '#090B0A',
+        'surface-2': '#0D100E',
+        'surface-3': '#121512',
+        'muted': '#858B84',
       },
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        mono: ['SF Mono', 'Menlo', 'Cascadia Code', 'Consolas', 'Ubuntu Mono', 'monospace'],
+        sans: ['Arial Narrow', 'Roboto Condensed', 'Helvetica Neue Condensed', 'Arial', 'sans-serif'],
+        mono: ['SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', 'monospace'],
       },
     },
   },

@@ -3,7 +3,7 @@ import Layout from './Layout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import TranslationLinks from '../components/TranslationLinks.astro';
 import TagList from '../components/TagList.astro';
-import { type Locale, locales } from '../i18n/config';
+import { isRtl, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 import { getLocalePrefix } from '../i18n/utils';
 
@@ -35,20 +35,19 @@ const {
 
 const t = useTranslations(locale);
 const prefix = getLocalePrefix(locale);
-
-const formattedPubDate = pubDate.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
+const backArrow = isRtl(locale) ? '\u2192' : '\u2190';
+const dateLocale = locale === 'en' ? 'en-US' : locale;
+const formattedPubDate = pubDate.toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
+  day: '2-digit',
 });
-
-const formattedUpdatedDate = updatedDate?.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
+const formattedUpdatedDate = updatedDate?.toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
+  day: '2-digit',
 });
 
-// BreadcrumbList JSON-LD
 const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -69,119 +68,569 @@ const breadcrumbLd = {
   publishedDate={pubDate}
   modifiedDate={updatedDate}
   tags={tags}
+  availableLocales={availableLocales}
 >
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
-  <div class="pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-6">
-      <!-- Back link -->
-      <a
-        href={`${prefix}/blog/`}
-        class="inline-flex items-center text-sm text-gray-400 hover:text-violet-300 transition-colors mb-8"
-      >
-        {t('blog.backToBlog')}
+  <section class="terminal-section article-shell">
+    <div class="terminal-container article-container">
+      <a href={`${prefix}/blog/`} class="article-back">
+        <span aria-hidden="true">{backArrow}</span>
+        <span>{t('blog.backToBlog').replace(/^[←→]\s*/, '')}</span>
       </a>
 
-      {heroImage && (
-        <div class="aspect-video rounded-xl overflow-hidden mb-8 bg-surface-2">
-          <img src={heroImage} alt={title} class="w-full h-full object-cover" />
+      <header class="article-header">
+        <div class="article-header__signal" aria-hidden="true">
+          <span></span>
+          <span>ARTICLE / {slug.toUpperCase()}</span>
         </div>
-      )}
 
-      <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Main content -->
-        <div class="flex-1 min-w-0">
-          <header class="mb-8">
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-              <time datetime={pubDate.toISOString()} class="text-sm text-gray-500 font-mono">
-                {t('blog.published')}: {formattedPubDate}
-              </time>
-              {updatedDate && (
-                <time datetime={updatedDate.toISOString()} class="text-sm text-gray-600 font-mono">
-                  {t('blog.updated')}: {formattedUpdatedDate}
-                </time>
-              )}
+        <div class="article-header__metadata">
+          <div>
+            <span>{t('blog.published')}</span>
+            <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
+          </div>
+          {updatedDate && (
+            <div>
+              <span>{t('blog.updated')}</span>
+              <time datetime={updatedDate.toISOString()}>{formattedUpdatedDate}</time>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">{title}</h1>
-            <div class="mb-4">
-              <TagList tags={tags} locale={locale} />
-            </div>
-            {availableLocales.length > 1 && (
-              <TranslationLinks
-                currentLocale={locale}
-                slug={slug}
-                availableLocales={availableLocales}
-                label={t('blog.translations')}
-              />
-            )}
-          </header>
-
-          <!-- Prose content -->
-          <div class="prose-container">
-            <slot />
+          )}
+          <div>
+            <span>REF</span>
+            <strong>{String(headings.length).padStart(2, '0')} NODES</strong>
           </div>
         </div>
 
-        <!-- Table of Contents -->
+        <h1 class="display-type">{title}</h1>
+        <p class="article-lead">{description}</p>
+
+        <div class="article-header__taxonomy">
+          <TagList tags={tags} locale={locale} />
+          {availableLocales.length > 1 && (
+            <TranslationLinks
+              currentLocale={locale}
+              slug={slug}
+              availableLocales={availableLocales}
+              label={t('blog.translations')}
+            />
+          )}
+        </div>
+      </header>
+
+      {heroImage && (
+        <figure class="article-hero">
+          <img src={heroImage} alt={title} />
+          <figcaption>
+            <span>VISUAL INPUT</span>
+            <span>{slug}</span>
+          </figcaption>
+        </figure>
+      )}
+
+      <div class="article-grid">
+        <article class="prose-container">
+          <slot />
+        </article>
         <TableOfContents headings={headings} title={t('blog.toc')} />
       </div>
     </div>
-  </div>
+  </section>
 
   <style>
-    .prose-container :global(h2) {
-      @apply text-2xl font-bold text-white mt-10 mb-4;
+    .article-shell {
+      position: relative;
+      padding-top: clamp(6.5rem, 10vw, 9rem);
+      padding-bottom: clamp(5rem, 10vw, 9rem);
+      overflow: clip;
+      background: #0b0d0c;
     }
-    .prose-container :global(h3) {
-      @apply text-xl font-semibold text-white mt-8 mb-3;
+
+    .article-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
+      border: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 3px,
+        rgba(231, 233, 227, 0.025) 3px,
+        rgba(231, 233, 227, 0.025) 4px
+      );
     }
+
+    .article-container {
+      position: relative;
+      width: min(100% - 2rem, 86rem);
+      margin-inline: auto;
+    }
+
+    .article-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+      color: rgba(231, 233, 227, 0.52);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .article-back span:first-child {
+      color: #ff3b30;
+    }
+
+    .article-back:hover {
+      color: #e7e9e3;
+    }
+
+    .article-back:focus-visible {
+      outline: 1px solid #ff3b30;
+      outline-offset: 5px;
+    }
+
+    .article-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem);
+      column-gap: clamp(2rem, 6vw, 7rem);
+      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      padding-top: 1rem;
+    }
+
+    .article-header__signal {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      color: rgba(255, 59, 48, 0.72);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .article-header__signal span:first-child {
+      width: 1.5rem;
+      height: 1px;
+      flex: 0 0 auto;
+      background: #ff3b30;
+    }
+
+    .article-header__signal span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .article-header__metadata {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      display: grid;
+      align-content: start;
+      border-top: 1px solid rgba(231, 233, 227, 0.14);
+    }
+
+    .article-header__metadata > div {
+      display: grid;
+      grid-template-columns: minmax(5rem, 0.7fr) minmax(0, 1fr);
+      gap: 1rem;
+      border-bottom: 1px solid rgba(231, 233, 227, 0.12);
+      padding: 0.72rem 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.07em;
+      line-height: 1.45;
+      text-transform: uppercase;
+    }
+
+    .article-header__metadata span {
+      color: rgba(231, 233, 227, 0.56);
+    }
+
+    .article-header__metadata time,
+    .article-header__metadata strong {
+      color: rgba(231, 233, 227, 0.62);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .article-header > h1 {
+      grid-column: 1;
+      max-width: 20ch;
+      margin: clamp(2rem, 5vw, 4rem) 0 0;
+      color: #e7e9e3;
+      font-size: clamp(2.8rem, 7.4vw, 7rem);
+      font-weight: 780;
+      letter-spacing: -0.07em;
+      line-height: 0.91;
+      text-wrap: balance;
+    }
+
+    .article-lead {
+      grid-column: 1;
+      max-width: 62ch;
+      margin: 1.75rem 0 0;
+      color: rgba(231, 233, 227, 0.62);
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    .article-header__taxonomy {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      align-items: start;
+      margin-top: clamp(2.5rem, 5vw, 4.5rem);
+      border-top: 1px solid rgba(231, 233, 227, 0.14);
+      border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+      padding-block: 1rem;
+    }
+
+    .article-header__taxonomy :global(.tag-index) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 1rem;
+      border: 0;
+    }
+
+    .article-header__taxonomy :global(.tag-index__item) {
+      display: inline-flex;
+      width: auto;
+      border: 0;
+      padding: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .article-header__taxonomy :global(.tag-index__item:first-child),
+    .article-header__taxonomy :global(.tag-index__marker) {
+      display: none;
+    }
+
+    .article-header__taxonomy :global(.tag-index__item:hover) {
+      color: #ff3b30;
+    }
+
+    .article-hero {
+      position: relative;
+      margin: clamp(2.5rem, 7vw, 6rem) 0 0;
+      overflow: hidden;
+      border: 1px solid rgba(231, 233, 227, 0.18);
+      background: #111411;
+    }
+
+    .article-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px);
+    }
+
+    .article-hero img {
+      display: block;
+      width: 100%;
+      max-height: 42rem;
+      object-fit: cover;
+      filter: grayscale(0.82) contrast(1.06) brightness(0.72);
+    }
+
+    .article-hero figcaption {
+      position: absolute;
+      z-index: 1;
+      inset-inline: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      background: rgba(11, 13, 12, 0.92);
+      padding: 0.7rem 0.85rem;
+      color: rgba(231, 233, 227, 0.42);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .article-hero figcaption span:first-child {
+      color: rgba(255, 59, 48, 0.75);
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 68ch) minmax(12rem, 16rem);
+      justify-content: center;
+      gap: clamp(3rem, 8vw, 8rem);
+      margin-top: clamp(3.5rem, 8vw, 7rem);
+    }
+
+    .prose-container {
+      min-width: 0;
+      color: rgba(231, 233, 227, 0.72);
+      font-size: clamp(1rem, 1.2vw, 1.08rem);
+      line-height: 1.78;
+    }
+
+    .prose-container > :global(h1:first-child) {
+      display: none;
+    }
+
+    .prose-container :global(h1),
+    .prose-container :global(h2),
+    .prose-container :global(h3),
     .prose-container :global(h4) {
-      @apply text-lg font-semibold text-gray-200 mt-6 mb-2;
+      color: #e7e9e3;
+      font-weight: 670;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      text-wrap: balance;
     }
+
+    .prose-container :global(h1) {
+      margin: 3.5rem 0 1.25rem;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+    }
+
+    .prose-container :global(h2) {
+      margin: 4.5rem 0 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      scroll-margin-top: 7rem;
+    }
+
+    .prose-container :global(h2::before) {
+      content: '//';
+      margin-inline-end: 0.65rem;
+      color: #ff3b30;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.55em;
+      letter-spacing: 0;
+      vertical-align: 0.2em;
+    }
+
+    .prose-container :global(h3) {
+      margin: 3rem 0 1rem;
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      scroll-margin-top: 7rem;
+    }
+
+    .prose-container :global(h4) {
+      margin: 2.4rem 0 0.8rem;
+      font-size: 1.12rem;
+    }
+
     .prose-container :global(p) {
-      @apply text-gray-300 leading-relaxed mb-4;
+      margin: 0 0 1.35rem;
+      text-wrap: pretty;
     }
+
     .prose-container :global(a) {
-      @apply text-violet-400 hover:text-violet-300 underline decoration-violet-500/30 hover:decoration-violet-300 transition-colors;
+      color: #e7e9e3;
+      text-decoration-color: rgba(255, 59, 48, 0.65);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.22em;
+      transition: color 160ms ease, text-decoration-color 160ms ease;
     }
-    .prose-container :global(ul), .prose-container :global(ol) {
-      @apply text-gray-300 mb-4 pl-6;
+
+    .prose-container :global(a:hover) {
+      color: #ff655d;
+      text-decoration-color: #ff3b30;
     }
-    .prose-container :global(ul) {
-      @apply list-disc;
+
+    .prose-container :global(a:focus-visible) {
+      outline: 1px solid #ff3b30;
+      outline-offset: 3px;
     }
+
+    .prose-container :global(ul),
     .prose-container :global(ol) {
-      @apply list-decimal;
+      margin: 0 0 1.5rem;
+      padding-inline-start: 1.5rem;
     }
+
     .prose-container :global(li) {
-      @apply mb-1.5;
+      margin-bottom: 0.55rem;
+      padding-inline-start: 0.25rem;
     }
+
+    .prose-container :global(li::marker) {
+      color: #ff3b30;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78em;
+    }
+
     .prose-container :global(blockquote) {
-      @apply border-l-2 border-violet-500/30 pl-4 text-gray-400 italic my-4;
+      position: relative;
+      margin: 2rem 0;
+      border-inline-start: 2px solid #ff3b30;
+      background: rgba(231, 233, 227, 0.035);
+      padding: 1.2rem 1.4rem;
+      color: rgba(231, 233, 227, 0.62);
+      font-size: 1.03em;
     }
+
+    .prose-container :global(blockquote p:last-child) {
+      margin-bottom: 0;
+    }
+
     .prose-container :global(code) {
-      @apply bg-white/[0.05] px-1.5 py-0.5 rounded text-sm font-mono text-violet-300;
+      border: 1px solid rgba(231, 233, 227, 0.12);
+      background: rgba(231, 233, 227, 0.055);
+      padding: 0.12rem 0.35rem;
+      color: #ff8b84;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84em;
+      overflow-wrap: anywhere;
     }
+
     .prose-container :global(pre) {
-      @apply bg-surface-2 border border-white/5 rounded-lg p-4 overflow-x-auto my-4;
+      max-width: 100%;
+      margin: 2rem 0;
+      overflow-x: auto;
+      border: 1px solid rgba(231, 233, 227, 0.16);
+      border-inline-start: 2px solid rgba(255, 59, 48, 0.75);
+      background: #080a09;
+      padding: 1.25rem;
+      color: rgba(231, 233, 227, 0.76);
+      font-size: 0.83rem;
+      line-height: 1.65;
+      tab-size: 2;
     }
+
     .prose-container :global(pre code) {
-      @apply bg-transparent px-0 py-0;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: inherit;
+      overflow-wrap: normal;
     }
+
     .prose-container :global(img) {
-      @apply rounded-lg my-4;
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 2rem 0;
+      border: 1px solid rgba(231, 233, 227, 0.16);
     }
+
     .prose-container :global(hr) {
-      @apply border-white/5 my-8;
+      margin: 3.5rem 0;
+      border: 0;
+      border-top: 1px solid rgba(231, 233, 227, 0.18);
     }
+
     .prose-container :global(table) {
-      @apply w-full text-sm my-4;
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 2rem 0;
+      overflow-x: auto;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
-    .prose-container :global(th) {
-      @apply text-left text-gray-400 font-mono py-2 px-3 border-b border-white/10;
-    }
+
+    .prose-container :global(th),
     .prose-container :global(td) {
-      @apply py-2 px-3 border-b border-white/5;
+      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      padding: 0.7rem 0.85rem;
+      text-align: start;
+    }
+
+    .prose-container :global(th) {
+      color: rgba(231, 233, 227, 0.48);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .prose-container :global(strong) {
+      color: #e7e9e3;
+      font-weight: 650;
+    }
+
+    @media (max-width: 1023px) {
+      .article-header {
+        grid-template-columns: 1fr;
+      }
+
+      .article-header__metadata {
+        grid-column: 1;
+        grid-row: auto;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 1.75rem;
+      }
+
+      .article-header__metadata > div {
+        grid-template-columns: 1fr;
+        border-inline-end: 1px solid rgba(231, 233, 227, 0.12);
+        padding-inline: 0.75rem;
+      }
+
+      .article-header__metadata > div:first-child {
+        padding-inline-start: 0;
+      }
+
+      .article-header > h1,
+      .article-lead {
+        grid-column: 1;
+      }
+
+      .article-grid {
+        grid-template-columns: minmax(0, 68ch);
+        gap: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .article-container {
+        width: min(100% - 1.25rem, 86rem);
+      }
+
+      .article-header__metadata {
+        grid-template-columns: 1fr;
+      }
+
+      .article-header__metadata > div {
+        grid-template-columns: 5.5rem minmax(0, 1fr);
+        border-inline-end: 0;
+        padding-inline: 0;
+      }
+
+      .article-header__taxonomy {
+        grid-template-columns: 1fr;
+      }
+
+      .article-hero {
+        margin-inline: -0.625rem;
+      }
+
+      .article-hero img {
+        min-height: 14rem;
+      }
+
+      .article-hero figcaption span:last-child {
+        display: none;
+      }
+
+      .prose-container :global(pre) {
+        margin-inline: -0.625rem;
+      }
     }
   </style>
 </Layout>

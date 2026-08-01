@@ -11,23 +11,147 @@ interface Props {
 }
 
 const { headings, title } = Astro.props;
-const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 ---
 
 {tocHeadings.length > 0 && (
-  <nav class="hidden lg:block sticky top-24 ml-8 w-56 shrink-0" aria-label={title}>
-    <h4 class="text-sm font-semibold text-gray-400 mb-3 font-mono">{title}</h4>
-    <ul class="space-y-2 text-sm">
-      {tocHeadings.map((heading) => (
-        <li class={heading.depth === 3 ? 'pl-3' : ''}>
-          <a
-            href={`#${heading.slug}`}
-            class="text-gray-500 hover:text-violet-300 transition-colors duration-200 leading-snug block"
-          >
-            {heading.text}
+  <nav class="article-toc" aria-label={title} data-article-toc>
+    <div class="article-toc__heading">
+      <span>INDEX</span>
+      <span>{String(tocHeadings.length).padStart(2, '0')}</span>
+    </div>
+    <h2>{title}</h2>
+    <ol>
+      {tocHeadings.map((heading, index) => (
+        <li class:list={{ 'article-toc__nested': heading.depth === 3 }}>
+          <a href={`#${heading.slug}`} data-toc-link={heading.slug}>
+            <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <span>{heading.text}</span>
           </a>
         </li>
       ))}
-    </ul>
+    </ol>
   </nav>
 )}
+
+<style>
+  .article-toc {
+    position: sticky;
+    top: 6.5rem;
+    align-self: start;
+    min-width: 0;
+    border-top: 1px solid rgba(231, 233, 227, 0.2);
+    padding-top: 0.75rem;
+  }
+
+  .article-toc__heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgba(255, 59, 48, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.6rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.14em;
+  }
+
+  .article-toc h2 {
+    margin: 0.55rem 0 1.1rem;
+    color: #e7e9e3;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .article-toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .article-toc li {
+    border-top: 1px solid rgba(231, 233, 227, 0.1);
+  }
+
+  .article-toc a {
+    display: grid;
+    grid-template-columns: 1.6rem minmax(0, 1fr);
+    gap: 0.55rem;
+    padding: 0.65rem 0;
+    color: rgba(231, 233, 227, 0.62);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 160ms ease, padding-inline-start 160ms ease;
+  }
+
+  .article-toc a span:first-child {
+    color: rgba(231, 233, 227, 0.23);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.6rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .article-toc a:hover,
+  .article-toc a[aria-current='location'] {
+    color: #e7e9e3;
+  }
+
+  .article-toc a[aria-current='location'] {
+    padding-inline-start: 0.4rem;
+    box-shadow: inset 1px 0 #ff3b30;
+  }
+
+  .article-toc a:focus-visible {
+    outline: 1px solid #ff3b30;
+    outline-offset: 2px;
+  }
+
+  .article-toc__nested a {
+    padding-inline-start: 1.2rem;
+  }
+
+  @media (max-width: 1023px) {
+    .article-toc {
+      position: static;
+      order: -1;
+      margin-bottom: 2rem;
+    }
+
+    .article-toc ol {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .article-toc ol {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const toc = document.querySelector<HTMLElement>('[data-article-toc]');
+  const links = toc ? Array.from(toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')) : [];
+  const headings = links
+    .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+    .filter((heading): heading is HTMLElement => Boolean(heading));
+
+  if (headings.length > 0 && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (!visible) return;
+      links.forEach((link) => {
+        if (link.dataset.tocLink === visible.target.id) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-15% 0px -72% 0px' });
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
+</script>

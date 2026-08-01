@@ -5,334 +5,216 @@ import { getHome } from '../i18n/home';
 interface Props {
   locale?: Locale;
 }
+
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).hero;
 
-// Fetch GitHub stats at build time
 let repoCount = '450+';
 let starCount = '650+';
 
 try {
   const userRes = await fetch('https://api.github.com/users/suenot', {
-    headers: { 'Accept': 'application/vnd.github.v3+json' }
+    headers: { Accept: 'application/vnd.github.v3+json' },
   });
   const userData = await userRes.json();
   repoCount = String(userData.public_repos ?? '450+');
 
-  // Paginate through all repos to sum stars
   let totalStars = 0;
   let page = 1;
   while (true) {
     const reposRes = await fetch(
       `https://api.github.com/users/suenot/repos?per_page=100&page=${page}&type=owner`,
-      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+      { headers: { Accept: 'application/vnd.github.v3+json' } },
     );
     const repos: { stargazers_count: number; fork: boolean }[] = await reposRes.json();
     if (!Array.isArray(repos) || repos.length === 0) break;
-    totalStars += repos.filter(r => !r.fork).reduce((s, r) => s + r.stargazers_count, 0);
+    totalStars += repos.filter((repo) => !repo.fork).reduce((sum, repo) => sum + repo.stargazers_count, 0);
     if (repos.length < 100) break;
     page++;
   }
   starCount = totalStars > 0 ? String(totalStars) : '650+';
 } catch {
-  // fallback to hardcoded values
+  // Build remains deterministic when GitHub is unavailable.
 }
 
-const DEV_START_YEAR = 2006;
-const TRADING_START_YEAR = 2011;
 const currentYear = new Date().getFullYear();
-const yearsDev = `${currentYear - DEV_START_YEAR}+`;
-const yearsTrading = `${currentYear - TRADING_START_YEAR}+`;
-
 const stats = [
-  { value: yearsDev, label: t.stat_dev },
-  { value: yearsTrading, label: t.stat_trading },
-  { value: starCount, label: t.stat_stars },
-  { value: repoCount, label: t.stat_repos },
+  { value: `${currentYear - 2006}+`, label: t.stat_dev, code: 'EXP/DEV' },
+  { value: `${currentYear - 2011}+`, label: t.stat_trading, code: 'EXP/MKT' },
+  { value: starCount, label: t.stat_stars, code: 'GH/STAR' },
+  { value: repoCount, label: t.stat_repos, code: 'GH/REPO' },
+];
+
+const orderBook = [
+  ['67244.5', '0.250', '11.597', '67240.0', '1.350'],
+  ['67244.0', '1.102', '11.347', '67239.5', '0.950'],
+  ['67243.5', '0.880', '10.245', '67239.0', '1.100'],
+  ['67243.0', '1.004', '9.365', '67238.5', '0.780'],
+  ['67242.5', '2.531', '8.361', '67238.0', '2.450'],
+  ['67242.0', '0.409', '5.839', '67237.5', '1.020'],
+  ['67241.5', '1.350', '5.430', '67237.0', '0.880'],
 ];
 ---
 
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-  <!-- Background gradient (fallback for no-WebGL / reduced-motion) -->
-  <div class="absolute inset-0 bg-gradient-to-br from-violet-950/30 via-transparent to-blue-950/20 pointer-events-none"></div>
-  <!-- WebGL shader canvas (aurora) -->
-  <canvas
-    id="hero-shader-canvas"
-    class="absolute inset-0 w-full h-full pointer-events-none opacity-50 mix-blend-screen"
-    aria-hidden="true"
-  ></canvas>
-  <!-- Readability scrim: darkens area behind the text -->
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style="background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(10,10,20,0.78) 0%, rgba(10,10,20,0.45) 45%, transparent 75%);"
-    aria-hidden="true"
-  ></div>
-  <!-- Grid pattern -->
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 64px 64px;"></div>
+<section id="top" class="hero terminal-section" aria-labelledby="hero-title">
+  <div class="hero__frame terminal-container">
+    <div class="hero__primary">
+      <div class="hero__status terminal-kicker">
+        <span class="hero__online" aria-hidden="true"></span>
+        <span>[ SUENOT // SYSTEM ONLINE ]</span>
+        <span class="hero__revision">REV 26.08</span>
+      </div>
 
-  <div class="relative max-w-6xl mx-auto px-6 text-center">
-    <!-- Status badge -->
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-mono mb-8">
-      <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-      {t.badge}
+      <div class="hero__name-block">
+        <span class="hero__rail" aria-hidden="true">C3 / 487</span>
+        <h1 id="hero-title" class="hero__name display-type"><span>Eugen</span><span>Soloviov</span></h1>
+      </div>
+
+      <p class="hero__tagline">{t.tagline}</p>
+      <p class="hero__description">{t.description}</p>
+      <p class="hero__roles">┌ &nbsp;{t.badge}&nbsp; ┘</p>
+
+      <div class="hero__actions">
+        <a href="#projects" class="terminal-button hero__button">
+          <span aria-hidden="true">→</span>
+          <span>[ {t.cta_projects} ]</span>
+        </a>
+        <a href="#contact" class="terminal-link hero__contact">{t.cta_contact} / COMM-LINK</a>
+      </div>
     </div>
 
-    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-6">
-      <span class="text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.6)]">Eugen</span>
-      <br />
-      <span class="bg-gradient-to-r from-fuchsia-300 via-pink-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_2px_24px_rgba(0,0,0,0.6)]">Soloviov</span>
-    </h1>
+    <aside class="hero__telemetry" aria-label="Trading and infrastructure telemetry">
+      <section class="telemetry telemetry--book">
+        <header><span>ORDER BOOK · BTC-USD</span><span>LIVE</span></header>
+        <div class="book__head"><span>PRICE</span><span>SIZE</span><span>PRICE</span><span>SIZE</span></div>
+        <div class="book__rows">
+          {orderBook.map((row, index) => (
+            <div class:list={["book__row", { "book__row--spread": index === 4 }]}>
+              <data value={row[0]}>{row[0]}</data><data value={row[1]}>{row[1]}</data>
+              <data class="book__ask" value={row[3]}>{row[3]}</data><data value={row[4]}>{row[4]}</data>
+            </div>
+          ))}
+        </div>
+        <div class="book__depth" aria-hidden="true">
+          <svg viewBox="0 0 520 132" preserveAspectRatio="none">
+            <path class="depth__grid" d="M0 26.5H520M0 66.5H520M0 106.5H520M130 0V132M260 0V132M390 0V132" />
+            <path class="depth__bid" d="M0 22H34V28H69V37H104V48H139V56H174V70H208V81H234V106H260" />
+            <path class="depth__ask" d="M260 106H283V81H312V72H346V63H378V53H409V43H441V31H474V20H520V132H260Z" />
+            <path class="depth__mid" d="M260 0V132" />
+          </svg>
+        </div>
+      </section>
 
-    <p class="text-xl sm:text-2xl text-gray-400 font-light max-w-2xl mx-auto mb-4">
-      {t.tagline}
-    </p>
+      <section class="telemetry telemetry--network">
+        <header><span>NETWORK TOPOLOGY</span><span>NODES / 08</span></header>
+        <svg class="network" viewBox="0 0 360 206" role="img" aria-label="Server network topology diagram">
+          <g class="network__links">
+            <path d="M42 92L112 34L191 25L305 88L296 163L201 178L103 169Z" />
+            <path d="M42 92L180 104L305 88M112 34L180 104L103 169M191 25L180 104L296 163M180 104L201 178" />
+          </g>
+          <g class="network__nodes">
+            <circle cx="42" cy="92" r="4"/><circle cx="112" cy="34" r="4"/><circle cx="191" cy="25" r="4"/>
+            <circle cx="305" cy="88" r="4"/><circle cx="296" cy="163" r="4"/><circle cx="201" cy="178" r="4"/>
+            <circle cx="103" cy="169" r="4"/><rect x="174" y="98" width="12" height="12"/>
+          </g>
+          <g class="network__labels">
+            <text x="29" y="111">FRA</text><text x="98" y="25">LDN</text><text x="199" y="18">AMS</text>
+            <text x="311" y="87">TYO</text><text x="302" y="170">NY4</text><text x="206" y="195">CHI</text>
+            <text x="76" y="188">SGP</text><text x="192" y="101">CORE/GW</text>
+          </g>
+        </svg>
+      </section>
+    </aside>
 
-    <p class="text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">
-      {t.description}
-    </p>
-
-    <div class="flex flex-wrap items-center justify-center gap-4">
-      <a
-        href="#projects"
-        class="px-6 py-3 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-medium transition-colors duration-200"
-      >
-        {t.cta_projects}
-      </a>
-      <a
-        href="#contact"
-        class="px-6 py-3 rounded-lg border border-white/10 hover:border-white/20 text-gray-300 hover:text-white font-medium transition-all duration-200"
-      >
-        {t.cta_contact}
-      </a>
-    </div>
-
-    <!-- Stats row -->
-    <div class="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
-      {stats.map((stat) => (
-        <div class="text-center">
-          <div class="text-2xl font-bold text-white">{stat.value}</div>
-          <div class="text-xs text-gray-400 mt-1">{stat.label}</div>
+    <div class="hero__stats" aria-label="Career and GitHub statistics">
+      {stats.map((stat, index) => (
+        <div class="hero__stat">
+          <span class="hero__stat-index">0{index + 1}</span>
+          <data value={stat.value}>{stat.value}</data>
+          <span>{stat.label}</span>
+          <samp>[ {stat.code} ]</samp>
         </div>
       ))}
+      <div class="hero__clock" aria-hidden="true">
+        <span>UTC +03:00</span>
+        <strong>{currentYear}</strong>
+      </div>
     </div>
   </div>
 </section>
 
-<script>
-  // Lightweight WebGL aurora shader for the hero background.
-  // Designed for low-end hardware: 0.5x render resolution, ~30fps cap,
-  // pauses when off-screen or tab hidden, respects prefers-reduced-motion.
-  (() => {
-    const canvas = document.getElementById('hero-shader-canvas') as HTMLCanvasElement | null;
-    if (!canvas) return;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return;
-
-    const gl = canvas.getContext('webgl', {
-      antialias: false,
-      alpha: true,
-      premultipliedAlpha: false,
-      powerPreference: 'low-power',
-    }) as WebGLRenderingContext | null;
-    if (!gl) return;
-
-    const vertSrc = `
-      attribute vec2 a_pos;
-      void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-    `;
-
-    // Cheap aurora: two stacked sine bands warped by a tiny noise.
-    // No loops over noise octaves — keeps fragment cost minimal.
-    const fragSrc = `
-      precision mediump float;
-      uniform vec2 u_res;
-      uniform float u_time;
-      uniform vec2 u_mouse;     // UV space, smoothed
-      uniform float u_mouseAmp; // 0..1, fades in after first move
-
-      // Hash + value noise (single octave, very cheap)
-      float hash(vec2 p) {
-        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-      }
-      float noise(vec2 p) {
-        vec2 i = floor(p);
-        vec2 f = fract(p);
-        vec2 u = f * f * (3.0 - 2.0 * f);
-        float a = hash(i);
-        float b = hash(i + vec2(1.0, 0.0));
-        float c = hash(i + vec2(0.0, 1.0));
-        float d = hash(i + vec2(1.0, 1.0));
-        return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-      }
-
-      void main() {
-        vec2 uv = gl_FragCoord.xy / u_res.xy;
-        float aspect = u_res.x / u_res.y;
-        vec2 p = uv;
-        p.x *= aspect;
-
-        // Mouse in aspect-corrected space; distance-based falloff
-        vec2 m = u_mouse;
-        m.x *= aspect;
-        vec2 toMouse = p - m;
-        float d2 = dot(toMouse, toMouse);
-        // Soft attractor radius ~0.35 (squared 0.1225)
-        float pull = exp(-d2 * 8.0) * u_mouseAmp;
-
-        float t = u_time * 0.08;
-
-        // Bands warp toward cursor: their y center is pulled by 'pull'
-        float warp = noise(p * 1.4 + vec2(t, -t * 0.7)) * 0.35;
-        float yA = 0.55 + warp + sin(p.x * 1.7 + t * 1.3) * 0.12;
-        float yB = 0.30 - warp * 0.6 + cos(p.x * 1.1 - t) * 0.10;
-        // Lift bands toward mouse y (small offset)
-        yA = mix(yA, m.y / aspect, pull * 0.35);
-        yB = mix(yB, m.y / aspect, pull * 0.25);
-
-        float bandA = exp(-pow((p.y - yA) * 3.2, 2.0));
-        float bandB = exp(-pow((p.y - yB) * 4.0, 2.0));
-
-        // Palette: violet -> blue, matching site theme
-        vec3 violet = vec3(0.55, 0.30, 0.95);
-        vec3 blue   = vec3(0.20, 0.45, 0.95);
-        vec3 cyan   = vec3(0.30, 0.80, 1.00);
-        vec3 deep   = vec3(0.05, 0.02, 0.15);
-
-        vec3 col = deep;
-        col += violet * bandA * (0.85 + pull * 0.4);
-        col += blue   * bandB * (0.75 + pull * 0.3);
-
-        // Soft cursor halo — adds a cyan glow under the pointer
-        float halo = exp(-d2 * 25.0) * u_mouseAmp;
-        col += cyan * halo * 0.55;
-
-        // Subtle vertical falloff so bottom isn't too bright
-        col *= smoothstep(-0.2, 0.6, 1.0 - uv.y) * 0.6 + 0.4;
-
-        // INVERTED vignette: darker in the center (where text lives),
-        // brighter at the edges so the aurora frames the content.
-        vec2 cv = uv - 0.5;
-        cv.x *= aspect;
-        float r = length(cv);
-        float centerDim = smoothstep(0.0, 0.55, r);   // 0 in center -> 1 at edge
-        float edgeFade  = smoothstep(1.15, 0.55, length(uv - 0.5)); // soft outer fade
-        col *= centerDim * edgeFade;
-
-        gl_FragColor = vec4(col, 1.0);
-      }
-    `;
-
-    function compile(type: number, src: string): WebGLShader | null {
-      const s = gl!.createShader(type);
-      if (!s) return null;
-      gl!.shaderSource(s, src);
-      gl!.compileShader(s);
-      if (!gl!.getShaderParameter(s, gl!.COMPILE_STATUS)) {
-        gl!.deleteShader(s);
-        return null;
-      }
-      return s;
-    }
-
-    const vs = compile(gl.VERTEX_SHADER, vertSrc);
-    const fs = compile(gl.FRAGMENT_SHADER, fragSrc);
-    if (!vs || !fs) return;
-
-    const prog = gl.createProgram();
-    if (!prog) return;
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
-      gl.STATIC_DRAW,
-    );
-    const loc = gl.getAttribLocation(prog, 'a_pos');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const uRes = gl.getUniformLocation(prog, 'u_res');
-    const uTime = gl.getUniformLocation(prog, 'u_time');
-    const uMouse = gl.getUniformLocation(prog, 'u_mouse');
-    const uMouseAmp = gl.getUniformLocation(prog, 'u_mouseAmp');
-
-    // Mouse: target (raw) and current (smoothed) positions in 0..1 UV.
-    // y is flipped so it matches gl_FragCoord (origin bottom-left).
-    const target = { x: 0.5, y: 0.5 };
-    const current = { x: 0.5, y: 0.5 };
-    let amp = 0;            // smoothed activation [0..1]
-    let targetAmp = 0;      // 1 when pointer is over the section
-    const section = canvas.parentElement; // the <section>
-    function onMove(e: PointerEvent) {
-      if (!section) return;
-      const r = section.getBoundingClientRect();
-      target.x = (e.clientX - r.left) / r.width;
-      target.y = 1.0 - (e.clientY - r.top) / r.height;
-      targetAmp = 1;
-    }
-    function onLeave() { targetAmp = 0; }
-    if (section) {
-      section.addEventListener('pointermove', onMove, { passive: true });
-      section.addEventListener('pointerleave', onLeave, { passive: true });
-    }
-
-    // 0.5x resolution; cap pixel cost on hi-DPI screens too.
-    const RENDER_SCALE = 0.5;
-    function resize() {
-      const w = Math.max(1, Math.floor(canvas!.clientWidth * RENDER_SCALE));
-      const h = Math.max(1, Math.floor(canvas!.clientHeight * RENDER_SCALE));
-      if (canvas!.width !== w || canvas!.height !== h) {
-        canvas!.width = w;
-        canvas!.height = h;
-        gl!.viewport(0, 0, w, h);
-      }
-    }
-
-    let visible = true;
-    let inView = true;
-    const io = new IntersectionObserver(
-      (entries) => { inView = entries[0]?.isIntersecting ?? true; },
-      { threshold: 0 },
-    );
-    io.observe(canvas);
-    document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
-    window.addEventListener('resize', resize, { passive: true });
-
-    const FRAME_MS = 1000 / 30; // cap ~30fps
-    let last = 0;
-    const start = performance.now();
-
-    function frame(now: number) {
-      requestAnimationFrame(frame);
-      if (!visible || !inView) return;
-      if (now - last < FRAME_MS) return;
-      last = now;
-      // Lerp mouse + amplitude so motion feels organic, not jittery.
-      current.x += (target.x - current.x) * 0.12;
-      current.y += (target.y - current.y) * 0.12;
-      amp += (targetAmp - amp) * 0.06;
-      resize();
-      gl!.uniform2f(uRes, canvas!.width, canvas!.height);
-      gl!.uniform1f(uTime, (now - start) * 0.001);
-      gl!.uniform2f(uMouse, current.x, current.y);
-      gl!.uniform1f(uMouseAmp, amp);
-      gl!.drawArrays(gl!.TRIANGLES, 0, 6);
-    }
-    requestAnimationFrame(frame);
-  })();
-</script>
-
 <style>
-  #hero-shader-canvas {
-    /* Let the browser scale the small canvas smoothly. */
-    image-rendering: auto;
+  .hero { min-height: 100dvh; padding-block-start: 4.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .hero__frame { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(26rem, .98fr); }
+  .hero__primary { position: relative; min-width: 0; padding: clamp(2rem, 5vw, 5.5rem) clamp(1rem, 3.4vw, 3.75rem) 2.25rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .hero__status { display: flex; align-items: center; gap: .7rem; margin-block-end: clamp(3rem, 7vw, 7rem); }
+  .hero__revision { margin-inline-start: auto; color: var(--terminal-muted, #747a75); }
+  .hero__online { inline-size: .4rem; block-size: .4rem; background: #4af626; }
+  .hero__name-block { position: relative; padding-inline-start: 3.4rem; }
+  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: #ff3b30; font: 600 .62rem/1 var(--font-mono, monospace); letter-spacing: .12em; border-inline-start: 2px solid #ff3b30; padding-inline-start: .55rem; }
+  .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5rem, 9.4vw, 10.75rem); font-weight: 900; letter-spacing: -.075em; line-height: .78; text-transform: uppercase; }
+  .hero__name span { display: block; }
+  .hero__tagline { margin: 1.75rem 0 0 3.4rem; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.85rem, 1.35vw, 1.25rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .hero__description { max-inline-size: 42rem; margin: 1.1rem 0 0 3.4rem; color: var(--terminal-muted, #8b908c); font: .82rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
+  .hero__roles { margin: 1.45rem 0 0 3.4rem; color: var(--terminal-muted, #8b908c); font: .68rem/1.6 var(--font-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
+  .hero__actions { display: flex; align-items: center; gap: 2rem; margin: 1.6rem 0 0 3.4rem; }
+  .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .68rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: #ff3b30; font-size: 1.5rem; }
+  .hero__button:hover { background: var(--terminal-fg, #e7e9e3); color: var(--terminal-bg, #0b0d0c); }
+  .hero__contact { color: var(--terminal-muted, #8b908c); font: .67rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: .45rem; }
+  .hero__contact:hover { color: #ff3b30; }
+  .hero__telemetry { display: grid; grid-template-columns: 1.08fr .92fr; align-content: start; min-width: 0; padding: clamp(2rem, 5vw, 5.5rem) clamp(1rem, 2vw, 2rem); gap: 1rem; }
+  .telemetry { min-width: 0; border: 1px solid var(--terminal-line, #303431); color: var(--terminal-muted, #8b908c); }
+  .telemetry header { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem .7rem; border-block-end: 1px solid var(--terminal-line, #303431); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .12em; }
+  .book__head, .book__row { display: grid; grid-template-columns: 1.1fr .8fr 1.1fr .8fr; gap: .4rem; align-items: center; padding-inline: .7rem; font: .53rem/1.5 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
+  .book__head { padding-block: .55rem .3rem; color: #5d625e; letter-spacing: .07em; }
+  .book__row { position: relative; min-block-size: 1.3rem; }
+  .book__row--spread { background: #171a18; }
+  .book__row--spread::after { content: "SPREAD 0.5"; position: absolute; inset-inline: 43% auto; inset-block-start: -.2rem; color: #5d625e; font-size: .42rem; }
+  .book__ask { color: #ff3b30; }
+  .book__depth { block-size: 8.5rem; margin: .65rem; border-block-start: 1px solid var(--terminal-line, #303431); }
+  .book__depth svg { inline-size: 100%; block-size: 100%; overflow: visible; }
+  .depth__grid { fill: none; stroke: #282c29; stroke-width: 1; stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
+  .depth__bid { fill: none; stroke: #606661; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+  .depth__ask { fill: #ff3b3018; stroke: #ff3b30; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+  .depth__mid { stroke: #686e69; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+  .telemetry--network { align-self: start; }
+  .network { display: block; inline-size: 100%; aspect-ratio: 1.42; }
+  .network__links { fill: none; stroke: #424743; stroke-width: 1; stroke-dasharray: 2 3; }
+  .network__nodes { fill: #8d938e; }
+  .network__labels { fill: #858b86; font: 8px var(--font-mono, monospace); letter-spacing: 1px; }
+  .hero__stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr) .48fr; border-block-start: 1px solid var(--terminal-line, #303431); }
+  .hero__stat { display: grid; grid-template-columns: auto 1fr; min-block-size: 8rem; padding: 1.1rem 1.4rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .hero__stat-index { color: var(--terminal-muted, #747a75); font: .65rem/1 var(--font-mono, monospace); }
+  .hero__stat data { justify-self: end; color: var(--terminal-fg, #e7e9e3); font: 700 clamp(1.5rem, 2.6vw, 2.7rem)/.9 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
+  .hero__stat > span:not(.hero__stat-index), .hero__stat samp { align-self: end; color: var(--terminal-muted, #8b908c); font: .57rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .hero__stat samp { justify-self: end; }
+  .hero__clock { display: grid; align-content: space-between; padding: 1.1rem; color: var(--terminal-muted, #8b908c); font: .6rem/1.5 var(--font-mono, monospace); }
+  .hero__clock strong { color: var(--terminal-fg, #e7e9e3); font-size: 1rem; font-weight: 500; }
+  .hero a:focus-visible { outline: 2px solid #ff3b30; outline-offset: 4px; }
+
+  @media (max-width: 1100px) {
+    .hero__frame { grid-template-columns: 1fr; }
+    .hero__primary { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
+    .hero__telemetry { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    .hero { padding-block-start: 3.75rem; }
+    .hero__primary { padding-block-start: 2.2rem; }
+    .hero__status { margin-block-end: 3.5rem; }
+    .hero__revision { display: none; }
+    .hero__name-block { padding-inline-start: 1.55rem; }
+    .hero__rail { font-size: .5rem; }
+    .hero__name { font-size: clamp(3.55rem, 20vw, 6.7rem); line-height: .81; }
+    .hero__tagline, .hero__description, .hero__roles, .hero__actions { margin-inline-start: 1.55rem; }
+    .hero__actions { align-items: flex-start; flex-direction: column; }
+    .hero__telemetry { grid-template-columns: 1fr; }
+    .telemetry--network { display: none; }
+    .hero__stats { grid-template-columns: 1fr 1fr; }
+    .hero__stat { min-block-size: 6.8rem; border-block-end: 1px solid var(--terminal-line, #303431); }
+    .hero__clock { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero *, .hero *::before, .hero *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
   }
 </style>

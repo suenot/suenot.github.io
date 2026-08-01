@@ -1,4 +1,6 @@
 ---
+import { type Locale } from '../i18n/config';
+
 interface Props {
   title: string;
   description: string;
@@ -7,39 +9,320 @@ interface Props {
   heroImage?: string;
   slug: string;
   readMoreLabel: string;
+  locale: Locale;
+  featured?: boolean;
+  index?: number;
 }
 
-const { title, description, pubDate, tags, heroImage, slug, readMoreLabel } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  tags,
+  heroImage,
+  slug,
+  readMoreLabel,
+  locale,
+  featured = false,
+  index = 0,
+} = Astro.props;
 
-const formattedDate = pubDate.toLocaleDateString('en-US', {
+const formattedDate = pubDate.toLocaleDateString(locale === 'en' ? 'en-US' : locale, {
   year: 'numeric',
   month: 'short',
-  day: 'numeric',
+  day: '2-digit',
 });
+
+const sequence = String(index + 1).padStart(2, '0');
+const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
 ---
 
-<article class="group rounded-xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-violet-500/20 transition-all duration-300">
-  {heroImage && (
-    <div class="aspect-video bg-surface-2 overflow-hidden">
-      <img src={heroImage} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-    </div>
-  )}
-  <div class="p-5">
-    <time datetime={pubDate.toISOString()} class="text-xs text-gray-500 font-mono">{formattedDate}</time>
-    <h3 class="text-lg font-semibold text-white mt-2 mb-2 group-hover:text-violet-300 transition-colors">
-      <a href={slug} class="hover:underline">{title}</a>
-    </h3>
-    <p class="text-sm text-gray-400 leading-relaxed mb-4">{description}</p>
-    <div class="flex flex-wrap gap-1.5 mb-3">
-      {tags.slice(0, 3).map((tag) => (
-        <span class="px-2 py-0.5 text-xs rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">{tag}</span>
-      ))}
-    </div>
-    <a href={slug} class="inline-flex items-center gap-1.5 text-xs text-violet-400 font-medium group-hover:text-violet-300 transition-colors duration-200">
-      <span>{readMoreLabel}</span>
-      <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-      </svg>
+<article class:list={['blog-entry', { 'blog-entry--featured': featured }]}>
+  {featured && heroImage && (
+    <a href={slug} class="blog-entry__media" tabindex="-1" aria-hidden="true">
+      <img src={heroImage} alt="" class="blog-entry__image" loading="eager" />
+      <span class="blog-entry__scanline"></span>
     </a>
+  )}
+
+  <div class="blog-entry__body">
+    <div class="blog-entry__meta">
+      <span aria-hidden="true">LOG/{sequence}</span>
+      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      {tags[0] && <span class="blog-entry__channel">CH/{tags[0]}</span>}
+    </div>
+
+    <h2 class:list={['blog-entry__title', { 'display-type': featured }]}>
+      <a href={slug}>{title}</a>
+    </h2>
+
+    <p class="blog-entry__description">{description}</p>
+
+    <div class="blog-entry__footer">
+      <ul class="blog-entry__tags" aria-label="Tags">
+        {tags.slice(0, featured ? 4 : 3).map((tag) => <li>#{tag}</li>)}
+      </ul>
+      <a href={slug} class="blog-entry__link">
+        <span>{readMoreLabel}</span>
+        <span aria-hidden="true">{forwardArrow}</span>
+      </a>
+    </div>
   </div>
 </article>
+
+<style>
+  .blog-entry {
+    --entry-border: rgba(231, 233, 227, 0.14);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--entry-border);
+    background: rgba(231, 233, 227, 0.012);
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .blog-entry::before {
+    content: '';
+    position: absolute;
+    inset-block: -1px;
+    inset-inline-start: 0;
+    width: 2px;
+    background: #ff3b30;
+    opacity: 0;
+    transform: scaleY(0.35);
+    transform-origin: center;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .blog-entry:hover,
+  .blog-entry:focus-within {
+    border-color: rgba(231, 233, 227, 0.32);
+    background: rgba(231, 233, 227, 0.035);
+  }
+
+  .blog-entry:hover::before,
+  .blog-entry:focus-within::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .blog-entry__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 1.4rem 0;
+  }
+
+  .blog-entry__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    color: rgba(231, 233, 227, 0.62);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.66rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .blog-entry__channel {
+    color: rgba(255, 59, 48, 0.78);
+  }
+
+  .blog-entry__title {
+    max-width: 26ch;
+    margin: 0.75rem 0 0;
+    color: #e7e9e3;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    font-weight: 650;
+    letter-spacing: -0.035em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+
+  .blog-entry__title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .blog-entry__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .blog-entry__title a:focus-visible {
+    outline: 1px solid #ff3b30;
+    outline-offset: 5px;
+  }
+
+  .blog-entry__description {
+    max-width: 65ch;
+    margin: 0.7rem 0 0;
+    color: rgba(231, 233, 227, 0.58);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .blog-entry__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .blog-entry__tags {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(231, 233, 227, 0.58);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .blog-entry__link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.55rem;
+    color: #e7e9e3;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .blog-entry__link span:last-child {
+    color: #ff3b30;
+    transition: transform 180ms ease;
+  }
+
+  .blog-entry:hover .blog-entry__link span:last-child {
+    transform: translateX(0.2rem);
+  }
+
+  .blog-entry--featured {
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    border: 1px solid var(--entry-border);
+  }
+
+  .blog-entry--featured::before {
+    inset-block: 0;
+  }
+
+  .blog-entry--featured .blog-entry__body {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 24rem;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .blog-entry--featured .blog-entry__title {
+    max-width: 17ch;
+    margin-top: auto;
+    font-size: clamp(2.15rem, 5vw, 4.6rem);
+    font-weight: 750;
+    letter-spacing: -0.06em;
+    line-height: 0.93;
+  }
+
+  .blog-entry--featured .blog-entry__description {
+    max-width: 54ch;
+    font-size: 0.98rem;
+  }
+
+  .blog-entry__media {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 24rem;
+    overflow: hidden;
+    border-inline-start: 1px solid var(--entry-border);
+    background: #111411;
+  }
+
+  .blog-entry__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.08) brightness(0.62);
+    transform: scale(1.01);
+    transition: filter 400ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .blog-entry:hover .blog-entry__image {
+    filter: grayscale(0.75) contrast(1.08) brightness(0.75);
+    transform: scale(1.035);
+  }
+
+  .blog-entry__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(11, 13, 12, 0.35), transparent 40%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  .blog-entry__scanline {
+    position: absolute;
+    inset-inline: 0;
+    top: 22%;
+    height: 1px;
+    background: rgba(255, 59, 48, 0.7);
+    box-shadow: 0 0 18px rgba(255, 59, 48, 0.35);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 760px) {
+    .blog-entry--featured {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-entry--featured .blog-entry__body {
+      grid-column: 1;
+      grid-row: 2;
+      min-height: 23rem;
+      padding: 1.35rem;
+    }
+
+    .blog-entry__media {
+      grid-column: 1;
+      grid-row: 1;
+      min-height: 13rem;
+      border-inline-start: 0;
+      border-bottom: 1px solid var(--entry-border);
+    }
+
+    .blog-entry__footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .blog-entry__link {
+      align-self: flex-end;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blog-entry,
+    .blog-entry::before,
+    .blog-entry__image,
+    .blog-entry__link span:last-child {
+      transition: none;
+    }
+  }
+</style>

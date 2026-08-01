@@ -3,8 +3,9 @@ import Analytics from '@vercel/analytics/astro';
 import SEO from '../components/SEO.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { type Locale, isRtl, defaultLocale } from '../i18n/config';
+import { type Locale, isRtl, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
+import '../styles/global.css';
 
 interface Props {
   title?: string;
@@ -15,6 +16,7 @@ interface Props {
   publishedDate?: Date;
   modifiedDate?: Date;
   tags?: string[];
+  availableLocales?: readonly Locale[];
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   publishedDate,
   modifiedDate,
   tags,
+  availableLocales = locales,
 } = Astro.props;
 
 const dir = isRtl(locale) ? 'rtl' : 'ltr';
@@ -34,7 +37,7 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
 ---
 
 <!doctype html>
-<html lang={locale} dir={dir} class="scroll-smooth">
+<html lang={locale} dir={dir}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,9 +55,10 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
       tags={tags}
     />
   </head>
-  <body class="bg-[#0A0A14] text-gray-100 font-sans antialiased flex flex-col min-h-screen">
-    <Nav locale={locale} />
-    <main class="flex-1">
+  <body class="terminal-shell">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Nav locale={locale} availableLocales={availableLocales} />
+    <main id="main-content">
       <slot />
     </main>
     <Footer locale={locale} />

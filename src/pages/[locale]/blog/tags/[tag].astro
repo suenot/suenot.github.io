@@ -12,18 +12,10 @@ import { getPostHeroImage } from '../../../../lib/blog';
 export const getStaticPaths = (async () => {
   const paths = [];
   for (const locale of locales) {
-    const posts = await getCollection('blog', ({ id, data }) => {
-      return id.startsWith(`${locale}/`) && !data.draft;
-    });
+    const posts = await getCollection('blog', ({ id, data }) => id.startsWith(`${locale}/`) && !data.draft);
     const tags = new Set<string>();
     posts.forEach((post) => post.data.tags.forEach((tag) => tags.add(tag)));
-
-    for (const tag of tags) {
-      paths.push({
-        params: { locale, tag },
-        props: { tag },
-      });
-    }
+    for (const tag of tags) paths.push({ params: { locale, tag }, props: { tag } });
   }
   return paths;
 }) satisfies GetStaticPaths;
@@ -32,56 +24,36 @@ const { locale } = Astro.params as { locale: Locale };
 const { tag } = Astro.props;
 const t = useTranslations(locale);
 const prefix = getLocalePrefix(locale);
-
-const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith(`${locale}/`) && !data.draft;
-});
-
-const posts = allPosts
-  .filter((post) => post.data.tags.includes(tag))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-
+const backArrow = locale === 'ar' ? '\u2192' : '\u2190';
+const allPosts = await getCollection('blog', ({ id, data }) => id.startsWith(`${locale}/`) && !data.draft);
+const localizedPosts = await getCollection('blog', ({ data }) => !data.draft);
+const availableTagLocales = locales.filter((candidateLocale) => localizedPosts.some(
+  (post) => post.id.startsWith(`${candidateLocale}/`) && post.data.tags.includes(tag),
+));
+const posts = allPosts.filter((post) => post.data.tags.includes(tag)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const allTags = allPosts.flatMap((post) => post.data.tags);
-
-function getSlug(id: string): string {
-  return id.replace(`${locale}/`, '').replace(/\.md$/, '');
-}
+const getSlug = (id: string) => id.replace(`${locale}/`, '').replace(/\.md$/, '');
 ---
 
-<Layout
-  title={`${t('blog.postsTagged')} "${tag}" — Eugen Soloviov`}
-  description={t('blog.description')}
-  locale={locale}
->
-  <div class="pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-6">
-      <header class="mb-8">
-        <a href={`${prefix}/blog/`} class="text-sm text-gray-400 hover:text-violet-300 transition-colors">
-          {t('blog.backToBlog')}
-        </a>
-        <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3 mt-4">
-          {t('blog.postsTagged')} <span class="text-violet-400">#{tag}</span>
-        </h1>
-        <p class="text-gray-500">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+<Layout title={`${t('blog.postsTagged')} "${tag}" — Eugen Soloviov`} description={t('blog.description')} locale={locale} availableLocales={availableTagLocales}>
+  <section class="terminal-section tag-shell">
+    <div class="terminal-container tag-container">
+      <a href={`${prefix}/blog/`} class="tag-back"><span aria-hidden="true">{backArrow}</span> {t('blog.backToBlog').replace(/^[←→]\s*/, '')}</a>
+      <header class="tag-header">
+        <div><p>CHANNEL / ACTIVE</p><h1 class="display-type"><span>#</span>{tag}</h1></div>
+        <div class="tag-header__meta"><span>{t('blog.postsTagged')}</span><strong>{String(posts.length).padStart(2, '0')} / {t('blog.archiveCount')}</strong></div>
       </header>
-
-      <div class="mb-10 flex justify-end border-y border-white/10 py-4">
-        <FilterDrawer tags={allTags} locale={locale} activeTag={tag} activeCount={1} />
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <BlogCard
-            title={post.data.title}
-            description={post.data.description}
-            pubDate={post.data.pubDate}
-            tags={post.data.tags}
-            heroImage={getPostHeroImage(getSlug(post.id), post.data.heroImage)}
-            slug={`${prefix}/blog/${getSlug(post.id)}/`}
-            readMoreLabel={t('blog.readMore')}
-          />
+      <div class="tag-controls"><a href={`${prefix}/blog/tags/`}>{t('blog.allTags')}</a><FilterDrawer tags={allTags} locale={locale} activeTag={tag} activeCount={1} /></div>
+      <div class="tag-stream">
+        {posts.map((post, index) => (
+          <div data-blog-post data-title={post.data.title} data-description={post.data.description} data-slug={getSlug(post.id)} data-tags={post.data.tags.join(',')} data-pubdate={post.data.pubDate.toISOString()}>
+            <BlogCard title={post.data.title} description={post.data.description} pubDate={post.data.pubDate} tags={post.data.tags} heroImage={getPostHeroImage(getSlug(post.id), post.data.heroImage)} slug={`${prefix}/blog/${getSlug(post.id)}/`} readMoreLabel={t('blog.readMore')} locale={locale} index={index} />
+          </div>
         ))}
       </div>
     </div>
-  </div>
+  </section>
+  <style>
+    .tag-shell{position:relative;min-height:100dvh;padding:clamp(7rem,11vw,10rem) 0 clamp(5rem,10vw,9rem);overflow:clip;background:#0b0d0c}.tag-shell:before{content:'';position:absolute;inset:0;width:auto;height:auto;border:0;pointer-events:none;opacity:.2;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(231,233,227,.025) 3px 4px)}.tag-container{position:relative;width:min(100% - 2rem,86rem);margin-inline:auto}.tag-back{display:inline-flex;gap:.6rem;margin-bottom:3rem;color:rgba(231,233,227,.48);font:.67rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.11em;text-decoration:none;text-transform:uppercase}.tag-back span,.tag-header h1 span{color:#ff3b30}.tag-back:hover{color:#e7e9e3}.tag-back:focus-visible,.tag-controls>a:focus-visible{outline:1px solid #ff3b30;outline-offset:4px}.tag-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,22rem);gap:3rem;align-items:end;border-block:1px solid rgba(231,233,227,.2);padding:clamp(2rem,5vw,4.5rem) 0}.tag-header p{margin:0 0 1rem;color:#ff3b30;font:.65rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.14em}.tag-header h1{max-width:15ch;margin:0;color:#e7e9e3;font-size:clamp(2.7rem,8vw,7rem);font-weight:780;letter-spacing:-.07em;line-height:.86;overflow-wrap:anywhere}.tag-header__meta{display:flex;justify-content:space-between;gap:1rem;border-block:1px solid rgba(231,233,227,.14);padding:.75rem 0;color:rgba(231,233,227,.35);font:.63rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}.tag-header__meta strong{color:rgba(231,233,227,.7);font-weight:400;font-variant-numeric:tabular-nums}.tag-controls{display:flex;justify-content:flex-end;gap:.7rem;margin:1.25rem 0 clamp(3rem,6vw,5rem)}.tag-controls>a{display:inline-flex;align-items:center;border:1px solid rgba(231,233,227,.2);padding:0 1rem;color:rgba(231,233,227,.55);font:.68rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.12em;text-decoration:none;text-transform:uppercase}.tag-controls>a:hover{border-color:rgba(255,59,48,.72);color:#e7e9e3}.tag-stream{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,5vw,5rem);border-bottom:1px solid rgba(231,233,227,.14)}.tag-stream>div:nth-child(odd){border-inline-end:1px solid rgba(231,233,227,.12);padding-inline-end:clamp(2rem,5vw,5rem)}@media(max-width:740px){.tag-header{grid-template-columns:1fr}.tag-stream{grid-template-columns:1fr}.tag-stream>div:nth-child(odd){border-inline-end:0;padding-inline-end:0}}@media(max-width:480px){.tag-container{width:min(100% - 1.25rem,86rem)}}
+  </style>
 </Layout>

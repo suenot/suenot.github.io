@@ -2,44 +2,79 @@
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
-interface Props {
-  locale?: Locale;
-}
+interface Props { locale?: Locale; }
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).about;
 ---
 
-<section id="about" class="py-24 bg-[#0D0D1A]">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="grid md:grid-cols-2 gap-16 items-start">
-      <div>
-        <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
-        <h2 class="text-3xl font-bold text-white mb-6">{t.heading}</h2>
-        <div class="space-y-4 text-gray-400 leading-relaxed">
-          <p>
-            {t.p1_prefix}<span class="text-white font-medium">Marketmaker.cc</span>{t.p1_marketmaker_suffix}<span class="text-white font-medium">Cmdop.com</span>{t.p1_cmdop_suffix}
-          </p>
-          <p>
-            {t.p2_prefix}<span class="text-white font-medium">{t.p2_year}</span>{t.p2_suffix}
-          </p>
-          <p>
-            {t.p3_prefix}<span class="text-white font-medium">{t.p3_langs}</span>{t.p3_suffix}
-          </p>
-        </div>
-      </div>
+<section id="about" class="about terminal-section" aria-labelledby="about-heading">
+  <div class="terminal-container about__layout">
+    <header class="about__header">
+      <p class="terminal-kicker">{t.eyebrow} / IDENTITY FILE</p>
+      <h2 id="about-heading" class="terminal-heading">{t.heading}</h2>
+      <span class="about__code" aria-hidden="true">[ BIO / 01 ]</span>
+    </header>
 
-      <div class="space-y-4">
-        <p class="text-violet-400 font-mono text-sm mb-3">{t.focus_eyebrow}</p>
-        {t.focus.map((item) => (
-          <div class="flex gap-4 p-4 rounded-lg bg-white/[0.03] border border-white/5 hover:border-violet-500/20 transition-colors">
-            <span class="text-2xl">{item.icon}</span>
-            <div>
-              <h3 class="text-white font-medium text-sm">{item.title}</h3>
-              <p class="text-gray-400 text-sm mt-1">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div class="about__statement">
+      <p>
+        {t.p1_prefix}<strong>Marketmaker.cc</strong>{t.p1_marketmaker_suffix}<strong>Cmdop.com</strong>{t.p1_cmdop_suffix}
+      </p>
+      <p>
+        {t.p2_prefix}<strong>{t.p2_year}</strong>{t.p2_suffix}
+      </p>
+      <p>
+        {t.p3_prefix}<strong>{t.p3_langs}</strong>{t.p3_suffix}
+      </p>
     </div>
+
+    <aside class="about__focus" aria-label={t.focus_eyebrow}>
+      <div class="about__focus-head">
+        <span>{t.focus_eyebrow}</span><span>STATUS / ACTIVE</span>
+      </div>
+      <ol>
+        {t.focus.map((item, index) => (
+          <li>
+            <span class="about__focus-index">0{index + 1}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </div>
+            <span class="about__marker" aria-hidden="true">+</span>
+          </li>
+        ))}
+      </ol>
+    </aside>
   </div>
 </section>
+
+<style>
+  .about { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .about__layout { display: grid; grid-template-columns: minmax(16rem, .7fr) minmax(22rem, 1.1fr) minmax(25rem, 1.2fr); }
+  .about__header, .about__statement, .about__focus { min-width: 0; padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 3vw, 3.2rem); }
+  .about__header, .about__statement { border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .about__header { display: flex; flex-direction: column; align-items: flex-start; }
+  .about__header .terminal-heading { max-inline-size: 8ch; margin-block-start: 1.4rem; font-size: clamp(3.4rem, 5.6vw, 6.5rem); line-height: .86; }
+  .about__code { margin-block-start: auto; padding-block-start: 4rem; color: #ff3b30; font: .62rem/1 var(--font-mono, monospace); letter-spacing: .13em; }
+  .about__statement { display: grid; align-content: center; gap: 2rem; color: var(--terminal-muted, #969b97); font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.65; }
+  .about__statement p { max-inline-size: 48rem; text-wrap: pretty; }
+  .about__statement strong { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
+  .about__focus { padding-inline: 0; }
+  .about__focus-head { display: flex; justify-content: space-between; gap: 1rem; padding: 0 1.5rem 1rem; color: var(--terminal-muted, #747a75); font: .6rem/1 var(--font-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
+  .about__focus ol { border-block-start: 1px solid var(--terminal-line, #303431); }
+  .about__focus li { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; padding: 1.35rem 1.5rem; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .about__focus-index { color: #ff3b30; font: .6rem/1.4 var(--font-mono, monospace); }
+  .about__focus h3 { color: var(--terminal-fg, #e7e9e3); font: 650 .8rem/1.2 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .about__focus li p { max-inline-size: 46ch; margin-block-start: .55rem; color: var(--terminal-muted, #8b908c); font: .69rem/1.55 var(--font-mono, monospace); }
+  .about__marker { align-self: end; color: var(--terminal-muted, #747a75); font: 1rem/1 var(--font-mono, monospace); }
+  @media (max-width: 1050px) {
+    .about__layout { grid-template-columns: .8fr 1.2fr; }
+    .about__statement { border-inline-end: 0; }
+    .about__focus { grid-column: 1 / -1; border-block-start: 1px solid var(--terminal-line, #303431); }
+  }
+  @media (max-width: 700px) {
+    .about__layout { grid-template-columns: 1fr; }
+    .about__header, .about__statement { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
+    .about__focus { grid-column: auto; border-block-start: 0; }
+    .about__code { padding-block-start: 3rem; }
+  }
+</style>

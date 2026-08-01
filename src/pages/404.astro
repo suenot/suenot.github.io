@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { defaultLocale } from '../i18n/config';
+---
+
+<Layout title="404 — Signal not found" description="The requested route does not exist." availableLocales={[defaultLocale]}>
+  <section class="error-screen" aria-labelledby="error-title">
+    <div class="error-marker" aria-hidden="true">ERR / 404</div>
+    <div class="error-grid terminal-grid">
+      <div class="error-primary terminal-panel">
+        <p class="terminal-kicker">ROUTE RESOLUTION FAILED</p>
+        <h1 id="error-title" class="display-type">SIGNAL<br />NOT FOUND</h1>
+        <p>The requested route is outside the current system index.</p>
+        <a class="terminal-button terminal-button--primary" href="/">[ RETURN TO SYSTEM ] →</a>
+      </div>
+      <div class="error-log terminal-panel" aria-label="Error telemetry">
+        <dl>
+          <div><dt>STATUS</dt><dd class="terminal-accent">404 / NOT FOUND</dd></div>
+          <div><dt>ORIGIN</dt><dd>SUENOT.GITHUB.IO</dd></div>
+          <div><dt>ACTION</dt><dd>RE-ENTER FROM ROOT</dd></div>
+          <div><dt>SYSTEM</dt><dd>ONLINE</dd></div>
+        </dl>
+        <pre aria-hidden="true">&gt; resolve(route)
+&gt; index lookup ........ failed
+&gt; fallback protocol ... ready
+&gt; awaiting operator input _</pre>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .error-screen {
+    display: grid;
+    min-height: 100dvh;
+    padding: calc(var(--terminal-header) + 2rem) clamp(1rem, 3vw, 3rem) 2rem;
+    grid-template-columns: minmax(3rem, 0.15fr) minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .error-marker {
+    border-inline-end: 1px solid var(--terminal-accent);
+    color: var(--terminal-accent);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    writing-mode: vertical-rl;
+  }
+
+  .error-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+  }
+
+  .error-primary,
+  .error-log {
+    display: flex;
+    min-height: calc(100dvh - var(--terminal-header) - 4rem);
+    padding: clamp(1.5rem, 5vw, 5rem);
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  h1 {
+    margin: 2rem 0;
+    font-size: clamp(5rem, 14vw, 14rem);
+    color: var(--terminal-ink);
+  }
+
+  .error-primary p:not(.terminal-kicker) {
+    max-width: 36rem;
+    margin: 0 0 2rem;
+    color: var(--terminal-muted);
+  }
+
+  .error-primary a {
+    align-self: flex-start;
+  }
+
+  .error-log {
+    justify-content: space-between;
+    color: var(--terminal-muted);
+  }
+
+  .error-log dl {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+  }
+
+  .error-log dl div {
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--terminal-line);
+  }
+
+  .error-log dt {
+    color: var(--terminal-dim);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+
+  .error-log dd {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+  }
+
+  pre {
+    overflow: auto;
+    margin: 2rem 0 0;
+    color: var(--terminal-dim);
+    font: inherit;
+    font-size: 0.6875rem;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 48rem) {
+    .error-screen {
+      grid-template-columns: 1rem minmax(0, 1fr);
+    }
+
+    .error-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .error-primary,
+    .error-log {
+      min-height: auto;
+      padding: 1.5rem;
+    }
+  }
+</style>

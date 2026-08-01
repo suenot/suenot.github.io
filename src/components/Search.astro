@@ -2,71 +2,167 @@
 interface Props {
   placeholder: string;
   noResultsText: string;
+  clearLabel: string;
+  resultsText: string;
 }
 
-const { placeholder, noResultsText } = Astro.props;
+const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
 ---
 
-<div class="relative">
+<div class="terminal-search" role="search" data-search-root data-no-results={noResultsText} data-results-text={resultsText}>
+  <label for="blog-search" class="sr-only">{placeholder}</label>
+  <span class="terminal-search__prompt" aria-hidden="true">/</span>
   <input
     type="search"
     id="blog-search"
     placeholder={placeholder}
-    class="w-full px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-colors text-sm"
+    autocomplete="off"
+    spellcheck="false"
+    class="terminal-search__input"
   />
-  <div id="search-results" class="mt-2"></div>
+  <button
+    type="button"
+    class="terminal-search__clear"
+    data-search-clear
+    aria-label={clearLabel}
+    hidden
+  >
+    <span aria-hidden="true">ESC</span>
+  </button>
+  <p id="blog-search-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
 </div>
 
-<script>
-  interface PostData {
-    title: string;
-    description: string;
-    slug: string;
-    tags: string[];
-    pubDate: string;
+<style>
+  .terminal-search {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    min-width: 0;
+    border: 1px solid rgba(231, 233, 227, 0.2);
+    background: rgba(231, 233, 227, 0.025);
+    color: #e7e9e3;
+    transition: border-color 180ms ease, background-color 180ms ease;
   }
 
-  const input = document.getElementById('blog-search') as HTMLInputElement;
+  .terminal-search:focus-within {
+    border-color: rgba(255, 59, 48, 0.82);
+    background: rgba(231, 233, 227, 0.045);
+  }
 
-  function showAll() {
-    document.querySelectorAll('[data-blog-post]').forEach((el) => {
-      (el as HTMLElement).style.display = '';
-    });
+  .terminal-search__prompt {
+    padding-inline-start: 1rem;
+    color: #ff3b30;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 1rem;
+  }
+
+  .terminal-search__input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    padding: 0.85rem 0.8rem;
+    color: #e7e9e3;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  .terminal-search__input::placeholder {
+    color: rgba(231, 233, 227, 0.38);
+    opacity: 1;
+  }
+
+  .terminal-search__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .terminal-search__clear {
+    align-self: stretch;
+    border: 0;
+    border-inline-start: 1px solid rgba(231, 233, 227, 0.14);
+    background: transparent;
+    padding: 0 0.8rem;
+    color: rgba(231, 233, 227, 0.48);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+  }
+
+  .terminal-search__clear:hover {
+    color: #ff3b30;
+  }
+
+  .terminal-search__clear:focus-visible {
+    outline: 1px solid #ff3b30;
+    outline-offset: -3px;
+  }
+</style>
+
+<script>
+  const searchRoot = document.querySelector<HTMLElement>('[data-search-root]');
+  const noResultsText = searchRoot?.dataset.noResults ?? '';
+  const resultsText = searchRoot?.dataset.resultsText ?? '{count}';
+  const input = document.getElementById('blog-search') as HTMLInputElement | null;
+  const clear = document.querySelector('[data-search-clear]') as HTMLButtonElement | null;
+  const status = document.getElementById('blog-search-status');
+
+  function getPosts() {
+    return Array.from(document.querySelectorAll<HTMLElement>('[data-blog-post]'));
+  }
+
+  function setSearchStatus(visibleCount: number, hasQuery: boolean) {
     const noResults = document.getElementById('no-results');
-    if (noResults) noResults.style.display = 'none';
+    if (noResults) noResults.hidden = visibleCount !== 0 || !hasQuery;
+    if (status) status.textContent = hasQuery
+      ? visibleCount === 0
+        ? noResultsText
+        : resultsText.replace('{count}', String(visibleCount))
+      : '';
   }
 
   function filterPosts(query: string) {
-    if (!query.trim()) {
-      showAll();
-      return;
-    }
-
-    const q = query.toLowerCase();
-    const posts = Array.from(document.querySelectorAll('[data-blog-post]')).map((el) => ({
-      title: (el as HTMLElement).dataset.title || '',
-      description: (el as HTMLElement).dataset.description || '',
-      tags: (el as HTMLElement).dataset.tags?.split(',') || [],
-    }));
-
+    const normalizedQuery = query.trim().toLocaleLowerCase();
+    const posts = getPosts();
     let visibleCount = 0;
-    document.querySelectorAll('[data-blog-post]').forEach((el, i) => {
-      const post = posts[i];
-      const match =
-        post.title.toLowerCase().includes(q) ||
-        post.description.toLowerCase().includes(q) ||
-        post.tags.some((t) => t.toLowerCase().includes(q));
-      (el as HTMLElement).style.display = match ? '' : 'none';
-      if (match) visibleCount++;
+
+    posts.forEach((post) => {
+      const haystack = [
+        post.dataset.title,
+        post.dataset.description,
+        post.dataset.tags,
+      ].filter(Boolean).join(' ').toLocaleLowerCase();
+      const matches = !normalizedQuery || haystack.includes(normalizedQuery);
+      post.hidden = !matches;
+      if (matches) visibleCount += 1;
     });
 
-    const noResults = document.getElementById('no-results');
-    if (noResults) {
-      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    const archiveStream = document.querySelector<HTMLElement>('.archive-stream');
+    if (archiveStream) {
+      const streamHasResults = Array.from(
+        archiveStream.querySelectorAll<HTMLElement>('[data-blog-post]')
+      ).some((post) => !post.hidden);
+      archiveStream.hidden = Boolean(normalizedQuery) && !streamHasResults;
     }
+
+    if (clear) clear.hidden = !normalizedQuery;
+    setSearchStatus(visibleCount, Boolean(normalizedQuery));
   }
 
-  input?.addEventListener('input', (e) => {
-    filterPosts((e.target as HTMLInputElement).value);
+  input?.addEventListener('input', () => filterPosts(input.value));
+  input?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && input.value) {
+      input.value = '';
+      filterPosts('');
+    }
+  });
+
+  clear?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = '';
+    filterPosts('');
+    input.focus();
   });
 </script>

@@ -3,83 +3,154 @@ import { locales, localeNames, defaultLocale, type Locale } from '../i18n/config
 
 interface Props {
   currentLocale: Locale;
+  availableLocales?: readonly Locale[];
 }
 
-const { currentLocale } = Astro.props;
+const { currentLocale, availableLocales = locales } = Astro.props;
+const selectableLocales = locales.filter((locale) => availableLocales.includes(locale));
 
-/**
- * Build the URL for switching to a different locale.
- * Default locale (en) lives at / (no prefix).
- * Other locales live at /ru/, /zh/, etc.
- */
 function getLocaleUrl(targetLocale: Locale): string {
   const pathname = Astro.url.pathname;
-
-  // Strip the current locale prefix from the path to get the "bare" path
-  let barePath: string;
-  if (currentLocale === defaultLocale) {
-    // Currently on root (no locale prefix), e.g. /blog/some-post/
-    barePath = pathname;
-  } else {
-    // Currently on /ru/blog/some-post/ → strip /ru
-    barePath = pathname.replace(`/${currentLocale}`, '') || '/';
-  }
-
-  // Build the target URL
-  if (targetLocale === defaultLocale) {
-    return barePath;
-  }
-  return `/${targetLocale}${barePath}`;
+  const localePrefix = new RegExp(`^/(?:${locales.join('|')})(?=/|$)`);
+  const barePath = pathname.replace(localePrefix, '') || '/';
+  return targetLocale === defaultLocale ? barePath : `/${targetLocale}${barePath}`;
 }
 ---
 
-<div class="relative" id="lang-selector">
+{selectableLocales.length > 1 ? (
+<div class="language-selector" id="lang-selector">
   <button
     id="lang-toggle"
-    class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-mono"
+    class="language-toggle"
+    type="button"
     aria-label="Select language"
     aria-expanded="false"
+    aria-controls="lang-menu"
   >
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-    </svg>
-    <span>{localeNames[currentLocale]}</span>
-    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
+    <span>{currentLocale.toUpperCase()}</span>
+    <span aria-hidden="true">▾</span>
   </button>
-  <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 py-1 w-40 rounded-lg bg-surface-2 border border-white/10 shadow-xl z-50">
-    {locales.map((loc) => (
-      <a
-        href={getLocaleUrl(loc)}
-        class:list={[
-          'block px-3 py-2 text-sm transition-colors',
-          loc === currentLocale
-            ? 'text-violet-300 bg-violet-500/10'
-            : 'text-gray-400 hover:text-white hover:bg-white/[0.03]',
-        ]}
-      >
-        {localeNames[loc]}
+  <div id="lang-menu" class="language-menu" hidden>
+    <div class="language-menu-label">LOCALE / SELECT</div>
+    {selectableLocales.map((loc) => (
+      <a href={getLocaleUrl(loc)} aria-current={loc === currentLocale ? 'true' : undefined}>
+        <span>{String(locales.indexOf(loc) + 1).padStart(2, '0')}</span>
+        <span>{localeNames[loc]}</span>
+        <span>{loc.toUpperCase()}</span>
       </a>
     ))}
   </div>
 </div>
+) : (
+  <span class="language-static" aria-label={localeNames[currentLocale]}>{currentLocale.toUpperCase()}</span>
+)}
+
+<style>
+  .language-selector {
+    position: relative;
+  }
+
+  .language-static {
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+  }
+
+  .language-toggle {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.45rem;
+    padding-inline: 0.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+  }
+
+  .language-toggle:hover {
+    color: var(--terminal-ink);
+  }
+
+  .language-menu {
+    position: absolute;
+    z-index: 70;
+    inset-block-start: calc(100% + 1rem);
+    inset-inline-end: 0;
+    width: min(19rem, calc(100vw - 2rem));
+    border: 1px solid var(--terminal-line-strong);
+    background: var(--terminal-bg);
+  }
+
+  .language-menu-label {
+    padding: 0.65rem 0.75rem;
+    border-block-end: 1px solid var(--terminal-line);
+    color: var(--terminal-dim);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+  }
+
+  .language-menu a {
+    display: grid;
+    align-items: center;
+    padding: 0.7rem 0.75rem;
+    border-block-end: 1px solid var(--terminal-line);
+    grid-template-columns: 2rem 1fr auto;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    text-decoration: none;
+  }
+
+  .language-menu a:last-child {
+    border-block-end: 0;
+  }
+
+  .language-menu a:hover,
+  .language-menu a[aria-current='true'] {
+    background: var(--terminal-panel-strong);
+    color: var(--terminal-ink);
+  }
+
+  .language-menu a[aria-current='true'] span:first-child {
+    color: var(--terminal-accent);
+  }
+
+  @media (max-width: 38rem) {
+    .language-menu {
+      position: fixed;
+      inset-block-start: calc(var(--terminal-header) + 0.5rem);
+      inset-inline: 1rem;
+      width: auto;
+    }
+  }
+</style>
 
 <script>
   const toggle = document.getElementById('lang-toggle');
   const menu = document.getElementById('lang-menu');
 
+  const close = () => {
+    toggle?.setAttribute('aria-expanded', 'false');
+    menu?.setAttribute('hidden', '');
+  };
+
   toggle?.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!expanded));
-    menu?.classList.toggle('hidden');
+    if (expanded) menu?.setAttribute('hidden', '');
+    else menu?.removeAttribute('hidden');
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', (event) => {
     const selector = document.getElementById('lang-selector');
-    if (selector && !selector.contains(e.target as Node)) {
-      toggle?.setAttribute('aria-expanded', 'false');
-      menu?.classList.add('hidden');
+    if (selector && !selector.contains(event.target as Node)) close();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      close();
+      toggle.focus();
     }
   });
 </script>

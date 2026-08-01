@@ -1,5 +1,5 @@
 ---
-import { locales, localeNames, type Locale } from '../i18n/config';
+import { localeNames, type Locale } from '../i18n/config';
 import { getLocalePrefix } from '../i18n/utils';
 
 interface Props {
@@ -10,20 +10,61 @@ interface Props {
 }
 
 const { currentLocale, slug, availableLocales, label } = Astro.props;
-
-const otherLocales = availableLocales.filter((l) => l !== currentLocale);
+const otherLocales = availableLocales.filter((locale) => locale !== currentLocale);
 ---
 
 {otherLocales.length > 0 && (
-  <div class="flex items-center gap-3 text-sm flex-wrap">
-    <span class="text-gray-500">{label}:</span>
-    {otherLocales.map((loc) => (
-      <a
-        href={`${getLocalePrefix(loc)}/blog/${slug}/`}
-        class="px-2 py-1 rounded bg-white/[0.03] border border-white/5 text-gray-400 hover:text-violet-300 hover:border-violet-500/20 transition-colors"
-      >
-        {localeNames[loc]}
+  <nav class="translation-links" aria-label={label}>
+    <span class="translation-links__label">{label}</span>
+    <span class="translation-links__line" aria-hidden="true"></span>
+    {otherLocales.map((locale) => (
+      <a href={`${getLocalePrefix(locale)}/blog/${slug}/`} hreflang={locale}>
+        <span>{locale.toUpperCase()}</span>
+        <span>{localeNames[locale]}</span>
       </a>
     ))}
-  </div>
+  </nav>
 )}
+
+<style>
+  .translation-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem 0.8rem;
+    color: rgba(231, 233, 227, 0.4);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .translation-links__line {
+    width: 1.5rem;
+    height: 1px;
+    background: rgba(231, 233, 227, 0.2);
+  }
+
+  .translation-links a {
+    display: inline-flex;
+    gap: 0.45rem;
+    border-inline-start: 1px solid rgba(231, 233, 227, 0.16);
+    padding-inline-start: 0.8rem;
+    color: rgba(231, 233, 227, 0.56);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .translation-links a span:first-child {
+    color: #ff3b30;
+  }
+
+  .translation-links a:hover {
+    color: #e7e9e3;
+  }
+
+  .translation-links a:focus-visible {
+    outline: 1px solid #ff3b30;
+    outline-offset: 3px;
+  }
+</style>

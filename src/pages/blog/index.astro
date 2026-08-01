@@ -3,22 +3,15 @@ import Layout from '../../layouts/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import Search from '../../components/Search.astro';
 import FilterDrawer from '../../components/FilterDrawer.astro';
-import { defaultLocale, type Locale } from '../../i18n/config';
+import { defaultLocale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
 import { getPostHeroImage } from '../../lib/blog';
 import { getCollection } from 'astro:content';
 
 const locale = defaultLocale;
 const t = useTranslations(locale);
-
-const allPosts = await getCollection('blog', ({ data, id }) => {
-  return id.startsWith(`${locale}/`) && !data.draft;
-});
-
-const posts = allPosts.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
-
+const allPosts = await getCollection('blog', ({ data, id }) => id.startsWith(`${locale}/`) && !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const allTags = posts.flatMap((post) => post.data.tags);
 
 function getSlug(id: string): string {
@@ -26,47 +19,368 @@ function getSlug(id: string): string {
 }
 ---
 
-<Layout
-  title={`${t('blog.title')} — Eugen Soloviov`}
-  description={t('blog.description')}
-  locale={locale}
->
-  <div class="pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-6">
-      <header class="mb-8">
-        <div class="mb-4 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/70">
-          <span class="h-px w-8 bg-amber-200/60"></span>
-          <span>{posts.length} {t('blog.archiveCount')}</span>
+<Layout title={`${t('blog.title')} — Eugen Soloviov`} description={t('blog.description')} locale={locale}>
+  <section class="terminal-section archive-shell">
+    <div class="terminal-container archive-container">
+      <header class="archive-hero">
+        <div class="archive-hero__kicker">
+          <span class="archive-hero__status"></span>
+          <span>WRITING SYSTEM / ONLINE</span>
         </div>
-        <h1 class="mb-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">{t('blog.title')}</h1>
-        <p class="max-w-2xl text-lg leading-relaxed text-gray-400">{t('blog.description')}</p>
+        <div class="archive-hero__grid">
+          <div>
+            <p class="archive-hero__code">04 / TRANSMISSION LOG</p>
+            <h1 class="display-type">{t('blog.title')}</h1>
+          </div>
+          <div class="archive-hero__summary">
+            <p>{t('blog.description')}</p>
+            <dl>
+              <div><dt>ENTRIES</dt><dd>{String(posts.length).padStart(2, '0')}</dd></div>
+              <div><dt>CHANNELS</dt><dd>{String(new Set(allTags).size).padStart(2, '0')}</dd></div>
+              <div><dt>FEED</dt><dd><a href="/blog/feed.xml">RSS</a></dd></div>
+            </dl>
+          </div>
+        </div>
       </header>
 
-      <div class="mb-10 flex items-center justify-between gap-4 border-y border-white/10 py-4">
-        <p class="text-sm text-gray-500">{t('blog.searchHint')}</p>
-        <FilterDrawer tags={allTags} locale={locale}>
-          <Search slot="search" placeholder={t('blog.search')} noResultsText={t('blog.noResults')} />
-        </FilterDrawer>
+      <div class="archive-controls">
+        <Search placeholder={t('blog.search')} noResultsText={t('blog.noResults')} clearLabel={t('blog.clearSearch')} resultsText={t('blog.resultsFound')} />
+        <a href="/blog/tags/" class="archive-controls__tags">{t('blog.tags')}</a>
+        <FilterDrawer tags={allTags} locale={locale} />
       </div>
 
-      <div id="blog-search-container" data-no-results={t('blog.noResults')}>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <div data-blog-post data-title={post.data.title} data-description={post.data.description} data-slug={getSlug(post.id)} data-tags={post.data.tags.join(',')} data-pubdate={post.data.pubDate.toISOString()}>
-              <BlogCard
-                title={post.data.title}
-                description={post.data.description}
-                pubDate={post.data.pubDate}
-                tags={post.data.tags}
-                heroImage={getPostHeroImage(getSlug(post.id), post.data.heroImage)}
-                slug={`/blog/${getSlug(post.id)}/`}
-                readMoreLabel={t('blog.readMore')}
-              />
+      <div id="blog-search-container" class="archive-feed" data-no-results={t('blog.noResults')}>
+        {posts[0] && (
+          <div
+            class="archive-featured"
+            data-blog-post
+            data-title={posts[0].data.title}
+            data-description={posts[0].data.description}
+            data-slug={getSlug(posts[0].id)}
+            data-tags={posts[0].data.tags.join(',')}
+            data-pubdate={posts[0].data.pubDate.toISOString()}
+          >
+            <BlogCard
+              title={posts[0].data.title}
+              description={posts[0].data.description}
+              pubDate={posts[0].data.pubDate}
+              tags={posts[0].data.tags}
+              heroImage={getPostHeroImage(getSlug(posts[0].id), posts[0].data.heroImage)}
+              slug={`/blog/${getSlug(posts[0].id)}/`}
+              readMoreLabel={t('blog.readMore')}
+              locale={locale}
+              featured
+              index={0}
+            />
+          </div>
+        )}
+
+        {posts.length > 1 && (
+          <section class="archive-stream" aria-labelledby="archive-stream-title">
+            <header class="archive-stream__header">
+              <h2 id="archive-stream-title">{t('blog.allPosts')}</h2>
+              <span>{String(posts.length - 1).padStart(2, '0')} / {t('blog.archiveCount')}</span>
+            </header>
+            <div class="archive-stream__list">
+              {posts.slice(1).map((post, index) => (
+                <div
+                  data-blog-post
+                  data-title={post.data.title}
+                  data-description={post.data.description}
+                  data-slug={getSlug(post.id)}
+                  data-tags={post.data.tags.join(',')}
+                  data-pubdate={post.data.pubDate.toISOString()}
+                >
+                  <BlogCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    pubDate={post.data.pubDate}
+                    tags={post.data.tags}
+                    heroImage={getPostHeroImage(getSlug(post.id), post.data.heroImage)}
+                    slug={`/blog/${getSlug(post.id)}/`}
+                    readMoreLabel={t('blog.readMore')}
+                    locale={locale}
+                    index={index + 1}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <p id="no-results" class="text-center text-gray-500 py-12 hidden">{t('blog.noResults')}</p>
+          </section>
+        )}
+        <p id="no-results" class="archive-empty" hidden>{t('blog.noResults')}</p>
       </div>
     </div>
-  </div>
+  </section>
+
+  <style>
+    .archive-shell {
+      position: relative;
+      min-height: 100dvh;
+      overflow: clip;
+      padding: clamp(7rem, 11vw, 10rem) 0 clamp(5rem, 10vw, 9rem);
+      background: #0b0d0c;
+    }
+
+    .archive-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
+      border: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(231, 233, 227, 0.025) 3px 4px);
+    }
+
+    .archive-container {
+      position: relative;
+      width: min(100% - 2rem, 86rem);
+      margin-inline: auto;
+    }
+
+    .archive-hero {
+      border-top: 1px solid rgba(231, 233, 227, 0.2);
+      border-bottom: 1px solid rgba(231, 233, 227, 0.2);
+    }
+
+    .archive-hero__kicker,
+    .archive-hero__code,
+    .archive-hero__summary dl,
+    .archive-stream__header {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      text-transform: uppercase;
+    }
+
+    .archive-hero__kicker {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      padding: 0.7rem 0;
+      color: rgba(231, 233, 227, 0.42);
+      font-size: 0.62rem;
+      letter-spacing: 0.13em;
+    }
+
+    .archive-hero__status {
+      width: 0.38rem;
+      height: 0.38rem;
+      background: #46e35f;
+    }
+
+    .archive-hero__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr);
+    }
+
+    .archive-hero__grid > div:first-child {
+      padding: clamp(2.5rem, 6vw, 5.5rem) clamp(2rem, 6vw, 6rem) clamp(2.5rem, 6vw, 5.5rem) 0;
+    }
+
+    .archive-hero__code {
+      margin: 0 0 1.2rem;
+      color: #ff3b30;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+    }
+
+    .archive-hero h1 {
+      margin: 0;
+      color: #e7e9e3;
+      font-size: clamp(5rem, 16vw, 13rem);
+      font-weight: 800;
+      letter-spacing: -0.085em;
+      line-height: 0.72;
+      text-transform: uppercase;
+    }
+
+    .archive-hero__summary {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border-inline-start: 1px solid rgba(231, 233, 227, 0.16);
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    .archive-hero__summary > p {
+      max-width: 35ch;
+      margin: 0 0 2rem;
+      color: rgba(231, 233, 227, 0.55);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .archive-hero__summary dl {
+      margin: 0;
+      border-top: 1px solid rgba(231, 233, 227, 0.13);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+    }
+
+    .archive-hero__summary dl > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      padding: 0.65rem 0;
+    }
+
+    .archive-hero__summary dt {
+      color: rgba(231, 233, 227, 0.3);
+    }
+
+    .archive-hero__summary dd {
+      margin: 0;
+      color: rgba(231, 233, 227, 0.7);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .archive-hero__summary a {
+      color: #ff3b30;
+      text-decoration: none;
+    }
+
+    .archive-controls {
+      display: grid;
+      grid-template-columns: minmax(12rem, 1fr) auto auto;
+      gap: 0.7rem;
+      margin: 1.25rem 0 clamp(3rem, 6vw, 5.5rem);
+    }
+
+    .archive-controls__tags {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(231, 233, 227, 0.2);
+      padding: 0 1rem;
+      color: rgba(231, 233, 227, 0.55);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .archive-controls__tags:hover {
+      border-color: rgba(255, 59, 48, 0.72);
+      color: #e7e9e3;
+    }
+
+    .archive-controls__tags:focus-visible {
+      outline: 1px solid #ff3b30;
+      outline-offset: 3px;
+    }
+
+    .archive-stream {
+      margin-top: clamp(4rem, 8vw, 7rem);
+    }
+
+    .archive-stream__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      border-top: 1px solid rgba(231, 233, 227, 0.22);
+      padding: 0.75rem 0 1.25rem;
+    }
+
+    .archive-stream__header h2 {
+      margin: 0;
+      color: #e7e9e3;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+    }
+
+    .archive-stream__header span {
+      color: rgba(231, 233, 227, 0.32);
+      font-size: 0.62rem;
+      letter-spacing: 0.11em;
+    }
+
+    .archive-stream__list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 5vw, 5rem);
+      border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+    }
+
+    .archive-stream__list > div:nth-child(odd) {
+      border-inline-end: 1px solid rgba(231, 233, 227, 0.12);
+      padding-inline-end: clamp(2rem, 5vw, 5rem);
+    }
+
+    .archive-empty {
+      border: 1px solid rgba(231, 233, 227, 0.16);
+      padding: 4rem 1rem;
+      color: rgba(231, 233, 227, 0.45);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 820px) {
+      .archive-hero__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-hero__summary {
+        border-top: 1px solid rgba(231, 233, 227, 0.16);
+        border-inline-start: 0;
+      }
+
+      .archive-hero__summary dl {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .archive-hero__summary dl > div {
+        display: grid;
+        border-inline-end: 1px solid rgba(231, 233, 227, 0.13);
+        padding-inline: 0.7rem;
+      }
+
+      .archive-stream__list {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-stream__list > div:nth-child(odd) {
+        border-inline-end: 0;
+        padding-inline-end: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .archive-container {
+        width: min(100% - 1.25rem, 86rem);
+      }
+
+      .archive-controls {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .archive-controls :global(.terminal-search) {
+        grid-column: 1 / -1;
+      }
+
+      .archive-controls__tags {
+        justify-content: center;
+        min-height: 2.75rem;
+      }
+
+      .archive-hero__summary dl {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-hero__summary dl > div {
+        display: flex;
+        border-inline-end: 0;
+        padding-inline: 0;
+      }
+    }
+  </style>
 </Layout>

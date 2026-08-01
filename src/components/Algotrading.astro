@@ -2,79 +2,102 @@
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
-interface Props {
-  locale?: Locale;
-}
+interface Props { locale?: Locale; }
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).algotrading;
 
-// Tag chips per section, keyed by section index (same order as t.sections)
-const sectionTags: { name: string; classes: string }[][] = [
-  // 0 Backtesting
-  [
-    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
-    { name: 'Zig', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
-    { name: 'Optuna', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
-  ],
-  // 1 Listings
-  [
-    { name: 'Rust', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
-    { name: 'Zig', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
-    { name: 'gRPC', classes: 'border-green-500/20 bg-green-500/5 text-green-300' },
-  ],
-  // 2 HFT
-  [
-    { name: 'Golang', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
-    { name: 'Rust', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
-    { name: 'C++', classes: 'border-red-500/20 bg-red-500/5 text-red-300' },
-  ],
-  // 3 Arbitrage Systems
-  [
-    { name: 'Go', classes: 'border-blue-500/20 bg-blue-500/5 text-blue-300' },
-    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
-    { name: 'Next.js', classes: 'border-green-500/20 bg-green-500/5 text-green-300' },
-  ],
-  // 4 Portfolio Optimization
-  [
-    { name: 'Python', classes: 'border-violet-500/20 bg-violet-500/5 text-violet-300' },
-    { name: 'SciPy', classes: 'border-orange-500/20 bg-orange-500/5 text-orange-300' },
-    { name: 'Math', classes: 'border-gray-500/20 bg-gray-500/5 text-gray-300' },
-  ],
+const sectionTags = [
+  ['Python', 'Zig', 'Optuna'],
+  ['Rust', 'Zig', 'gRPC'],
+  ['Golang', 'Rust', 'C++'],
+  ['Go', 'Python', 'Next.js'],
+  ['Python', 'SciPy', 'Math'],
 ];
 ---
 
-<section id="algotrading" class="py-24 bg-[#0A0A14]">
-  <div class="max-w-6xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
-    <h2 class="text-3xl font-bold text-white mb-4">{t.heading}</h2>
-    <p class="text-gray-400 mb-12 max-w-xl">
-      {t.intro}
-    </p>
+<section id="algotrading" class="trading terminal-section" aria-labelledby="trading-heading">
+  <div class="terminal-container">
+    <header class="trading__header">
+      <div>
+        <p class="terminal-kicker">{t.eyebrow} / EXECUTION SYSTEMS</p>
+        <h2 id="trading-heading" class="terminal-heading">{t.heading}</h2>
+      </div>
+      <p>{t.intro}</p>
+      <div class="trading__signal" aria-hidden="true">
+        <span>LATENCY ENVELOPE</span>
+        <svg viewBox="0 0 240 55" preserveAspectRatio="none">
+          <path d="M0 38L14 36L28 39L42 29L56 34L70 12L84 36L98 30L112 35L126 26L140 31L154 18L168 34L182 32L196 22L210 36L224 29L240 33" />
+        </svg>
+      </div>
+    </header>
 
-    <div class="space-y-16">
-      {t.sections.map((section, i) => (
-        <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
-          <div class="space-y-4">
-            <h3 class="text-xl font-bold text-white">{section.title}</h3>
-            <p class="text-violet-400 font-mono text-xs uppercase tracking-wider">{section.subtitle}</p>
-            <div class="flex flex-wrap gap-2">
-              {(sectionTags[i] ?? []).map((tag) => (
-                <span class={`text-[10px] px-2 py-0.5 rounded border font-mono ${tag.classes}`}>{tag.name}</span>
-              ))}
+    <ol class="trading__cases">
+      {t.sections.map((section, index) => (
+        <li class="trading__case">
+          <header class="case__header">
+            <span class="case__number">0{index + 1}</span>
+            <p class="case__subtitle">{section.subtitle}</p>
+            <h3 class="display-type">{section.title}</h3>
+            <div class="case__tags">
+              {(sectionTags[index] ?? []).map((tag) => <span>[ {tag} ]</span>)}
             </div>
-          </div>
-          <div class="bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-            <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
-              {section.bullets.map((bullet) => (
-                <li class="flex gap-3">
-                  <span class="text-violet-500 mt-1">▹</span>
-                  <span set:html={bullet} />
+          </header>
+
+          <div class="case__body">
+            <div class="case__meta" aria-hidden="true">
+              <span>UNIT / HFT-{String(index + 1).padStart(2, '0')}</span>
+              <span>MODE / PRODUCTION</span>
+            </div>
+            <ul>
+              {section.bullets.map((bullet, bulletIndex) => (
+                <li>
+                  <span>{String(bulletIndex + 1).padStart(2, '0')}</span>
+                  <p set:html={bullet} />
                 </li>
               ))}
             </ul>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
+
+<style>
+  .trading { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .trading__header { display: grid; grid-template-columns: 1.15fr .7fr .45fr; gap: clamp(2rem, 5vw, 6rem); align-items: end; padding: clamp(3.5rem, 7vw, 7rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .trading__header .terminal-heading { max-inline-size: 12ch; margin-block-start: 1.2rem; font-size: clamp(3.5rem, 6vw, 7rem); line-height: .86; }
+  .trading__header > p { max-inline-size: 48ch; color: var(--terminal-muted, #8b908c); font: .75rem/1.65 var(--font-mono, monospace); text-wrap: pretty; }
+  .trading__signal { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .12em; }
+  .trading__signal svg { display: block; inline-size: 100%; block-size: 3.5rem; margin-block-start: .8rem; border-block: 1px solid var(--terminal-line, #303431); }
+  .trading__signal path { fill: none; stroke: var(--terminal-muted, #747a75); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .trading__cases { counter-reset: cases; }
+  .trading__case { display: grid; grid-template-columns: minmax(17rem, .72fr) minmax(0, 1.28fr); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .trading__case:nth-child(even) .case__header { grid-column: 2; border-inline-end: 0; border-inline-start: 1px solid var(--terminal-line, #303431); }
+  .trading__case:nth-child(even) .case__body { grid-column: 1; grid-row: 1; }
+  .case__header { position: relative; min-block-size: 22rem; padding: 2rem clamp(1rem, 3vw, 3rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .case__number { display: block; color: #ff3b30; font: .75rem/1 var(--font-mono, monospace); }
+  .case__subtitle { margin-block-start: 3.5rem; color: var(--terminal-muted, #8b908c); font: .57rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .case__header h3 { max-inline-size: 12ch; margin-block-start: .65rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(2.1rem, 3.6vw, 4rem); font-weight: 800; letter-spacing: -.045em; line-height: .9; text-transform: uppercase; text-wrap: balance; }
+  .case__tags { position: absolute; inset-block-end: 2rem; inset-inline: clamp(1rem, 3vw, 3rem); display: flex; flex-wrap: wrap; gap: .75rem; color: var(--terminal-muted, #747a75); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .06em; }
+  .case__body { align-self: stretch; padding: 2rem clamp(1rem, 4vw, 4.5rem); }
+  .case__meta { display: flex; justify-content: space-between; gap: 1rem; padding-block-end: 1rem; color: var(--terminal-muted, #666b67); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .case__body > ul > li { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; padding-block: 1.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .case__body li > span { color: #ff3b30; font: .58rem/1.55 var(--font-mono, monospace); }
+  .case__body li p { max-inline-size: 85ch; color: var(--terminal-muted, #969b97); font-size: .83rem; line-height: 1.65; }
+  .case__body li :global(strong) { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
+  @media (max-width: 900px) {
+    .trading__header { grid-template-columns: 1fr 1fr; }
+    .trading__signal { display: none; }
+    .trading__case { grid-template-columns: minmax(14rem, .7fr) 1.3fr; }
+  }
+  @media (max-width: 680px) {
+    .trading__header { grid-template-columns: 1fr; }
+    .trading__case { display: block; }
+    .trading__case:nth-child(even) .case__header { border-inline-start: 0; }
+    .case__header { min-block-size: 17rem; border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
+    .case__subtitle { margin-block-start: 2rem; }
+    .case__tags { inset-block-end: 1.5rem; }
+    .case__body { padding-block-end: 3rem; }
+  }
+</style>

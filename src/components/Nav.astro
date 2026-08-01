@@ -1,134 +1,342 @@
 ---
 import LanguageSelector from './LanguageSelector.astro';
-import { type Locale, defaultLocale } from '../i18n/config';
+import { type Locale, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
 interface Props {
   locale?: Locale;
+  availableLocales?: readonly Locale[];
 }
 
-const { locale = 'en' } = Astro.props;
+const { locale = defaultLocale, availableLocales = locales } = Astro.props;
 const t = useTranslations(locale);
 const prefix = locale === defaultLocale ? '' : `/${locale}`;
+const pathname = Astro.url.pathname;
 
 const links = [
-  { href: `${prefix}/#about`, label: t('nav.about') },
-  { href: `${prefix}/#algotrading`, label: t('nav.algotrading') },
-  { href: `${prefix}/#tech`, label: t('nav.tech') },
-  { href: `${prefix}/#frontier`, label: t('nav.frontier') },
-  { href: `${prefix}/#projects`, label: t('nav.projects') },
-  { href: `${prefix}/#communities`, label: t('nav.communities') },
-  { href: `${prefix}/#contact`, label: t('nav.contact') },
-  { href: `${prefix}/blog/`, label: t('nav.blog') },
+  { code: '01', href: `${prefix}/#about`, label: t('nav.about'), key: 'about' },
+  { code: '02', href: `${prefix}/#algotrading`, label: t('nav.algotrading'), key: 'trading' },
+  { code: '03', href: `${prefix}/#projects`, label: t('nav.projects'), key: 'projects' },
+  { code: '04', href: `${prefix}/blog/`, label: t('nav.blog'), key: 'blog' },
+  { code: '05', href: `${prefix}/#contact`, label: t('nav.contact'), key: 'contact' },
 ];
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0A0A14]/80 backdrop-blur-md border-b border-white/5">
-  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-    <a href={`${prefix}/`} class="font-mono text-violet-400 font-semibold text-sm tracking-wider flex-shrink-0">
-      suenot<span class="text-gray-600">.com</span>
+<nav class="site-nav" aria-label="Primary navigation">
+  <div class="nav-shell">
+    <a class="nav-identity" href={`${prefix}/`} aria-label="Suenot — home">
+      <span class="nav-online" aria-hidden="true"></span>
+      <span>SUENOT</span>
+      <span class="nav-system">// SYSTEM ONLINE</span>
     </a>
 
-    <ul class="hidden lg:flex items-center gap-5 flex-wrap">
-      {links.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class="text-sm text-gray-400 hover:text-white transition-colors duration-200 whitespace-nowrap"
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+    <ul class="nav-index" role="list">
+      {links.map((link) => {
+        const isCurrent = link.key === 'blog' && pathname.includes('/blog');
+        return (
+          <li>
+            <a href={link.href} aria-current={isCurrent ? 'page' : undefined}>
+              <span>{link.code}</span>
+              <span>{link.label}</span>
+            </a>
+          </li>
+        );
+      })}
     </ul>
 
-    <div class="flex items-center gap-3 flex-shrink-0">
-      <LanguageSelector currentLocale={locale} />
-      <a
-        href="https://github.com/suenot"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hidden lg:inline text-sm text-violet-400 hover:text-violet-300 transition-colors font-mono whitespace-nowrap"
-      >
-        github →
-      </a>
+    <div class="nav-actions">
+      <LanguageSelector currentLocale={locale} availableLocales={availableLocales} />
       <button
         id="mobile-menu-toggle"
+        class="nav-toggle"
         type="button"
-        aria-label="Toggle menu"
+        aria-label="Toggle navigation"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="lg:hidden w-9 h-9 inline-flex items-center justify-center rounded-md border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors"
       >
-        <svg id="mobile-menu-icon-open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-        <svg id="mobile-menu-icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <line x1="6" y1="6" x2="18" y2="18" />
-          <line x1="6" y1="18" x2="18" y2="6" />
-        </svg>
+        <span aria-hidden="true">[ MENU ]</span>
       </button>
     </div>
   </div>
 
-  <div
-    id="mobile-menu"
-    class="lg:hidden hidden border-t border-white/5 bg-[#0A0A14]/95 backdrop-blur-md max-h-[calc(100vh-4rem)] overflow-y-auto"
-  >
-    <ul class="px-6 py-4 flex flex-col gap-1">
+  <div id="mobile-menu" class="mobile-menu" aria-hidden="true" inert>
+    <div class="mobile-menu-meta">
+      <span>NAVIGATION INDEX</span>
+      <span>REV / 26.08</span>
+    </div>
+    <ul role="list">
       {links.map((link) => (
         <li>
-          <a
-            href={link.href}
-            data-mobile-nav-link
-            class="block px-3 py-2.5 rounded-md text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
-          >
-            {link.label}
+          <a href={link.href} data-mobile-nav-link>
+            <span>{link.code}</span>
+            <span>{link.label}</span>
+            <span aria-hidden="true">→</span>
           </a>
         </li>
       ))}
-      <li class="mt-2 pt-3 border-t border-white/5">
-        <a
-          href="https://github.com/suenot"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-3 py-2.5 rounded-md text-sm text-violet-400 hover:text-violet-300 hover:bg-white/5 transition-colors font-mono"
-        >
-          github →
-        </a>
-      </li>
     </ul>
+    <a class="mobile-github" href="https://github.com/suenot" target="_blank" rel="noopener noreferrer">
+      GITHUB / SOURCE INDEX ↗
+    </a>
   </div>
 </nav>
 
+<style>
+  .site-nav {
+    position: fixed;
+    z-index: 60;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: var(--terminal-header);
+    border-block-end: 1px solid var(--terminal-line);
+    background: rgba(9, 11, 10, 0.96);
+  }
+
+  .nav-shell {
+    display: grid;
+    width: min(100%, var(--terminal-max));
+    height: 100%;
+    margin-inline: auto;
+    grid-template-columns: minmax(16rem, 1.4fr) minmax(36rem, 3fr) auto;
+  }
+
+  .nav-identity,
+  .nav-actions,
+  .nav-index a {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-identity {
+    gap: 0.65rem;
+    padding-inline: clamp(1rem, 3vw, 3rem);
+    border-inline-end: 1px solid var(--terminal-line);
+    color: var(--terminal-ink);
+  }
+
+  .nav-online {
+    width: 0.42rem;
+    height: 0.42rem;
+    flex: 0 0 auto;
+    background: var(--terminal-online);
+    box-shadow: 0 0 0.7rem rgba(98, 230, 107, 0.42);
+  }
+
+  .nav-system {
+    color: var(--terminal-muted);
+  }
+
+  .nav-index {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    list-style: none;
+  }
+
+  .nav-index li {
+    min-width: 0;
+    border-inline-end: 1px solid var(--terminal-line);
+  }
+
+  .nav-index a {
+    height: 100%;
+    justify-content: center;
+    gap: 0.55rem;
+    padding-inline: 0.75rem;
+    white-space: nowrap;
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .nav-index a span:first-child {
+    color: var(--terminal-dim);
+  }
+
+  .nav-index a:hover,
+  .nav-index a[aria-current='page'] {
+    background: var(--terminal-panel-strong);
+    color: var(--terminal-ink);
+  }
+
+  .nav-index a[aria-current='page'] span:first-child {
+    color: var(--terminal-accent);
+  }
+
+  .nav-actions {
+    gap: 0.75rem;
+    padding-inline: 1rem;
+  }
+
+  .nav-toggle {
+    display: none;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--terminal-line-strong);
+    border-radius: 0;
+    background: transparent;
+    color: var(--terminal-ink);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  @media (max-width: 75rem) {
+    .nav-shell {
+      grid-template-columns: 1fr auto;
+    }
+
+    .nav-index {
+      display: none;
+    }
+
+    .nav-identity {
+      border-inline-end: 1px solid var(--terminal-line);
+    }
+
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset-block-start: var(--terminal-header);
+      inset-inline: 0;
+      bottom: 0;
+      z-index: 59;
+      overflow-y: auto;
+      background: var(--terminal-bg);
+    }
+
+    .mobile-menu[data-open='true'] {
+      display: block;
+    }
+
+    .mobile-menu-meta {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      border-block-end: 1px solid var(--terminal-line);
+      color: var(--terminal-dim);
+      font-size: 0.625rem;
+      letter-spacing: 0.12em;
+    }
+
+    .mobile-menu ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mobile-menu li {
+      border-block-end: 1px solid var(--terminal-line);
+    }
+
+    .mobile-menu li a {
+      display: grid;
+      min-height: 4.75rem;
+      align-items: center;
+      padding-inline: 1rem;
+      grid-template-columns: 3rem 1fr auto;
+      color: var(--terminal-ink);
+      font-family: "Arial Narrow", "Roboto Condensed", sans-serif;
+      font-size: clamp(1.6rem, 7vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .mobile-menu li a span:first-child,
+    .mobile-menu li a span:last-child {
+      color: var(--terminal-accent);
+      font-family: inherit;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+    }
+
+    .mobile-github {
+      display: block;
+      padding: 1rem;
+      color: var(--terminal-muted);
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .nav-system {
+      display: none;
+    }
+
+    .nav-actions {
+      gap: 0.4rem;
+      padding-inline: 0.65rem;
+    }
+  }
+</style>
+
 <script is:inline>
   (() => {
-    const btn = document.getElementById('mobile-menu-toggle');
+    const button = document.getElementById('mobile-menu-toggle');
     const menu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('mobile-menu-icon-open');
-    const iconClose = document.getElementById('mobile-menu-icon-close');
-    if (!btn || !menu || !iconOpen || !iconClose) return;
+    if (!button || !menu) return;
 
-    const setOpen = (open) => {
-      menu.classList.toggle('hidden', !open);
-      iconOpen.classList.toggle('hidden', open);
-      iconClose.classList.toggle('hidden', !open);
-      btn.setAttribute('aria-expanded', String(open));
+    const setOpen = (open, restoreFocus = true) => {
+      menu.toggleAttribute('data-open', open);
+      menu.toggleAttribute('inert', !open);
+      menu.setAttribute('aria-hidden', String(!open));
+      button.setAttribute('aria-expanded', String(open));
+      button.querySelector('span').textContent = open ? '[ CLOSE ]' : '[ MENU ]';
       document.documentElement.classList.toggle('overflow-hidden', open);
+      [document.querySelector('main'), document.querySelector('.site-footer'), document.querySelector('.skip-link')]
+        .filter((element) => element instanceof HTMLElement)
+        .forEach((element) => element.toggleAttribute('inert', open));
+
+      if (open) {
+        document.getElementById('lang-menu')?.setAttribute('hidden', '');
+        document.getElementById('lang-toggle')?.setAttribute('aria-expanded', 'false');
+        menu.querySelector('[data-mobile-nav-link]')?.focus();
+      } else if (restoreFocus && menu.contains(document.activeElement)) {
+        button.focus();
+      }
     };
 
-    btn.addEventListener('click', () => {
-      const isOpen = !menu.classList.contains('hidden');
-      setOpen(!isOpen);
+    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    menu.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
     });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        return;
+      }
 
-    menu.querySelectorAll('[data-mobile-nav-link]').forEach((a) => {
-      a.addEventListener('click', () => setOpen(false));
+      if (event.key === 'Tab' && button.getAttribute('aria-expanded') === 'true') {
+        const focusable = [button, ...menu.querySelectorAll('a[href], button:not([disabled])')];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     });
-
-    const mq = window.matchMedia('(min-width: 1024px)');
-    mq.addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+    window.matchMedia('(min-width: 75rem)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false, false);
+    });
   })();
 </script>

@@ -6,51 +6,38 @@ import { useTranslations } from '../../../../i18n/ui';
 import { getLocalePrefix } from '../../../../i18n/utils';
 import { getCollection } from 'astro:content';
 
-export const getStaticPaths = (() => {
-  return locales.map((locale) => ({ params: { locale } }));
-}) satisfies GetStaticPaths;
-
+export const getStaticPaths = (() => locales.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
 const { locale } = Astro.params as { locale: Locale };
 const t = useTranslations(locale);
 const prefix = getLocalePrefix(locale);
-
-const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith(`${locale}/`) && !data.draft;
-});
-
+const backArrow = locale === 'ar' ? '\u2192' : '\u2190';
+const allPosts = await getCollection('blog', ({ id, data }) => id.startsWith(`${locale}/`) && !data.draft);
 const tagCounts: Record<string, number> = {};
-allPosts.forEach((post) => {
-  post.data.tags.forEach((tag) => {
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-});
-
-const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+allPosts.forEach((post) => post.data.tags.forEach((tag) => { tagCounts[tag] = (tagCounts[tag] || 0) + 1; }));
+const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], locale));
 ---
 
-<Layout
-  title={`${t('blog.tags')} — Eugen Soloviov`}
-  description={t('blog.description')}
-  locale={locale}
->
-  <div class="pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-6">
-      <header class="mb-10">
-        <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3">{t('blog.allTags')}</h1>
-        <p class="text-gray-400 text-lg">{t('blog.description')}</p>
+<Layout title={`${t('blog.tags')} — Eugen Soloviov`} description={t('blog.description')} locale={locale}>
+  <section class="terminal-section taxonomy-shell">
+    <div class="terminal-container taxonomy-container">
+      <a href={`${prefix}/blog/`} class="taxonomy-back"><span aria-hidden="true">{backArrow}</span> {t('blog.backToBlog').replace(/^[←→]\s*/, '')}</a>
+      <header class="taxonomy-header">
+        <div><p>ARCHIVE / CHANNEL INDEX</p><h1 class="display-type">{t('blog.allTags')}</h1></div>
+        <dl><div><dt>CHANNELS</dt><dd>{String(sortedTags.length).padStart(2, '0')}</dd></div><div><dt>ENTRIES</dt><dd>{String(allPosts.length).padStart(2, '0')}</dd></div></dl>
       </header>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {sortedTags.map(([tag, count]) => (
-          <a
-            href={`${prefix}/blog/tags/${tag}/`}
-            class="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-violet-500/20 transition-all"
-          >
-            <div class="text-white font-medium group-hover:text-violet-300 transition-colors">#{tag}</div>
-            <div class="text-sm text-gray-500 mt-1">{count} {count === 1 ? 'post' : 'posts'}</div>
+      <nav class="taxonomy-grid" aria-label={t('blog.allTags')}>
+        {sortedTags.map(([tag, count], index) => (
+          <a href={`${prefix}/blog/tags/${encodeURIComponent(tag)}/`}>
+            <span class="taxonomy-grid__index">{String(index + 1).padStart(2, '0')}</span>
+            <span class="taxonomy-grid__name">#{tag}</span>
+            <span class="taxonomy-grid__count">{String(count).padStart(2, '0')} / {t('blog.archiveCount')}</span>
+            <span class="taxonomy-grid__arrow" aria-hidden="true">&#8594;</span>
           </a>
         ))}
-      </div>
+      </nav>
     </div>
-  </div>
+  </section>
+  <style>
+    .taxonomy-shell{position:relative;min-height:100dvh;padding:clamp(7rem,11vw,10rem) 0 clamp(5rem,10vw,9rem);overflow:clip;background:#0b0d0c}.taxonomy-shell:before{content:'';position:absolute;inset:0;width:auto;height:auto;border:0;pointer-events:none;opacity:.2;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(231,233,227,.025) 3px 4px)}.taxonomy-container{position:relative;width:min(100% - 2rem,86rem);margin-inline:auto}.taxonomy-back{display:inline-flex;gap:.6rem;margin-bottom:3rem;color:rgba(231,233,227,.48);font:.67rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.11em;text-decoration:none;text-transform:uppercase}.taxonomy-back span{color:#ff3b30}.taxonomy-back:hover{color:#e7e9e3}.taxonomy-back:focus-visible,.taxonomy-grid a:focus-visible{outline:1px solid #ff3b30;outline-offset:4px}.taxonomy-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,22rem);gap:3rem;align-items:end;border-block:1px solid rgba(231,233,227,.2);padding:clamp(2rem,5vw,4.5rem) 0}.taxonomy-header p{margin:0 0 1rem;color:#ff3b30;font:.65rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.14em}.taxonomy-header h1{margin:0;color:#e7e9e3;font-size:clamp(3rem,9vw,7rem);font-weight:780;letter-spacing:-.07em;line-height:.86;text-transform:uppercase}.taxonomy-header dl{margin:0;border-top:1px solid rgba(231,233,227,.14);font:.63rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.1em}.taxonomy-header dl div{display:flex;justify-content:space-between;border-bottom:1px solid rgba(231,233,227,.14);padding:.7rem 0}.taxonomy-header dt{color:rgba(231,233,227,.32)}.taxonomy-header dd{margin:0;color:rgba(231,233,227,.7);font-variant-numeric:tabular-nums}.taxonomy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(3rem,6vw,5rem);border-top:1px solid rgba(231,233,227,.16)}.taxonomy-grid a{position:relative;display:grid;grid-template-columns:2rem minmax(0,1fr) auto auto;gap:1rem;align-items:center;min-height:6rem;border-bottom:1px solid rgba(231,233,227,.14);padding:1rem 1.2rem;color:rgba(231,233,227,.55);text-decoration:none;transition:background-color .18s,color .18s}.taxonomy-grid a:nth-child(odd){border-inline-end:1px solid rgba(231,233,227,.14)}.taxonomy-grid a:hover{background:rgba(231,233,227,.035);color:#e7e9e3}.taxonomy-grid__index,.taxonomy-grid__count{font: .62rem ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.08em;font-variant-numeric:tabular-nums}.taxonomy-grid__index{color:rgba(255,59,48,.72)}.taxonomy-grid__name{overflow-wrap:anywhere;font-size:clamp(.95rem,2vw,1.25rem);font-weight:600;letter-spacing:-.02em}.taxonomy-grid__count{color:rgba(231,233,227,.3);text-transform:uppercase}.taxonomy-grid__arrow{color:#ff3b30;transition:transform .18s}.taxonomy-grid a:hover .taxonomy-grid__arrow{transform:translateX(.2rem)}@media(max-width:740px){.taxonomy-header{grid-template-columns:1fr}.taxonomy-grid{grid-template-columns:1fr}.taxonomy-grid a:nth-child(odd){border-inline-end:0}}@media(max-width:480px){.taxonomy-container{width:min(100% - 1.25rem,86rem)}.taxonomy-grid a{grid-template-columns:1.5rem minmax(0,1fr) auto}.taxonomy-grid__count{display:none}}
+  </style>
 </Layout>

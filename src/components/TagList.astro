@@ -11,33 +11,87 @@ interface Props {
 
 const { tags, locale, activeTag, allLabel = 'All' } = Astro.props;
 const prefix = getLocalePrefix(locale);
-
-const uniqueTags = [...new Set(tags)].sort();
+const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b, locale));
 ---
 
-<div class="flex flex-wrap gap-2">
+<nav class="tag-index" aria-label={allLabel}>
   <a
     href={`${prefix}/blog/`}
-    class:list={[
-      'px-3 py-1.5 text-sm rounded-full border transition-colors duration-200',
-      !activeTag
-        ? 'bg-violet-500/20 text-violet-300 border-violet-500/30'
-        : 'bg-white/[0.03] text-gray-400 border-white/5 hover:border-violet-500/20 hover:text-white',
-    ]}
+    class:list={['tag-index__item', { 'tag-index__item--active': !activeTag }]}
+    aria-current={!activeTag ? 'page' : undefined}
   >
-    {allLabel}
+    <span class="tag-index__marker" aria-hidden="true">00</span>
+    <span>{allLabel}</span>
   </a>
-  {uniqueTags.map((tag) => (
+  {uniqueTags.map((tag, index) => (
     <a
-      href={`${prefix}/blog/tags/${tag}/`}
-      class:list={[
-        'px-3 py-1.5 text-sm rounded-full border transition-colors duration-200',
-        activeTag === tag
-          ? 'bg-violet-500/20 text-violet-300 border-violet-500/30'
-          : 'bg-white/[0.03] text-gray-400 border-white/5 hover:border-violet-500/20 hover:text-white',
-      ]}
+      href={`${prefix}/blog/tags/${encodeURIComponent(tag)}/`}
+      class:list={['tag-index__item', { 'tag-index__item--active': activeTag === tag }]}
+      aria-current={activeTag === tag ? 'page' : undefined}
     >
-      {tag}
+      <span class="tag-index__marker" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+      <span>#{tag}</span>
     </a>
   ))}
-</div>
+</nav>
+
+<style>
+  .tag-index {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid rgba(231, 233, 227, 0.14);
+  }
+
+  .tag-index__item {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: baseline;
+    min-width: 0;
+    border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+    padding: 0.75rem 0.7rem;
+    color: rgba(231, 233, 227, 0.55);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 160ms ease, background-color 160ms ease;
+  }
+
+  .tag-index__item:nth-child(odd) {
+    border-inline-end: 1px solid rgba(231, 233, 227, 0.14);
+  }
+
+  .tag-index__item:hover,
+  .tag-index__item--active {
+    background: rgba(231, 233, 227, 0.045);
+    color: #e7e9e3;
+  }
+
+  .tag-index__item--active {
+    box-shadow: inset 2px 0 #ff3b30;
+  }
+
+  .tag-index__item:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 1px solid #ff3b30;
+    outline-offset: -2px;
+  }
+
+  .tag-index__marker {
+    color: rgba(231, 233, 227, 0.25);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 420px) {
+    .tag-index {
+      grid-template-columns: 1fr;
+    }
+
+    .tag-index__item:nth-child(odd) {
+      border-inline-end: 0;
+    }
+  }
+</style>

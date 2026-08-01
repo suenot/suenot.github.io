@@ -128,73 +128,106 @@ const projects: ProjectGroup[] = [
 ];
 
 const statusStyles: Record<StatusKey, string> = {
-  active: 'bg-green-500/10 text-green-400 border-green-500/20',
-  wip: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  concept: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  paused: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
-  left: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  rip: 'bg-gray-700/10 text-gray-400 border-gray-700/20',
+  active: 'status--active',
+  wip: 'status--wip',
+  concept: 'status--concept',
+  paused: 'status--paused',
+  left: 'status--left',
+  rip: 'status--rip',
 };
 ---
 
-<section id="projects" class="py-24">
-  <div class="max-w-6xl mx-auto px-6">
-    <p class="text-violet-400 font-mono text-sm mb-3">{t.eyebrow}</p>
-    <h2 class="text-3xl font-bold text-white mb-4">{t.heading}</h2>
-    <p class="text-gray-400 mb-12 max-w-xl">
-      {t.intro}
-    </p>
+<section id="projects" class="projects terminal-section" aria-labelledby="projects-heading">
+  <div class="terminal-container">
+    <header class="projects__header">
+      <div>
+        <p class="terminal-kicker">{t.eyebrow} / COMPLETE ARCHIVE</p>
+        <h2 id="projects-heading" class="terminal-heading">{t.heading}</h2>
+      </div>
+      <p>{t.intro}</p>
+      <dl aria-label="Archive summary">
+        <div><dt>GROUPS</dt><dd>{projects.length.toString().padStart(2, '0')}</dd></div>
+        <div><dt>RECORDS</dt><dd>{projects.reduce((sum, group) => sum + group.items.length, 0)}</dd></div>
+      </dl>
+    </header>
 
-    <div class="space-y-12">
-      {projects.map((group) => (
-        <div>
-          <h3 class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-6 pb-3 border-b border-white/5">
-            {t.categories[group.category]}
-          </h3>
-          <div class="grid sm:grid-cols-2 gap-4">
-            {group.items.map((project) => (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group block p-5 rounded-xl bg-white/[0.03] border border-white/5 hover:border-violet-500/30 hover:bg-violet-500/5 transition-all duration-200"
-              >
-                <div class="flex items-start justify-between gap-3 mb-3">
-                  <div class="flex items-center gap-2">
-                    <h4 class="text-white font-semibold group-hover:text-violet-300 transition-colors">
-                      {project.name}
-                    </h4>
-                    {project.private ? (
-                      <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                      </svg>
-                    ) : (
-                      <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                        <line x1="6" y1="1" x2="6" y2="4" />
-                        <line x1="10" y1="1" x2="10" y2="4" />
-                        <line x1="14" y1="1" x2="14" y2="4" />
-                      </svg>
-                    )}
-                  </div>
-                  <span class={`flex-shrink-0 text-xs px-2 py-0.5 rounded-full border ${statusStyles[project.status]}`}>
-                    {t.status[project.status]}
-                  </span>
-                </div>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">{t.descs[project.descKey]}</p>
-                <div class="flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <span class="text-xs px-2 py-0.5 rounded bg-white/5 text-gray-400 font-mono">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </a>
-            ))}
+    <div class="projects__archive">
+      {projects.map((group, groupIndex) => (
+        <section class="project-group">
+          <header class="project-group__header">
+            <span>{String(groupIndex + 1).padStart(2, '0')}</span>
+            <h3 class="display-type">{t.categories[group.category]}</h3>
+            <span>{String(group.items.length).padStart(2, '0')} RECORDS</span>
+          </header>
+          <div class="project-group__columns" aria-hidden="true">
+            <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE</span>
           </div>
-        </div>
+          <ol>
+            {group.items.map((project, projectIndex) => (
+              <li>
+                <a href={project.url} target="_blank" rel="noopener noreferrer">
+                  <div class="project-row__name">
+                    <span class="project-row__id">{String(groupIndex + 1).padStart(2, '0')}.{String(projectIndex + 1).padStart(2, '0')}</span>
+                    <h4>{project.name}</h4>
+                    <span class="project-row__access" title={project.private ? 'Private repository' : 'Public link'}>{project.private ? 'LOCK' : 'OPEN'}</span>
+                  </div>
+                  <p>{t.descs[project.descKey]}</p>
+                  <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
+                  <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
+                  <span class="project-row__arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .projects { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .projects__header { display: grid; grid-template-columns: 1fr .55fr auto; gap: clamp(2rem, 5vw, 6rem); align-items: end; padding: clamp(3.5rem, 7vw, 7rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .projects__header .terminal-heading { max-inline-size: 11ch; margin-block-start: 1.25rem; font-size: clamp(3.5rem, 6.6vw, 7.6rem); line-height: .84; }
+  .projects__header > p { max-inline-size: 48ch; color: var(--terminal-muted, #8b908c); font: .75rem/1.65 var(--font-mono, monospace); }
+  .projects__header dl { display: flex; gap: 1.6rem; }
+  .projects__header dl div { display: grid; gap: .5rem; }
+  .projects__header dt { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .projects__header dd { color: var(--terminal-fg, #e7e9e3); font: 600 1.65rem/1 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
+  .project-group__header { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; min-block-size: 5.6rem; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .project-group__header > span { color: #ff3b30; font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .project-group__header > span:last-child { color: var(--terminal-muted, #747a75); }
+  .project-group__header h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.6rem, 2.8vw, 3rem); font-weight: 750; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
+  .project-group__columns, .project-group a { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 5rem 1rem; gap: 1.2rem; }
+  .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: #5d625e; font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .project-group li { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .project-group a { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
+  .project-row__name { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .7rem; align-items: start; min-width: 0; }
+  .project-row__id, .project-row__access { color: #5d625e; font: .5rem/1.5 var(--font-mono, monospace); }
+  .project-row__name h4 { color: var(--terminal-fg, #e7e9e3); font: 600 .72rem/1.35 var(--font-mono, monospace); overflow-wrap: anywhere; }
+  .project-group a > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
+  .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: var(--terminal-muted, #747a75); font: .52rem/1.35 var(--font-mono, monospace); }
+  .project-row__tags span::before { content: "["; margin-inline-end: .2rem; }.project-row__tags span::after { content: "]"; margin-inline-start: .2rem; }
+  .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
+  .project-row__status::before { content: ""; inline-size: .3rem; block-size: .3rem; border: 1px solid currentColor; }
+  .status--active::before { border: 0; background: #4af626; }.status--wip { color: #ff3b30; }.status--rip { opacity: .55; }
+  .project-row__arrow { color: #ff3b30; font: .8rem/1 var(--font-mono, monospace); opacity: 0; }
+  .project-group a:hover, .project-group a:focus-visible { background: #151816; }
+  .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }
+  .project-group a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  @media (max-width: 1050px) {
+    .project-group__columns { display: none; }
+    .project-group a { grid-template-columns: minmax(12rem, .8fr) 1.2fr 5rem 1rem; }
+    .project-row__tags { grid-column: 2; }
+    .project-row__status { grid-column: 3; grid-row: 1; }
+  }
+  @media (max-width: 760px) {
+    .projects__header { grid-template-columns: 1fr; }
+    .project-group a { grid-template-columns: 1fr auto; gap: .8rem 1rem; }
+    .project-row__name { grid-column: 1; }
+    .project-group a > p { grid-column: 1 / -1; }
+    .project-row__tags { grid-column: 1; }
+    .project-row__status { grid-column: 2; grid-row: 1; }
+    .project-row__arrow { grid-column: 2; grid-row: 3; align-self: end; opacity: 1; }
+  }
+</style>
