@@ -65,10 +65,6 @@ const drawerId = `filters-drawer-${locale}`;
       <TagList tags={tags} locale={locale} activeTag={activeTag} allLabel={t('blog.allPosts')} />
     </div>
 
-    <footer class="filter-drawer__footer">
-      <span class="filter-drawer__status-dot"></span>
-      <span>FILTER CORE ONLINE</span>
-    </footer>
   </aside>
 </div>
 
@@ -76,13 +72,14 @@ const drawerId = `filters-drawer-${locale}`;
   .filter-drawer {
     position: relative;
     z-index: 60;
+    height: 3rem;
   }
 
   .filter-drawer__toggle {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    min-height: 2.75rem;
+    height: 100%;
     border: 1px solid rgba(231, 233, 227, 0.2);
     border-radius: 0;
     background: transparent;
@@ -192,8 +189,7 @@ const drawerId = `filters-drawer-${locale}`;
   }
 
   .filter-drawer__eyebrow,
-  .filter-drawer__label,
-  .filter-drawer__footer {
+  .filter-drawer__label {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.62rem;
     letter-spacing: 0.12em;
@@ -250,21 +246,6 @@ const drawerId = `filters-drawer-${locale}`;
   .filter-drawer__label p {
     margin: 0;
     color: #e7e9e3;
-  }
-
-  .filter-drawer__footer {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    border-top: 1px solid rgba(231, 233, 227, 0.16);
-    padding: 1rem 1.5rem;
-    color: rgba(231, 233, 227, 0.35);
-  }
-
-  .filter-drawer__status-dot {
-    width: 0.36rem;
-    height: 0.36rem;
-    background: #46e35f;
   }
 
   @media (prefers-reduced-motion: reduce) {

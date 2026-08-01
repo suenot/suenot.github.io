@@ -24,7 +24,6 @@ function getSlug(id: string): string {
     <div class="terminal-container archive-container">
       <header class="archive-hero">
         <div class="archive-hero__kicker">
-          <span class="archive-hero__status"></span>
           <span>WRITING / ARCHIVE</span>
         </div>
         <div class="archive-hero__grid">
@@ -163,12 +162,6 @@ function getSlug(id: string): string {
       letter-spacing: 0.13em;
     }
 
-    .archive-hero__status {
-      width: 0.38rem;
-      height: 0.38rem;
-      background: #46e35f;
-    }
-
     .archive-hero__grid {
       display: grid;
       grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr);
@@ -252,6 +245,7 @@ function getSlug(id: string): string {
     .archive-controls__tags {
       display: inline-flex;
       align-items: center;
+      height: 3rem;
       border: 1px solid rgba(231, 233, 227, 0.2);
       padding: 0 1rem;
       color: rgba(231, 233, 227, 0.55);
@@ -369,7 +363,6 @@ function getSlug(id: string): string {
 
       .archive-controls__tags {
         justify-content: center;
-        min-height: 2.75rem;
       }
 
       .archive-hero__summary dl {
