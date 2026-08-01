@@ -8,7 +8,7 @@ draft: false
 
 # The Self-Learning Company: How AI Rebuilds the Organization
 
-🎬 **Watch on YouTube:** [The Self-Learning Company](https://www.youtube.com/watch?v=JdpaBr5Tc8Y)
+🎬 **Watch on YouTube:** [The Self-Learning Company](https://www.youtube.com/watch?v=RZTF_BDFlpk)
 
 *Research source: [the original Russian video](https://www.youtube.com/watch?v=JdpaBr5Tc8Y)*
 

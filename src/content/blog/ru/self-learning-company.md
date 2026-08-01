@@ -8,7 +8,7 @@ draft: false
 
 # Самообучающаяся компания: как ИИ перестраивает организацию
 
-🎬 **Видео на YouTube:** [Самообучающаяся компания](https://www.youtube.com/watch?v=JdpaBr5Tc8Y)
+🎬 **Видео на YouTube:** [Самообучающаяся компания](https://www.youtube.com/watch?v=RZTF_BDFlpk)
 
 *Источник исследования: [оригинальное видео на русском](https://www.youtube.com/watch?v=JdpaBr5Tc8Y)*
 

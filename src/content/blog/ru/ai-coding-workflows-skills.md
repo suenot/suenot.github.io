@@ -8,7 +8,7 @@ draft: false
 
 # Рабочий процесс ИИ-разработки: от вайбкодинга к инженерной дисциплине
 
-🎬 **Видео на YouTube:** [Рабочий процесс ИИ-разработки](https://www.youtube.com/watch?v=Vi2nU1qxueg)
+🎬 **Видео на YouTube:** [Рабочий процесс ИИ-разработки](https://www.youtube.com/watch?v=1J3Nqztz3DI)
 
 *Источник исследования: [оригинальное видео на русском](https://www.youtube.com/watch?v=Vi2nU1qxueg)*
 

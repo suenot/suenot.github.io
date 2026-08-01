@@ -8,7 +8,7 @@ draft: false
 
 # AI Coding Workflows: From Vibe Coding to Engineering Discipline
 
-🎬 **Watch on YouTube:** [AI Coding Workflows: From Vibe Coding to Engineering Discipline](https://www.youtube.com/watch?v=Vi2nU1qxueg)
+🎬 **Watch on YouTube:** [AI Coding Workflows: From Vibe Coding to Engineering Discipline](https://www.youtube.com/watch?v=1J3Nqztz3DI)
 
 *Research source: [the original Russian video](https://www.youtube.com/watch?v=Vi2nU1qxueg)*
 
