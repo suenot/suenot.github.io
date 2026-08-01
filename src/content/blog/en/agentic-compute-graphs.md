@@ -2,6 +2,7 @@
 title: "Agentic Compute Graphs: Static vs Dynamic Agent Workflows"
 description: "Should your agent follow a fixed script or decide its own path at runtime? The plasticity spectrum between static workflows and dynamic multi-agent systems, the token tax of over-provisioning, LangChain vs LangGraph, and a practical architect's playbook."
 pubDate: 2026-07-19
+heroImage: "/images/blog/agentic-compute-graphs-hero.png"
 tags: ["ai-agents", "agentic-systems", "compute-graph", "langgraph", "langchain", "agent-architecture"]
 draft: false
 ---

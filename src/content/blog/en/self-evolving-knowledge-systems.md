@@ -2,6 +2,7 @@
 title: "Self-Evolving Agentic Memory: Compiling Knowledge Instead of Retrieving It"
 description: "Most agents forget everything between sessions. This is the opposite: a self-evolving memory built with Claude Code and a Karpathy-style architecture — why standard RAG fails agents, how a compile-time knowledge graph beats query-time retrieval, and the loop that makes knowledge compound."
 pubDate: 2026-07-19
+heroImage: "/images/blog/self-evolving-knowledge-systems-hero.png"
 tags: ["claude-code", "agentic-memory", "knowledge-compilation", "knowledge-graph", "context-engineering", "ai-engineering"]
 draft: false
 ---

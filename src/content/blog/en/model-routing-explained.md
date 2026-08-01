@@ -2,6 +2,7 @@
 title: "LLM Model Routing: How to Cut AI API Spend by 85% Without Losing Quality"
 description: "Firing your most expensive frontier model at every request is a structural defect. Model routing sends each query to the right model instead — cascade, classifier, and semantic routing, the traps that quietly kill your savings, and why orchestration is the new moat."
 pubDate: 2026-07-19
+heroImage: "/images/blog/model-routing-explained-hero.png"
 tags: ["llm", "model-routing", "ai-cost-optimization", "inference", "kv-cache", "infrastructure"]
 draft: false
 ---

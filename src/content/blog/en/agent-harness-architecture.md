@@ -2,6 +2,7 @@
 title: "Agent Harness Architecture: The Primitives That Make AI Agents Reliable"
 description: "Agent = Model + Harness. The model is raw intelligence; the harness is the runtime that turns an unpredictable, amnesic model into a production system. The failure modes of unguided agents and the core primitives — resilient tool execution, context assembly, sandboxing, and bounded error escalation — that engineer reliability in."
 pubDate: 2026-07-19
+heroImage: "/images/blog/agent-harness-architecture-hero.png"
 tags: ["agent-harness", "ai-agents", "agentic-ai", "context-engineering", "llm", "architecture"]
 draft: false
 ---

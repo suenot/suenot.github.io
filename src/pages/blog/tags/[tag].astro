@@ -1,9 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import BlogCard from '../../../components/BlogCard.astro';
-import TagList from '../../../components/TagList.astro';
+import FilterDrawer from '../../../components/FilterDrawer.astro';
 import { defaultLocale, type Locale } from '../../../i18n/config';
 import { useTranslations } from '../../../i18n/ui';
+import { getPostHeroImage } from '../../../lib/blog';
 import { getCollection } from 'astro:content';
 
 const locale = defaultLocale;
@@ -47,7 +48,7 @@ function getSlug(id: string): string {
 >
   <div class="pt-24 pb-16">
     <div class="max-w-5xl mx-auto px-6">
-      <header class="mb-10">
+      <header class="mb-8">
         <a href="/blog/" class="text-sm text-gray-400 hover:text-violet-300 transition-colors">
           {t('blog.backToBlog')}
         </a>
@@ -57,8 +58,8 @@ function getSlug(id: string): string {
         <p class="text-gray-500">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
       </header>
 
-      <div class="mb-8">
-        <TagList tags={allTags} locale={locale} activeTag={tag} />
+      <div class="mb-10 flex justify-end border-y border-white/10 py-4">
+        <FilterDrawer tags={allTags} locale={locale} activeTag={tag} activeCount={1} />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -68,7 +69,7 @@ function getSlug(id: string): string {
             description={post.data.description}
             pubDate={post.data.pubDate}
             tags={post.data.tags}
-            heroImage={post.data.heroImage}
+            heroImage={getPostHeroImage(getSlug(post.id), post.data.heroImage)}
             slug={`/blog/${getSlug(post.id)}/`}
             readMoreLabel={t('blog.readMore')}
           />

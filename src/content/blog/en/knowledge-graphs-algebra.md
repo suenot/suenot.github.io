@@ -2,6 +2,7 @@
 title: "How Knowledge Graphs Help AI Actually Solve Algebra"
 description: "LLMs write flawless-looking math and still get the answer wrong, because next-token prediction is probabilistic, not provable. How knowledge graphs fix that: the neurosymbolic pipeline, Paths-over-Graph and KG-RAR, and why traceable reasoning beats raw accuracy."
 pubDate: 2026-07-19
+heroImage: "/images/blog/knowledge-graphs-algebra-hero.png"
 tags: ["knowledge-graphs", "ai-reasoning", "neurosymbolic-ai", "llm-math", "graph-rag", "ai-engineering"]
 draft: false
 ---

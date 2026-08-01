@@ -2,6 +2,7 @@
 title: "The Karpathy Loop & AI Arbitrage: Capturing Agentic Value"
 description: "AI arbitrage is the spread between what an agent can now do autonomously and what the market still pays humans to do. The Karpathy Loop is how you capture it: Software 3.0, a self-improving read-evaluate-commit ratchet, the capability gap, and a blueprint for value capture."
 pubDate: 2026-07-19
+heroImage: "/images/blog/karpathy-loop-ai-arbitrage-hero.png"
 tags: ["ai-arbitrage", "karpathy", "agentic-engineering", "software-3", "self-improving-ai", "ai-economics"]
 draft: false
 ---

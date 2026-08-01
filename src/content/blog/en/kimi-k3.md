@@ -2,6 +2,7 @@
 title: "Kimi K3: The Open-Weight MoE Model That Caught Up to the Frontier"
 description: "Moonshot AI's Kimi K3 is a 2.8-trillion-parameter open-weight Mixture-of-Experts model that trades blows with closed frontier labs on coding and reasoning — and you can download the weights. What it is, where it shines, and the tension between democratizing intelligence and shipping unfiltered power."
 pubDate: 2026-07-19
+heroImage: "/images/blog/kimi-k3-hero.png"
 tags: ["kimi-k3", "moonshot-ai", "open-weights", "mixture-of-experts", "agentic-coding", "llm"]
 draft: false
 ---

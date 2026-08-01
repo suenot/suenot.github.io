@@ -2,6 +2,7 @@
 title: "Claude Code Skills: Wayfinder, Specifications, and the Skills-Driven Agent Workflow"
 description: "The Skills 1.1 update introduced Wayfinder for navigation through uncertainty, Specifications for precise technical scoping, and a skills-driven development cycle. What Skills are, why terminology matters for LLMs, and how packaged instructions change agent reliability."
 pubDate: 2026-07-25
+heroImage: "/images/blog/claude-code-skills-wayfinder-hero.png"
 tags: ["claude-code", "skills", "wayfinder", "agent-workflow", "llm-orchestration"]
 draft: false
 ---

@@ -2,6 +2,7 @@
 title: "Vibe Graphing: The Multi-Agent System Factory"
 description: "Shrinking a 1,500-line multi-agent workflow to 45 lines and letting an AI compiler wire the graph for you. The cost of hand-wiring agents, intent-to-executable-graph, the shift from coding to reviewing, and the economics of a graph-centric future."
 pubDate: 2026-07-19
+heroImage: "/images/blog/vibe-graphing-hero.png"
 tags: ["multi-agent-systems", "vibe-graphing", "ai-compiler", "agent-orchestration", "langgraph", "ai-engineering"]
 draft: false
 ---

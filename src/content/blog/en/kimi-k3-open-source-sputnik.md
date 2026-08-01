@@ -2,6 +2,7 @@
 title: "Kimi K3 and the Sputnik Moment: How Open Weights Broke the AI Monopoly"
 description: "When a Chinese startup released an open-weight model that matched the frontier despite chip sanctions, it triggered something bigger than a new model launch. The Sputnik moment for AI: open weights caught the closed labs, the monopoly fractured, and intelligence became a perishable asset. What the geopolitics of K3 actually mean."
 pubDate: 2026-07-25
+heroImage: "/images/blog/kimi-k3-open-source-sputnik-hero.png"
 tags: ["open-weights", "geopolitics", "moonshot-ai", "kimi-k3", "ai-strategy", "frontier-models"]
 draft: false
 ---

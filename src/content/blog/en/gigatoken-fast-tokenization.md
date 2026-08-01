@@ -2,6 +2,7 @@
 title: "Gigatoken: How Tokenization Went from Megabytes to Gigabytes per Second"
 description: "Tokenization is the hidden bottleneck every LLM pays on on every prompt. Gigatoken runs 100-1000x faster than tiktoken by moving from regex to SIMD and GPU-style parallelism on CPU — same output, radically faster. What changed, why it matters for training and inference, and the engineering lesson that boring plumbing still hides 100x speedups."
 pubDate: 2026-07-25
+heroImage: "/images/blog/gigatoken-fast-tokenization-hero.png"
 tags: ["tokenization", "gigatoken", "llm", "inference", "training", "infrastructure", "rust", "simd"]
 draft: false
 ---

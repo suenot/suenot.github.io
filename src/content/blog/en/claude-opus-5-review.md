@@ -2,6 +2,7 @@
 title: "Claude Opus 5: More Performance for Less Money"
 description: "Anthropic's Opus 5 breaks the traditional trade-off between quality and cost — higher success rates than frontier rivals at lower prices, with agent cycles that self-correct before billing you. Where it leads (coding, reasoning, automation), the economics, and the open frontier window."
 pubDate: 2026-07-25
+heroImage: "/images/blog/claude-opus-5-review-hero.png"
 tags: ["claude-opus-5", "anthropic", "agent-coding", "llm-benchmarks", "ai-costs", "frontier-models"]
 draft: false
 ---

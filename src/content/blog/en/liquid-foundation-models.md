@@ -2,6 +2,7 @@
 title: "Liquid Foundation Models: Continuous-Time AI for the Edge"
 description: "Ramin Hasani's Liquid AI offers a different path from transformer brute force — liquid neural networks inspired by a 302-neuron worm, continuous-time dynamics that scale linearly, and foundation models small enough to run on a car's chip. The architecture intuition, the math breakthrough that made it possible, and where LFMs fit in the post-transformer landscape."
 pubDate: 2026-07-25
+heroImage: "/images/blog/liquid-foundation-models-hero.png"
 tags: ["liquid-ai", "liquid-foundation-models", "liquid-neural-networks", "continuous-time-rnn", "edge-computing", "llm"]
 draft: false
 ---

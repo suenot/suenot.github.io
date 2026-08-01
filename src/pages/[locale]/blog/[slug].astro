@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import BlogPost from '../../../layouts/BlogPost.astro';
 import { locales, type Locale } from '../../../i18n/config';
 import { getCollection, render } from 'astro:content';
+import { getPostHeroImage } from '../../../lib/blog';
 
 export const getStaticPaths = (async () => {
   const paths = [];
@@ -39,7 +40,7 @@ for (const loc of locales) {
   description={post.data.description}
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
-  heroImage={post.data.heroImage}
+  heroImage={getPostHeroImage(slug, post.data.heroImage)}
   tags={post.data.tags}
   locale={locale}
   slug={slug}

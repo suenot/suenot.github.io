@@ -2,6 +2,7 @@
 title: "KV-Cache and PagedAttention: How vLLM Gets 4x More Throughput From the Same GPU"
 description: "LLM serving runs out of GPU memory long before it runs out of compute. PagedAttention borrows a 1970s operating-system idea — virtual memory paging — to kill the KV-cache fragmentation that wastes up to 80% of your VRAM, and continuous batching keeps the cores busy."
 pubDate: 2026-07-19
+heroImage: "/images/blog/kv-cache-paged-attention-hero.png"
 tags: ["kv-cache", "paged-attention", "vllm", "llm-inference", "gpu", "infrastructure"]
 draft: false
 ---
