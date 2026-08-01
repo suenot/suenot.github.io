@@ -33,7 +33,7 @@ const socialLinks = [
   <div class="footer-shell">
     <div class="footer-primary">
       <div>
-        <div class="terminal-status">{t('footer.status_available')}</div>
+        <div class="terminal-label">{t('footer.status_available')}</div>
         <div class="footer-wordmark display-type" aria-hidden="true">SUENOT</div>
       </div>
       <div class="footer-command">
@@ -63,12 +63,6 @@ const socialLinks = [
         </ul>
       </div>
 
-      <dl class="footer-telemetry">
-        <div><dt>LOCATION</dt><dd>MOSCOW / UTC+3</dd></div>
-        <div><dt>STACK</dt><dd>ASTRO + TAILWIND</dd></div>
-        <div><dt>SYSTEM</dt><dd>ONLINE</dd></div>
-        <div><dt>LOCAL TIME</dt><dd><output id="system-clock">--:--:--</output></dd></div>
-      </dl>
     </div>
 
     <div class="footer-strip">
@@ -120,7 +114,7 @@ const socialLinks = [
     border-block-start: 1px solid var(--terminal-line);
     border-block-end: 1px solid var(--terminal-line);
     background: var(--terminal-line);
-    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .footer-index > * {
@@ -152,31 +146,6 @@ const socialLinks = [
   .footer-index a:hover,
   .footer-strip button:hover {
     color: var(--terminal-accent);
-  }
-
-  .footer-telemetry {
-    display: grid;
-    margin: 0;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 1.5rem;
-  }
-
-  .footer-telemetry div {
-    display: grid;
-    gap: 0.2rem;
-  }
-
-  .footer-telemetry dt {
-    color: var(--terminal-dim);
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-  }
-
-  .footer-telemetry dd {
-    margin: 0;
-    color: var(--terminal-muted);
-    font-size: 0.6875rem;
-    font-variant-numeric: tabular-nums;
   }
 
   .footer-strip {
@@ -220,10 +189,6 @@ const socialLinks = [
       font-size: clamp(4.5rem, 25vw, 8rem);
     }
 
-    .footer-telemetry {
-      grid-template-columns: 1fr;
-    }
-
     .footer-strip {
       align-items: flex-start;
       flex-direction: column;
@@ -232,20 +197,6 @@ const socialLinks = [
 </style>
 
 <script>
-  const clock = document.getElementById('system-clock');
-  const renderClock = () => {
-    if (!clock) return;
-    clock.textContent = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Europe/Moscow',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    }).format(new Date());
-  };
-  renderClock();
-  window.setInterval(renderClock, 1000);
-
   document.getElementById('footer-top')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

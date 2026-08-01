@@ -25,9 +25,7 @@ const links = [
 <nav class="site-nav" aria-label="Primary navigation">
   <div class="nav-shell">
     <a class="nav-identity" href={`${prefix}/`} aria-label="Suenot — home">
-      <span class="nav-online" aria-hidden="true"></span>
       <span>SUENOT</span>
-      <span class="nav-system">// SYSTEM ONLINE</span>
     </a>
 
     <ul class="nav-index" role="list">
@@ -118,18 +116,6 @@ const links = [
     padding-inline: clamp(1rem, 3vw, 3rem);
     border-inline-end: 1px solid var(--terminal-line);
     color: var(--terminal-ink);
-  }
-
-  .nav-online {
-    width: 0.42rem;
-    height: 0.42rem;
-    flex: 0 0 auto;
-    background: var(--terminal-online);
-    box-shadow: 0 0 0.7rem rgba(98, 230, 107, 0.42);
-  }
-
-  .nav-system {
-    color: var(--terminal-muted);
   }
 
   .nav-index {
@@ -275,10 +261,6 @@ const links = [
   }
 
   @media (max-width: 38rem) {
-    .nav-system {
-      display: none;
-    }
-
     .nav-actions {
       gap: 0.4rem;
       padding-inline: 0.65rem;
@@ -286,18 +268,28 @@ const links = [
   }
 </style>
 
-<script is:inline>
-  (() => {
+<script>
+  let teardownMobileMenu: (() => void) | undefined;
+
+  const initMobileMenu = () => {
+    teardownMobileMenu?.();
+
     const button = document.getElementById('mobile-menu-toggle');
     const menu = document.getElementById('mobile-menu');
     if (!button || !menu) return;
 
+    const controller = new AbortController();
+    const { signal } = controller;
+    const buttonLabel = button.querySelector('span');
+    const desktopQuery = window.matchMedia('(min-width: 75.001rem)');
+
     const setOpen = (open, restoreFocus = true) => {
-      menu.toggleAttribute('data-open', open);
+      if (open) menu.setAttribute('data-open', 'true');
+      else menu.removeAttribute('data-open');
       menu.toggleAttribute('inert', !open);
       menu.setAttribute('aria-hidden', String(!open));
       button.setAttribute('aria-expanded', String(open));
-      button.querySelector('span').textContent = open ? '[ CLOSE ]' : '[ MENU ]';
+      if (buttonLabel) buttonLabel.textContent = open ? '[ CLOSE ]' : '[ MENU ]';
       document.documentElement.classList.toggle('overflow-hidden', open);
       [document.querySelector('main'), document.querySelector('.site-footer'), document.querySelector('.skip-link')]
         .filter((element) => element instanceof HTMLElement)
@@ -312,31 +304,55 @@ const links = [
       }
     };
 
-    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
-    menu.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
-      link.addEventListener('click', () => setOpen(false));
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
-        setOpen(false);
-        return;
-      }
+    setOpen(false, false);
 
-      if (event.key === 'Tab' && button.getAttribute('aria-expanded') === 'true') {
-        const focusable = [button, ...menu.querySelectorAll('a[href], button:not([disabled])')];
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
+    button.addEventListener(
+      'click',
+      () => setOpen(button.getAttribute('aria-expanded') !== 'true'),
+      { signal },
+    );
+    menu.querySelectorAll('a[href]').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false), { signal });
+    });
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+          return;
         }
-      }
-    });
-    window.matchMedia('(min-width: 75rem)').addEventListener('change', (event) => {
-      if (event.matches) setOpen(false, false);
-    });
-  })();
+
+        if (event.key === 'Tab' && button.getAttribute('aria-expanded') === 'true') {
+          const focusable = [button, ...menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')];
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      },
+      { signal },
+    );
+    desktopQuery.addEventListener(
+      'change',
+      (event) => {
+        if (event.matches) setOpen(false, false);
+      },
+      { signal },
+    );
+
+    teardownMobileMenu = () => {
+      setOpen(false, false);
+      controller.abort();
+      teardownMobileMenu = undefined;
+    };
+  };
+
+  initMobileMenu();
+  document.addEventListener('astro:page-load', initMobileMenu);
+  document.addEventListener('astro:before-swap', () => teardownMobileMenu?.());
 </script>

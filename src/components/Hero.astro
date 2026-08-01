@@ -2,30 +2,21 @@
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
-interface Props {
-  locale?: Locale;
-}
+interface Props { locale?: Locale; }
 
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).hero;
-
 let repoCount = '450+';
 let starCount = '650+';
 
 try {
-  const userRes = await fetch('https://api.github.com/users/suenot', {
-    headers: { Accept: 'application/vnd.github.v3+json' },
-  });
+  const userRes = await fetch('https://api.github.com/users/suenot', { headers: { Accept: 'application/vnd.github.v3+json' } });
   const userData = await userRes.json();
   repoCount = String(userData.public_repos ?? '450+');
-
   let totalStars = 0;
   let page = 1;
   while (true) {
-    const reposRes = await fetch(
-      `https://api.github.com/users/suenot/repos?per_page=100&page=${page}&type=owner`,
-      { headers: { Accept: 'application/vnd.github.v3+json' } },
-    );
+    const reposRes = await fetch(`https://api.github.com/users/suenot/repos?per_page=100&page=${page}&type=owner`, { headers: { Accept: 'application/vnd.github.v3+json' } });
     const repos: { stargazers_count: number; fork: boolean }[] = await reposRes.json();
     if (!Array.isArray(repos) || repos.length === 0) break;
     totalStars += repos.filter((repo) => !repo.fork).reduce((sum, repo) => sum + repo.stargazers_count, 0);
@@ -44,86 +35,31 @@ const stats = [
   { value: starCount, label: t.stat_stars, code: 'GH/STAR' },
   { value: repoCount, label: t.stat_repos, code: 'GH/REPO' },
 ];
-
-const orderBook = [
-  ['67244.5', '0.250', '11.597', '67240.0', '1.350'],
-  ['67244.0', '1.102', '11.347', '67239.5', '0.950'],
-  ['67243.5', '0.880', '10.245', '67239.0', '1.100'],
-  ['67243.0', '1.004', '9.365', '67238.5', '0.780'],
-  ['67242.5', '2.531', '8.361', '67238.0', '2.450'],
-  ['67242.0', '0.409', '5.839', '67237.5', '1.020'],
-  ['67241.5', '1.350', '5.430', '67237.0', '0.880'],
-];
 ---
 
 <section id="top" class="hero terminal-section" aria-labelledby="hero-title">
   <div class="hero__frame terminal-container">
     <div class="hero__primary">
-      <div class="hero__status terminal-kicker">
-        <span class="hero__online" aria-hidden="true"></span>
-        <span>[ SUENOT // SYSTEM ONLINE ]</span>
-        <span class="hero__revision">REV 26.08</span>
-      </div>
-
+      <div class="hero__eyebrow terminal-kicker" aria-hidden="true"><span>PORTFOLIO / 2026</span><span>BUILD 26.08</span></div>
       <div class="hero__name-block">
         <span class="hero__rail" aria-hidden="true">C3 / 487</span>
         <h1 id="hero-title" class="hero__name display-type"><span>Eugen</span><span>Soloviov</span></h1>
       </div>
-
       <p class="hero__tagline">{t.tagline}</p>
       <p class="hero__description">{t.description}</p>
       <p class="hero__roles">┌ &nbsp;{t.badge}&nbsp; ┘</p>
-
       <div class="hero__actions">
-        <a href="#projects" class="terminal-button hero__button">
-          <span aria-hidden="true">→</span>
-          <span>[ {t.cta_projects} ]</span>
-        </a>
+        <a href="#projects" class="terminal-button hero__button"><span aria-hidden="true">→</span><span>[ {t.cta_projects} ]</span></a>
         <a href="#contact" class="terminal-link hero__contact">{t.cta_contact} / COMM-LINK</a>
       </div>
     </div>
 
-    <aside class="hero__telemetry" aria-label="Trading and infrastructure telemetry">
-      <section class="telemetry telemetry--book">
-        <header><span>ORDER BOOK · BTC-USD</span><span>LIVE</span></header>
-        <div class="book__head"><span>PRICE</span><span>SIZE</span><span>PRICE</span><span>SIZE</span></div>
-        <div class="book__rows">
-          {orderBook.map((row, index) => (
-            <div class:list={["book__row", { "book__row--spread": index === 4 }]}>
-              <data value={row[0]}>{row[0]}</data><data value={row[1]}>{row[1]}</data>
-              <data class="book__ask" value={row[3]}>{row[3]}</data><data value={row[4]}>{row[4]}</data>
-            </div>
-          ))}
-        </div>
-        <div class="book__depth" aria-hidden="true">
-          <svg viewBox="0 0 520 132" preserveAspectRatio="none">
-            <path class="depth__grid" d="M0 26.5H520M0 66.5H520M0 106.5H520M130 0V132M260 0V132M390 0V132" />
-            <path class="depth__bid" d="M0 22H34V28H69V37H104V48H139V56H174V70H208V81H234V106H260" />
-            <path class="depth__ask" d="M260 106H283V81H312V72H346V63H378V53H409V43H441V31H474V20H520V132H260Z" />
-            <path class="depth__mid" d="M260 0V132" />
-          </svg>
-        </div>
-      </section>
-
-      <section class="telemetry telemetry--network">
-        <header><span>NETWORK TOPOLOGY</span><span>NODES / 08</span></header>
-        <svg class="network" viewBox="0 0 360 206" role="img" aria-label="Server network topology diagram">
-          <g class="network__links">
-            <path d="M42 92L112 34L191 25L305 88L296 163L201 178L103 169Z" />
-            <path d="M42 92L180 104L305 88M112 34L180 104L103 169M191 25L180 104L296 163M180 104L201 178" />
-          </g>
-          <g class="network__nodes">
-            <circle cx="42" cy="92" r="4"/><circle cx="112" cy="34" r="4"/><circle cx="191" cy="25" r="4"/>
-            <circle cx="305" cy="88" r="4"/><circle cx="296" cy="163" r="4"/><circle cx="201" cy="178" r="4"/>
-            <circle cx="103" cy="169" r="4"/><rect x="174" y="98" width="12" height="12"/>
-          </g>
-          <g class="network__labels">
-            <text x="29" y="111">FRA</text><text x="98" y="25">LDN</text><text x="199" y="18">AMS</text>
-            <text x="311" y="87">TYO</text><text x="302" y="170">NY4</text><text x="206" y="195">CHI</text>
-            <text x="76" y="188">SGP</text><text x="192" y="101">CORE/GW</text>
-          </g>
-        </svg>
-      </section>
+    <aside class="hero__cube" aria-label="Interactive particle cube" data-particle-cube>
+      <div class="cube__header" aria-hidden="true"><span>OBJECT / C-27</span><span>PARTICLE MATRIX</span></div>
+      <canvas class="cube__canvas" data-cube-canvas role="img" tabindex="0" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Interactive particle Rubik cube. Drag or use the arrow keys to rotate it.">Interactive particle Rubik cube</canvas>
+      <div class="cube__footer" aria-hidden="true"><span>27 UNITS / UP TO 5,832 PTS</span><span>[ DRAG / ARROWS TO ROTATE ]</span></div>
+      <span class="cube__marker cube__marker--nw" aria-hidden="true">+</span>
+      <span class="cube__marker cube__marker--se" aria-hidden="true">+</span>
     </aside>
 
     <div class="hero__stats" aria-label="Career and GitHub statistics">
@@ -135,86 +71,256 @@ const orderBook = [
           <samp>[ {stat.code} ]</samp>
         </div>
       ))}
-      <div class="hero__clock" aria-hidden="true">
-        <span>UTC +03:00</span>
-        <strong>{currentYear}</strong>
-      </div>
     </div>
   </div>
 </section>
 
+<script>
+  type Vec3 = [number, number, number];
+  type Mat3 = [number, number, number, number, number, number, number, number, number];
+  type Particle = { point: Vec3; normal: Vec3; accent: boolean };
+  type Cubie = { position: Vec3; orientation: Mat3; particles: Particle[] };
+  type Turn = { axis: 0 | 1 | 2; layer: number; direction: number; start: number };
+
+  const cubeCleanups = new WeakMap<Element, () => void>();
+  const identity = (): Mat3 => [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  const multiply = (a: Mat3, b: Mat3): Mat3 => [
+    a[0] * b[0] + a[1] * b[3] + a[2] * b[6], a[0] * b[1] + a[1] * b[4] + a[2] * b[7], a[0] * b[2] + a[1] * b[5] + a[2] * b[8],
+    a[3] * b[0] + a[4] * b[3] + a[5] * b[6], a[3] * b[1] + a[4] * b[4] + a[5] * b[7], a[3] * b[2] + a[4] * b[5] + a[5] * b[8],
+    a[6] * b[0] + a[7] * b[3] + a[8] * b[6], a[6] * b[1] + a[7] * b[4] + a[8] * b[7], a[6] * b[2] + a[7] * b[5] + a[8] * b[8],
+  ];
+  const transform = (m: Mat3, v: Vec3): Vec3 => [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
+  const rotation = (axis: 0 | 1 | 2, angle: number): Mat3 => {
+    const c = Math.cos(angle); const s = Math.sin(angle);
+    return axis === 0 ? [1, 0, 0, 0, c, -s, 0, s, c] : axis === 1 ? [c, 0, s, 0, 1, 0, -s, 0, c] : [c, -s, 0, s, c, 0, 0, 0, 1];
+  };
+
+  function makeParticles(samples: number): Particle[] {
+    const result: Particle[] = [];
+    const faces: { normal: Vec3; u: Vec3; v: Vec3; accent: boolean }[] = [
+      { normal: [1, 0, 0], u: [0, 1, 0], v: [0, 0, 1], accent: true },
+      { normal: [-1, 0, 0], u: [0, 1, 0], v: [0, 0, 1], accent: false },
+      { normal: [0, 1, 0], u: [1, 0, 0], v: [0, 0, 1], accent: false },
+      { normal: [0, -1, 0], u: [1, 0, 0], v: [0, 0, 1], accent: false },
+      { normal: [0, 0, 1], u: [1, 0, 0], v: [0, 1, 0], accent: false },
+      { normal: [0, 0, -1], u: [1, 0, 0], v: [0, 1, 0], accent: false },
+    ];
+    const half = 0.43;
+    for (const face of faces) for (let y = 0; y < samples; y++) for (let x = 0; x < samples; x++) {
+      const a = -half + (x / (samples - 1)) * half * 2; const b = -half + (y / (samples - 1)) * half * 2;
+      result.push({ point: [face.normal[0] * half + face.u[0] * a + face.v[0] * b, face.normal[1] * half + face.u[1] * a + face.v[1] * b, face.normal[2] * half + face.u[2] * a + face.v[2] * b], normal: face.normal, accent: face.accent });
+    }
+    return result;
+  }
+
+  function startParticleCube(root: HTMLElement) {
+    cubeCleanups.get(root)?.();
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-cube-canvas]');
+    const context = canvas?.getContext('2d');
+    if (!canvas || !context) return;
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const efficientMode = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+    let reducedMotion = motionPreference.matches;
+    const minimumFrameTime = efficientMode ? 1000 / 30 : 0;
+    const template = makeParticles(efficientMode ? 4 : 6);
+    const neutralTemplate = template.map((particle) => ({ ...particle, accent: false }));
+    const cubies: Cubie[] = [];
+    for (let z = -1; z <= 1; z++) for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) cubies.push({ position: [x, y, z], orientation: identity(), particles: x === 1 ? template : neutralTemplate });
+
+    let width = 1; let height = 1; let dpr = 1; let yaw = -0.55; let pitch = -0.38;
+    let velocityX = 0; let velocityY = 0; let pointerId = -1; let previousX = 0; let previousY = 0;
+    let frameId = 0; let stopped = false; let visible = true; let lastFrame = performance.now(); let lastPaint = 0; let nextTurn = lastFrame + 2100; let turn: Turn | null = null; let moveIndex = 0;
+    const moves: [0 | 1 | 2, number, number][] = [[1, 1, 1], [0, -1, -1], [2, 1, 1], [1, -1, -1], [2, 0, 1], [0, 1, 1]];
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = Math.max(1, rect.width); height = Math.max(1, rect.height); dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(performance.now());
+    }
+
+    function finishTurn(active: Turn) {
+      const finalRotation = rotation(active.axis, active.direction * Math.PI / 2);
+      for (const cubie of cubies) if (Math.round(cubie.position[active.axis]) === active.layer) {
+        cubie.position = transform(finalRotation, cubie.position).map((value) => Math.round(value)) as Vec3;
+        cubie.orientation = multiply(finalRotation, cubie.orientation);
+      }
+      turn = null; nextTurn = performance.now() + 1700;
+    }
+
+    function draw(now: number) {
+      context.clearRect(0, 0, width, height);
+      context.save();
+      context.strokeStyle = 'rgba(145,151,146,.10)'; context.lineWidth = 1;
+      context.beginPath(); context.moveTo(width * .5, height * .13); context.lineTo(width * .5, height * .87); context.moveTo(width * .13, height * .5); context.lineTo(width * .87, height * .5); context.stroke();
+      context.restore();
+
+      let activeRotation: Mat3 | null = null;
+      if (turn) {
+        const progress = Math.min(1, (now - turn.start) / 760);
+        const eased = progress < .5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        activeRotation = rotation(turn.axis, turn.direction * Math.PI / 2 * eased);
+        if (progress === 1) finishTurn(turn);
+      }
+      const view = multiply(rotation(1, yaw), rotation(0, pitch));
+      const projected: { x: number; y: number; z: number; radius: number; alpha: number; accent: boolean }[] = [];
+      const scale = Math.min(width, height) * .175; const camera = 6.8;
+      for (const cubie of cubies) {
+        const inSlice = turn && Math.round(cubie.position[turn.axis]) === turn.layer;
+        const sliceRotation = inSlice ? activeRotation : null;
+        const center = sliceRotation ? transform(sliceRotation, cubie.position) : cubie.position;
+        for (const particle of cubie.particles) {
+          let local = transform(cubie.orientation, particle.point); let normal = transform(cubie.orientation, particle.normal);
+          if (sliceRotation) { local = transform(sliceRotation, local); normal = transform(sliceRotation, normal); }
+          const world: Vec3 = [center[0] * 1.04 + local[0], center[1] * 1.04 + local[1], center[2] * 1.04 + local[2]];
+          const point = transform(view, world); const facing = transform(view, normal)[2];
+          if (facing < -.08) continue;
+          const perspective = camera / (camera - point[2]);
+          projected.push({ x: width / 2 + point[0] * scale * perspective, y: height / 2 + point[1] * scale * perspective, z: point[2], radius: Math.max(.55, perspective * 1.25), alpha: Math.min(.94, .22 + Math.max(0, facing) * .7), accent: particle.accent });
+        }
+      }
+      projected.sort((a, b) => a.z - b.z);
+      for (const particle of projected) {
+        context.globalAlpha = particle.alpha;
+        context.fillStyle = particle.accent ? '#ff493f' : '#e7e9e3';
+        context.shadowColor = 'rgba(255,59,48,.65)';
+        context.shadowBlur = particle.accent ? 4 : 0;
+        context.beginPath(); context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2); context.fill();
+      }
+      context.globalAlpha = 1; context.shadowBlur = 0;
+    }
+
+    function animate(now: number) {
+      if (stopped || document.hidden || !visible) return;
+      frameId = requestAnimationFrame(animate);
+      if (now - lastPaint < minimumFrameTime) return;
+      lastPaint = now;
+      const elapsed = Math.min(40, now - lastFrame); lastFrame = now;
+      if (pointerId < 0) {
+        yaw += (.000095 * elapsed) + velocityX * elapsed; pitch += (.000045 * elapsed) + velocityY * elapsed;
+        const decay = Math.exp(-elapsed / 650); velocityX *= decay; velocityY *= decay;
+        if (!turn && now >= nextTurn) { const move = moves[moveIndex++ % moves.length]; turn = { axis: move[0], layer: move[1], direction: move[2], start: now }; }
+      }
+      pitch = Math.max(-1.25, Math.min(1.25, pitch)); draw(now);
+    }
+
+    function resume() {
+      cancelAnimationFrame(frameId);
+      if (stopped || document.hidden || !visible || reducedMotion) { draw(performance.now()); return; }
+      lastFrame = performance.now(); frameId = requestAnimationFrame(animate);
+    }
+    function pointerDown(event: PointerEvent) {
+      pointerId = event.pointerId; previousX = event.clientX; previousY = event.clientY; velocityX = 0; velocityY = 0;
+      canvas.setPointerCapture(pointerId); canvas.classList.add('is-dragging');
+    }
+    function pointerMove(event: PointerEvent) {
+      if (event.pointerId !== pointerId) return;
+      const dx = event.clientX - previousX; const dy = event.clientY - previousY; previousX = event.clientX; previousY = event.clientY;
+      velocityX = dx * .00013; velocityY = dy * .00013; yaw += dx * .008; pitch = Math.max(-1.25, Math.min(1.25, pitch + dy * .008)); draw(performance.now());
+    }
+    function pointerUp(event: PointerEvent) {
+      if (event.pointerId !== pointerId) return;
+      pointerId = -1; canvas.classList.remove('is-dragging'); if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId); resume();
+    }
+    function lostPointerCapture(event: PointerEvent) {
+      if (event.pointerId !== pointerId) return;
+      pointerId = -1; canvas.classList.remove('is-dragging'); resume();
+    }
+    function keyDown(event: KeyboardEvent) {
+      const rotations: Record<string, [number, number]> = { ArrowLeft: [-.12, 0], ArrowRight: [.12, 0], ArrowUp: [0, -.12], ArrowDown: [0, .12] };
+      const change = rotations[event.key];
+      if (!change) return;
+      event.preventDefault(); yaw += change[0]; pitch = Math.max(-1.25, Math.min(1.25, pitch + change[1])); draw(performance.now());
+    }
+    const motionPreferenceChange = (event: MediaQueryListEvent) => { reducedMotion = event.matches; resume(); };
+    canvas.addEventListener('pointerdown', pointerDown); canvas.addEventListener('pointermove', pointerMove); canvas.addEventListener('pointerup', pointerUp); canvas.addEventListener('pointercancel', pointerUp); canvas.addEventListener('lostpointercapture', lostPointerCapture); canvas.addEventListener('keydown', keyDown);
+    motionPreference.addEventListener('change', motionPreferenceChange);
+    const resizeObserver = new ResizeObserver(resize);
+    const intersectionObserver = new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? true; resume(); }, { threshold: .01 });
+    const visibilityChange = () => resume();
+    function cleanup() {
+      stopped = true; cancelAnimationFrame(frameId); resizeObserver.disconnect(); intersectionObserver.disconnect();
+      canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove); canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', pointerUp); canvas.removeEventListener('lostpointercapture', lostPointerCapture); canvas.removeEventListener('keydown', keyDown);
+      motionPreference.removeEventListener('change', motionPreferenceChange);
+      document.removeEventListener('visibilitychange', visibilityChange); document.removeEventListener('astro:before-swap', cleanup); cubeCleanups.delete(root);
+    }
+    resizeObserver.observe(canvas); intersectionObserver.observe(root); document.addEventListener('visibilitychange', visibilityChange); document.addEventListener('astro:before-swap', cleanup, { once: true });
+    resize(); resume(); cubeCleanups.set(root, cleanup);
+  }
+
+  function initializeParticleCubes() { document.querySelectorAll<HTMLElement>('[data-particle-cube]').forEach(startParticleCube); }
+  const cubeWindow = window as Window & typeof globalThis & { __particleCubePageLoad?: () => void };
+  if (cubeWindow.__particleCubePageLoad) document.removeEventListener('astro:page-load', cubeWindow.__particleCubePageLoad);
+  cubeWindow.__particleCubePageLoad = initializeParticleCubes;
+  initializeParticleCubes();
+  document.addEventListener('astro:page-load', initializeParticleCubes);
+</script>
+
 <style>
   .hero { min-height: 100dvh; padding-block-start: 4.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .hero__frame { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(26rem, .98fr); }
-  .hero__primary { position: relative; min-width: 0; padding: clamp(2rem, 5vw, 5.5rem) clamp(1rem, 3.4vw, 3.75rem) 2.25rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .hero__status { display: flex; align-items: center; gap: .7rem; margin-block-end: clamp(3rem, 7vw, 7rem); }
-  .hero__revision { margin-inline-start: auto; color: var(--terminal-muted, #747a75); }
-  .hero__online { inline-size: .4rem; block-size: .4rem; background: #4af626; }
-  .hero__name-block { position: relative; padding-inline-start: 3.4rem; }
-  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: #ff3b30; font: 600 .62rem/1 var(--font-mono, monospace); letter-spacing: .12em; border-inline-start: 2px solid #ff3b30; padding-inline-start: .55rem; }
-  .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5rem, 9.4vw, 10.75rem); font-weight: 900; letter-spacing: -.075em; line-height: .78; text-transform: uppercase; }
+  .hero__frame { display: grid; grid-template-columns: minmax(0, .97fr) minmax(36rem, 1.03fr); }
+  .hero__primary { position: relative; min-width: 0; padding: clamp(1.5rem, 3.7vw, 4.5rem) clamp(1rem, 3.2vw, 3.5rem) 2.5rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .hero__eyebrow { display: flex; justify-content: space-between; color: var(--terminal-muted, #747a75); margin-block-end: clamp(2.8rem, 5vw, 5.5rem); }
+  .hero__name-block { position: relative; padding-inline-start: 2.7rem; }
+  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: #ff3b30; font: 600 .58rem/1 var(--font-mono, monospace); letter-spacing: .14em; border-inline-start: 2px solid #ff3b30; padding-inline-start: .55rem; }
+  .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5.4rem, 9.2vw, 11rem); font-weight: 950; letter-spacing: -.082em; line-height: .76; text-transform: uppercase; text-wrap: nowrap; }
   .hero__name span { display: block; }
-  .hero__tagline { margin: 1.75rem 0 0 3.4rem; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.85rem, 1.35vw, 1.25rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .hero__description { max-inline-size: 42rem; margin: 1.1rem 0 0 3.4rem; color: var(--terminal-muted, #8b908c); font: .82rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
-  .hero__roles { margin: 1.45rem 0 0 3.4rem; color: var(--terminal-muted, #8b908c); font: .68rem/1.6 var(--font-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
-  .hero__actions { display: flex; align-items: center; gap: 2rem; margin: 1.6rem 0 0 3.4rem; }
-  .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .68rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .hero__tagline { margin: 1.55rem 0 0 2.7rem; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.78rem, 1.2vw, 1.1rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .hero__description { max-inline-size: 39rem; margin: 1rem 0 0 2.7rem; color: var(--terminal-muted, #929792); font: .76rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
+  .hero__roles { margin: 1.2rem 0 0 2.7rem; color: var(--terminal-muted, #8b908c); font: .64rem/1.6 var(--font-mono, monospace); letter-spacing: .11em; text-transform: uppercase; }
+  .hero__actions { display: flex; align-items: center; gap: 2rem; margin: 1.45rem 0 0 2.7rem; }
+  .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .65rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
   .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: #ff3b30; font-size: 1.5rem; }
   .hero__button:hover { background: var(--terminal-fg, #e7e9e3); color: var(--terminal-bg, #0b0d0c); }
-  .hero__contact { color: var(--terminal-muted, #8b908c); font: .67rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: .45rem; }
+  .hero__contact { color: var(--terminal-muted, #8b908c); font: .64rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: .45rem; }
   .hero__contact:hover { color: #ff3b30; }
-  .hero__telemetry { display: grid; grid-template-columns: 1.08fr .92fr; align-content: start; min-width: 0; padding: clamp(2rem, 5vw, 5.5rem) clamp(1rem, 2vw, 2rem); gap: 1rem; }
-  .telemetry { min-width: 0; border: 1px solid var(--terminal-line, #303431); color: var(--terminal-muted, #8b908c); }
-  .telemetry header { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem .7rem; border-block-end: 1px solid var(--terminal-line, #303431); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .12em; }
-  .book__head, .book__row { display: grid; grid-template-columns: 1.1fr .8fr 1.1fr .8fr; gap: .4rem; align-items: center; padding-inline: .7rem; font: .53rem/1.5 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
-  .book__head { padding-block: .55rem .3rem; color: #5d625e; letter-spacing: .07em; }
-  .book__row { position: relative; min-block-size: 1.3rem; }
-  .book__row--spread { background: #171a18; }
-  .book__row--spread::after { content: "SPREAD 0.5"; position: absolute; inset-inline: 43% auto; inset-block-start: -.2rem; color: #5d625e; font-size: .42rem; }
-  .book__ask { color: #ff3b30; }
-  .book__depth { block-size: 8.5rem; margin: .65rem; border-block-start: 1px solid var(--terminal-line, #303431); }
-  .book__depth svg { inline-size: 100%; block-size: 100%; overflow: visible; }
-  .depth__grid { fill: none; stroke: #282c29; stroke-width: 1; stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
-  .depth__bid { fill: none; stroke: #606661; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-  .depth__ask { fill: #ff3b3018; stroke: #ff3b30; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-  .depth__mid { stroke: #686e69; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
-  .telemetry--network { align-self: start; }
-  .network { display: block; inline-size: 100%; aspect-ratio: 1.42; }
-  .network__links { fill: none; stroke: #424743; stroke-width: 1; stroke-dasharray: 2 3; }
-  .network__nodes { fill: #8d938e; }
-  .network__labels { fill: #858b86; font: 8px var(--font-mono, monospace); letter-spacing: 1px; }
-  .hero__stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr) .48fr; border-block-start: 1px solid var(--terminal-line, #303431); }
-  .hero__stat { display: grid; grid-template-columns: auto 1fr; min-block-size: 8rem; padding: 1.1rem 1.4rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .hero__stat-index { color: var(--terminal-muted, #747a75); font: .65rem/1 var(--font-mono, monospace); }
-  .hero__stat data { justify-self: end; color: var(--terminal-fg, #e7e9e3); font: 700 clamp(1.5rem, 2.6vw, 2.7rem)/.9 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
-  .hero__stat > span:not(.hero__stat-index), .hero__stat samp { align-self: end; color: var(--terminal-muted, #8b908c); font: .57rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
-  .hero__stat samp { justify-self: end; }
-  .hero__clock { display: grid; align-content: space-between; padding: 1.1rem; color: var(--terminal-muted, #8b908c); font: .6rem/1.5 var(--font-mono, monospace); }
-  .hero__clock strong { color: var(--terminal-fg, #e7e9e3); font-size: 1rem; font-weight: 500; }
-  .hero a:focus-visible { outline: 2px solid #ff3b30; outline-offset: 4px; }
 
-  @media (max-width: 1100px) {
+  .hero__cube { position: relative; align-self: stretch; min-width: 0; min-height: 38rem; margin: clamp(1.5rem, 3.7vw, 4.5rem) clamp(.8rem, 1.5vw, 1.5rem) 1.5rem; overflow: hidden; border: 1px solid var(--terminal-line, #303431); background: #090b0a; }
+  .cube__header, .cube__footer { position: absolute; z-index: 2; inset-inline: 0; display: flex; justify-content: space-between; gap: 1rem; padding: .68rem .8rem; color: #858b86; font: .54rem/1 var(--font-mono, monospace); letter-spacing: .14em; pointer-events: none; }
+  .cube__header { inset-block-start: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .cube__footer { inset-block-end: 0; border-block-start: 1px solid var(--terminal-line, #303431); }
+  .cube__canvas { display: block; inline-size: 100%; block-size: 100%; min-block-size: 38rem; cursor: grab; touch-action: none; }
+  .cube__canvas.is-dragging { cursor: grabbing; }
+  .cube__marker { position: absolute; z-index: 3; color: #ff3b30; font: .65rem/1 var(--font-mono, monospace); pointer-events: none; }
+  .cube__marker--nw { inset: 2.55rem auto auto .35rem; }
+  .cube__marker--se { inset: auto .35rem 2.55rem auto; }
+
+  .hero__stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); border-block-start: 1px solid var(--terminal-line, #303431); }
+  .hero__stat { display: grid; grid-template-columns: auto 1fr; min-block-size: 7.2rem; padding: 1rem 1.3rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .hero__stat:last-child { border-inline-end: 0; }
+  .hero__stat-index { color: var(--terminal-muted, #747a75); font: .62rem/1 var(--font-mono, monospace); }
+  .hero__stat data { justify-self: end; color: var(--terminal-fg, #e7e9e3); font: 700 clamp(1.4rem, 2.4vw, 2.5rem)/.9 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
+  .hero__stat > span:not(.hero__stat-index), .hero__stat samp { align-self: end; color: var(--terminal-muted, #8b908c); font: .55rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .hero__stat samp { justify-self: end; }
+  .hero a:focus-visible, .cube__canvas:focus-visible { outline: 2px solid #ff3b30; outline-offset: 4px; }
+
+  @media (max-width: 1180px) {
     .hero__frame { grid-template-columns: 1fr; }
     .hero__primary { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
-    .hero__telemetry { grid-template-columns: 1fr 1fr; }
+    .hero__name { font-size: clamp(5rem, 15vw, 10rem); }
+    .hero__cube { min-height: min(44rem, 76vw); }
+    .cube__canvas { min-block-size: min(44rem, 76vw); }
   }
   @media (max-width: 720px) {
     .hero { padding-block-start: 3.75rem; }
-    .hero__primary { padding-block-start: 2.2rem; }
-    .hero__status { margin-block-end: 3.5rem; }
-    .hero__revision { display: none; }
-    .hero__name-block { padding-inline-start: 1.55rem; }
-    .hero__rail { font-size: .5rem; }
-    .hero__name { font-size: clamp(3.55rem, 20vw, 6.7rem); line-height: .81; }
-    .hero__tagline, .hero__description, .hero__roles, .hero__actions { margin-inline-start: 1.55rem; }
-    .hero__actions { align-items: flex-start; flex-direction: column; }
-    .hero__telemetry { grid-template-columns: 1fr; }
-    .telemetry--network { display: none; }
+    .hero__primary { padding-block-start: 1.8rem; }
+    .hero__eyebrow { margin-block-end: 2.8rem; }
+    .hero__name-block { padding-inline-start: 1.5rem; }
+    .hero__rail { font-size: .48rem; }
+    .hero__name { font-size: clamp(3.35rem, 19.2vw, 6.4rem); line-height: .8; }
+    .hero__tagline, .hero__description, .hero__roles, .hero__actions { margin-inline-start: 1.5rem; }
+    .hero__actions { align-items: flex-start; flex-direction: column; gap: 1.4rem; }
+    .hero__cube { min-height: min(31rem, 112vw); margin: .8rem; }
+    .cube__canvas { min-block-size: min(31rem, 112vw); }
+    .cube__footer span:first-child { display: none; }
+    .cube__footer { justify-content: flex-end; }
     .hero__stats { grid-template-columns: 1fr 1fr; }
-    .hero__stat { min-block-size: 6.8rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-    .hero__clock { display: none; }
+    .hero__stat { min-block-size: 6.6rem; border-block-end: 1px solid var(--terminal-line, #303431); }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .hero *, .hero *::before, .hero *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  @media (max-width: 390px) {
+    .hero__stat { padding-inline: .9rem; }
+    .hero__stat samp { display: none; }
   }
+  @media (prefers-reduced-motion: reduce) { .cube__canvas { cursor: grab; } }
 </style>

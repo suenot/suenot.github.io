@@ -86,7 +86,7 @@ export const home = {
           bullets: [
             '<strong>Frontrunning Algorithms:</strong> Developed low-latency orderbook analyzers processing L1 (10ms) and L50 (20ms) streams simultaneously to hunt manipulator orders via adaptive deviation reduction.',
             '<strong>Market Making & Scalping:</strong> Implemented models like Avellaneda-Stoikov and high-performance FIX protocol scalpers.',
-            '<strong>Execution Optimization:</strong> Optimized execution paths using <strong>fasthttp</strong> and custom gRPC adapters, achieving order placement in 3-7ms.',
+            '<strong>Execution Optimization:</strong> Optimized execution paths using <strong>fasthttp</strong> and custom gRPC adapters, achieving order placement in &lt;1ms.',
           ],
         },
         {
@@ -180,7 +180,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'Implementation of the Avellaneda-Stoikov HFT market making model. Includes multiple versions and TigerBeetle integration.',
         Frontrunner:
-          'Bybit HFT bot — L1/L50 orderbook analysis, adaptive deviation reduction, and hot connection warming. Order placement in 3–7ms.',
+          'Bybit HFT bot — L1/L50 orderbook analysis, adaptive deviation reduction, and hot connection warming. Order placement in <1ms.',
         'simple-fast-fix-scalper':
           'High-performance FIX protocol scalper in C++.',
         'vector-arbitrage': 'C++ vector arbitrage system for crypto exchanges.',
@@ -387,7 +387,7 @@ export const home = {
           bullets: [
             '<strong>Frontrunning-алгоритмы:</strong> разработал анализаторы стакана с низкой латентностью, обрабатывающие L1 (10ms) и L50 (20ms) потоки одновременно для поиска заявок манипуляторов через адаптивное сокращение отклонений.',
             '<strong>Market Making и скальпинг:</strong> реализовал модели вроде Avellaneda-Stoikov и высокопроизводительные скальперы на FIX-протоколе.',
-            '<strong>Оптимизация исполнения:</strong> оптимизировал пути исполнения через <strong>fasthttp</strong> и кастомные gRPC-адаптеры, добившись размещения ордеров за 3–7ms.',
+            '<strong>Оптимизация исполнения:</strong> оптимизировал пути исполнения через <strong>fasthttp</strong> и кастомные gRPC-адаптеры, добившись размещения ордеров менее чем за 1ms (&lt;1ms).',
           ],
         },
         {
@@ -481,7 +481,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'Реализация HFT market making модели Avellaneda-Stoikov. Несколько версий и интеграция с TigerBeetle.',
         Frontrunner:
-          'HFT-бот для Bybit — анализ стакана L1/L50, адаптивное сокращение отклонений, hot connection warming. Размещение ордера за 3–7ms.',
+          'HFT-бот для Bybit — анализ стакана L1/L50, адаптивное сокращение отклонений, hot connection warming. Размещение ордера менее чем за 1ms (<1ms).',
         'simple-fast-fix-scalper':
           'Высокопроизводительный скальпер на FIX-протоколе на C++.',
         'vector-arbitrage':
@@ -692,7 +692,7 @@ export const home = {
           bullets: [
             '<strong>抢跑算法：</strong>开发低延迟订单簿分析器，同时处理 L1（10ms）和 L50（20ms）数据流，通过自适应偏差缩减来捕获操纵者订单。',
             '<strong>做市与剥头皮：</strong>实现 Avellaneda-Stoikov 等模型与高性能 FIX 协议剥头皮策略。',
-            '<strong>执行优化：</strong>使用 <strong>fasthttp</strong> 和自研 gRPC 适配器优化执行路径，下单速度达到 3–7ms。',
+            '<strong>执行优化：</strong>使用 <strong>fasthttp</strong> 和自研 gRPC 适配器优化执行路径，下单速度达到 &lt;1ms。',
           ],
         },
         {
@@ -786,7 +786,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'Avellaneda-Stoikov HFT 做市模型实现。包含多个版本以及 TigerBeetle 集成。',
         Frontrunner:
-          'Bybit HFT 机器人 —— L1/L50 订单簿分析、自适应偏差缩减与热连接预热。下单 3–7ms。',
+          'Bybit HFT 机器人 —— L1/L50 订单簿分析、自适应偏差缩减与热连接预热。下单 <1ms。',
         'simple-fast-fix-scalper':
           'C++ 编写的高性能 FIX 协议剥头皮策略。',
         'vector-arbitrage':
@@ -987,7 +987,7 @@ export const home = {
           bullets: [
             '<strong>프론트러닝 알고리즘:</strong> L1(10ms)과 L50(20ms) 스트림을 동시에 처리하는 저지연 오더북 분석기를 개발하여 적응형 편차 감소 기법으로 조작 주문을 추적했습니다.',
             '<strong>마켓 메이킹 & 스캘핑:</strong> Avellaneda-Stoikov 등의 모델과 고성능 FIX 프로토콜 스캘퍼를 구현했습니다.',
-            '<strong>실행 최적화:</strong> <strong>fasthttp</strong>와 커스텀 gRPC 어댑터로 실행 경로를 최적화하여 주문 체결 시간을 3-7ms로 단축했습니다.',
+            '<strong>실행 최적화:</strong> <strong>fasthttp</strong>와 커스텀 gRPC 어댑터로 실행 경로를 최적화하여 주문 체결 시간을 &lt;1ms로 단축했습니다.',
           ],
         },
         {
@@ -1081,7 +1081,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'Avellaneda-Stoikov HFT 마켓 메이킹 모델 구현. 여러 버전과 TigerBeetle 통합 포함.',
         Frontrunner:
-          'Bybit HFT 봇 — L1/L50 오더북 분석, 적응형 편차 감소, 핫 커넥션 워밍. 주문 체결 3-7ms.',
+          'Bybit HFT 봇 — L1/L50 오더북 분석, 적응형 편차 감소, 핫 커넥션 워밍. 주문 체결 <1ms.',
         'simple-fast-fix-scalper':
           'C++로 작성된 고성능 FIX 프로토콜 스캘퍼.',
         'vector-arbitrage':
@@ -1287,7 +1287,7 @@ export const home = {
           bullets: [
             '<strong>フロントランニング・アルゴリズム:</strong> L1（10ms）と L50（20ms）のストリームを同時に処理する低レイテンシ板分析器を開発し、適応的偏差削減でマニピュレーターの注文を捕捉しました。',
             '<strong>マーケットメイキング & スキャルピング:</strong> Avellaneda-Stoikov などのモデルや高性能 FIX プロトコル・スキャルパーを実装しました。',
-            '<strong>執行最適化:</strong> <strong>fasthttp</strong> とカスタム gRPC アダプタで執行経路を最適化し、注文発行を 3-7ms で実現しました。',
+            '<strong>執行最適化:</strong> <strong>fasthttp</strong> とカスタム gRPC アダプタで執行経路を最適化し、注文発行を &lt;1ms で実現しました。',
           ],
         },
         {
@@ -1381,7 +1381,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'Avellaneda-Stoikov 型 HFT マーケットメイキングモデルの実装。複数バージョンと TigerBeetle 連携を含みます。',
         Frontrunner:
-          'Bybit HFT bot — L1/L50 板分析、適応的偏差削減、ホットコネクションウォーミング。注文発行 3-7ms。',
+          'Bybit HFT bot — L1/L50 板分析、適応的偏差削減、ホットコネクションウォーミング。注文発行 <1ms。',
         'simple-fast-fix-scalper':
           'C++ 製の高性能 FIX プロトコル・スキャルパー。',
         'vector-arbitrage':
@@ -1587,7 +1587,7 @@ export const home = {
           bullets: [
             '<strong>خوارزميات Frontrunning:</strong> طوّرت محلّلات orderbook منخفضة الزمن تعالج تدفّقات L1 (10ms) وL50 (20ms) في الوقت نفسه لمطاردة أوامر المتلاعبين عبر تقليل الانحراف التكيّفي.',
             '<strong>Market Making وScalping:</strong> نفّذت نماذج مثل Avellaneda-Stoikov وscalpers عالية الأداء على بروتوكول FIX.',
-            '<strong>تحسين التنفيذ:</strong> حسّنت مسارات التنفيذ باستخدام <strong>fasthttp</strong> ومحوّلات gRPC مخصّصة، محقّقاً وضع أوامر في 3-7ms.',
+            '<strong>تحسين التنفيذ:</strong> حسّنت مسارات التنفيذ باستخدام <strong>fasthttp</strong> ومحوّلات gRPC مخصّصة، محقّقاً وضع أوامر في &lt;1ms.',
           ],
         },
         {
@@ -1681,7 +1681,7 @@ export const home = {
         'Avellaneda-Stoikov':
           'تنفيذ نموذج Avellaneda-Stoikov لصناعة السوق في HFT. يشمل عدة إصدارات وتكامل مع TigerBeetle.',
         Frontrunner:
-          'بوت HFT لـ Bybit — تحليل orderbook L1/L50، تقليل انحراف تكيّفي، وتسخين اتصالات. وضع أوامر في 3-7ms.',
+          'بوت HFT لـ Bybit — تحليل orderbook L1/L50، تقليل انحراف تكيّفي، وتسخين اتصالات. وضع أوامر في <1ms.',
         'simple-fast-fix-scalper':
           'Scalper عالي الأداء لبروتوكول FIX بـ C++.',
         'vector-arbitrage':

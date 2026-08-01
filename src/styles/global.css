@@ -13,10 +13,10 @@
   --terminal-line: #292e2a;
   --terminal-line-strong: #424943;
   --terminal-accent: #ff3b30;
-  --terminal-online: #62e66b;
   --terminal-max: 100rem;
   --terminal-header: 4.5rem;
-  --font-mono: "SFMono-Regular", "Roboto Mono", "Cascadia Code", "Liberation Mono", monospace;
+  --font-display: "DIN Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Noto Sans Condensed", "Liberation Sans Narrow", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", "Roboto Mono", "Noto Sans Mono", "Liberation Mono", monospace;
   color-scheme: dark;
   font-synthesis: none;
 }
@@ -43,6 +43,7 @@ body {
   color: var(--terminal-ink);
   font-family: var(--font-mono);
   font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums slashed-zero;
   line-height: 1.55;
   text-rendering: optimizeLegibility;
 }
@@ -110,11 +111,12 @@ input {
 }
 
 .display-type {
-  font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", Impact, sans-serif;
+  font-family: var(--font-display);
   font-stretch: condensed;
-  font-weight: 800;
-  letter-spacing: -0.065em;
-  line-height: 0.82;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 0.8;
+  text-rendering: geometricPrecision;
   text-transform: uppercase;
 }
 
@@ -162,14 +164,23 @@ input {
 .terminal-heading {
   margin: 0;
   color: var(--terminal-ink);
-  font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", Impact, sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 8rem);
   font-stretch: condensed;
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 0.86;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.84;
+  text-rendering: geometricPrecision;
   text-transform: uppercase;
   text-wrap: balance;
+}
+
+:lang(ar) .display-type,
+:lang(ar) .terminal-heading {
+  font-family: "SF Arabic", "Noto Sans Arabic", Tahoma, ui-sans-serif, system-ui, sans-serif;
+  font-stretch: normal;
+  letter-spacing: -0.025em;
+  line-height: 0.92;
 }
 
 .terminal-grid {
@@ -253,24 +264,6 @@ output {
 .terminal-button--primary:hover {
   background: var(--terminal-ink);
   border-color: var(--terminal-ink);
-}
-
-.terminal-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  color: var(--terminal-muted);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.terminal-status::before {
-  width: 0.4rem;
-  height: 0.4rem;
-  content: "";
-  background: var(--terminal-online);
-  box-shadow: 0 0 0.75rem rgba(98, 230, 107, 0.45);
 }
 
 .terminal-rule {
