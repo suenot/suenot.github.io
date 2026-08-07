@@ -4,12 +4,12 @@ description: "Скилл на 39 тысяч звезд, который иссл�
 pubDate: 2026-08-07
 heroImage: "/images/blog/last30days-research-agent-hero.png"
 tags: ["agent-skills", "claude-code", "research-agents", "web-scraping", "ranking", "last30days"]
-draft: true
+draft: false
 ---
 
 # Last30Days: как на самом деле работает ресерч-агент с ранжированием по вовлеченности
 
-🎬 **Смотреть на YouTube:** [Last30Days: The Research Agent That Reads People, Not Pages](https://www.youtube.com/@suenot)
+🎬 **Смотреть на YouTube:** [Your AI Doesn't Know What Happened Last Month. One Command Fixes It](https://www.youtube.com/watch?v=4HpQh1heIkw)
 
 Спроси базовую модель, что произошло за последний месяц, — она ответит из весов, которые замерзли до того, как этот месяц наступил. Спроси поисковик — получишь SEO-статьи, написанные чтобы ранжироваться, а не чтобы информировать. А обсуждение, которое действительно важно — тред, где трое людей, реально запустивших эту штуку в прод, спорят о том, почему она сломалась, — живет внутри закрытых садов, куда не дотягивается ни один из них.
 

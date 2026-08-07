@@ -4,12 +4,12 @@ description: "A 39k-star agent skill that researches Reddit, X, YouTube, Hacker 
 pubDate: 2026-08-07
 heroImage: "/images/blog/last30days-research-agent-hero.png"
 tags: ["agent-skills", "claude-code", "research-agents", "web-scraping", "ranking", "last30days"]
-draft: true
+draft: false
 ---
 
 # Last30Days: How an Engagement-Ranked Research Agent Actually Works
 
-🎬 **Watch on YouTube:** [Last30Days: The Research Agent That Reads People, Not Pages](https://www.youtube.com/@suenot)
+🎬 **Watch on YouTube:** [Your AI Doesn't Know What Happened Last Month. One Command Fixes It](https://www.youtube.com/watch?v=4HpQh1heIkw)
 
 Ask a base model what happened last month and it answers from weights that froze before last month existed. Ask a search engine and it returns SEO articles written to rank, not to inform. The discussion that actually matters — the thread where three people who shipped the thing argue about why it broke — lives inside walled gardens that neither of them can see.
 
