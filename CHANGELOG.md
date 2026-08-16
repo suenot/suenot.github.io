@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-08-16
+
+### Fixed
+
+- Aligned blog JSON-LD, SEO fallback, and `robots.txt` with the canonical `www.suenot.com` domain.
+
 ## [0.3.0] - 2026-08-16
 
 ### Added

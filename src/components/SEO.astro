@@ -26,7 +26,7 @@ const {
   tags = [],
 } = Astro.props;
 
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://suenot.github.io';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://www.suenot.com';
 const currentUrl = canonicalUrl || new URL(Astro.url.pathname, siteUrl).toString();
 const imageUrl = ogImage ? new URL(ogImage, siteUrl).toString() : '';
 
