@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.10] - 2026-08-16
+
+### Changed
+
+- Reworked the Claude Code Skills and Wayfinder article with a more direct, source-attributed explanation of the workflow.
+
 ## [0.4.9] - 2026-08-16
 
 ### Changed
