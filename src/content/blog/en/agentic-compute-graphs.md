@@ -1,76 +1,56 @@
 ---
-title: "Agentic Compute Graphs: Static vs Dynamic Agent Workflows"
-description: "Should your agent follow a fixed script or decide its own path at runtime? The plasticity spectrum between static workflows and dynamic multi-agent systems, the token tax of over-provisioning, LangChain vs LangGraph, and a practical architect's playbook."
+title: "Agentic Compute Graphs: Choosing Static and Dynamic Workflows"
+description: "How to choose between fixed workflows and agent-selected routes, account for cost and observability, and use LangChain and LangGraph in their respective roles."
 pubDate: 2026-07-19
 heroImage: "/images/blog/agentic-compute-graphs-hero.png"
 tags: ["ai-agents", "agentic-systems", "compute-graph", "langgraph", "langchain", "agent-architecture"]
 draft: false
 ---
 
-# Agentic Compute Graphs: Static vs Dynamic Agent Workflows
+# Agentic Compute Graphs: Choosing Static and Dynamic Workflows
 
-🎬 **Watch on YouTube:** [Agentic Compute Graphs: Static vs Dynamic Agent Workflows](https://www.youtube.com/watch?v=m9DQfa-ocCs)
+Watch on YouTube: [Agentic Compute Graphs: Static vs Dynamic Agent Workflows](https://www.youtube.com/watch?v=m9DQfa-ocCs)
 
-Here's a decision that quietly determines whether your AI agent is reliable or expensive: does it follow a fixed script, or does it decide its own path at runtime? Pick the wrong end of that spectrum and you pay for it — in flakiness at one extreme, in wasted tokens at the other.
+One design choice shapes the behavior and cost of an AI workflow: do you define the route before it runs, or let the system select some routes at runtime?
 
-I think of every agent system as a **compute graph**: nodes that do work, edges that pass control and data. The interesting question isn't *whether* you have a graph — you always do — it's how much freedom the graph has to rewire itself while it runs.
+I find it useful to model an agent system as a compute graph. Nodes do work. Edges pass control and data. I use "plasticity" to mean how much freedom the graph gives the runtime to choose its route. It is a framing for design decisions, not a formal standard.
 
 ## The plasticity spectrum
 
-Agent architectures live on a spectrum I call **plasticity** — how much the graph can change shape at runtime.
+A fully static workflow defines its nodes and routes before execution. It may still have fixed conditional branches, but the topology and rules are known in advance. At the other end, an agent can select tools, decide among routes, and sometimes start subagents while it runs.
 
-At one end, **fully static**: the graph is fixed before execution. Node A always leads to node B leads to node C. It's a finite-state machine, essentially a flowchart with LLM calls in the boxes. Nothing about the topology is decided at runtime.
+Most systems mix the two. The useful question is not whether a graph is static or dynamic in the abstract. It is where runtime choice is worth the extra uncertainty and overhead.
 
-At the other end, **fully dynamic**: the agent decides, moment to moment, what to do next, which tools to call, and even which sub-agents to spawn. The graph is discovered as it executes. This is the "give the model a goal and let it figure out the path" dream.
+## Fixed workflows
 
-Most real systems sit somewhere in between, and the whole game of agent architecture is choosing *where* on that spectrum each part of your system should live.
+Static workflows are often the right fit for tasks with clear requirements. A known path is easier to test, review, and explain. Payment flows, data pipelines, and compliance checks often benefit from that predictability.
 
-## Static workflows: the power of determinism
+The trade-off is that a fixed workflow can spend effort on cases that do not need it. Imagine a verification chain that always runs five steps, even though only 5% of requests need the full chain. If every step runs unconditionally, the other 95% pay for work that adds little value. Caching, early exits, and fixed conditional routing can reduce that cost without handing routing to a model.
 
-Static graphs get unfairly dismissed as "not real agents." That's backwards. Determinism is a feature, and often the most valuable one you have.
+## Dynamic routing
 
-When the topology is fixed, the system is **predictable**: the same input flows through the same path every time. That means you can test it, you can reason about its failure modes, you can put it in front of a customer without holding your breath. There's no runtime surprise where the agent decides to take a creative detour into an infinite loop.
+Agent-selected routing can send simple requests down a shorter path and reserve costly work for difficult ones. It also adds model calls, coordination overhead, and paths that are harder to predict. Dynamic routing can lower wasted work in some systems; it does not automatically lower total cost.
 
-For anything with real stakes — a payment flow, a data pipeline, a compliance step — determinism is exactly what you want. The path is auditable because the path is fixed. You trade flexibility for reliability, and for a huge class of production tasks that's the right trade.
+The choice is a cost and reliability trade-off. Add runtime freedom only when the variation in the task is real enough to justify it.
 
-## The token tax of over-provisioning
+## LangChain and LangGraph
 
-But static has a failure mode too, and it's a financial one. When you hard-wire a graph for the *hardest* case it might ever see, every request pays for that worst case — even the trivial ones.
+The distinction between LangChain and LangGraph is best understood as an emphasis, not a hard boundary. LangChain provides components such as prompt templates, model wrappers, tool integrations, and output parsers. It also has agent and orchestration features, often with LangGraph underneath.
 
-This is **over-provisioning**, and it shows up as a token tax. If your static workflow always runs a five-step verification chain because 5% of inputs need it, the other 95% burn those tokens for nothing. A static graph can't skip steps it doesn't need, because skipping is a runtime decision and static graphs don't make runtime decisions. You've bought reliability and paid for it in inference cost on every single call.
+LangGraph focuses on stateful graph execution. It is useful when a workflow needs explicit state, cycles, conditional edges, or routes selected at runtime. In many projects the two are complementary: LangChain supplies integrations and components, while LangGraph makes control flow and state visible.
 
-Dynamic graphs solve exactly this — they can route the easy 95% down a short path and reserve the expensive chain for the hard 5%. That's the upside of plasticity: you provision effort per-request instead of per-worst-case.
+## Observability follows flexibility
 
-## Orchestration tooling: components vs runtime
+When a system can choose different routes, two runs may not take the same path. Production teams then need to record which nodes ran, in which order, and with what state. Observability becomes hard to avoid once routing is no longer fixed.
 
-This maps cleanly onto two tools people constantly confuse. The distinction is components versus runtime.
+A trace supports diagnosis and can help approximate a replay. It does not guarantee that an LLM or external tool will reproduce the same result, since sampling, models, context, and external state can change.
 
-**LangChain** is a library of **components** — the building blocks. Prompt templates, model wrappers, tool integrations, output parsers. It gives you the pieces. It doesn't, by itself, give you a stateful, branching, cyclic execution model.
+## A practical sequence
 
-**LangGraph** is a **runtime** — a stateful graph execution engine. It's built for exactly the plasticity question: cycles, conditional edges, persistent state across steps, and the ability to express both static and dynamic topologies explicitly. You define nodes and edges, and the runtime manages traversal, state, and control flow.
+My preference is to begin with a fixed graph. It forces the team to describe the task and gives a baseline for tests and costs. Then look for steps that run without earning their cost. Add dynamic decisions only where variable inputs or open-ended work make them useful, and keep the resulting routes observable.
 
-The short version: reach for LangChain when you need the parts, and LangGraph when you need to orchestrate them into a graph that has real control flow and memory. They're complements, not competitors.
-
-## Observability: debugging path divergence
-
-The moment you allow any plasticity, you inherit a new problem — **path divergence**. Two runs of the same system can now take different routes. When something goes wrong, "it worked last time" is no longer a useful clue, because last time may have followed a completely different path.
-
-This is why observability stops being optional the instant you leave the fully-static end. You need to capture the *actual* graph each execution traversed — which nodes fired, in what order, with what state — so you can replay and debug a specific run rather than a hypothetical one. Without that trace, a dynamic agent is a black box that fails in ways you can't reproduce. With it, divergence becomes debuggable.
-
-## The architect's playbook
-
-So how do you actually decide? Here's the sequence I follow.
-
-**Start static.** Model the workflow as a fixed graph first. It's the most predictable, testable, and debuggable form, and it forces you to actually understand the task.
-
-**Prune.** Find the steps that don't earn their keep — the over-provisioned branches that run for cases that rarely occur. Cut the token tax.
-
-**Generate.** Where you genuinely need runtime flexibility — variable inputs, open-ended tasks — introduce dynamic decision-making. Let the graph choose its path there, and there only.
-
-**Edit sparingly.** Every bit of plasticity you add is reliability and observability cost you take on. Add it deliberately, where it pays for itself, not everywhere by default.
-
-The principle underneath all four steps: **default to determinism, buy plasticity only where it earns its cost.** Most systems need far less runtime freedom than their builders assume — and the ones that get this right are both more reliable and cheaper to run.
+That is not a universal rule. It is a reasonable default when an agent system needs to be understandable as well as capable.
 
 ---
 
-If this was useful, come talk agent architecture with me: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), [Telegram](https://t.me/suenot_dev).
+More: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), and [Telegram](https://t.me/suenot_dev).

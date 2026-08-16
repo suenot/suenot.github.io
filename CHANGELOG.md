@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.16] - 2026-08-16
+
+### Changed
+
+- Reworked the agentic compute graphs article with a more direct account of routing, cost, LangChain, LangGraph, and observability trade-offs.
+
 ## [0.4.15] - 2026-08-16
 
 ### Changed
