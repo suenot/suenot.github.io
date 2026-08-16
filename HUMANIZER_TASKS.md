@@ -18,7 +18,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `agent-harness-architecture` (EN)
 - [x] `agentic-compute-graphs` (EN)
 - [x] `karpathy-loop-ai-arbitrage` (EN)
-- [ ] `kimi-k3` (EN)
+- [x] `kimi-k3` (EN)
 - [ ] `knowledge-graphs-algebra` (EN)
 - [ ] `kv-cache-paged-attention` (EN)
 - [ ] `life-harness` (EN)

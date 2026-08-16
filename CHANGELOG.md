@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.18] - 2026-08-16
+
+### Changed
+
+- Reworked the Kimi K3 article with a direct, source-attributed explanation of its architecture, evaluations, deployment, and safety responsibilities.
+
+### Fixed
+
+- Corrected the activated-parameter and API-pricing descriptions.
+
 ## [0.4.17] - 2026-08-16
 
 ### Changed
