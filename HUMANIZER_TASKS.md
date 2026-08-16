@@ -17,7 +17,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `liquid-foundation-models` (EN)
 - [x] `agent-harness-architecture` (EN)
 - [x] `agentic-compute-graphs` (EN)
-- [ ] `karpathy-loop-ai-arbitrage` (EN)
+- [x] `karpathy-loop-ai-arbitrage` (EN)
 - [ ] `kimi-k3` (EN)
 - [ ] `knowledge-graphs-algebra` (EN)
 - [ ] `kv-cache-paged-attention` (EN)

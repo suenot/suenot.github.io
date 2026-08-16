@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.17] - 2026-08-16
+
+### Changed
+
+- Reworked the Karpathy Loop article with a more direct, risk-aware explanation of agent work, value, and trading examples.
+
 ## [0.4.16] - 2026-08-16
 
 ### Changed
