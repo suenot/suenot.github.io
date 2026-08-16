@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian Last30Days articles with a natural voice and corrected source-verified details about contribution counts, local execution, installation paths, hooks, and cost controls.
+
 ## [0.4.3] - 2026-08-16
 
 ### Changed

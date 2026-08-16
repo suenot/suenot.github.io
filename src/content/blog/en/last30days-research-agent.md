@@ -1,6 +1,6 @@
 ---
 title: "Last30Days: How an Engagement-Ranked Research Agent Actually Works"
-description: "A 39k-star agent skill that researches Reddit, X, YouTube, Hacker News and Polymarket from your own machine, using your own browser cookies. What the ranking really does, why its deduplication is deliberately boring, and which failure modes are still open — verified against the source code, not the hype."
+description: "A source-checked look at how Last30Days researches Reddit, X, YouTube, Hacker News, and Polymarket from a local machine, ranks results, removes duplicates, and handles failures."
 pubDate: 2026-08-07
 heroImage: "/images/blog/last30days-research-agent-hero.png"
 tags: ["agent-skills", "claude-code", "research-agents", "web-scraping", "ranking", "last30days"]
@@ -9,17 +9,17 @@ draft: false
 
 # Last30Days: How an Engagement-Ranked Research Agent Actually Works
 
-🎬 **Watch on YouTube:** [Your AI Doesn't Know What Happened Last Month. One Command Fixes It](https://www.youtube.com/watch?v=4HpQh1heIkw)
+Video: [Your AI Doesn't Know What Happened Last Month. One Command Fixes It](https://www.youtube.com/watch?v=4HpQh1heIkw)
 
-Ask a base model what happened last month and it answers from weights that froze before last month existed. Ask a search engine and it returns SEO articles written to rank, not to inform. The discussion that actually matters — the thread where three people who shipped the thing argue about why it broke — lives inside walled gardens that neither of them can see.
+Ask a base model what happened last month and it answers from weights trained before that month existed. A search engine often returns articles written to rank. Meanwhile, the useful discussion may be sitting inside a closed platform, in a thread where three people who shipped the thing are arguing about why it broke.
 
-[Last30Days](https://github.com/mvanhorn/last30days-skill) is an agent skill built around that gap. It hit roughly 39,000 GitHub stars and the top of the trending list by doing something structurally simple: run the searches from *your* machine, with *your* logged-in browser session, then rank what comes back by what people actually engaged with.
+[Last30Days](https://github.com/mvanhorn/last30days-skill) searches those platforms from your machine, combining source-specific tools with credentials stored locally, and ranks the results by engagement. The agent skill reached roughly 39,000 GitHub stars and the top of the trending list with that straightforward setup.
 
-I went through the source video's architectural claims and checked each one against the repository. Several of them turned out to be wrong — in interesting ways. What follows is the version that survives contact with the code.
+I checked the architectural claims in the source video against the repository. Several did not match the code. The gaps reveal engineering tradeoffs that the video's cleaner explanation left out.
 
-## The distribution story is half the product
+## Why global installation matters
 
-Two install paths, and the difference matters more than it looks:
+The project has two installation paths:
 
 ```bash
 # Claude Code, via the plugin marketplace — auto-updates
@@ -29,21 +29,21 @@ Two install paths, and the difference matters more than it looks:
 npx skills add mvanhorn/last30days-skill -g
 ```
 
-The `-g` flag installs globally instead of per-project. That single flag is the difference between a tool you re-initialize in every microservice repo and a capability that's simply present wherever you open a terminal. For a research skill — something you reach for *between* projects, not inside one — global is the only sane default.
+The `-g` flag installs the skill globally instead of adding it to one project. Without it, every microservice repository needs its own setup. With it, the skill is available from any terminal. That fits a research tool used between projects better than a project-local installation.
 
-This is the same shift I wrote about in [Claude Code Skills and Wayfinder](https://www.suenot.com/blog/claude-code-skills-wayfinder/): skills stopped being repo-local config and became installable, versioned, cross-harness packages. Last30Days is what that ecosystem looks like when a single skill gets 175 merged community PRs in a release cycle.
+I wrote about the same change in [Claude Code Skills and Wayfinder](https://www.suenot.com/blog/claude-code-skills-wayfinder/). Skills have moved beyond repository configuration into installable, versioned packages that work across harnesses. Between the v3.3 announcement in May and v3.11.1 in July 2026, Last30Days merged 175 pull requests across 15 releases. Of those, 122 came from 52 community contributors.
 
-## Bring your own credentials
+## The searches use your credentials
 
-There is no central API pool and no server-side scraping fleet. Reddit, Hacker News, Polymarket, GitHub, arXiv and Techmeme work with zero configuration. X, YouTube, Bluesky, TikTok, Instagram and LinkedIn need credentials — and the credentials are *yours*: browser cookies read locally, API keys from a `.env` file or the macOS keychain via `scripts/setup-keychain.sh`.
+There is no central API pool or server-side scraping fleet. Reddit, Hacker News, Polymarket, and GitHub work immediately. First-run setup installs keyless command-line tools for YouTube, arXiv, and Techmeme. X can use local browser cookies, Bluesky uses an app password, and TikTok, Instagram, and LinkedIn use a configured ScrapeCreators key. API keys can come from a `.env` file or the macOS keychain through `scripts/setup-keychain.sh`.
 
-The trade is explicit. You get past bot-checks because you aren't a datacenter IP pretending to be a person — you're a person's own authenticated session, on their own machine. Your research queries never leave the laptop. In exchange, the project inherits the maintenance burden of every browser-and-OS combination that stores cookies differently, and you inherit whatever your platform's terms say about automated access from your account.
+For sources that use a browser session, requests come from the person's authenticated machine instead of a datacenter scraper. The local process still sends searches to external platforms and APIs; it simply does not route them through a central Last30Days service. The project must support browser and operating-system combinations that store cookies differently. The person running the skill also remains responsible for each platform's terms on automated account access.
 
-That's a real cost, not a footnote. But it's the same architectural bet as the local-first patterns in [Agent Harness Architecture](https://www.suenot.com/blog/agent-harness-architecture/): push capability to the edge, keep state on the user's machine, and let the harness — not a central service — hold the credentials.
+This follows the local-first pattern I discussed in [Agent Harness Architecture](https://www.suenot.com/blog/agent-harness-architecture/): the capability and state stay on the user's machine, and the harness holds the credentials instead of a central service.
 
-## The ranking is where the actual engineering is
+## How Polymarket ranking works
 
-The README's one-line summary — "scores content by engagement metrics: upvotes, views, trading volume" — undersells it. Look at the Polymarket integration in `skills/last30days/scripts/lib/polymarket.py` and you find a specific, tuned formula:
+The README says the skill "scores content by engagement metrics: upvotes, views, trading volume." The Polymarket integration in `skills/last30days/scripts/lib/polymarket.py` is more specific:
 
 ```python
 market_quality = (
@@ -55,21 +55,19 @@ market_quality = (
 relevance = min(1.0, text_score * (0.75 + 0.25 * market_quality))
 ```
 
-Three things worth stealing from those five lines.
+The final relevance score starts with `text_score` and scales it by a factor between 0.75 and 1.0. Market quality can refine a relevant match, but it cannot create text relevance. A $50M election market gains no automatic place in results for a Python library just because it has high volume.
 
-**Semantic relevance multiplies; market quality only modulates.** The final score is `text_score` scaled by a factor between 0.75 and 1.0. A wildly liquid market that doesn't match your topic cannot climb the rankings — quality refines relevant matches instead of rescuing irrelevant ones. That single structural choice is what keeps a $50M election market out of your query about a Python library.
+Volume and liquidity use logarithmic saturation. With `min(1.0, log1p(volume) / 16)`, both a $9M market and a $90M market reach the volume ceiling. Otherwise one market dominated by whales could flatten every other signal. Recent price movement also gets more weight: daily change counts 3x, weekly change 2x, and monthly change 1x.
 
-**Everything saturates logarithmically.** `min(1.0, log1p(volume) / 16)` means a $9M market and a $90M market score nearly the same. Without the log, one whale market would flatten every other signal. Recency of price *movement* is weighted too — a daily change counts 3×, weekly 2×, monthly 1× — because a market that just moved is a market where something happened.
+Markets close to 50/50 receive a bonus because they still contain genuine disagreement. A market at 97% is already close to settled.
 
-**Near-50/50 markets get a bonus.** A market sitting at 97% isn't news; it's a settled question with a spread. The interesting signal is genuine disagreement.
+The source video claimed that the developers "abandoned dollar volume entirely and switched to pure probabilities, because volume is distorted by whales." The code says otherwise. Volume is the heaviest term at 0.50, and logarithmic compression limits the effect of whales without discarding the signal.
 
-Here the source video I worked from claimed the developers "abandoned dollar volume entirely and switched to pure probabilities, because volume is distorted by whales." That's a nice story and it's false. Volume is the single heaviest term at 0.50. The whale problem is handled by the log compression, not by dropping the signal.
+## Deduplication uses Jaccard, not embeddings
 
-## Deduplication is deliberately boring, and that's the lesson
+The video also claimed that v3 introduced "vector embeddings for cross-platform semantic clustering" to collapse a Reddit thread, an X argument, and a YouTube comment section into one entity.
 
-The second claim I checked was that v3 introduced "vector embeddings for cross-platform semantic clustering," collapsing a Reddit thread, an X argument and a YouTube comment section into one entity.
-
-The actual implementation, in `lib/dedupe.py`, opens with the docstring `"""Within-source near-duplicate detection."""` and runs on Jaccard similarity:
+The implementation in `lib/dedupe.py` opens with the docstring `"""Within-source near-duplicate detection."""` and uses Jaccard similarity:
 
 ```python
 def hybrid_similarity(text_a: str, text_b: str) -> float:
@@ -79,53 +77,50 @@ def hybrid_similarity(text_a: str, text_b: str) -> float:
     )
 ```
 
-Character 3-grams OR filtered token sets, whichever agrees more, at a 0.7 threshold. No embeddings, no vector store, no model call. Chinese segmentation is handled by a dedicated `cjk` module rather than by hoping a multilingual embedding model works it out.
+It compares character 3-grams and filtered token sets, keeps the higher score, and applies a 0.7 threshold. The module uses neither embeddings nor a vector store and makes no model calls. A dedicated `cjk` module handles Chinese segmentation.
 
-And then there's the best comment in the file — a bug report preserved as a docstring:
+The file also preserves a bug report as a docstring:
 
 > Jobs are deduped by exact URL only: distinct postings on the same careers board share heavy boilerplate (company intro, "TL;DR", benefits) that trips fuzzy text similarity and collapses unrelated roles (a 26-role board fell to 7).
 
-Twenty-six jobs became seven because every posting shared the same company blurb. The fix wasn't a better similarity metric — it was noticing that job postings already carry a unique identity, and using it. That's the whole discipline in one paragraph: fuzzy matching is a fallback for when you have no identifier, not an upgrade over having one.
+Twenty-six jobs became seven because every posting shared the same company text. The fix used the exact URL already attached to each job instead of trying to improve fuzzy similarity. Fuzzy matching still helps when no identifier exists, but it is a poor substitute for one that is already available.
 
-Every LLM call you *don't* make is latency and money you keep — the same argument as [saving tokens in Claude Code](https://www.suenot.com/blog/saving-tokens-llm/), applied one layer down. Cheap deterministic filters run first; the model only sees what survives.
+This also avoids model calls during deduplication. Cheap deterministic filters run first, and the model sees only the surviving results. The cost argument is the same one I made in [saving tokens in Claude Code](https://www.suenot.com/blog/saving-tokens-llm/), applied one layer earlier in the pipeline.
 
-## The open failure modes
+## What still breaks
 
-The source video presented two bugs as elegantly solved. Both are still open on GitHub, and both are more instructive unsolved.
+The source video presented two bugs as solved, but both remain open on GitHub. A third issue is closed and shows a different kind of failure.
 
-**Issue #887 — entity-miss demotion is inert on topics without a distinctive entity.** The pipeline demotes results that don't mention the thing you asked about. But on an abstract query — "AI code review," "comparison" — the parser finds no hard proper noun, strips the intent words, and clamps onto whatever broad token remains. Query "AI code review," lose "review," keep "AI," and now every piece of content in the universe that says "AI" scores as relevant. The reported symptom: astronomy videos and course spam outranking actual technical threads.
+### Issue #887: a broad token passes entity grounding
 
-The proposed fix requires a *discriminating* token — statistically rare — before relevance is granted. Which is a genuine precision-versus-recall trade, not a free win: tighten it and you also stop surfacing the unexpected cross-domain result that made the tool interesting. For a tool whose metric is "developer time saved before standup," a false positive costs more than a missed insight. Reasonable call. Still a trade.
+The reported query was `AI code review bottleneck: can reviewers still judge AI-produced work`. The parser removed `review` because it treats that word as an intent modifier. The remaining entity still began with `AI`, so `_entity_grounded` accepted candidates whose only overlap was that leading token. In the reproduced run, a course promotion, a Chinese web drama, and an astronomy video scored alongside the relevant technical clusters.
 
-**Issue #818 — npx-installed v3.14 regresses to repository-relative script paths.** Scripts resolved their own assets relative to `process.cwd()`. Fine when you run from the project root; broken the moment `-g` means you're running from `~/work/some-enterprise-app` while the package lives in a global node modules tree. The tool goes looking for its HTML report templates inside your app.
+The proposed fix keeps an intent modifier when it is the only content-bearing noun and requires a discriminating token for grounding. That should reduce false positives, though a stricter test can also reduce recall. The issue remains open.
 
-Note what makes this bug *structural* rather than sloppy: global installation is the feature, and global installation is what breaks the assumption. Ship the convenience, inherit the path problem.
+### Issue #818: global installation exposes a path bug
 
-**Issue #463 — closed, and the most transferable of the three.** The SessionStart hook `check-config.sh` exited 1 when no prior run existed, because there was no history file to read. In a normal shell that's a yellow "file not found" warning nobody reads. Inside an agent harness, exit code 1 is a fatal task error — the agent panics, retries, hallucinates a recovery, or loops.
+In v3.14 installed through npx, several instructions in `SKILL.md` invoked `skills/last30days/scripts/last30days.py` relative to the current workspace. The HTML reference also used the old `${SKILL_ROOT}` convention instead of `${SKILL_DIR}`. Those paths work from a repository checkout but fail when the skill is installed globally and invoked from an unrelated directory such as `~/work/some-enterprise-app`.
 
-Agents are far more sensitive to return codes than humans are. "No previous state" is not a failure; it's a first run. If you write hooks for agent environments, that distinction is the difference between a clean start and a self-repair spiral. It's the harness-level thinking I keep coming back to in [The Harness, Not the Model](https://www.suenot.com/blog/harness-not-model/).
+The engine is present under the global skill directory, but the instructions still assume a repository checkout inside the current workspace.
 
-## Cost control as a first-class feature
+### Issue #463: a nonzero hook exit caused a warning
 
-An agent that autonomously fires hundreds of requests can burn a budget quietly. Two mechanisms:
+This issue is closed. The SessionStart hook `check-config.sh` returned exit code 1 when there was no history file from a previous run. Claude Code showed a non-blocking hook-failure warning, but the session itself was unaffected.
+
+No previous state means that this is the first run, not that the hook failed. Returning zero removes a confusing warning from an otherwise valid setup. This is the same harness-level concern I discussed in [The Harness, Not the Model](https://www.suenot.com/blog/harness-not-model/).
+
+## How the skill limits spending
+
+An agent making hundreds of requests can consume a budget without much visibility. Source selection is the first control:
 
 - `EXCLUDE_SOURCES=tiktok,instagram` hard-blocks platforms at the core, before any call is planned.
-- Paid sources — Perplexity, Brave Search, ScrapeCreators — are opt-in. Without an explicit include flag, the engine spends nothing.
+- Perplexity is explicitly opt-in. TikTok, Instagram, and LinkedIn require both a ScrapeCreators key and source selection. Configured web-search backends can be selected automatically, so their quotas and pricing still need attention.
 
-Plus `--preflight`, which prints what would be read and written without executing anything. The obvious use is a sanity check. The better one is CI: validate that your configuration, env vars and routing are correct without touching real browser cookies or sending a single outbound request. Separating "plan the execution graph" from "execute it" is what lets a scraping pipeline have integration tests at all.
+The `--preflight` option reports the configuration source, browser-cookie plan, planned writes, optional commands, available sources, and endpoint overrides. It does not read browser cookies, write setup or report files, or run research. That makes it a safe way to inspect permissions and routing before a real request.
 
-The other cost lever shipped in v3.16.0 (PR #827): YouTube comments now come free through `yt-dlp` instead of requiring a paid scraping API. The fallback pattern is the interesting part — try the free local extractor first, fall back to the paid API when YouTube changes its DOM on a Friday night, and return to free automatically once the open-source parser is fixed upstream. Free path first, paid path as insurance, no manual switch.
+Version 3.16.0 added another cost control in PR #827. YouTube comments now use the free local `yt-dlp` extractor first. A genuine extractor failure can trigger the ScrapeCreators fallback, but only when its token is configured. A clean result with zero comments does not spend a paid request.
 
-## What to take from it
-
-Whether or not you install the skill, four patterns transfer directly to anything agentic you're building:
-
-1. **Let relevance multiply and quality modulate.** Popularity should never outrank topicality.
-2. **Compress unbounded signals logarithmically.** One whale should not flatten a thousand honest votes.
-3. **Use identifiers when you have them.** Fuzzy similarity is what you do when you don't.
-4. **Never exit non-zero for "nothing here yet."** In agent environments, an error code is a panic trigger.
-
-And one meta-lesson, which is why this article exists in the form it does. The video I built it from is itself an AI synthesis, and it stated with total confidence that two open issues were closed, that volume-based ranking had been abandoned, and that a Jaccard deduper was a vector embedding pipeline. Every one of those claims was checkable in about ninety seconds against the GitHub API and the source files. Confidence is free; verification is cheap. Run the check.
+The source video was itself an AI synthesis. It confidently described two open issues as closed, said volume-based ranking had been abandoned, and called a Jaccard deduper a vector embedding pipeline. Checking those claims against the GitHub API and source files took about ninety seconds. That check is why the implementation described here differs from the video.
 
 ---
 
