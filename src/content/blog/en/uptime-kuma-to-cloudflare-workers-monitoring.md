@@ -2,7 +2,7 @@
 title: "Replacing Uptime Kuma with Cloudflare Workers: a monitor that survives the server"
 description: "How I moved monitoring outside the server with Cloudflare Workers, D1, a public status page, and Telegram notifications for outages and recovery."
 pubDate: 2026-08-16
-heroImage: "/images/blog/uptime-kuma-to-cloudflare-workers-monitoring-hero.png"
+heroImage: "https://suenot.com/images/blog/uptime-kuma-to-cloudflare-workers-monitoring-hero.png"
 tags: ["cloudflare", "cloudflare-workers", "monitoring", "uptime", "incident-response", "notifications"]
 draft: false
 ---

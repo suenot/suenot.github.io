@@ -2,7 +2,7 @@
 title: "Как я перенес мониторинг с Uptime Kuma на Cloudflare Workers"
 description: "Внешние проверки из Cloudflare, D1 для истории и Telegram-уведомления: что изменилось после отказа от локального мониторинга и почему падение сервера теперь видно со стороны."
 pubDate: 2026-08-16
-heroImage: "/images/blog/uptime-kuma-to-cloudflare-workers-monitoring-hero.png"
+heroImage: "https://suenot.com/images/blog/uptime-kuma-to-cloudflare-workers-monitoring-hero.png"
 tags: ["cloudflare", "cloudflare-workers", "мониторинг", "uptime", "инциденты"]
 draft: false
 ---

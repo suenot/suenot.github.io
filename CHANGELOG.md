@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-08-16
+
+### Fixed
+
+- Served the monitoring article hero image from the canonical domain so it also renders on the `www` host.
+
 ## [0.4.0] - 2026-08-16
 
 ### Added
