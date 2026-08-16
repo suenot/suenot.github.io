@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.14] - 2026-08-16
+
+### Changed
+
+- Reworked the Liquid Foundation Models article with a more direct explanation and corrected claims about continuous-time networks and LFM architecture.
+
+### Fixed
+
+- Corrected the Liquid Foundation Models footer Discord link.
+
 ## [0.4.13] - 2026-08-16
 
 ### Changed

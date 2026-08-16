@@ -14,7 +14,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `claude-opus-5-review` (EN)
 - [x] `gigatoken-fast-tokenization` (EN)
 - [x] `kimi-k3-open-source-sputnik` (EN)
-- [ ] `liquid-foundation-models` (EN)
+- [x] `liquid-foundation-models` (EN)
 - [ ] `agent-harness-architecture` (EN)
 - [ ] `agentic-compute-graphs` (EN)
 - [ ] `karpathy-loop-ai-arbitrage` (EN)
