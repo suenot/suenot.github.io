@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.24] - 2026-08-16
+
+### Changed
+
+- Reworked the Vibe Graphing article with a direct explanation of MASFactory's human-in-the-loop workflow design.
+
+### Fixed
+
+- Corrected the line-count comparison and clarified that reported dollar figures measure workflow construction, not runtime execution.
+
 ## [0.4.23] - 2026-08-16
 
 ### Changed
