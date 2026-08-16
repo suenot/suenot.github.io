@@ -36,6 +36,19 @@ The pieces are simple:
 
 `status.marketmaker.cc` is now the main status address. `uptime.marketmaker.cc` remains available as a compatibility address, so existing bookmarks still work.
 
+## TL;DR: start with the boilerplate
+
+I also made the blank version of this setup public: [Cloudflare Uptime Starter](https://github.com/suenot/cloudflare-uptime-starter). It has no MarketMaker logo, monitor list, or notification credentials. The starter uses the same independent checker and D1 state, with a status-page Worker that is ready for current Next.js deployments on Cloudflare.
+
+The short path is:
+
+1. Create a repository from the template and replace the `example-site` entry in `config/public.ts` with a public endpoint you own.
+2. Run `npm ci` and `npm --prefix worker ci`, then create a D1 database with Wrangler.
+3. Put the returned D1 ID in both Wrangler configuration files, initialize it with `init.sql`, and deploy the checker and status page.
+4. Add the optional notification URL and JSON payload as Worker secrets. They never belong in the TypeScript configuration or GitHub Actions YAML.
+
+The [README in the template](https://github.com/suenot/cloudflare-uptime-starter#tldr) has the exact commands. It is a better starting point than copying the production configuration because that configuration includes project-specific monitor names and operational details.
+
 ## Notifications that are useful during an outage
 
 One failed request is not always an outage. It can be a brief network delay, an application restart, or a temporary proxy response. A down notification therefore waits for two consecutive failures instead of reacting to the first timeout.
