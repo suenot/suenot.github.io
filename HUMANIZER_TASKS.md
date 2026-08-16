@@ -21,7 +21,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `kimi-k3` (EN)
 - [x] `knowledge-graphs-algebra` (EN)
 - [x] `kv-cache-paged-attention` (EN)
-- [ ] `life-harness` (EN)
+- [x] `life-harness` (EN)
 - [ ] `model-routing-explained` (EN)
 - [ ] `self-evolving-knowledge-systems` (EN)
 - [ ] `vibe-graphing` (EN)

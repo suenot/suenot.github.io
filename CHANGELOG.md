@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.21] - 2026-08-16
+
+### Changed
+
+- Reworked the Life Harness article with a direct, source-attributed account of its runtime components and experimental scope.
+
+### Fixed
+
+- Corrected the claim that Life Harness is a physical-world interface and clarified its offline harness evolution.
+
 ## [0.4.20] - 2026-08-16
 
 ### Changed
