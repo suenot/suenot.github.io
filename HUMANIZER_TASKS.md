@@ -11,7 +11,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `multi-agent-graph-engineering` (EN, RU)
 - [x] `self-learning-company` (EN, RU)
 - [x] `claude-code-skills-wayfinder` (EN)
-- [ ] `claude-opus-5-review` (EN)
+- [x] `claude-opus-5-review` (EN)
 - [ ] `gigatoken-fast-tokenization` (EN)
 - [ ] `kimi-k3-open-source-sputnik` (EN)
 - [ ] `liquid-foundation-models` (EN)

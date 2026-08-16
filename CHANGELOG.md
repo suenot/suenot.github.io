@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.11] - 2026-08-16
+
+### Changed
+
+- Reworked the Claude Opus 5 review with a more direct voice and clear source attribution for benchmark, cost, safety, and strategic claims.
+
 ## [0.4.10] - 2026-08-16
 
 ### Changed
