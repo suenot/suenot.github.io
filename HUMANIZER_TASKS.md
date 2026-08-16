@@ -9,7 +9,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `last30days-research-agent` (EN, RU)
 - [x] `ai-coding-workflows-skills` (EN, RU)
 - [x] `multi-agent-graph-engineering` (EN, RU)
-- [ ] `self-learning-company` (EN, RU)
+- [x] `self-learning-company` (EN, RU)
 - [ ] `claude-code-skills-wayfinder` (EN)
 - [ ] `claude-opus-5-review` (EN)
 - [ ] `gigatoken-fast-tokenization` (EN)

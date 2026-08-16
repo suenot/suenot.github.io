@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian self-learning company articles with a more direct, natural voice while preserving their sources and technical claims.
+
 ## [0.4.8] - 2026-08-16
 
 ### Changed
