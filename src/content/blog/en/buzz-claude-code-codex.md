@@ -9,15 +9,15 @@ draft: false
 
 # Buzz: Put Claude Code and Codex in the Same Room
 
-**Watch the visual explainer:** [Claude Code + Codex in One Channel: Buzz Explained](https://youtu.be/NLopx9QY1Bo)
+Video: [Claude Code + Codex in One Channel: Buzz Explained](https://youtu.be/NLopx9QY1Bo)
 
-Your Claude Code runs in one terminal. Your Codex runs in another. When one of them needs to know what the other just concluded, you select the text, switch windows, and paste. You are the integration layer, and you are the slowest part of it.
+Claude Code runs in one terminal and Codex in another. Passing a conclusion from one to the other means selecting text, switching windows, and pasting it by hand. That is manageable once or twice. When the agents need to consult each other all day, the human becomes an expensive clipboard.
 
-[Buzz](https://github.com/block/buzz) deletes that job. It's a self-hostable workspace from Block — Apache-2.0, with more than 26,000 GitHub stars at the time of writing — where humans and agents sit in the same channels. Not a bot that posts into your chat: a member, with its own identity, its own channel memberships, and its own audit trail.
+[Buzz](https://github.com/block/buzz) puts people and agents in shared channels. It is a self-hostable workspace from Block under the Apache-2.0 license. At publication, its GitHub repository had more than 26,000 stars. Each agent connects as a separate member with its own identity, access to specific channels, and entries in the audit log.
 
-## The wiring, since that's what you came for
+## How Buzz connects the agents
 
-The piece that connects your existing agents is `buzz-acp`, a harness in the repo:
+The bridge to an existing agent is `buzz-acp`, a harness in the repository:
 
 ```
 Buzz Relay ──WS──→ buzz-acp ──stdio──→ Your Agent
@@ -26,9 +26,9 @@ Buzz Relay ──WS──→ buzz-acp ──stdio──→ Your Agent
                                     (send_message, etc.)
 ```
 
-The harness listens for @mentions on the relay, prompts your agent over the [Agent Client Protocol](https://agentclientprotocol.com/) on stdin/stdout, and the agent replies through `buzz-cli` — a JSON-in, JSON-out tool built to be called by an LLM rather than typed by a human.
+The harness listens for `@mentions` on the relay and prompts the agent over the [Agent Client Protocol](https://agentclientprotocol.com/) through stdin and stdout. The reply goes through `buzz-cli`. That tool accepts and returns JSON, which suits model calls better than manual terminal use.
 
-Anything that speaks ACP over stdio plugs in. The docs show two adapter paths plus Goose's native ACP entrypoint:
+Any environment that supports ACP over stdio can connect. The documentation shows two adapters and Goose's native ACP entry point:
 
 ```bash
 # Codex
@@ -46,43 +46,45 @@ export GOOSE_MODE=auto
 buzz-acp   # spawns the agent, connects to the relay, discovers channels, listens
 ```
 
-One note from the Buzz docs worth having in advance: if the documented `codex-acp` setup logs `426 Upgrade Required` during its ChatGPT WebSocket attempt, Buzz describes that error as expected and non-fatal and recommends `OPENAI_API_KEY` as the fallback.
+There is one Codex caveat. During the ChatGPT WebSocket attempt, the documented `codex-acp` setup may log `426 Upgrade Required`. Buzz describes the error as expected and non-fatal, and its documentation recommends `OPENAI_API_KEY` as the fallback.
 
-The protocol is the whole point. You aren't buying into a vendor's agent; you're pointing a generic harness at the agent runtime you choose. Buzz itself adds no separate platform subscription, but that is not the same as zero total cost: you still pay for your model or API access and for the infrastructure that hosts your relay. The documented Codex path requires `OPENAI_API_KEY`; the Claude adapter uses `ANTHROPIC_API_KEY`.
+I like that the protocol avoids tying this setup to one agent. The same harness can point at whichever agent runtime you choose. Buzz adds no separate platform subscription, although the model or API access and the relay infrastructure still cost money. The documented Codex path requires `OPENAI_API_KEY`, while the Claude adapter uses `ANTHROPIC_API_KEY`.
 
-## Identity instead of permission flags
+## How agent access works
 
-Here's the design decision that makes the rest work, and it's the part worth stealing whether or not you install anything.
+Every agent receives its own Nostr keypair. The keypair defines its identity, and [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md) supplies the event and signature model. Three agents require three keypairs.
 
-Every agent gets its own Nostr keypair. That keypair *is* its identity — the event and signature model comes from [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md). Running three agents means minting three keypairs.
+Two kinds of membership are easy to confuse. `buzz-admin add-member` registers a public key as a relay member. When that list changes, the relay publishes a relay-signed [NIP-43 membership-list snapshot](https://github.com/block/buzz/blob/main/NOSTR.md#relay-membership-nip-43) as event kind `13534`. This is the relay roster. It is neither the agent's keypair nor a private-channel membership event.
 
-The membership layers are separate, and the distinction matters. `buzz-admin add-member` registers the public key as a **relay member**. After a membership change, the relay publishes a relay-signed [NIP-43 membership-list snapshot](https://github.com/block/buzz/blob/main/NOSTR.md#relay-membership-nip-43) as event kind `13534`. That event is the relay roster; it is not the agent's keypair and it is not a private-channel membership event. Channel membership is managed separately, and private channels require explicit membership.
+Channel access is managed separately. Private channels require explicit membership, and the harness discovers only channels available to the authenticated agent. The relay does not yet have a REST or event API for managing channel members. The `buzz-acp` documentation offers a workaround: create the channel through the CLI, which automatically makes the creator a member.
 
-The harness then discovers only channels the authenticated agent is allowed to join. Buzz's own `buzz-acp` documentation calls out a current gap here: the relay does not yet expose a REST or event API for channel-member management. Creating a channel through the CLI works because the creator becomes a member automatically.
+In practice, this is easier to follow than a long capability array. An agent receives access to the rooms it needs, and each action is signed with a traceable key. If it should not see payments, nobody adds it to the payments channel.
 
-So scoping an agent isn't a matter of toggling capability flags in a config file. You add it to the channels it should see, exactly as you'd onboard a person, and everything it does is signed under a key you can trace. An agent that shouldn't touch the payments channel simply isn't in the payments channel.
-
-That's a meaningfully different model from the permission-array approach most agent harnesses use, and it's the same instinct behind treating agents as first-class participants that I've written about in [Graph Engineering for Multi-Agent AI](https://www.suenot.com/blog/multi-agent-graph-engineering/) and [Agent Harness Architecture](https://www.suenot.com/blog/agent-harness-architecture/): the boundaries that hold up are the ones the substrate enforces, not the ones a prompt asks for politely.
+This follows the same line of thought as articles I wrote about [Graph Engineering for Multi-Agent AI](https://www.suenot.com/blog/multi-agent-graph-engineering/) and [Agent Harness Architecture](https://www.suenot.com/blog/agent-harness-architecture/). A boundary enforced by the environment is more dependable than a polite request in a prompt.
 
 ## One log, not seven tabs
 
-Underneath, Buzz is a Nostr relay. Every message, reaction, patch, CI result, workflow step and review approval is a signed event in a single log — same shape, same identity model, same audit trail, whether a person or a process wrote it. Git activity rides in as NIP-34 events: patches, repo announcements, status.
+Buzz runs on a Nostr relay. Messages, reactions, patches, CI results, workflow steps, and review approvals enter one log as signed events. People and processes use the same identity model and audit trail. Git activity arrives through NIP-34 events, including patches, repository announcements, and status.
 
-That sameness is what produces the three things you'd actually use it for.
+### Asking the project about its history
 
-**Ask the project a question and get receipts.** It's 2am and you type "have we seen this error before?" An agent in the channel searches months of history and posts the threads, the root causes and the fixes — links, not vibes. The question and the answer stay in the channel, so the next person at 2am finds both.
+Imagine an error appearing at 2am. Someone asks in the channel whether the team has seen it before. An agent searches months of history and returns related threads, root causes, and fixes with links. The question and answer stay together for the next person who has to investigate it.
 
-**A branch becomes a room.** Open a feature branch, get a channel. Patches land as events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence. The channel becomes the record of *why* the code exists — the context that normally evaporates between a PR description and a Slack thread nobody can find.
+### Giving a branch its own room
 
-**A release that writes itself.** A YAML workflow fires on a tag, an agent reads the merged PRs from the project channels, drafts the release notes and posts them for review. Workflows can already trigger on messages, reactions, schedules or webhooks. A human reaction is a natural control surface, but Buzz's status table still lists formal workflow approval gates as "being wired up", so do not treat that final gate as production-ready yet.
+Open a feature branch and it gets a channel. Patches and CI results arrive there, an agent performs an initial review, and teammates react to the parts that matter to them. The merge decision remains beside the evidence behind it. That context usually gets split between a pull request description and a chat thread that nobody can find later.
 
-And the reason two agents in one channel is more than a gimmick: they can critique each other's work in place. Claude Code proposes, Codex reviews, both see the same thread, and no human relays messages between tabs. If you already run two coding agents daily, that alone is the pitch.
+### Preparing a release
+
+A YAML workflow can fire on a tag. The agent reads merged pull requests from the project channels, drafts the release notes, and posts them for review. Workflows already accept message, reaction, schedule, and webhook triggers. Formal workflow approval gates are still listed as "being wired up" in the Buzz status table, so they are not ready to control the final production step.
+
+Agents in the same channel can also review each other's work. Claude Code might propose a change and Codex inspect it. Both see the same thread, so a person no longer has to carry messages between tabs. That is useful for anyone who already runs two coding agents every day.
 
 ## Getting started
 
-Two paths. The fast one is the packaged desktop app (Tauri + React) from the [latest release](https://github.com/block/buzz/releases/latest) — macOS, Linux and Windows builds. It connects to `ws://localhost:3000` by default; point it elsewhere with `BUZZ_RELAY_URL`. The Windows build isn't code-signed yet, so expect a SmartScreen warning.
+The quickest route is the packaged Tauri and React desktop app from the [latest release](https://github.com/block/buzz/releases/latest). Builds are available for macOS, Linux, and Windows. The app connects to `ws://localhost:3000` by default, and `BUZZ_RELAY_URL` points it elsewhere. The Windows build is not code-signed yet, so SmartScreen may show a warning.
 
-The self-host path needs Docker and Hermit (or Rust 1.88+, Node 24+, pnpm 10+, `just`):
+Self-hosting requires Docker and Hermit. You can use Rust 1.88+, Node 24+, pnpm 10+, and `just` instead of Hermit:
 
 ```bash
 git clone https://github.com/block/buzz.git && cd buzz
@@ -95,31 +97,25 @@ just relay   # relay
 just dev     # desktop app
 ```
 
-Relay on `ws://localhost:3000`, desktop app pops up. For a team relay without managing servers, there's a one-click Railway deploy; for a VPS, the production Compose bundle in `deploy/compose/` (Postgres, Redis, MinIO, optional Caddy/TLS). The root `docker-compose.yml` is development-only — don't ship it.
+The relay then runs on `ws://localhost:3000`, and the desktop app opens automatically. A one-click Railway deployment provides a team relay without server management. For a VPS, `deploy/compose/` contains the production Compose bundle with Postgres, Redis, MinIO, and optional Caddy with TLS. The root `docker-compose.yml` is only for development.
 
-For agents: set `BUZZ_PRIVATE_KEY` and let them call `buzz-cli`.
+Agents need `BUZZ_PRIVATE_KEY` and access to `buzz-cli`.
 
-## What's actually finished
+## What works today
 
-Being straight about the state matters more than hype, so, from the project's own status table:
+According to the project's status table, the relay, channels, threads, DMs, canvases, media, search, and audit log work today. The desktop app, `buzz-cli`, and ACP harness for Goose, Codex, and Claude Code are also available. YAML workflows accept message, reaction, schedule, and webhook triggers. Git support includes NIP-34 events and a hosting backend.
 
-**Works today:** relay, channels, threads, DMs, canvases, media, search, audit log; the desktop app; `buzz-cli` plus the ACP harness for Goose, Codex and Claude Code; YAML workflows with message, reaction, schedule and webhook triggers; NIP-34 git events and a git hosting backend.
+The Flutter clients for iOS and Android are still being wired up. The infrastructure for workflow approval gates exists, but the connecting code is unfinished. Huddle lifecycle events are also in progress. Cross-relay web-of-trust reputation and push notifications remain ideas without code.
 
-**Still being wired up:** mobile clients (iOS and Android, Flutter), workflow approval gates — the infrastructure exists, the glue doesn't — and huddle lifecycle events.
+Before moving a team onto Buzz, keep two constraints in mind. Private channels require explicit membership, and the relay does not yet offer a REST or event API for managing channel members. The documented workaround is to create channels through `create_channel` in the CLI, since the creator automatically becomes a member. The secret key is also neither stored nor recoverable. Losing it means losing the identity.
 
-**Opinions without code yet:** web-of-trust reputation across relays, push notifications.
+The project shipped within the last few months, and some features are still unfinished.
 
-Two more caveats worth knowing before you commit a team to it. Private channels need explicit membership, and the relay doesn't yet expose a REST or event API for managing channel members — the documented workaround is creating channels via `create_channel` in the CLI, since the creator is automatically a member. And the key rule is not a formality: the secret key isn't stored anywhere and can't be recovered. Lose it and you lose the identity.
+## What I would keep without Buzz
 
-The project shipped in the last few months and reads like it. That's the trade for being early enough to shape it.
-
-## Even if you never install it
-
-Three ideas here transfer to whatever you're building:
-
-1. **Give agents identities, not permission arrays.** Membership is easier to reason about, easier to audit, and it degrades sensibly — a key that shouldn't be in a room simply isn't.
-2. **Put the conversation and the artifact in the same log.** The reason context evaporates isn't that people don't write things down; it's that the writing lives in a different system from the code, the CI run and the approval.
-3. **Let a human reaction be a control surface.** A 👍 as an approval gate costs nothing to learn and is trivially auditable when it's a signed event like everything else.
+1. A separate identity makes membership easier to inspect than a long permission array. A key stays out of a room until someone adds it.
+2. Keeping the conversation beside the work preserves the connection between discussion, code, the CI run, and approval.
+3. A thumbs-up can control a workflow without extra explanation and remains auditable when stored as a signed event.
 
 ---
 

@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian Buzz articles with a more natural voice while preserving their technical details, commands, links, and product caveats.
+
 ## [0.4.2] - 2026-08-16
 
 ### Changed
