@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-16
+
+### Added
+
+- Published the English version of the Cloudflare Workers monitoring migration post so it appears in the primary blog archive.
+
+### Changed
+
+- Set `www.suenot.com` as the canonical site URL for generated links and sitemap entries.
+
 ## [0.2.0] - 2026-08-16
 
 ### Added
