@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.26] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian tool-format translation articles with a practical, source-linked account of protocol boundaries.
+
+### Fixed
+
+- Removed stale provider comparisons and narrowed claims about streaming, reasoning state, caching, and compatibility.
+
 ## [0.4.25] - 2026-08-16
 
 ### Removed

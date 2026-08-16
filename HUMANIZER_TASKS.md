@@ -25,7 +25,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `model-routing-explained` (EN)
 - [x] `self-evolving-knowledge-systems` (EN)
 - [x] `vibe-graphing` (EN)
-- [ ] `llm-tool-format-sync` (EN, RU)
+- [x] `llm-tool-format-sync` (EN, RU)
 - [ ] `harness-not-model` (EN, RU)
 - [ ] `cctoggle-claude-code` (EN, RU)
 - [ ] `cloudflare-resend-email` (EN, RU)
