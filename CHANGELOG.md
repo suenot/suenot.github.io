@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.15] - 2026-08-16
+
+### Changed
+
+- Reworked the agent harness architecture article with a more direct explanation of runtime controls and bounded recovery.
+
 ## [0.4.14] - 2026-08-16
 
 ### Changed

@@ -15,7 +15,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `gigatoken-fast-tokenization` (EN)
 - [x] `kimi-k3-open-source-sputnik` (EN)
 - [x] `liquid-foundation-models` (EN)
-- [ ] `agent-harness-architecture` (EN)
+- [x] `agent-harness-architecture` (EN)
 - [ ] `agentic-compute-graphs` (EN)
 - [ ] `karpathy-loop-ai-arbitrage` (EN)
 - [ ] `kimi-k3` (EN)
