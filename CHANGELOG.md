@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.22] - 2026-08-16
+
+### Changed
+
+- Reworked the model-routing article with a direct explanation of routing policies, evaluation, judges, and cache locality.
+
+### Fixed
+
+- Scoped research cost and cache-scheduling figures to their reported experiments and removed unsupported production estimates.
+
 ## [0.4.21] - 2026-08-16
 
 ### Changed

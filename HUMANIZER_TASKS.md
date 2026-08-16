@@ -22,7 +22,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `knowledge-graphs-algebra` (EN)
 - [x] `kv-cache-paged-attention` (EN)
 - [x] `life-harness` (EN)
-- [ ] `model-routing-explained` (EN)
+- [x] `model-routing-explained` (EN)
 - [ ] `self-evolving-knowledge-systems` (EN)
 - [ ] `vibe-graphing` (EN)
 - [ ] `llm-tool-format-sync` (AR, EN, JA, KO, RU, ZH)

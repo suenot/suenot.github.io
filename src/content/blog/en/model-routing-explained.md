@@ -1,72 +1,56 @@
 ---
-title: "LLM Model Routing: How to Cut AI API Spend by 85% Without Losing Quality"
-description: "Firing your most expensive frontier model at every request is a structural defect. Model routing sends each query to the right model instead — cascade, classifier, and semantic routing, the traps that quietly kill your savings, and why orchestration is the new moat."
+title: "LLM model routing: choosing a model for each request"
+description: "Model routing selects among models according to task, quality, budget, latency, availability, and data-residency requirements. A practical guide to routing policies, evaluation, cache locality, and their tradeoffs."
 pubDate: 2026-07-19
 heroImage: "/images/blog/model-routing-explained-hero.png"
 tags: ["llm", "model-routing", "ai-cost-optimization", "inference", "kv-cache", "infrastructure"]
 draft: false
 ---
 
-# LLM Model Routing: How to Cut AI API Spend by 85% Without Losing Quality
+# LLM model routing: choosing a model for each request
 
-🎬 **Watch on YouTube:** [LLM Model Routing: How to Cut AI API Spend by 85% Without Losing Quality](https://www.youtube.com/watch?v=vCV6OABWNoA)
+Watch the source walkthrough on [YouTube](https://www.youtube.com/watch?v=vCV6OABWNoA).
 
-Most teams ship their AI product the same way: pick the best frontier model, wire it to the API, send everything to it. It works. It also quietly wastes most of your inference budget.
+Sending every request to one large model is simple, but it is rarely the only sensible policy. Different requests have different requirements for quality, latency, privacy, tool access, availability, and cost. Model routing makes that choice explicit.
 
-Here's the uncomfortable framing from the video: routing 100% of enterprise queries to the most expensive, most capable frontier model is a **structural and financial defect**. You're hiring a cardiac surgeon to apply a bandage. And you're doing it thousands of times a day.
+The aim is not to find a universally cheap model. It is to choose a model and execution path that meet a defined service level for a particular request. A local open-weight deployment, for example, has its own capacity and operational costs even when it has no per-token API bill.
 
-## The problem hiding in your bill
+## Common routing policies
 
-Look at what actually flows through a production AI system. Somewhere between **60 and 80% of enterprise AI tasks are commodity inference** — extraction, classification, summarization. These do not need frontier intelligence. By one estimate, 95% of queries don't. Sending them all to the top-tier model wastes 50–90% of total inference spend.
+A cascade tries a lower-cost model first and escalates when a task-specific check says the answer needs more work. This can save work on simpler requests, but an escalation adds latency and the initial result must be evaluated carefully.
 
-The cost gap is not small. Frontier intelligence carries a **10x to 60x cost premium** over open-source or small models:
+A pre-inference classifier estimates which route is appropriate before a model call. It can be trained from human labels, offline evaluations, synthetic labels, or preference data. Its usefulness depends on calibration against representative traffic, not on a generic difficulty score.
 
-| Model tier | Relative cost |
-| --- | --- |
-| Open source / small (DeepSeek, Llama-class) | 1x |
-| Mid-tier (GPT-4o-mini, Claude Haiku-class) | ~3–4x |
-| Frontier (Opus-class, GPT-5.5-class) | 35x–60x |
+Semantic routing uses embeddings or other retrieval signals to select a route based on similar prior tasks. It needs an explicit feedback and retraining loop to improve. Embedding, storage, freshness, and authorization all remain part of its cost and correctness model.
 
-The fix is **model routing**: inspect each request and send it to the cheapest model that can handle it. The RouteLLM benchmark reports up to **85% cost reduction while retaining 95% of frontier quality**. One production case (ESKOM.ai) dropped per-task cost from $8.20 to $2.44 — 70% savings at equal quality.
+These policies can be combined in a multi-stage routing system. The right arrangement depends on the application rather than on a fixed traffic split.
 
-## Three primitives that power routing
+## Build the policy around requirements
 
-There isn't one way to route. There are three building blocks, each with a different tradeoff.
+Start with the requirements that actually differ between requests. A tenant may require a particular data region. An endpoint may have a tight latency budget. A high-impact action may need a stronger model, a deterministic tool check, or human review. A lower-risk extraction task may be well served by a smaller route.
 
-**1. Confidence cascade.** Try a cheap model first. If its confidence score is below a threshold, escalate to the frontier model. The upside: zero training data required, savings on day one. The downside: a latency penalty, because hard queries now take multiple sequential calls.
+Then evaluate the policy on held-out traffic that resembles production. Track task quality, escalation rate, total cost, time to first token, time per output token, cache hit rate, errors, and safety outcomes. A lower invoice is not a success if it comes from silently accepting worse answers.
 
-**2. Pre-inference classifier.** A lightweight ML model predicts a query's difficulty *before* the LLM call, then routes accordingly. This gets you a single call and the lowest latency — under 5ms. The catch: you need labeled production data to train it well.
+## Confidence is evidence, not proof
 
-**3. Semantic routing.** Vector embeddings match the incoming query against historically successful models for similar tasks. It improves automatically over time and handles messy, overlapping intents. The cost is compute overhead — you're embedding every request.
+Model probabilities and self-reported confidence are not generally calibrated measures of factual correctness. A wrong answer can still sound certain. Use task-specific offline calibration, structured validation, deterministic tools where available, and sampled human review for cases that matter.
 
-In practice you don't pick one. You stack them.
+LLM judges can be useful as one signal in an evaluation pipeline, especially for open-ended output. They also have biases and failure modes. Pin the judge version and prompt, test it against human judgments, and keep a sample of human review instead of treating it as an automatic guarantee.
 
-## The production pattern: Mixture-of-Models
+## Cache locality is a routing concern
 
-Real systems layer routing into what the video calls a **Mixture-of-Models (MoM)**:
+For self-hosted serving, prefix caching helps only when requests share token prefixes. A cache-aware scheduler can keep those requests near replicas that already hold the relevant cache blocks, while balancing locality against queue load. Unique prompts may receive little benefit.
 
-- **Layer 1 — Semantic cache.** Embeddings intercept repetitive queries before generation even begins. In the example, this absorbs ~30% of traffic at a marginal cost of $0.
-- **Layer 2 — Intent classifier.** A sub-5ms local model analyzes difficulty and routes predictable commodity tasks to small, fast open-source LLMs. Around 65% of traffic gets routed here.
-- **Layer 3 — Confidence gate.** If the mid-tier model returns a low confidence score (say, below 0.70), the query escalates to the frontier model as a final fallback. Only ~5% of traffic gets there.
+The llm-d project reports a 57 times P90 time-to-first-token improvement and roughly twice the throughput in a benchmark with high prefix reuse, eight pods, and 16 H100 GPUs. Those figures compare its cache-aware scheduling with cache-blind scheduling in that setup. They are not a general result for all routing systems. See the [llm-d cache-aware scheduling guide](https://github.com/llm-d/llm-d/blob/main/guides/precise-prefix-cache-aware/README.md).
 
-The point: the engineering moat is orchestrating this workflow, not just querying a model. And routing decisions aren't only about complexity — policy matters too. Free users can be capped at commodity models to protect margins on zero-revenue traffic; enterprise accounts unlock the full cascade. You can enforce per-customer budget ceilings, force smaller models on latency-sensitive endpoints to hold p99 targets, or pin sensitive workloads to EU-only endpoints for data residency.
+## What the research results say
 
-## Two traps that quietly kill your savings
+[RouteLLM](https://arxiv.org/abs/2406.18665) reports up to 85% lower cost while retaining 95% of GPT-4 performance on MT-Bench for particular model-pair and routing settings. That is a benchmark result, not a promise that every product can reduce spend by the same amount.
 
-Routing looks easy in a slide and fails in subtle ways in production. Two failures matter most.
+For evaluating generated output, the MT-Bench and Chatbot Arena paper reports GPT-4 agreement with human preferences in a particular non-tie setup. It also documents position, verbosity, and self-enhancement biases in LLM judging. Read the [paper](https://arxiv.org/abs/2306.05685) before treating a judge score as ground truth.
 
-**Silent misclassification at the decision boundary.** Ambiguous queries sitting right on the threshold get sent to a weak model, which returns a highly confident but completely hallucinated answer. This is the dangerous part: unlike a 500 error or a timeout, this failure *does not* trigger crash logs. It's invisible to standard APM monitoring. The fix is to never trust the decision boundary blindly — add LLM-as-a-judge guardrails or strict logprob-based escalation to catch threshold failures before they reach the user.
-
-**KV-cache destruction from disaggregated routing.** In distributed serving, a naive load balancer spreads related requests across different pods, destroying vLLM's prefix caching. Expensive system prompts and agent histories get recomputed from scratch — and uncached tokens cost roughly 10x more than cached ones. The fix is a **cache-aware router** that introspects global node memory and routes a query to the specific pod already holding its cached prefix. Done right, cache-aware routing yields up to 57x faster time-to-first-token and doubles throughput on identical hardware.
-
-## Measuring the router
-
-You can't tune what you can't measure, and traditional metrics (ROUGE, BERTScore) don't capture generative nuance. Human annotation is too slow for continuous calibration. The practical answer is a **deterministic LLM-as-a-judge**: use a frontier model offline to grade the cheap model's outputs against strict criteria. To avoid arbitrary 1–10 scores, structure evaluations as a directed acyclic graph — break subjective quality into binary yes/no sub-decisions (relevant? factual?). State-of-the-art judges align with human consensus around 85% of the time.
-
-## The takeaway
-
-The competitive advantage is no longer *which* frontier model you have access to — everyone has the same access. The moat is how efficiently your infrastructure orchestrates the capability gap. Shifting from a static single-model pipeline to a dynamic Mixture-of-Models lets you move faster, spend radically less, and scale safely.
+Model routing is practical infrastructure, not a moat by default. Its value comes from a policy that is measured, revised, and matched to the risks of the product.
 
 ---
 
-If this was useful, come talk models and infrastructure with me: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), [Telegram](https://t.me/suenot_dev).
+Come talk models and infrastructure with me: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), [Telegram](https://t.me/suenot_dev).
