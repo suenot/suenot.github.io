@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.13] - 2026-08-16
+
+### Changed
+
+- Reworked the Kimi K3 open-weights article with a more direct, source-attributed geopolitical and technical discussion.
+
+### Fixed
+
+- Corrected the Kimi K3 primer link.
+
 ## [0.4.12] - 2026-08-16
 
 ### Changed

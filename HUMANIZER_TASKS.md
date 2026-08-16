@@ -13,7 +13,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `claude-code-skills-wayfinder` (EN)
 - [x] `claude-opus-5-review` (EN)
 - [x] `gigatoken-fast-tokenization` (EN)
-- [ ] `kimi-k3-open-source-sputnik` (EN)
+- [x] `kimi-k3-open-source-sputnik` (EN)
 - [ ] `liquid-foundation-models` (EN)
 - [ ] `agent-harness-architecture` (EN)
 - [ ] `agentic-compute-graphs` (EN)
