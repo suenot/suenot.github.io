@@ -1,66 +1,51 @@
 ---
-title: "KV-Cache and PagedAttention: How vLLM Gets 4x More Throughput From the Same GPU"
-description: "LLM serving runs out of GPU memory long before it runs out of compute. PagedAttention borrows a 1970s operating-system idea — virtual memory paging — to kill the KV-cache fragmentation that wastes up to 80% of your VRAM, and continuous batching keeps the cores busy."
+title: "KV cache and PagedAttention: how vLLM uses GPU memory more efficiently"
+description: "PagedAttention manages the KV cache in fixed-size blocks, reducing allocation waste and enabling larger batches. What that changes, where continuous batching helps, and what the original vLLM results actually show."
 pubDate: 2026-07-19
 heroImage: "/images/blog/kv-cache-paged-attention-hero.png"
 tags: ["kv-cache", "paged-attention", "vllm", "llm-inference", "gpu", "infrastructure"]
 draft: false
 ---
 
-# KV-Cache and PagedAttention: How vLLM Gets 4x More Throughput From the Same GPU
+# KV cache and PagedAttention: how vLLM uses GPU memory more efficiently
 
-🎬 **Watch on YouTube:** [KV-Cache and PagedAttention: How vLLM Gets 4x More Throughput From the Same GPU](https://www.youtube.com/watch?v=m0JnK3b-Am4)
+Watch the source walkthrough on [YouTube](https://www.youtube.com/watch?v=m0JnK3b-Am4).
 
-If you've ever tried to serve an LLM in production, you've probably hit a wall that felt wrong: the GPU's compute cores sit half-idle, yet you're out of memory and can't add more concurrent requests. The bottleneck isn't compute. It's memory — specifically, how the **KV-cache** is managed. This is the problem vLLM's PagedAttention was built to solve, and the fix is one of the most elegant borrowings in systems engineering.
+Serving a language model can hit a memory limit before the GPU reaches its peak compute rate. During token-by-token decoding, reading the growing KV cache is often a memory-bandwidth problem. That is not true of every stage or every workload: prefill can be compute-bound, and the balance changes with the model, context length, batch size, and hardware.
 
-## The core bottleneck: the KV-cache
+vLLM's PagedAttention addresses one important source of memory pressure: the way a serving system allocates the key and value cache for many requests.
 
-During generation, a transformer caches the key and value tensors for every token it has already processed, so it doesn't recompute them on each step. That's the KV-cache, and it's expensive. A 70B-parameter model generating 2,048 tokens can require **~140GB of memory per request** strictly for the KV-cache. On an NVIDIA A100 with 40GB, the cache alone can eat well over half the card.
+## Why the KV cache matters
 
-The killer property: **the KV-cache scales linearly per user**. Every concurrent request needs its own cache. So as concurrency climbs, VRAM — not compute — becomes the ceiling almost instantly.
+For each processed token, a transformer can retain key and value tensors so it does not recompute them during later decoding steps. The cache grows with the sequence, and every active request needs its own cache state.
 
-## The traditional failure: fragmentation
+Its actual size depends on the architecture, including the number of layers, KV heads, head dimension, and precision. There is no useful universal "gigabytes per request" number. The operational point is that enough simultaneous requests can exhaust accelerator memory even when the scheduler still has compute capacity available.
 
-Early serving engines made things worse by pre-allocating a single contiguous block of GPU memory sized for the *maximum possible* sequence length. Two kinds of waste followed:
+## The allocation problem
 
-- **Internal fragmentation.** A request that might grow to 2,048 tokens gets 2,048 slots reserved immediately, even though it currently uses three. The other 2,040 slots sit reserved and empty.
-- **External fragmentation.** Freed regions of different sizes leave gaps that no new request fits into cleanly.
+Older serving approaches often reserved a contiguous region large enough for a request's possible maximum length. If a short request received a long reservation, much of that allocation remained empty. When requests ended, differently sized gaps could also make later allocations awkward.
 
-The result is brutal. In traditional LLM serving, **only 20–40% of the KV-cache memory actually holds token states**. The rest — up to 80% of your VRAM — is wasted on empty reservations. And when 80% of memory is wasted, your maximum batch size is artificially crippled, which is exactly the throughput you were paying the GPU for.
+The original PagedAttention paper measured 20.4% to 38.2% useful occupancy in the KV-cache allocations of the systems it profiled. That result is specific to those systems and workloads. It is not a claim that every serving stack wastes most of its total VRAM.
 
-## The breakthrough: OS virtual memory for LLMs
+## Paging the cache
 
-The vLLM team's insight was that this is not a new problem at all. KV-cache fragmentation is *identical* to the memory fragmentation operating systems solved in the 1970s with **virtual memory paging**. So they applied the same idea directly to the attention mechanism.
+PagedAttention applies an operating-system paging idea to KV-cache allocation. It splits the cache into fixed-size blocks, such as 16 tokens per block when that configuration is selected. A request's logical token sequence can map to noncontiguous physical blocks, and a block table records the mapping.
 
-Instead of one contiguous chunk per request, memory is divided into small fixed-size **blocks** (for example, 16 tokens each). A sequence's logically contiguous tokens can then map to physically scattered blocks, exactly like virtual pages mapping to physical RAM frames through a page table. In PagedAttention, a **block table** plays the role of the page table: logical KV blocks on one side, physical GPU blocks on the other, with the mapping handled transparently.
+The runtime allocates blocks as a sequence grows. This avoids the need to reserve its full potential length at the start and greatly reduces external fragmentation. It does not eliminate overhead altogether: the final partially used block and metadata still take space. In the paper's experiments, waste stayed below 4%.
 
-The payoff is two-fold:
+## Shared prompts and continuous batching
 
-- **Near-zero waste.** Memory is allocated on demand, block by block, so a request only holds what it's actually using.
-- **No external fragmentation.** Because any free block can serve any sequence regardless of physical location, there are no unusable gaps.
+Requests that share a prompt can share complete KV-cache blocks for that prompt. When a sequence needs to write to a shared last block, PagedAttention uses copy-on-write. This is particularly useful for parallel sampling and beam search. The paper reports memory savings of up to 55% for complex decoding scenarios, not for all workloads.
 
-## Sharing memory between sequences
+vLLM also uses iteration-level scheduling, often called continuous or in-flight batching. Finished requests can leave the batch between decoding iterations, and queued requests can enter. This can reduce the idle time associated with a static batch that waits for its longest sequence. It is a separate scheduling technique, not something paging automatically provides.
 
-Paging unlocks a second trick borrowed from operating systems: **copy-on-write**. When you sample multiple outputs from the same prompt — parallel sampling, beam search — every output shares the identical prefix. PagedAttention lets those sequences physically share the same memory blocks for the common prompt, and only diverge into separate blocks once their generations differ. In complex decoding scenarios this reduces memory consumption dynamically by up to **55%**.
+## What the original result means
 
-## The synergy: continuous batching
+The 2023 PagedAttention paper reported two to four times higher throughput at similar latency than the FasterTransformer and Orca configurations it compared. That is a useful result, but it is not a standing promise for every current model or deployment. Kernels, quantization, prefix caching, scheduler policy, model architecture, and workload shape all affect the outcome.
 
-Paging solves *how much* fits in memory. But there's a second source of idle GPUs: scheduling. Traditional **static batching** groups requests and waits for the longest sequence in the batch to finish before starting anything new. Short requests in that batch complete early and then their share of the GPU sits idle, burning time.
+The practical lesson is modest and useful: measure memory allocation and cache reuse before buying more GPUs. Block-based KV-cache management and careful scheduling can increase useful concurrency on the hardware you already have.
 
-vLLM pairs PagedAttention with **continuous (in-flight) batching**: iteration-level scheduling that swaps finished requests out and new ones in immediately, without waiting for the whole batch. As soon as a slot frees, a queued request takes it. The two techniques compound — PagedAttention packs more requests into memory, and continuous batching ensures the compute cores process them without a microsecond of downtime.
-
-## The result
-
-Put the pieces together and you get vLLM's headline: up to **4x throughput** on existing hardware, with near-zero memory waste, compared to earlier serving stacks like FasterTransformer. Nothing about the model changed. No new GPUs. Just smarter memory management borrowed from an idea that's been around for fifty years.
-
-The executive summary from the video is worth keeping:
-
-- **The bottleneck** is KV-cache unpredictability destroying memory efficiency.
-- **The solution** is PagedAttention eliminating fragmentation.
-- **The synergy** is continuous batching saturating the compute cores.
-- **The outcome** is massive throughput gains on hardware you already own.
-
-If you're routing or serving models at scale, this is why cache-aware infrastructure matters so much — a point that connects directly to the [KV-cache pitfalls in model routing](/blog/model-routing-explained), where spreading requests across pods destroys exactly this prefix locality.
+For the implementation details and original experimental results, see [Kwon et al., "Efficient Memory Management for LLM Serving with PagedAttention"](https://arxiv.org/abs/2309.06180). Cache-aware routing can also preserve prefix locality. Sending similar requests to unrelated replicas may reduce the hit rate of each replica's local prefix cache, as discussed in [KV-cache pitfalls in model routing](/blog/model-routing-explained).
 
 ---
 

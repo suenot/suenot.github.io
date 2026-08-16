@@ -20,7 +20,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `karpathy-loop-ai-arbitrage` (EN)
 - [x] `kimi-k3` (EN)
 - [x] `knowledge-graphs-algebra` (EN)
-- [ ] `kv-cache-paged-attention` (EN)
+- [x] `kv-cache-paged-attention` (EN)
 - [ ] `life-harness` (EN)
 - [ ] `model-routing-explained` (EN)
 - [ ] `self-evolving-knowledge-systems` (EN)

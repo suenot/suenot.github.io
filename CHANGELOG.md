@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.20] - 2026-08-16
+
+### Changed
+
+- Reworked the KV-cache and PagedAttention article with a direct explanation of block allocation, cache sharing, and continuous batching.
+
+### Fixed
+
+- Corrected the KV-cache size example and scoped the original vLLM efficiency and throughput figures to their published experiments.
+
 ## [0.4.19] - 2026-08-16
 
 ### Changed
