@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-08-16
+
+### Added
+
+- Added a generated monitoring hero image to the English and Russian Cloudflare Workers migration posts.
+
 ## [0.3.1] - 2026-08-16
 
 ### Fixed

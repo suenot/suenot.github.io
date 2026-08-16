@@ -1,0 +1,12 @@
+Use case: stylized-concept
+Asset type: 16:9 hero image for a technical blog post about migrating server monitoring from Uptime Kuma to Cloudflare Workers.
+Primary request: Show an independent edge monitor continuing to watch a server after the server has gone dark. The visual should communicate external uptime checks, incident history, and a Telegram-style alert without copying any brand logos.
+Scene/backdrop: deep charcoal-black editorial technology backdrop, subtle fine grain, faint vertical division lines, restrained circuit traces.
+Subject: on the right, a dark isolated server rack with one dim red status point; on the left, a luminous abstract cloud-edge sentinel sending precise amber and cool cyan signal paths across the frame; between them, a small minimal status timeline of dots and one restrained alert glyph. The check signal must visibly travel from the external monitor toward the server, with an independent return route.
+Style/medium: premium dark technical editorial illustration, matching a recent blog hero: graphite black, thin warm brass/copper linework, muted amber glow, very limited cyan accents, understated depth, clean vector-like geometry with a soft cinematic glow.
+Composition/framing: widescreen 16:9, balanced, generous negative space, no UI screenshot, no people.
+Lighting/mood: calm, precise, slightly moody, high-end infrastructure engineering.
+Color palette: charcoal, near-black, bronze, amber, soft cyan, a single muted red indicator.
+Materials/textures: paper-like dark grain, delicate engraved circuit lines, lightly luminous paths.
+Text: none.
+Constraints: no readable text, no letters, no numbers, no logos, no watermark, no generic stock-photo look, no excessive neon, no glossy 3D plastic.
