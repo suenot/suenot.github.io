@@ -9,13 +9,11 @@ draft: false
 
 # Last30Days: How an Engagement-Ranked Research Agent Actually Works
 
-Video: [Your AI Doesn't Know What Happened Last Month. One Command Fixes It](https://www.youtube.com/watch?v=4HpQh1heIkw)
-
 Ask a base model what happened last month and it answers from weights trained before that month existed. A search engine often returns articles written to rank. Meanwhile, the useful discussion may be sitting inside a closed platform, in a thread where three people who shipped the thing are arguing about why it broke.
 
 [Last30Days](https://github.com/mvanhorn/last30days-skill) searches those platforms from your machine, combining source-specific tools with credentials stored locally, and ranks the results by engagement. The agent skill reached roughly 39,000 GitHub stars and the top of the trending list with that straightforward setup.
 
-I checked the architectural claims in the source video against the repository. Several did not match the code. The gaps reveal engineering tradeoffs that the video's cleaner explanation left out.
+I checked the project's README, code, and open issues to see how it works. Most of the heavy lifting comes from ordinary formulas and filters, while the open issues expose the less obvious engineering tradeoffs.
 
 ## Why global installation matters
 
@@ -61,11 +59,7 @@ Volume and liquidity use logarithmic saturation. With `min(1.0, log1p(volume) / 
 
 Markets close to 50/50 receive a bonus because they still contain genuine disagreement. A market at 97% is already close to settled.
 
-The source video claimed that the developers "abandoned dollar volume entirely and switched to pure probabilities, because volume is distorted by whales." The code says otherwise. Volume is the heaviest term at 0.50, and logarithmic compression limits the effect of whales without discarding the signal.
-
 ## Deduplication uses Jaccard, not embeddings
-
-The video also claimed that v3 introduced "vector embeddings for cross-platform semantic clustering" to collapse a Reddit thread, an X argument, and a YouTube comment section into one entity.
 
 The implementation in `lib/dedupe.py` opens with the docstring `"""Within-source near-duplicate detection."""` and uses Jaccard similarity:
 
@@ -89,7 +83,7 @@ This also avoids model calls during deduplication. Cheap deterministic filters r
 
 ## What still breaks
 
-The source video presented two bugs as solved, but both remain open on GitHub. A third issue is closed and shows a different kind of failure.
+The relevance and global-installation bugs below remain open on GitHub. A third issue, about a warning during the first run, is closed.
 
 ### Issue #887: a broad token passes entity grounding
 
@@ -120,8 +114,6 @@ The `--preflight` option reports the configuration source, browser-cookie plan, 
 
 Version 3.16.0 added another cost control in PR #827. YouTube comments now use the free local `yt-dlp` extractor first. A genuine extractor failure can trigger the ScrapeCreators fallback, but only when its token is configured. A clean result with zero comments does not spend a paid request.
 
-The source video was itself an AI synthesis. It confidently described two open issues as closed, said volume-based ranking had been abandoned, and called a Jaccard deduper a vector embedding pipeline. Checking those claims against the GitHub API and source files took about ninety seconds. That check is why the implementation described here differs from the video.
-
 ---
 
-*Source: this article was written from a technical breakdown published on the [Yersham](https://www.youtube.com/watch?v=9kaal1WHH0Q) channel, with all architectural claims re-verified against the [last30days-skill](https://github.com/mvanhorn/last30days-skill) repository at v3.18.4.*
+*Source: all architectural details were verified against the [last30days-skill](https://github.com/mvanhorn/last30days-skill) repository at v3.18.4.*

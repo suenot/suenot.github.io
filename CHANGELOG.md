@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.5] - 2026-08-16
+
+### Fixed
+
+- Removed nonexistent video attribution and related comparisons from both Last30Days article translations.
+
 ## [0.4.4] - 2026-08-16
 
 ### Changed
