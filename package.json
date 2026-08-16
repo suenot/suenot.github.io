@@ -1,7 +1,7 @@
 {
   "name": "suenot-blog",
   "type": "module",
-  "version": "0.4.24",
+  "version": "0.4.25",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

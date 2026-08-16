@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.25] - 2026-08-16
+
+### Removed
+
+- Removed Arabic, Japanese, Korean, and Chinese translations for the eleven specified pending article groups; English and Russian versions remain.
+
 ## [0.4.24] - 2026-08-16
 
 ### Changed
