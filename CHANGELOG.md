@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.7] - 2026-08-16
+
+### Removed
+
+- Removed unwanted source-author attribution from every affected English and Russian article while preserving the underlying source links.
+
 ## [0.4.6] - 2026-08-16
 
 ### Changed

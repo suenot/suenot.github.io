@@ -75,7 +75,7 @@ The Sputnik moment wasn't just about one satellite. It was about the realization
 
 ---
 
-Research source: [yersham explainer](https://youtu.be/0LDXVAYUG58)
+Research source: [source video](https://youtu.be/0LDXVAYUG58)
 
 ---
 

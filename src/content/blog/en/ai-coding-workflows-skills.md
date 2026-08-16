@@ -46,6 +46,6 @@ Tests provide an executable boundary as well. The `tdd` skill uses a red and gre
 
 ---
 
-*Sources: [Yersham's Russian walkthrough](https://www.youtube.com/watch?v=Vi2nU1qxueg) and [mattpocock/skills at bfdaef8](https://github.com/mattpocock/skills/tree/bfdaef8e989a5c81160e74bc5043bd434da49cac).*
+*Sources: [Russian source video](https://www.youtube.com/watch?v=Vi2nU1qxueg) and [mattpocock/skills at bfdaef8](https://github.com/mattpocock/skills/tree/bfdaef8e989a5c81160e74bc5043bd434da49cac).*
 
 Elsewhere: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), and [Telegram](https://t.me/suenot_dev).

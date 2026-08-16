@@ -46,6 +46,6 @@ draft: false
 
 ---
 
-*Источники: [русский разбор Yersham](https://www.youtube.com/watch?v=Vi2nU1qxueg) и [mattpocock/skills на коммите bfdaef8](https://github.com/mattpocock/skills/tree/bfdaef8e989a5c81160e74bc5043bd434da49cac).*
+*Источники: [исходное видео на русском](https://www.youtube.com/watch?v=Vi2nU1qxueg) и [mattpocock/skills на коммите bfdaef8](https://github.com/mattpocock/skills/tree/bfdaef8e989a5c81160e74bc5043bd434da49cac).*
 
 Другие площадки: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg) и [Telegram](https://t.me/suenot_dev).

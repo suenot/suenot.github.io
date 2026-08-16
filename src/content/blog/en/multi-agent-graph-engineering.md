@@ -10,7 +10,7 @@ draft: false
 
 🎬 **Watch on YouTube:** [Graph Engineering for Multi-Agent AI](https://www.youtube.com/watch?v=wuwevll_yZg)
 
-*Research source: [Yersham's original Russian video](https://www.youtube.com/watch?v=QdghZPU-nCE)*
+*Research source: [original Russian video](https://www.youtube.com/watch?v=QdghZPU-nCE)*
 
 The hard part of a multi-agent AI product is no longer making one model sound intelligent. It is deciding which worker receives which context, which output can be trusted, and how information moves through the system. That is graph engineering.
 

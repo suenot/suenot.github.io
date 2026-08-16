@@ -139,6 +139,6 @@ That's a different kind of scaling law. Not more GPUs, but better mathematics.
 
 ---
 
-Research source: [yersham explainer](https://youtu.be/iMdqzoLGkSw)
+Research source: [source video](https://youtu.be/iMdqzoLGkSw)
 
 Building embedded AI or interested in model architecture? Come talk: [X](https://x.com/suenot), [Discord](https://discord.com/2PtuMAg), [Telegram](https://t.me/suenot_dev).

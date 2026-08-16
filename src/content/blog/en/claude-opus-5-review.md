@@ -67,6 +67,6 @@ The competitive edge has shifted from *which* model to *how* you use it.
 
 ---
 
-Research source: [yersham explainer](https://youtu.be/UqWulCRWHjk)
+Research source: [source video](https://youtu.be/UqWulCRWHjk)
 
 Building with agents or frontier models? Come compare notes: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), [Telegram](https://t.me/suenot_dev).

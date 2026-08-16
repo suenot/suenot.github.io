@@ -127,6 +127,6 @@ That's the Skills 1.1 thesis in a sentence: **chaos becomes pipeline when you gi
 
 ---
 
-Research source: [yersham explainer](https://youtu.be/sFLT7ZAMUio)
+Research source: [source video](https://youtu.be/sFLT7ZAMUio)
 
 Building agent workflows or structuring Skills? Come compare notes: [X](https://x.com/suenot), [Discord](https://discord.com/invite/2PtuMAg), [Telegram](https://t.me/suenot_dev).
