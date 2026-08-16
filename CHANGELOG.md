@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.27] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian harness articles with a direct, source-attributed account of runtime controls and evaluation.
+
+### Fixed
+
+- Separated Life-Harness and Meta-Harness results and scoped their reported performance and token figures to the relevant experiments.
+
 ## [0.4.26] - 2026-08-16
 
 ### Changed
