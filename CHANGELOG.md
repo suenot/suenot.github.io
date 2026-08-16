@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.19] - 2026-08-16
+
+### Changed
+
+- Reworked the knowledge-graphs algebra article with a direct account of structured retrieval, symbolic verification, PoG, and KG-RAR.
+
+### Fixed
+
+- Clarified that a knowledge graph alone does not validate algebraic reasoning.
+
 ## [0.4.18] - 2026-08-16
 
 ### Changed
