@@ -34,8 +34,6 @@ The pieces are simple:
 3. The status page presents the result by product.
 4. Telegram receives outage and recovery notifications.
 
-`status.marketmaker.cc` is now the main status address. `uptime.marketmaker.cc` remains available as a compatibility address, so existing bookmarks still work.
-
 ## TL;DR: start with the boilerplate
 
 I also made the blank version of this setup public: [Cloudflare Uptime Starter](https://github.com/suenot/cloudflare-uptime-starter). It has no MarketMaker logo, monitor list, or notification credentials. The starter uses the same independent checker and D1 state, with a status-page Worker that is ready for current Next.js deployments on Cloudflare.

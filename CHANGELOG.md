@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-08-16
+
+### Changed
+
+- Removed an unnecessary note about the legacy status-page address from the monitoring migration posts.
+
 ## [0.4.1] - 2026-08-16
 
 ### Fixed
