@@ -1,0 +1,38 @@
+# Humanizer tasks
+
+This file tracks every article in `src/content/blog`. A task is complete only when every listed language version has been rewritten with the humanizer workflow. Delete this file after every task is complete.
+
+Status: `[x]` complete, `[-] in progress, `[ ]` pending.
+
+- [x] `uptime-kuma-to-cloudflare-workers-monitoring` (EN, RU)
+- [x] `buzz-claude-code-codex` (EN, RU)
+- [x] `last30days-research-agent` (EN, RU)
+- [x] `ai-coding-workflows-skills` (EN, RU)
+- [x] `multi-agent-graph-engineering` (EN, RU)
+- [ ] `self-learning-company` (EN, RU)
+- [ ] `claude-code-skills-wayfinder` (EN)
+- [ ] `claude-opus-5-review` (EN)
+- [ ] `gigatoken-fast-tokenization` (EN)
+- [ ] `kimi-k3-open-source-sputnik` (EN)
+- [ ] `liquid-foundation-models` (EN)
+- [ ] `agent-harness-architecture` (EN)
+- [ ] `agentic-compute-graphs` (EN)
+- [ ] `karpathy-loop-ai-arbitrage` (EN)
+- [ ] `kimi-k3` (EN)
+- [ ] `knowledge-graphs-algebra` (EN)
+- [ ] `kv-cache-paged-attention` (EN)
+- [ ] `life-harness` (EN)
+- [ ] `model-routing-explained` (EN)
+- [ ] `self-evolving-knowledge-systems` (EN)
+- [ ] `vibe-graphing` (EN)
+- [ ] `llm-tool-format-sync` (AR, EN, JA, KO, RU, ZH)
+- [ ] `harness-not-model` (AR, EN, JA, KO, RU, ZH)
+- [ ] `cctoggle-claude-code` (AR, EN, JA, KO, RU, ZH)
+- [ ] `cloudflare-resend-email` (AR, EN, JA, KO, RU, ZH)
+- [ ] `gonka-free-tokens` (AR, EN, JA, KO, RU, ZH)
+- [ ] `graphify-claude-code` (AR, EN, JA, KO, RU, ZH)
+- [ ] `openclaude-multi-provider` (AR, EN, JA, KO, RU, ZH)
+- [ ] `notebooklm-youtube-guide` (AR, EN, JA, KO, RU, ZH)
+- [ ] `muxy-terminal-focus` (AR, EN, JA, KO, RU, ZH)
+- [ ] `clother-claude-wrappers` (AR, EN, JA, KO, RU, ZH)
+- [ ] `saving-tokens-llm` (AR, EN, JA, KO, RU, ZH)

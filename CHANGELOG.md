@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.8] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian multi-agent graph engineering articles with a more direct, natural voice while preserving their sources and technical claims.
+
+### Added
+
+- Added a temporary tracker for the remaining humanizer article tasks.
+
 ## [0.4.7] - 2026-08-16
 
 ### Removed
