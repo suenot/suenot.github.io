@@ -23,7 +23,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `kv-cache-paged-attention` (EN)
 - [x] `life-harness` (EN)
 - [x] `model-routing-explained` (EN)
-- [ ] `self-evolving-knowledge-systems` (EN)
+- [x] `self-evolving-knowledge-systems` (EN)
 - [ ] `vibe-graphing` (EN)
 - [ ] `llm-tool-format-sync` (AR, EN, JA, KO, RU, ZH)
 - [ ] `harness-not-model` (AR, EN, JA, KO, RU, ZH)

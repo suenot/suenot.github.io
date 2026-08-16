@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.23] - 2026-08-16
+
+### Changed
+
+- Reworked the self-evolving knowledge article as a practical, reviewable structured-memory pattern.
+
+### Fixed
+
+- Clarified how the approach complements retrieval and Claude Code memory, and added maintenance limits for stored conclusions.
+
 ## [0.4.22] - 2026-08-16
 
 ### Changed
