@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.6] - 2026-08-16
+
+### Changed
+
+- Reworked the English and Russian AI coding workflow articles with a more natural voice and source-checked details from the Matt Pocock skills repository.
+
 ## [0.4.5] - 2026-08-16
 
 ### Fixed
