@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.12] - 2026-08-16
+
+### Changed
+
+- Reworked the Gigatoken article with a more direct explanation and clear attribution for benchmark and compatibility claims.
+
 ## [0.4.11] - 2026-08-16
 
 ### Changed
