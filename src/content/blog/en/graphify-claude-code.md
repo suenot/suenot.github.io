@@ -1,34 +1,29 @@
 ---
-title: "graphify in Claude Code: a knowledge graph instead of reading the whole repo, semantics on cheap OpenRouter"
-description: "My ready-to-use graphify setup for Claude Code: a knowledge graph instead of full-repo reads, semantic extraction on cheap OpenRouter (deepseek) instead of Claude tokens, auto-watch via hooks, protection against leaking secrets into the graph. All packaged in the claude-code-token-savers repository."
+title: "Using graphify with Claude Code"
+description: "A practical graphify setup for Claude Code: build a searchable map of a repository, keep extraction separate from the main session, update the graph carefully, and check it before committing."
 pubDate: 2026-06-23
 heroImage: "/images/blog/graphify-hero.png"
 tags: ["graphify", "claude-code", "tokens", "knowledge-graph", "openrouter"]
 draft: false
 ---
 
-# graphify in Claude Code: a knowledge graph instead of reading the whole repo
+# Using graphify with Claude Code
 
-In the [token-saving guide](https://www.suenot.com/blog/saving-tokens-llm/) I mentioned graphify briefly as part of the overall stack. Here it gets its own deep dive into how I've set up the automation: exactly what I keep enabled globally and why it doesn't burn Claude tokens.
+[graphify](https://github.com/safishamsi/graphify) turns a repository into a graph of files, entities, and relations. Instead of asking an agent to read a large module end to end, you can query the graph for a smaller piece of evidence. That is useful when you are entering an unfamiliar codebase or returning to one after a long break.
 
-The problem is simple. To understand someone else's code (or your own from six months ago), the agent reads files in batches, and every file lands in the context. That's expensive on input and on top of that it drags in context rot: the more you pile in, the worse the model thinks. [graphify](https://github.com/safishamsi/graphify) breaks that coupling: once, it builds a knowledge graph from the repo (nodes, relations, communities, god-nodes) that you **query**, instead of dumping files into the window.
+My setup lives in [suenot/claude-code-token-savers](https://github.com/suenot/claude-code-token-savers), in the `graphify/` directory. It is deliberately split in two: semantic extraction uses a separate provider, while Claude Code queries the finished graph during the main session. The provider, model IDs, prices, and limits change, so check them before treating this as a cost-saving recipe.
 
-Everything is packaged in a single repository — **[suenot/claude-code-token-savers](https://github.com/suenot/claude-code-token-savers)** (the `graphify/` folder, an idempotent `setup.sh`, patches, hooks).
+## Set up the extraction provider
 
-## The main trick: semantics on someone else's tokens
-
-Building the graph is a pile of LLM calls for entity and relation extraction. If you run them through Claude, the savings turn into spending. So semantic extraction is offloaded to **cheap OpenRouter**, not the Claude budget.
-
-`~/.graphify/providers.json`:
+`graphify` needs a provider configuration for relation extraction. This example sends compatible requests through OpenRouter. Keep the key in an environment variable, not in the file.
 
 ```json
 {
   "openrouter": {
     "base_url": "https://openrouter.ai/api/v1",
-    "default_model": "deepseek/deepseek-v4-flash",
+    "default_model": "YOUR_CURRENT_MODEL_ID",
     "env_key": "OPENROUTER_API_KEY",
     "model_env_key": "GRAPHIFY_OPENROUTER_MODEL",
-    "pricing": { "input": 0.09, "output": 0.18 },
     "temperature": 0,
     "max_tokens": 16384,
     "vision": false
@@ -36,87 +31,59 @@ Building the graph is a pile of LLM calls for entity and relation extraction. If
 }
 ```
 
-`deepseek/deepseek-v4-flash` — $0.09 / $0.18 per 1M tokens, 1M context. Building the graph for a medium project costs **~$0.10 on OpenRouter and zero Claude session tokens**. The model is swapped with a single variable: `export GRAPHIFY_OPENROUTER_MODEL=qwen/qwen3.7-plus`.
+Put the configuration at `~/.graphify/providers.json` and select a model from the provider's current catalog. Confirm the extraction order after running `graphify install`: installations and upgrades can replace `~/.claude/skills/graphify/SKILL.md`. In this setup, OpenRouter is preferred when its key exists, Gemini is the next option, and Claude subagents are the fallback.
 
-An important detail: `graphify install` overwrites `~/.claude/skills/graphify/SKILL.md`. That file hard-codes the extraction backend priority, and if you don't restore it, graphify falls back to Claude subagents and burns your tokens. The correct priority:
+## Install the local pieces
 
-1. **OpenRouter** (if `OPENROUTER_API_KEY` is present) — text chunks go here.
-2. **Gemini** (if `GEMINI_API_KEY` / `GOOGLE_API_KEY` is present).
-3. **Claude subagents** — only as the last fallback.
-
-## Installation
-
-You need [`uv`](https://docs.astral.sh/uv/) and `OPENROUTER_API_KEY` in your environment.
+You need [`uv`](https://docs.astral.sh/uv/) and an `OPENROUTER_API_KEY` if you use the example provider. The repository setup script installs graphify, copies the helper scripts, and applies its local patches:
 
 ```bash
 cd graphify
-./setup.sh          # installs graphify, the OpenRouter backend, patches, hooks, no-media
+./setup.sh
 ```
 
-`setup.sh` is idempotent (with rollback). Under the hood, if you prefer to do it by hand:
+The manual path is useful when you want to inspect each step. It installs `graphifyy` with its OpenAI extra, writes the provider configuration, copies the helpers into `~/.graphify/`, and runs `graphify install --platform claude`. Read the current script before running it because package names, installation behavior, and patches can change.
+
+## Update without indexing by surprise
+
+The setup can register a `SessionStart` hook that runs `build-and-watch.sh`. If a graph already exists, the hook starts `graphify watch`; if it does not, it asks you to run `/graphify .` yourself. That distinction matters. Opening a large directory should not silently start an expensive indexing job.
+
+`~/.claude/settings.json` needs merged hook entries rather than a replacement of the whole file:
+
+```
+SessionStart  -> ~/.graphify/build-and-watch.sh
+SessionEnd    -> ~/.graphify/stop-watch.sh
+```
+
+The helper scripts in this setup also skip broad or risky paths, respect `.graphify-skip`, and provide `~/.graphify/disable-autowatch` as an off switch. A lock and PID check aim to keep one watcher per project. `watch` focuses on the code and AST layer; refresh documentation with `/graphify . --update` when needed.
+
+## Treat graph output as data that may be committed
+
+Graph output can contain more than code structure. Review it before adding `graphify-out/` to a commit.
+
+The local setup has several safeguards:
+
+- graphify's sensitive-data detection handles common secret files;
+- the optional `no-media` marker keeps media out of detection;
+- `patch-merge-ignore.py` changes the local ignore behavior so `.gitignore` and `.graphifyignore` are combined rather than one hiding the other;
+- `precommit-graph-guard.sh` checks whether ignored files reached `graphify-out/graph.json` and can stop the commit.
+
+These checks reduce risk; they do not replace a review of generated output. Treat `git commit --no-verify` as a deliberate override, not a routine workaround.
+
+## Query the graph
+
+Build it once, then ask focused questions:
 
 ```bash
-uv tool install --with watchdog "graphifyy[openai]"   # openai-extra = OpenRouter; watchdog = graphify watch
-mkdir -p ~/.graphify
-cp providers.json ~/.graphify/providers.json
-cp build-and-watch.sh stop-watch.sh precommit-graph-guard.sh ~/.graphify/ && chmod +x ~/.graphify/*.sh
-PY="$(sed -n '1s/^#!//p' "$(command -v graphify)")"
-"$PY" patch-global-ignore.py     # global ignore layer
-"$PY" patch-merge-ignore.py      # merge .gitignore + .graphifyignore (instead of shadowing)
-"$PY" patch-no-media.py          # no-media toggle
-touch ~/.graphify/no-media       # media off by default
-graphify install --platform claude
-```
-
-## Auto-watch: the graph updates itself
-
-The heart of the automation is the `SessionStart` hook `build-and-watch.sh`. On every session start it inspects the project and picks a branch:
-
-- **graph exists** → starts `graphify watch` (cheap, AST-only, no LLM) + installs the pre-commit guard → status "watching".
-- **graph not initialized** → prints "run `/graphify .`" and does nothing. This is a safeguard: an accidentally opened root or huge folder won't silently go into indexing and burn tokens.
-- the `~/.graphify/autobuild` marker → additionally auto-builds small, fresh projects via OpenRouter (cap: 500 files / 2M words; anything larger is skipped with a request to build by hand).
-
-Safety guards: it skips `$HOME`, the FS root, system/`tmp` folders, ancestors of `$HOME`, and any project with `.graphify-skip`. The global kill switch is `~/.graphify/disable-autowatch`. Exactly one watcher per project (atomic `mkdir` lock + PID check). On `SessionEnd` it's killed by `stop-watch.sh`. `watch` updates only the code/AST layer; docs require `/graphify . --update`.
-
-The hook map in `~/.claude/settings.json` (merge, don't overwrite existing ones):
-
-```
-SessionStart  -> ~/.graphify/build-and-watch.sh    # status + watch
-SessionEnd    -> ~/.graphify/stop-watch.sh          # stop watcher
-```
-
-## What won't make it into the graph (and why that matters)
-
-The graph can end up in a commit, which means you can't let secrets into it. Three independent mechanisms:
-
-1. **Secrets and `.env`** — always stripped by the built-in `_is_sensitive` in graphify, no config needed.
-2. **Media** — a clean toggle without fiddling with ignore files: `patch-no-media.py` makes `detect()` skip images/pdf/video/office when `~/.graphify/no-media` exists (or `GRAPHIFY_NO_MEDIA=1`). Delete the marker and media is back in play.
-3. **`.gitignore` shadowing — fixed.** Upstream, a folder's `.graphifyignore` **completely shadowed** its own `.gitignore`: a pattern present only in `.gitignore` (a secret, say) still got indexed. `patch-merge-ignore.py` merges instead of replacing — this is [PR #1364](https://github.com/safishamsi/graphify/pull/1364) upstream.
-
-On top of that — the **pre-commit guard** (`precommit-graph-guard.sh`), installed into graphified git repos, that **blocks the commit** of `graphify-out/graph.json` if a `.gitignore`-d file made it into the graph. Defense-in-depth against secrets leaking into a committed graph. Bypass with `git commit --no-verify`.
-
-## How to use it
-
-Build once, then query:
-
-```bash
-/graphify .                         # build the graph for the current folder
-/graphify https://github.com/o/r    # clone the repo and build
-/graphify url1 url2 ...              # several repos → one cross-repo graph
-/graphify . --mode deep             # more thorough, more INFERRED relations
-/graphify . --update                # incremental, only new/changed
-
+/graphify .
+/graphify . --update
 /graphify query "where is the token validated and what does that trigger"
-/graphify query "..." --dfs         # trace a specific path, not broad context
-/graphify query "..." --budget 1500 # cap the answer at N tokens
+/graphify query "..." --dfs
+/graphify query "..." --budget 1500
 ```
 
-The output is interactive HTML, GraphRAG-JSON, and a human-readable `GRAPH_REPORT.md`; there's also `--mcp` (a stdio server for agents) and `--wiki`. From then on, instead of "read the entire auth module," the agent hits the graph and gets exactly the slice it needs.
+graphify can also produce HTML, GraphRAG JSON, `GRAPH_REPORT.md`, an MCP server, and a wiki view. The useful habit is simple: query the graph for a narrow trail first, then open the source files that trail identifies. A graph is an aid to investigation, not a substitute for reading the code that you change.
 
-## After upgrading graphify
+After a graphify upgrade, run `./setup.sh` again and inspect the provider priority and local patches. The configuration under `~/.graphify/`, Claude hooks, and repository hooks may survive, but installed package files can be replaced.
 
-`uv tool upgrade graphifyy` and `graphify install` wipe site-packages (all 3 `detect.py` patches are lost) and overwrite `SKILL.md`. The fix is to run `./setup.sh` again (restores the patches, files, no-media marker) and re-add the backend priority block in `SKILL.md`. What survives the upgrade: `~/.graphify/*`, the hooks in `~/.claude/settings.json`, the per-repo `.git/hooks/pre-commit`.
-
----
-
-Bottom line: graphify removes the heaviest layer from your context — "read the whole repository" — and does it on someone else's penny-cheap tokens, updating itself in the background and not dragging secrets into the graph. The combo with rtk (command input) and caveman (model output) is covered in the [token-saving guide](https://www.suenot.com/blog/saving-tokens-llm/).
+For the surrounding workflow, see the [token-saving guide](https://www.suenot.com/blog/saving-tokens-llm/).

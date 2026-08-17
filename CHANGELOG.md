@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.31] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian graphify articles as a practical repository-graph setup guide.
+
+### Fixed
+
+- Removed stale pricing and savings claims, and clarified that generated graph output needs review before it is committed.
+
 ## [0.4.30] - 2026-08-17
 
 ### Changed

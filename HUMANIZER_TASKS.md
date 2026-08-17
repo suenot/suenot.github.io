@@ -30,7 +30,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `cctoggle-claude-code` (EN, RU)
 - [x] `cloudflare-resend-email` (EN, RU)
 - [x] `gonka-free-tokens` (EN, RU)
-- [ ] `graphify-claude-code` (EN, RU)
+- [x] `graphify-claude-code` (EN, RU)
 - [ ] `openclaude-multi-provider` (EN, RU)
 - [ ] `notebooklm-youtube-guide` (EN, RU)
 - [ ] `muxy-terminal-focus` (EN, RU)
