@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.35] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian Clother articles around scoped provider launchers and operational checks.
+
+### Fixed
+
+- Removed stale provider catalogs, performance claims, automatic-failover promises, and broad compatibility claims.
+
 ## [0.4.34] - 2026-08-17
 
 ### Changed

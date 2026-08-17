@@ -34,5 +34,5 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `openclaude-multi-provider` (EN, RU)
 - [x] `notebooklm-youtube-guide` (EN, RU)
 - [x] `muxy-terminal-focus` (EN, RU)
-- [ ] `clother-claude-wrappers` (EN, RU)
+- [x] `clother-claude-wrappers` (EN, RU)
 - [ ] `saving-tokens-llm` (EN, RU)
