@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.32] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian OpenClaude articles as a practical guide to provider profiles and routing policy.
+
+### Fixed
+
+- Removed unsupported project-origin claims, stale provider lists, model comparisons, and automatic-switching promises.
+
 ## [0.4.31] - 2026-08-17
 
 ### Changed
