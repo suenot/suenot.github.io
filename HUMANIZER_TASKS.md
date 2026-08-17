@@ -33,6 +33,6 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `graphify-claude-code` (EN, RU)
 - [x] `openclaude-multi-provider` (EN, RU)
 - [x] `notebooklm-youtube-guide` (EN, RU)
-- [ ] `muxy-terminal-focus` (EN, RU)
+- [x] `muxy-terminal-focus` (EN, RU)
 - [ ] `clother-claude-wrappers` (EN, RU)
 - [ ] `saving-tokens-llm` (EN, RU)

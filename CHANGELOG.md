@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.34] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian Muxy articles as a personal, practical terminal-workflow note.
+
+### Fixed
+
+- Removed broad productivity and native-platform claims, and clarified the limits of automated code review for security.
+
 ## [0.4.33] - 2026-08-17
 
 ### Changed
