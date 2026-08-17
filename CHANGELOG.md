@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.29] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian Cloudflare and Resend articles with a practical separation of receiving, sending, DNS, and agent notifications.
+
+### Fixed
+
+- Removed unsupported API, pricing, deliverability, and automation guarantees.
+
 ## [0.4.28] - 2026-08-17
 
 ### Changed

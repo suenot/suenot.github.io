@@ -28,7 +28,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `llm-tool-format-sync` (EN, RU)
 - [x] `harness-not-model` (EN, RU)
 - [x] `cctoggle-claude-code` (EN, RU)
-- [ ] `cloudflare-resend-email` (EN, RU)
+- [x] `cloudflare-resend-email` (EN, RU)
 - [ ] `gonka-free-tokens` (EN, RU)
 - [ ] `graphify-claude-code` (EN, RU)
 - [ ] `openclaude-multi-provider` (EN, RU)
