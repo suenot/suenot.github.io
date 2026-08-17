@@ -35,4 +35,4 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `notebooklm-youtube-guide` (EN, RU)
 - [x] `muxy-terminal-focus` (EN, RU)
 - [x] `clother-claude-wrappers` (EN, RU)
-- [ ] `saving-tokens-llm` (EN, RU)
+- [x] `saving-tokens-llm` (EN, RU)

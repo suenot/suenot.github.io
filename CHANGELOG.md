@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.36] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian token-saving articles as a measurement-first context-management guide.
+
+### Fixed
+
+- Removed stale model, benchmark, pricing, and product claims; clarified the boundaries between client, API, proxy, and retrieval tools.
+
 ## [0.4.35] - 2026-08-17
 
 ### Changed
