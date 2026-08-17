@@ -32,7 +32,7 @@ Status: `[x]` complete, `[-] in progress, `[ ]` pending.
 - [x] `gonka-free-tokens` (EN, RU)
 - [x] `graphify-claude-code` (EN, RU)
 - [x] `openclaude-multi-provider` (EN, RU)
-- [ ] `notebooklm-youtube-guide` (EN, RU)
+- [x] `notebooklm-youtube-guide` (EN, RU)
 - [ ] `muxy-terminal-focus` (EN, RU)
 - [ ] `clother-claude-wrappers` (EN, RU)
 - [ ] `saving-tokens-llm` (EN, RU)

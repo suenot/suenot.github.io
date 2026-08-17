@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.33] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian NotebookLM articles as a review-first video-production workflow.
+
+### Fixed
+
+- Removed fixed timing, feature, and publication guarantees; clarified caption, rights, account, and browser-profile checks.
+
 ## [0.4.32] - 2026-08-17
 
 ### Changed
