@@ -1,94 +1,61 @@
 ---
-title: "cctoggle: turn every Claude Code plugin and MCP server off with one command — and back on"
-description: "A small utility and global /cctoggle slash command that switches off all Claude Code plugins and user-scope MCP servers at once — clearing their tool definitions out of context — and restores exactly what it disabled. No app restart. Inside: apply semantics, selective disable, backups, and limitations."
+title: "CCToggle: switch Claude Code plugins and MCP servers on or off"
+description: "CCToggle is a small command-line utility for temporarily disabling Claude Code plugins and user-scope MCP servers, then restoring the state it changed. Its commands, configuration scope, and operational limits."
 pubDate: 2026-06-23
 heroImage: "/images/blog/cctoggle-hero.png"
 tags: ["cctoggle", "claude-code", "tokens", "mcp", "plugins"]
 draft: false
 ---
 
-# cctoggle: turn every Claude Code plugin and MCP server off with one command
+# CCToggle: switch Claude Code plugins and MCP servers on or off
 
-A Claude Code session is rarely bare. Plugins are loaded, user-scope MCP servers are connected, each one ships a bundle of tool definitions, and all of it lands in context before your first message. Sometimes you want the opposite: a clean, lean session for a specific task — and then a one-command restore.
+[CCToggle](https://github.com/suenot/cctoggle) is a small utility for changing a Claude Code setup temporarily. It can disable configured plugins and user-scope MCP servers, record what it changed, and restore that recorded state later.
 
-That's what I built [**cctoggle**](https://github.com/suenot/cctoggle) for (public, MIT) — a small utility and a global slash command that flips all plugins and user-scope MCP servers off at once, then restores exactly what it disabled.
+This is useful when you want to test a smaller tool set, isolate a configuration issue, or start a task without optional integrations. Whether fewer tools improve a given workflow is something to measure, not a property of the command itself.
 
-## The problem
+## Commands
 
-The more plugins and MCP servers a session carries, the more bloated the context: their tool definitions eat into the token budget and clutter the list of available tools. That's both more expensive (input grows) and worse for quality (the more is piled in, the worse the model navigates it). And doing it by hand means editing two config files, then painfully remembering exactly what you touched so you can put it back.
-
-cctoggle closes both ends: it disables everything with one command and remembers precisely what it disabled, so it can restore only that.
-
-## What it does
-
-Four commands, working both as `/cctoggle` inside Claude Code and as a `cctoggle` CLI in your terminal:
+The utility provides a slash command and a terminal CLI:
 
 ```bash
-/cctoggle status          # what's currently enabled/disabled
-/cctoggle off             # disable all plugins + user-scope MCP
-/cctoggle on              # restore exactly what cctoggle disabled
-/cctoggle restore-backup  # roll back to a config backup
+/cctoggle status
+/cctoggle off
+/cctoggle on
+/cctoggle restore-backup
 ```
 
-`off` does two things:
+`status` reports the current state. `off` changes the configured plugin and user-scope MCP state. `on` restores the items that CCToggle recorded as disabled. `restore-backup` restores a saved configuration copy.
 
-- **Plugins** — flips the `enabledPlugins` flags in `~/.claude/settings.json` to `false`.
-- **MCP** — pulls user-scope MCP server definitions out of `~/.claude.json` and stashes them in a local state file.
-
-`on` restores strictly what cctoggle itself disabled. If you'd already turned some plugin or server off by hand earlier, `on` leaves it alone and won't re-enable it. That's an important detail: the command isn't "enable everything," it's "undo my last `off`."
-
-### Selective disable
-
-You don't have to nuke everything. `off` takes arguments:
+Selective operation is also available:
 
 ```bash
-cctoggle off --keep superpowers,caveman   # disable all except these
-cctoggle off graphify rtk                  # disable only the listed ones
+cctoggle off --keep superpowers,caveman
+cctoggle off graphify rtk
 ```
 
-## How changes apply (worth understanding)
+The first form keeps named integrations enabled; the second targets the named integrations. Review the reported plan before applying it, especially in a shared configuration.
 
-This is the non-trivial part — plugins and MCP have different apply semantics.
+## What the utility changes
 
-**Plugin changes apply to the CURRENT session** — but only after you type `/reload-plugins`. No full app restart needed.
+For plugins, CCToggle updates enabled-plugin settings. For user-scope MCP servers, it changes the definitions stored in Claude Code's user configuration and keeps its own local record of the change. The restore operation is deliberately narrower than "enable everything": it is intended to undo the state that CCToggle itself changed.
 
-**MCP config changes apply on your NEXT `claude` session.** There is no live MCP disconnect in Claude Code — it isn't supported. And, less obviously: `/clear` and `/compact` do NOT drop MCP connections. The same process keeps the child MCP servers alive, so clearing context isn't enough — you need a fresh `claude` session.
+That distinction matters when a plugin or server was already disabled for another reason. A state-management tool should avoid silently changing a choice it did not make.
 
-So the working loop is:
+## Applying the change
+
+Plugin and MCP changes do not necessarily take effect at the same time. Reload plugins when Claude Code supports that operation for the current session. For MCP configuration, start a fresh Claude Code session when the existing process has already connected the server. Clearing or compacting a conversation is not a substitute for restarting the process that owns an MCP connection.
+
+Servers supplied dynamically at launch, rather than through user configuration, are outside this mechanism. Change the launch command and start a new process to alter those servers.
+
+## Installation and recovery
+
+The repository documents installation through its `install.sh` script:
 
 ```bash
-/cctoggle off        # flag plugins and stash MCP
-/reload-plugins      # plugins leave the current session
-# for MCP — exit and start claude again
+git clone https://github.com/suenot/cctoggle.git ~/projects/claude
+~/projects/claude/install.sh
 ```
 
-## Install
+Before relying on it in a working setup, inspect the installer and make a backup of your configuration. CCToggle also keeps configuration backups for its own recovery command. Treat those backups as sensitive if MCP definitions contain credentials, and do not commit them to a repository.
 
-You only need git. Clone the repo and run the installer:
-
-```bash
-git clone https://github.com/suenot/cctoggle.git ~/projects/claude && \
-  ~/projects/claude/install.sh
-```
-
-`install.sh` symlinks the slash command into `~/.claude/commands/` and puts the `cctoggle` CLI on your `PATH`. After that `/cctoggle` is available in every Claude Code session, and `cctoggle` works straight from the terminal.
-
-## Why it's robust
-
-`/cctoggle` is a **user command** (it lives in `~/.claude/commands/`), not a plugin. So it keeps working even after all plugins are disabled. If cctoggle were itself a plugin, the `off` command would shoot itself in the foot — instead, `on` is always at hand no matter what you turned off.
-
-## Backups and privacy
-
-Before every change cctoggle backs up both config files (`~/.claude/settings.json` and `~/.claude.json`) into a `backups/` directory. If something goes wrong, `restore-backup` rolls back to a saved copy.
-
-The state file and backups are gitignored, so your private MCP server definitions (which often hold keys and tokens) never leak into a commit.
-
-## Limitations
-
-One honest limitation to know up front. MCP servers that `claude mcp get <name>` reports as **"Dynamic config (from command line)"** — i.e. injected at launch via command-line flags (e.g. `claude_design`) — cannot be toggled through config at all. They can only be disabled by changing how `claude` is launched and restarting it.
-
-cctoggle **detects and reports** these servers, but it can't toggle them — that's a limitation of the mechanism itself, not of the utility.
-
----
-
-Bottom line: cctoggle is a fast toggle between a "heavy" session with all plugins and MCP and a "lean" session for the task at hand, with a guarantee that everything comes back exactly as it was. Backups before every step, private MCP definitions stay out of git, and the command itself survives disabling every plugin because it lives in user space. Repo — [github.com/suenot/cctoggle](https://github.com/suenot/cctoggle).
+The utility is a user command rather than a plugin, so its restore path remains available after plugins are disabled. Read the [CCToggle repository](https://github.com/suenot/cctoggle) for current commands and configuration details.

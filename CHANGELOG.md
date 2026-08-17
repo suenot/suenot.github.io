@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.28] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian CCToggle articles with a direct explanation of commands, state restoration, and session boundaries.
+
+### Fixed
+
+- Removed broad claims about context and reliability, and clarified configuration and dynamic-server limits.
+
 ## [0.4.27] - 2026-08-16
 
 ### Changed
