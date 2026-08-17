@@ -7,6 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.30] - 2026-08-17
+
+### Changed
+
+- Reworked the English and Russian GonkaGate articles as a practical OpenAI-compatible provider setup guide.
+
+### Fixed
+
+- Removed time-sensitive free-credit, price, throughput, model-list, and installer claims.
+
 ## [0.4.29] - 2026-08-17
 
 ### Changed

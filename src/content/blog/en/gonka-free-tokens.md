@@ -1,150 +1,60 @@
 ---
-title: "Gonka Gives $10 Free, No Card: Billions of Kimi K2.6 Tokens for AI Startups"
-description: "GonkaGate hands out $10 of free balance with no card and no crypto top-ups. At ~$0.000334 per 1M tokens, that's enough for billions of Kimi K2.6 tokens — fuel for AI startups that burn through tokens. Inside: TPS tests and step-by-step setup for opencode and Hermes Agent."
+title: "Using GonkaGate as an OpenAI-compatible model provider"
+description: "A practical guide to connecting an OpenAI-compatible GonkaGate endpoint to command-line agents. How to create and protect an API key, test the endpoint, configure a custom provider, and verify models and costs before a workload."
 pubDate: 2026-06-23
 heroImage: "/images/blog/gonka-hero.png"
 tags: ["gonka", "llm", "tokens", "kimi", "opencode", "hermes-agent"]
 draft: false
 ---
 
-# Gonka Gives $10 Free, No Card: Billions of Kimi K2.6 Tokens for AI Startups
+# Using GonkaGate as an OpenAI-compatible model provider
 
-A quick rundown for anyone burning tokens by the bucket: [Gonka](https://gonka.ai) is a decentralized compute network, and [GonkaGate](https://gonkagate.com/en) is an OpenAI-compatible gateway on top of it with billing in dollars. And it **hands you $10 of free balance right at signup — no card and no crypto top-ups**. You don't need a wallet, GNK tokens, or a single cent upfront to start sending requests.
+[GonkaGate](https://gonkagate.com/en) exposes an OpenAI-compatible API for models available through the Gonka network. That makes it possible to use the endpoint with tools that can speak the OpenAI API shape, including command-line agents with custom-provider support.
 
-## Why this matters
+Pricing, sign-up credits, model availability, and rate limits change. Check the current [GonkaGate pricing page](https://gonkagate.com/en/pricing), account balance, and model list before planning a workload around them.
 
-It's not about the $10 itself, but about **how many tokens** fit into it.
+## Create a key and test the endpoint
 
-The price for `moonshotai/kimi-k2.6` on GonkaGate is around **$0.000334 per 1M tokens** (~$0.000304 network cost + ~$0.000030 gateway fee). That's orders of magnitude cheaper than typical cloud rates. At that price, $10 is **billions of tokens**. In practice, even that $10 covers roughly **2.6 billion context tokens** of Kimi K2.6.
+Create an API key in the provider dashboard and store it in an environment variable or secret manager. Do not place it in a repository, shell history, or a prompt.
 
-That's no longer "just playing around" — it's real fuel. With the free $10 you can:
-
-- run bulk processing (classification, labeling, summarizing thousands of documents);
-- keep background agents running that chew through context in bulk;
-- **build an AI startup prototype**, where token economics usually kills the idea at the starting line.
-
-You can top up the account in **USDT** if you want — but you don't need to for the start; the $10 is there right away.
-
-## Speed
-
-I benchmarked `moonshotai/kimi-k2.6` through the gateway: end-to-end generation speed of **about 60 tok/s**. For a decentralized network at this price, those are more than workable numbers.
-
-## Get a key
-
-1. Sign up at **[gonkagate.com/en/pricing](https://gonkagate.com/en/pricing)** — the $10 lands in your balance automatically.
-2. Create an API key. It starts with `gp-...` and is **shown only once** — save it right away.
-3. API base: `https://api.gonkagate.com/v1`, authorization `Authorization: Bearer gp-...`. The gateway is OpenAI-compatible: swap the base URL, key, and model id, and any OpenAI SDK works as is.
-
-Quick smoke test (to confirm the key is live):
+The endpoint uses a bearer token and an OpenAI-style chat-completions request:
 
 ```bash
 curl https://api.gonkagate.com/v1/chat/completions \
   -H "Authorization: Bearer $GONKAGATE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "moonshotai/kimi-k2.6",
+    "model": "YOUR_CURRENT_MODEL_ID",
     "messages": [{"role": "user", "content": "Reply with exactly: GonkaGate ok"}]
   }'
 ```
 
-## Setup for opencode
+Replace `YOUR_CURRENT_MODEL_ID` with a model ID currently returned by `GET /v1/models`. Do not rely on a model name from an old configuration, and record the model and timestamp when benchmarking latency, throughput, or quality.
 
-[opencode](https://opencode.ai) is a terminal AI agent. It connects to GonkaGate as a custom provider.
+## Configure a command-line agent
 
-### Option A — official installer (easiest)
-
-```bash
-npx @gonkagate/opencode-setup
-```
-
-Non-interactive (for scripts/CI):
-
-```bash
-GONKAGATE_API_KEY=gp-... npx @gonkagate/opencode-setup --scope project --yes
-```
-
-### Option B — by hand
-
-1. Start opencode, run `/connect`, choose `Other`, and enter:
-   - Provider id: `gonkagate`
-   - API key: your `gp-...`
-2. Add the provider to `~/.config/opencode/opencode.json`:
+OpenCode can use an OpenAI-compatible custom provider. The exact configuration format may change with OpenCode releases, but the important values are the provider name, base URL, API key, and model ID. A representative configuration looks like this:
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
   "provider": {
     "gonkagate": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "GonkaGate",
-      "options": {
-        "baseURL": "https://api.gonkagate.com/v1"
-      },
-      "models": {
-        "moonshotai/kimi-k2.6": {
-          "name": "Kimi K2.6 (GonkaGate)"
-        }
-      }
+      "options": { "baseURL": "https://api.gonkagate.com/v1" }
     }
-  },
-  "model": "gonkagate/moonshotai/kimi-k2.6",
-  "small_model": "gonkagate/moonshotai/kimi-k2.6"
+  }
 }
 ```
 
-3. Check:
+Use the provider's setup instructions when available, then inspect the resulting configuration and run the agent's own configuration diagnostic. Test a small task before assigning a long-running coding or batch workload.
 
-```bash
-opencode debug config --pure
-```
+Other agents that accept a custom OpenAI-compatible base URL can use the same endpoint pattern. Keep credentials outside configuration files when their tooling supports environment variables or a secret store.
 
-Then run `/models` in opencode — the `GonkaGate` provider and the `Kimi K2.6` model should show up in the list. You can always pull the current model list from `GET /v1/models`.
+## Tool schemas and operational checks
 
-## Setup for Hermes Agent
+An API-compatible endpoint does not make every tool schema portable. A model backend may support a narrower JSON Schema or regular-expression dialect than the client that created the schema. If a tool request fails validation, reduce the schema to the supported subset and test it independently before blaming the agent.
 
-[Hermes Agent](https://github.com/nousresearch/hermes-agent) from Nous Research is a terminal agent that works with any model provider and remembers context across sessions. It also hooks up to GonkaGate in one step.
+Track request errors, retries, token use, latency, and output quality on representative work. Low advertised prices do not by themselves determine total cost, particularly when failures, long contexts, or repeated calls are involved.
 
-**Requirements:** Hermes Agent `v2026.5.16` / `v0.14.0`+ in `PATH`, Node.js ≥ `22.14.0`, a `gp-...` key, an interactive terminal (TTY), Linux/macOS/WSL2.
-
-### Option A — official installer
-
-```bash
-npx @gonkagate/hermes-agent-setup
-```
-
-Under a separate profile:
-
-```bash
-npx @gonkagate/hermes-agent-setup --profile work
-```
-
-### Option B — by hand
-
-The installer edits two files; you can write the same thing manually.
-
-`~/.hermes/config.yaml`:
-
-```yaml
-model:
-  provider: custom
-  base_url: https://api.gonkagate.com/v1
-  default: moonshotai/kimi-k2.6
-```
-
-`~/.hermes/.env`:
-
-```
-OPENAI_API_KEY=gp-...
-```
-
-Run and check:
-
-```bash
-hermes
-# then prompt: Reply with exactly: Hermes Agent connected to GonkaGate
-```
-
-## Pitfalls
-
-- **RE2 regexes in tool schemas.** The Kimi backend on Gonka uses Go RE2 — it doesn't understand lookahead. If an MCP tool's JSON schema has a `pattern` with `(?!` or `(?=`, the request fails: `400 ... schema pattern is not a valid regular expression`. The fix is to remove such patterns from the tool's schema.
-- **Other models.** Besides `moonshotai/kimi-k2.6`, there's Qwen3 235B, MiniMax M2.7, and more — the current list is at `GET /v1/models`. Ids are case-sensitive, so copy them exactly.
+The useful workflow is straightforward: confirm the current model list and terms, keep the key out of source control, make a small API request, then validate the agent configuration on a real task. Treat provider selection as an operational choice that needs monitoring, not as a one-time price comparison.
