@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.37] - 2026-08-17
+
+### Removed
+
+- Removed the completed humanizer task tracker.
+
 ## [0.4.36] - 2026-08-17
 
 ### Changed
