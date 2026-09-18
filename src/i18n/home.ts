@@ -31,7 +31,7 @@ export const home = {
         '. Started with manual trading, gradually automated everything, and now focus on building HFT infrastructure and algorithmic trading platforms.',
       p3_prefix: 'Full-stack developer with deep expertise in ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: '. Based in Moscow.',
+      p3_suffix: '. Based in Batumi, Georgia.',
       focus_eyebrow: 'Current focus',
       focus: [
         {
@@ -138,7 +138,7 @@ export const home = {
         'Marketmaker.cc':
           'Algorithmic trading platform & scalping terminal. 60+ crypto exchanges, real-time data, backtesting engine.',
         'Cmdop.com':
-          'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace.',
+          'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace. CTO and frontend developer since 2025.',
       },
     },
     projects: {
@@ -172,7 +172,7 @@ export const home = {
         'StockAPIs.com':
           'Crypto market data from 100+ exchanges, <100ms latency. AI agents for portfolio management and autonomous trading.',
         'Profitmaker.cc':
-          'Open-source trading terminal (frontend + backend) for self-hosting, expandable with modules.',
+          'Founder and full-stack developer of an open-source React/Vite trading terminal for self-hosting, expandable with modules.',
         Trender:
           'High-performance tick-sim backtesting engine with Genetic Optimization (Optuna). Features 1s drill-down, distributed cluster (50+ threads), and 22+ candle building methods.',
         PolyTracker:
@@ -282,7 +282,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           'Open source startups. Fullstack dev: pseudo-graph DB, event-driven architecture, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–present.',
         'Dolphin.bi':
-          'Open-source crypto analytics marketplace. Sentiment analysis, ICO fundamental analysis. Went through Startupbootcamp. 2017–2018.',
+          'Frontend developer for an open-source crypto analytics marketplace. Sentiment analysis and ICO fundamental analysis. The project participated in Startupbootcamp. 2016–2017.',
         Shakeapp:
           'C2C/C2B sharing platform (car & home rental). React developer. 2020–2022.',
         'centrum-air.com':
@@ -292,10 +292,8 @@ export const home = {
         'Kupi.ru': 'Marketplace. Went through FRII acceleration. 2013.',
         'Kupi.net': 'Website builder startup. Partner. 2019–2020.',
         'Deep chain': 'Participation in the 2024–2025 launch of a Cosmos SDK fork of cyb.ai. Network suspended.',
-        'Dolphin.bi (graveyard)':
-          'Open-source crypto analytics marketplace. Sentiment analysis, ICO fundamental analysis, ICOFaces. ICO (unsuccessful). Went through Startupbootcamp. 2017–2018.',
         'Bursa.dex':
-          'Open-source decentralized exchange. Solidity smart contract, Web3.js, orderbook caching. Won BlockchainHack by Waves. 2017.',
+          'Founder and full-stack developer of an open-source decentralized exchange. Solidity smart contract, Web3.js, and orderbook caching. 2018.',
         'de-core.net':
           'Web development studio. Started as solo freelancer, grew to team of 3-7 devs. ~200 websites built. 2010-2016.',
         Thermom:
@@ -350,7 +348,7 @@ export const home = {
         ' года. Начинал с ручной торговли, постепенно автоматизировал всё, а теперь фокусируюсь на HFT-инфраструктуре и платформах алготрейдинга.',
       p3_prefix: 'Full-stack разработчик с глубокой экспертизой в ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: '. Живу в Москве.',
+      p3_suffix: '. Живу в Батуми, Грузия.',
       focus_eyebrow: 'Текущий фокус',
       focus: [
         {
@@ -457,7 +455,7 @@ export const home = {
         'Marketmaker.cc':
           'Платформа алгоритмической торговли и скальпинг-терминал. 60+ крипто-бирж, данные в реальном времени, движок бэктестинга.',
         'Cmdop.com':
-          'Удалённое управление серверами через AI-агентов. Telegram/Discord/Slack боты, автоматизация браузера, маркетплейс скиллов.',
+          'Удаленное управление серверами через AI-агентов. Telegram/Discord/Slack боты, автоматизация браузера, маркетплейс скиллов. CTO и фронтенд-разработчик с 2025 года.',
       },
     },
     projects: {
@@ -491,7 +489,7 @@ export const home = {
         'StockAPIs.com':
           'Крипто рыночные данные со 100+ бирж, латентность <100ms. AI-агенты для управления портфелем и автономной торговли.',
         'Profitmaker.cc':
-          'Open-source торговый терминал (frontend + backend) для self-hosting, расширяемый модулями.',
+          'Основатель и fullstack-разработчик open-source торгового терминала на React/Vite для самостоятельного развертывания, расширяемого модулями.',
         Trender:
           'Высокопроизводительный tick-sim движок бэктестинга с генетической оптимизацией (Optuna). 1s drill-down, распределённый кластер (50+ потоков) и 22+ метода построения свечей.',
         PolyTracker:
@@ -605,7 +603,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           'Open-source стартапы. Fullstack-разработка: псевдо-граф БД, event-driven архитектура, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–настоящее время.',
         'Dolphin.bi':
-          'Open-source маркетплейс крипто-аналитики. Sentiment-анализ, фундаментальный анализ ICO. Прошёл Startupbootcamp. 2017–2018.',
+          'Разработчик фронтенда маркетплейса криптоаналитики с открытым исходным кодом: анализ настроений и фундаментальный анализ ICO. Проект участвовал в акселераторе Startupbootcamp. 2016–2017.',
         Shakeapp:
           'C2C/C2B sharing-платформа (аренда авто и жилья). React-разработчик. 2020–2022.',
         'centrum-air.com':
@@ -615,10 +613,8 @@ export const home = {
         'Kupi.ru': 'Маркетплейс. Прошёл акселерацию ФРИИ. 2013.',
         'Kupi.net': 'Стартап-конструктор сайтов. Партнёр. 2019–2020.',
         'Deep chain': 'Участие в запуске в 2024–2025 годах форка cyb.ai на Cosmos SDK. Сеть приостановлена.',
-        'Dolphin.bi (graveyard)':
-          'Open-source маркетплейс крипто-аналитики. Sentiment-анализ, фундаментальный анализ ICO, ICOFaces. ICO (неуспешное). Прошёл Startupbootcamp. 2017–2018.',
         'Bursa.dex':
-          'Open-source децентрализованная биржа. Solidity smart-contract, Web3.js, кэширование стакана. Победитель BlockchainHack by Waves. 2017.',
+          'Основатель и разработчик фронтенда и бэкенда децентрализованной биржи с открытым исходным кодом. Смарт-контракты на Solidity, Web3.js и кэширование стакана. 2018.',
         'de-core.net':
           'Студия веб-разработки. Начинал как соло-фрилансер, вырос до команды 3–7 разработчиков. ~200 сайтов. 2010–2016.',
         Thermom:
@@ -673,7 +669,7 @@ export const home = {
         ' 年起就对加密货币和股票市场感兴趣。从手动交易起步，逐步实现全面自动化，目前专注于构建 HFT 基础设施和算法交易平台。',
       p3_prefix: '全栈开发者，精通 ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: '。常驻莫斯科。',
+      p3_suffix: '。居住在格鲁吉亚巴统。',
       focus_eyebrow: '当前重点',
       focus: [
         {
@@ -780,7 +776,7 @@ export const home = {
         'Marketmaker.cc':
           '算法交易平台与剥头皮终端。60+ 加密交易所、实时数据、回测引擎。',
         'Cmdop.com':
-          '通过 AI 代理远程管理服务器。Telegram/Discord/Slack 机器人、浏览器自动化、技能市场。',
+          '通过 AI 代理远程管理服务器。Telegram/Discord/Slack 机器人、浏览器自动化、技能市场。自 2025 年起担任 CTO 并负责前端开发。',
       },
     },
     projects: {
@@ -814,7 +810,7 @@ export const home = {
         'StockAPIs.com':
           '来自 100+ 交易所的加密市场数据，延迟 <100ms。用于组合管理和自主交易的 AI 代理。',
         'Profitmaker.cc':
-          '开源交易终端（前端 + 后端），支持自托管，可通过模块扩展。',
+          '开源 React/Vite 交易终端的创始人兼全栈开发者，支持自托管并可通过模块扩展。',
         Trender:
           '高性能 tick-sim 回测引擎，配备 Optuna 遗传优化。1 秒级钻取、分布式集群（50+ 线程）以及 22+ 种 K 线构建方法。',
         PolyTracker:
@@ -912,7 +908,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           '开源创业项目。全栈开发：伪图数据库、事件驱动架构、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022 至今。',
         'Dolphin.bi':
-          '开源加密分析市场。情绪分析、ICO 基本面分析。曾通过 Startupbootcamp。2017–2018。',
+          '开源加密分析市场的前端开发者，提供情绪分析和 ICO 基本面分析。项目曾参与 Startupbootcamp 加速器。2016–2017。',
         Shakeapp:
           'C2C/C2B 共享平台（汽车与房屋租赁）。React 开发者。2020–2022。',
         'centrum-air.com':
@@ -922,10 +918,8 @@ export const home = {
         'Kupi.ru': '电商平台。曾通过 FRII 加速器。2013。',
         'Kupi.net': '网站建站工具创业项目。合伙人。2019–2020。',
         'Deep chain': '参与了 2024–2025 年 cyb.ai 的 Cosmos SDK 分叉启动。网络已暂停。',
-        'Dolphin.bi (graveyard)':
-          '开源加密分析市场。情绪分析、ICO 基本面分析、ICOFaces。ICO 失败。曾通过 Startupbootcamp。2017–2018。',
         'Bursa.dex':
-          '开源去中心化交易所。Solidity 智能合约、Web3.js、订单簿缓存。获 Waves BlockchainHack 冠军。2017。',
+          '开源去中心化交易所的创始人兼全栈开发者。Solidity 智能合约、Web3.js 和订单簿缓存。2018。',
         'de-core.net':
           'Web 开发工作室。从单人自由职业起步，发展为 3–7 人团队，建立 ~200 个网站。2010–2016。',
         Thermom:
@@ -980,7 +974,7 @@ export const home = {
         '년부터 암호화폐와 주식 시장에 관심을 가져왔습니다. 수동 트레이딩으로 시작해 점차 모든 것을 자동화했고, 지금은 HFT 인프라와 알고리즘 트레이딩 플랫폼 구축에 집중하고 있습니다.',
       p3_prefix: '풀스택 개발자로 ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: ' 에 깊은 전문성을 보유. 모스크바 거주.',
+      p3_suffix: ' 에 깊은 전문성을 보유. 조지아 바투미 거주.',
       focus_eyebrow: '현재 집중 분야',
       focus: [
         {
@@ -1087,7 +1081,7 @@ export const home = {
         'Marketmaker.cc':
           '알고리즘 트레이딩 플랫폼 & 스캘핑 터미널. 60+ 암호화폐 거래소, 실시간 데이터, 백테스팅 엔진.',
         'Cmdop.com':
-          'AI 에이전트를 통한 원격 서버 관리. Telegram/Discord/Slack 봇, 브라우저 자동화, 스킬 마켓플레이스.',
+          'AI 에이전트를 통한 원격 서버 관리. Telegram/Discord/Slack 봇, 브라우저 자동화, 스킬 마켓플레이스. 2025년부터 CTO 및 프런트엔드 개발 담당.',
       },
     },
     projects: {
@@ -1121,7 +1115,7 @@ export const home = {
         'StockAPIs.com':
           '100+ 거래소의 암호화폐 시장 데이터, 지연 <100ms. 포트폴리오 관리 및 자율 트레이딩용 AI 에이전트.',
         'Profitmaker.cc':
-          '셀프 호스팅 가능한 오픈소스 트레이딩 터미널(프런트엔드 + 백엔드), 모듈로 확장 가능.',
+          '셀프 호스팅과 모듈 확장이 가능한 오픈소스 React/Vite 트레이딩 터미널의 창립자이자 풀스택 개발자.',
         Trender:
           'Optuna 유전 알고리즘 최적화 기반 고성능 tick-sim 백테스팅 엔진. 1초 단위 드릴다운, 분산 클러스터(50+ 스레드), 22+ 캔들 생성 방식 지원.',
         PolyTracker:
@@ -1224,7 +1218,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           '오픈소스 스타트업. 풀스택 개발: 의사 그래프 DB, 이벤트 기반 아키텍처, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022~현재.',
         'Dolphin.bi':
-          '오픈소스 암호화폐 분석 마켓플레이스. 감정 분석, ICO 펀더멘털 분석. Startupbootcamp 통과. 2017–2018.',
+          '감정 분석과 ICO 펀더멘털 분석을 제공하는 오픈소스 암호화폐 분석 마켓플레이스의 프런트엔드 개발자. 프로젝트는 Startupbootcamp 액셀러레이터에 참여했습니다. 2016–2017.',
         Shakeapp:
           'C2C/C2B 공유 플랫폼 (자동차 & 주택 렌탈). React 개발자. 2020–2022.',
         'centrum-air.com':
@@ -1234,10 +1228,8 @@ export const home = {
         'Kupi.ru': '마켓플레이스. FRII 액셀러레이션 통과. 2013.',
         'Kupi.net': '웹사이트 빌더 스타트업. 파트너. 2019–2020.',
         'Deep chain': '2024–2025년 cyb.ai의 Cosmos SDK 포크 출시 참여. 네트워크는 중단되었습니다.',
-        'Dolphin.bi (graveyard)':
-          '오픈소스 암호화폐 분석 마켓플레이스. 감정 분석, ICO 펀더멘털 분석, ICOFaces. ICO (실패). Startupbootcamp 통과. 2017–2018.',
         'Bursa.dex':
-          '오픈소스 탈중앙화 거래소. Solidity 스마트 컨트랙트, Web3.js, 오더북 캐싱. Waves의 BlockchainHack 우승. 2017.',
+          '오픈소스 탈중앙화 거래소의 창립자이자 풀스택 개발자. Solidity 스마트 컨트랙트, Web3.js, 오더북 캐싱. 2018.',
         'de-core.net':
           '웹 개발 스튜디오. 1인 프리랜서로 시작해 3-7명 팀으로 성장. ~200개 웹사이트 제작. 2010–2016.',
         Thermom:
@@ -1292,7 +1284,7 @@ export const home = {
         ' 年から暗号通貨と株式市場に興味を持っています。手動トレーディングから始め、徐々にすべてを自動化し、現在は HFT インフラとアルゴリズム取引プラットフォームの構築に注力しています。',
       p3_prefix: 'フルスタック開発者として ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: ' に深い専門性を持ちます。モスクワ在住。',
+      p3_suffix: ' に深い専門性を持ちます。ジョージアのバトゥミ在住。',
       focus_eyebrow: '現在のフォーカス',
       focus: [
         {
@@ -1399,7 +1391,7 @@ export const home = {
         'Marketmaker.cc':
           'アルゴリズム取引プラットフォーム & スキャルピングターミナル。60+ の暗号通貨取引所、リアルタイムデータ、バックテストエンジン。',
         'Cmdop.com':
-          'AI エージェントによるリモートサーバー管理。Telegram/Discord/Slack bot、ブラウザ自動化、スキルマーケットプレイス。',
+          'AI エージェントによるリモートサーバー管理。Telegram/Discord/Slack bot、ブラウザ自動化、スキルマーケットプレイス。2025年から CTO とフロントエンド開発を担当。',
       },
     },
     projects: {
@@ -1433,7 +1425,7 @@ export const home = {
         'StockAPIs.com':
           '100+ 取引所からの暗号通貨マーケットデータ、レイテンシ <100ms。ポートフォリオ管理と自律取引のための AI エージェント。',
         'Profitmaker.cc':
-          'セルフホスティング可能なオープンソース取引ターミナル（フロントエンド + バックエンド）、モジュールで拡張可能。',
+          'セルフホスティングとモジュール拡張が可能なオープンソース React/Vite 取引ターミナルの創業者兼フルスタック開発者。',
         Trender:
           'Optuna による遺伝的最適化を備えた高性能 tick-sim バックテストエンジン。1 秒ドリルダウン、分散クラスタ（50+ スレッド）、22+ 種類のローソク足構築方法。',
         PolyTracker:
@@ -1536,7 +1528,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           'オープンソーススタートアップ。フルスタック開発: 擬グラフ DB、イベント駆動アーキテクチャ、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022–現在。',
         'Dolphin.bi':
-          'オープンソース暗号通貨アナリティクスマーケットプレイス。センチメント分析、ICO ファンダメンタル分析。Startupbootcamp を通過。2017–2018。',
+          'センチメント分析と ICO ファンダメンタル分析を提供するオープンソース暗号通貨分析マーケットプレイスのフロントエンド開発者。プロジェクトは Startupbootcamp に参加。2016–2017。',
         Shakeapp:
           'C2C/C2B シェアリングプラットフォーム（自動車・住宅レンタル）。React 開発者。2020–2022。',
         'centrum-air.com':
@@ -1546,10 +1538,8 @@ export const home = {
         'Kupi.ru': 'マーケットプレイス。FRII アクセラレーションを通過。2013。',
         'Kupi.net': 'ウェブサイトビルダーのスタートアップ。パートナー。2019–2020。',
         'Deep chain': '2024〜2025年の cyb.ai の Cosmos SDK フォーク立ち上げに参加。ネットワークは停止中。',
-        'Dolphin.bi (graveyard)':
-          'オープンソース暗号通貨アナリティクスマーケットプレイス。センチメント分析、ICO ファンダメンタル分析、ICOFaces。ICO（失敗）。Startupbootcamp を通過。2017–2018。',
         'Bursa.dex':
-          'オープンソースの分散型取引所。Solidity スマートコントラクト、Web3.js、板キャッシュ。Waves による BlockchainHack で優勝。2017。',
+          'オープンソース分散型取引所の創業者兼フルスタック開発者。Solidity スマートコントラクト、Web3.js、板キャッシュ。2018。',
         'de-core.net':
           'ウェブ開発スタジオ。1 人のフリーランスから始まり、3-7 人のチームに成長。~200 サイト構築。2010–2016。',
         Thermom:
@@ -1604,7 +1594,7 @@ export const home = {
         '. بدأت بالتداول اليدوي، ثم أتمتت كل شيء تدريجياً، وأركّز الآن على بناء بنية HFT ومنصّات التداول الخوارزمي.',
       p3_prefix: 'مطوّر full-stack بخبرة عميقة في ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
-      p3_suffix: '. مقيم في موسكو.',
+      p3_suffix: '. مقيم في باتومي، جورجيا.',
       focus_eyebrow: 'التركيز الحالي',
       focus: [
         {
@@ -1711,7 +1701,7 @@ export const home = {
         'Marketmaker.cc':
           'منصّة تداول خوارزمي وطرفية scalping. 60+ بورصة عملات رقمية، بيانات فورية، ومحرّك backtesting.',
         'Cmdop.com':
-          'إدارة الخوادم عن بُعد عبر وكلاء AI. بوتات Telegram/Discord/Slack، أتمتة المتصفح، وسوق للمهارات.',
+          'إدارة الخوادم عن بُعد عبر وكلاء AI. بوتات Telegram/Discord/Slack، أتمتة المتصفح، وسوق للمهارات. CTO ومطور الواجهة الأمامية منذ 2025.',
       },
     },
     projects: {
@@ -1745,7 +1735,7 @@ export const home = {
         'StockAPIs.com':
           'بيانات سوق العملات الرقمية من أكثر من 100 بورصة بزمن <100ms. وكلاء AI لإدارة المحافظ والتداول الذاتي.',
         'Profitmaker.cc':
-          'طرفية تداول مفتوحة المصدر (frontend + backend) قابلة للاستضافة الذاتية وللتوسعة بالموديولات.',
+          'مؤسس ومطور full-stack لطرفية تداول مفتوحة المصدر على React/Vite، قابلة للاستضافة الذاتية والتوسعة بالموديولات.',
         Trender:
           'محرّك backtesting tick-sim عالي الأداء مع تحسين جيني (Optuna). يدعم drill-down ثانية واحدة، عنقود موزّع (50+ thread)، وأكثر من 22 طريقة لبناء الشموع.',
         PolyTracker:
@@ -1850,7 +1840,7 @@ export const home = {
         'Deep.foundation & Deep.memo':
           'شركات ناشئة مفتوحة المصدر. تطوير full-stack: قاعدة pseudo-graph، بنية event-driven، DevOps (Swarm، ArgoCD، Kubernetes، Terraform). 2022–حتى الآن.',
         'Dolphin.bi':
-          'سوق تحليلات عملات رقمية مفتوح المصدر. تحليل المشاعر وتحليل أساسي لـ ICO. اجتاز Startupbootcamp. 2017–2018.',
+          'مطور الواجهة الأمامية لسوق تحليلات عملات رقمية مفتوح المصدر، لتحليل المشاعر والتحليل الأساسي لـ ICO. شارك المشروع في مسرعة Startupbootcamp. 2016–2017.',
         Shakeapp:
           'منصّة مشاركة C2C/C2B (تأجير سيارات ومنازل). مطوّر React. 2020–2022.',
         'centrum-air.com':
@@ -1860,10 +1850,8 @@ export const home = {
         'Kupi.ru': 'سوق إلكتروني. اجتاز تسريع FRII. 2013.',
         'Kupi.net': 'شركة ناشئة لبناء المواقع. شريك. 2019–2020.',
         'Deep chain': 'مشاركة في إطلاق 2024–2025 لفورك cyb.ai على Cosmos SDK. الشبكة معلقة.',
-        'Dolphin.bi (graveyard)':
-          'سوق تحليلات عملات رقمية مفتوح المصدر. تحليل المشاعر، تحليل أساسي لـ ICO، ICOFaces. ICO (غير ناجح). اجتاز Startupbootcamp. 2017–2018.',
         'Bursa.dex':
-          'بورصة لامركزية مفتوحة المصدر. عقد ذكي بـ Solidity، Web3.js، تخزين مؤقت للـ orderbook. فاز بـ BlockchainHack من Waves. 2017.',
+          'مؤسس ومطور full-stack لبورصة لامركزية مفتوحة المصدر. عقد ذكي بـ Solidity، Web3.js، وتخزين مؤقت للـ orderbook. 2018.',
         'de-core.net':
           'استوديو لتطوير الويب. بدأ كعمل حر فردي، ونما إلى فريق من 3–7 مطوّرين. تم بناء ~200 موقع. 2010–2016.',
         Thermom:

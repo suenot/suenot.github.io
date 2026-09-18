@@ -7,6 +7,19 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.4.39] - 2026-09-18
+
+### Changed
+
+- Updated the profile location to Batumi, Georgia across all six languages.
+- Added Astro to the frontend stack and CMDOP's 2025 start year.
+
+### Fixed
+
+- Consolidated Dolphin.bi into one entry with its 2016–2017 dates and frontend-only role on the Vue/Python product.
+- Corrected Bursa.dex's 2018 founder/fullstack role and removed the incorrectly attributed hackathon award.
+- Clarified Profitmaker's founder/fullstack role and React/Vite terminal stack.
+
 ## [0.4.38] - 2026-09-18
 
 ### Added
