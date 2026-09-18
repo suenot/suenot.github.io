@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import Contributions from '../components/Contributions.astro';
 import About from '../components/About.astro';
 import TechStack from '../components/TechStack.astro';
 import Projects from '../components/Projects.astro';
@@ -15,6 +16,7 @@ const locale = defaultLocale;
 
 <Layout locale={locale}>
   <Hero locale={locale} />
+  <Contributions locale={locale} />
   <About locale={locale} />
   <Algotrading locale={locale} />
   <TechStack locale={locale} />

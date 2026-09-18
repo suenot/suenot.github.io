@@ -7,6 +7,13 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-18
+
+### Added
+
+- Added a yearly GitHub and GitLab activity calendar with separate source totals in all six languages.
+- Added a cached server API for contribution counts, including accessible private activity without exposing repository details or credentials.
+
 ## [0.4.39] - 2026-09-18
 
 ### Changed

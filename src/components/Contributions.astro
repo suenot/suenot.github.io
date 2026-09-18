@@ -1,0 +1,214 @@
+---
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getContributions } from '../i18n/contributions';
+
+interface Props { locale?: Locale; }
+const { locale = defaultLocale } = Astro.props;
+const t = getContributions(locale);
+---
+
+<section id="contributions" class="contributions terminal-section" aria-labelledby="contributions-heading" data-contributions-root
+  data-loading={t.loading} data-unavailable={t.unavailable} data-partial={t.partial} data-range={t.range}
+  data-updated={t.updated} data-combined={t.combined} data-private-note={t.privateNote} data-details={t.details}
+  data-source-note={t.sourceNote} data-date={t.date} data-activity={t.activity} data-unavailable-source={t.unavailableSource} data-no-activity={t.noActivity}>
+  <div class="terminal-container contributions__layout">
+    <header class="contributions__header">
+      <p class="terminal-kicker">{t.eyebrow} / SOURCE ACTIVITY</p>
+      <h2 id="contributions-heading" class="terminal-heading">{t.heading}</h2>
+      <p>{t.intro}</p>
+    </header>
+    <div class="contributions__body">
+      <p class="contributions__status" aria-live="polite" data-contributions-status>{t.loading}</p>
+      <dl class="contributions__sources" data-contributions-sources></dl>
+      <dl class="contributions__meta" data-contributions-meta hidden></dl>
+      <figure class="contributions__calendar" data-contributions-calendar hidden>
+        <figcaption>{t.combined}</figcaption>
+        <div class="contributions__months" aria-hidden="true" data-contributions-months></div>
+        <div class="contributions__grid" role="img" data-contributions-grid></div>
+      </figure>
+      <p class="contributions__note" data-contributions-note hidden>{t.privateNote}</p>
+      <p class="contributions__note" data-contributions-source-note hidden>{t.sourceNote}</p>
+      <details class="contributions__details" data-contributions-details hidden>
+        <summary>{t.details}</summary>
+        <div class="contributions__table-wrap">
+          <table><thead><tr><th scope="col">{t.date}</th><th scope="col">{t.activity}</th></tr></thead><tbody data-contributions-days></tbody></table>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script>
+  type Day = { date: string; count: number };
+  type Source = { id: 'github' | 'gitlab'; label: string; total: number; days: Day[]; status: 'ok' | 'unavailable' };
+  type Payload = { from: string; to: string; updatedAt: string; sources: Source[] };
+
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  const sourceNames: Record<Source['id'], string> = { github: 'GitHub', gitlab: 'GitLab' };
+  const parseDay = (value: string) => new Date(`${value}T00:00:00Z`);
+  const isValidDate = (value: unknown) => typeof value === 'string' && datePattern.test(value) && !Number.isNaN(parseDay(value).getTime()) && parseDay(value).toISOString().slice(0, 10) === value;
+  const isCount = (value: unknown): value is number => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+  function isPayload(value: unknown): value is Payload {
+    if (!value || typeof value !== 'object') return false;
+    const payload = value as Payload;
+    if (!isValidDate(payload.from) || !isValidDate(payload.to) || payload.to < payload.from || (parseDay(payload.to).getTime() - parseDay(payload.from).getTime()) / 86400000 > 370 || typeof payload.updatedAt !== 'string' || Number.isNaN(new Date(payload.updatedAt).getTime()) || !Array.isArray(payload.sources) || payload.sources.length === 0) return false;
+    const seen = new Set<string>();
+    return payload.sources.every((source) => {
+      if (!source || (source.id !== 'github' && source.id !== 'gitlab') || seen.has(source.id) || (source.status !== 'ok' && source.status !== 'unavailable') || !isCount(source.total) || !Array.isArray(source.days)) return false;
+      seen.add(source.id);
+      const dates = new Set<string>();
+      let total = 0;
+      for (const day of source.days) {
+        if (!isValidDate(day.date) || day.date < payload.from || day.date > payload.to || dates.has(day.date) || !isCount(day.count)) return false;
+        dates.add(day.date); total += day.count;
+        if (!Number.isSafeInteger(total)) return false;
+      }
+      return total === source.total;
+    });
+  }
+
+  function appendTerm(list: HTMLElement, label: string, value: string) {
+    const term = document.createElement('dt');
+    term.textContent = label;
+    const description = document.createElement('dd');
+    description.textContent = value;
+    list.append(term, description);
+    return description;
+  }
+
+  function formatDate(value: string) {
+    return new Intl.DateTimeFormat(document.documentElement.lang || undefined, { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(parseDay(value));
+  }
+
+  function formatUpdated(value: string) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(document.documentElement.lang || undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+  }
+
+  function render(root: HTMLElement, payload: Payload) {
+    const status = root.querySelector<HTMLElement>('[data-contributions-status]')!;
+    const sourcesList = root.querySelector<HTMLElement>('[data-contributions-sources]')!;
+    const meta = root.querySelector<HTMLElement>('[data-contributions-meta]')!;
+    const calendar = root.querySelector<HTMLElement>('[data-contributions-calendar]')!;
+    const months = root.querySelector<HTMLElement>('[data-contributions-months]')!;
+    const grid = root.querySelector<HTMLElement>('[data-contributions-grid]')!;
+    const note = root.querySelector<HTMLElement>('[data-contributions-note]')!;
+    const sourceNote = root.querySelector<HTMLElement>('[data-contributions-source-note]')!;
+    const details = root.querySelector<HTMLDetailsElement>('[data-contributions-details]')!;
+    const daysBody = root.querySelector<HTMLTableSectionElement>('[data-contributions-days]')!;
+    const texts = root.dataset;
+    const sources = payload.sources;
+    const available = sources.filter((source) => source.status === 'ok');
+
+    sourcesList.replaceChildren();
+    sources.forEach((source) => {
+      const value = appendTerm(sourcesList, source.label || sourceNames[source.id], source.status === 'ok' ? new Intl.NumberFormat(document.documentElement.lang).format(source.total) : texts.unavailableSource ?? 'unavailable');
+      if (source.status !== 'ok') value.dataset.unavailable = 'true';
+    });
+    if (available.length === 0) { status.textContent = texts.unavailable ?? ''; return; }
+    status.textContent = available.length === sources.length ? '' : texts.partial ?? '';
+
+    meta.replaceChildren();
+    appendTerm(meta, texts.range ?? '', `${formatDate(payload.from)} – ${formatDate(payload.to)}`);
+    appendTerm(meta, texts.updated ?? '', formatUpdated(payload.updatedAt));
+    meta.hidden = false;
+    note.hidden = false;
+    sourceNote.hidden = false;
+
+    const counts = new Map<string, number>();
+    available.forEach((source) => source.days.forEach((day) => {
+      counts.set(day.date, (counts.get(day.date) ?? 0) + day.count);
+    }));
+    const from = parseDay(payload.from);
+    const to = parseDay(payload.to);
+    if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || to < from || (to.getTime() - from.getTime()) / 86400000 > 370) { status.textContent = texts.unavailable ?? ''; return; }
+    const start = new Date(from); start.setUTCDate(start.getUTCDate() - start.getUTCDay());
+    const weeks = Math.ceil((to.getTime() - start.getTime() + 86400000) / (7 * 86400000));
+    const maximum = Math.max(...counts.values(), 1);
+    grid.replaceChildren();
+    months.replaceChildren();
+    grid.style.setProperty('--weeks', String(weeks));
+    months.style.setProperty('--weeks', String(weeks));
+    const monthFormatter = new Intl.DateTimeFormat(document.documentElement.lang || undefined, { month: 'short', timeZone: 'UTC' });
+    let monthIndex = 0;
+    for (let week = 0; week < weeks; week += 1) {
+      const weekStart = new Date(start); weekStart.setUTCDate(start.getUTCDate() + week * 7);
+      const firstOfMonth = week === 0 ? from : Array.from({ length: 7 }, (_, offset) => {
+        const candidate = new Date(weekStart); candidate.setUTCDate(weekStart.getUTCDate() + offset); return candidate;
+      }).find((candidate) => candidate >= from && candidate <= to && candidate.getUTCDate() === 1);
+      if (!firstOfMonth) continue;
+      const label = document.createElement('span');
+      label.className = 'contributions__month';
+      if (monthIndex % 3 === 0) label.classList.add('contributions__month--mobile');
+      label.style.gridColumn = String(week + 1);
+      label.textContent = monthFormatter.format(firstOfMonth);
+      months.append(label); monthIndex += 1;
+    }
+    for (let index = 0; index < weeks * 7; index += 1) {
+      const day = new Date(start); day.setUTCDate(start.getUTCDate() + index);
+      const iso = day.toISOString().slice(0, 10);
+      const cell = document.createElement('span');
+      cell.className = 'contributions__cell';
+      if (day < from || day > to) cell.classList.add('contributions__cell--outside');
+      else {
+        const count = counts.get(iso) ?? 0;
+        const level = count === 0 ? 0 : Math.min(4, Math.ceil((count / maximum) * 4));
+        cell.classList.add(`contributions__cell--level-${level}`);
+        cell.title = `${formatDate(iso)}: ${count}`;
+        cell.setAttribute('aria-label', cell.title);
+      }
+      grid.append(cell);
+    }
+    calendar.hidden = false;
+    grid.setAttribute('aria-label', `${texts.combined ?? ''}: ${formatDate(payload.from)} – ${formatDate(payload.to)}`);
+
+    daysBody.replaceChildren();
+    [...counts.entries()].filter(([, count]) => count > 0).sort(([left], [right]) => right.localeCompare(left)).forEach(([date, count]) => {
+      const row = document.createElement('tr');
+      const dateCell = document.createElement('td'); dateCell.textContent = formatDate(date);
+      const countCell = document.createElement('td'); countCell.textContent = String(count);
+      row.append(dateCell, countCell); daysBody.append(row);
+    });
+    if (daysBody.childElementCount === 0) {
+      const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 2; cell.textContent = texts.noActivity ?? ''; row.append(cell); daysBody.append(row);
+    }
+    details.hidden = false;
+  }
+
+  async function initializeContributions() {
+    document.querySelectorAll<HTMLElement>('[data-contributions-root]').forEach(async (root) => {
+      if (root.dataset.loaded === 'true') return;
+      root.dataset.loaded = 'true';
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 55000);
+      try {
+        const response = await fetch('/api/contributions', { signal: controller.signal, headers: { Accept: 'application/json' } });
+        const payload: unknown = response.ok ? await response.json() : null;
+        if (!isPayload(payload)) throw new Error('Invalid contributions payload');
+        render(root, payload);
+      } catch {
+        const status = root.querySelector<HTMLElement>('[data-contributions-status]');
+        if (status) status.textContent = root.dataset.unavailable ?? '';
+      } finally { window.clearTimeout(timeout); }
+    });
+  }
+
+  const contributionsWindow = window as Window & typeof globalThis & { __contributionsPageLoad?: () => void };
+  if (contributionsWindow.__contributionsPageLoad) document.removeEventListener('astro:page-load', contributionsWindow.__contributionsPageLoad);
+  contributionsWindow.__contributionsPageLoad = initializeContributions;
+  initializeContributions();
+  document.addEventListener('astro:page-load', initializeContributions);
+</script>
+
+<style>
+  .contributions__sources :global(dd[data-unavailable]) { font-size: .75rem; font-weight: 400; }
+  .contributions { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .contributions__layout { display: grid; grid-template-columns: minmax(15rem, .52fr) minmax(0, 1.48fr); }
+  .contributions__header { padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 3.5vw, 3.75rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .contributions__header h2 { margin-block-start: 1.25rem; }.contributions__header > p:last-child { margin-block-start: 2rem; color: var(--terminal-muted, #969b97); font-size: .85rem; line-height: 1.65; }
+  .contributions__body { min-width: 0; padding: clamp(1.25rem, 3.5vw, 3.75rem); }.contributions__status { min-block-size: 1.5rem; color: #ff3b30; font: .62rem/1.5 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .contributions__sources, .contributions__meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem 1rem; margin-block-start: 1rem; font: .64rem/1.45 var(--font-mono, monospace); }.contributions__sources { max-inline-size: 30rem; }.contributions__sources :global(dt), .contributions__meta :global(dt) { color: var(--terminal-muted, #747a75); text-transform: uppercase; }.contributions__sources :global(dd) { min-width: 0; margin: 0; color: var(--terminal-fg, #e7e9e3); font-size: 1.8rem; font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; text-align: end; }.contributions__meta :global(dd) { margin: 0; color: var(--terminal-fg, #e7e9e3); overflow-wrap: anywhere; text-align: end; }
+  .contributions__meta { margin-block-start: 2rem; padding-block-start: 1rem; border-block-start: 1px solid var(--terminal-line, #303431); }.contributions__calendar { margin: 2rem 0 0; }.contributions__calendar figcaption, .contributions__note, .contributions__details { color: var(--terminal-muted, #969b97); font: .62rem/1.55 var(--font-mono, monospace); }.contributions__months { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); gap: .18rem; min-block-size: 1rem; margin-block-start: .75rem; overflow: hidden; color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); text-transform: uppercase; white-space: nowrap; }.contributions__months :global(.contributions__month) { overflow: visible; }.contributions__grid { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); grid-template-rows: repeat(7, .65rem); grid-auto-flow: column; gap: .18rem; margin-block-start: .25rem; overflow: hidden; }.contributions__grid :global(.contributions__cell) { min-inline-size: 0; background: #222622; }.contributions__grid :global(.contributions__cell--outside) { background: transparent; }.contributions__grid :global(.contributions__cell--level-1) { background: #235e2c; }.contributions__grid :global(.contributions__cell--level-2) { background: #2f8a3b; }.contributions__grid :global(.contributions__cell--level-3) { background: #43b34f; }.contributions__grid :global(.contributions__cell--level-4) { background: #70df61; }
+  .contributions__note { margin: 1rem 0 0; max-inline-size: 68ch; }.contributions__details { margin-block-start: 1.5rem; }.contributions__details summary { cursor: pointer; color: var(--terminal-fg, #e7e9e3); }.contributions__table-wrap { max-block-size: 18rem; margin-block-start: .75rem; overflow: auto; border: 1px solid var(--terminal-line, #303431); } .contributions table { inline-size: 100%; border-collapse: collapse; } .contributions__table-wrap :global(th), .contributions__table-wrap :global(td) { padding: .55rem .7rem; border-block-end: 1px solid var(--terminal-line, #303431); text-align: start; } .contributions__table-wrap :global(th:last-child), .contributions__table-wrap :global(td:last-child) { text-align: end; }
+  @media (max-width: 760px) { .contributions__layout { grid-template-columns: 1fr; }.contributions__header { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }.contributions__months :global(.contributions__month:not(.contributions__month--mobile)) { display: none; }.contributions__grid { grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); grid-template-rows: repeat(7, .5rem); gap: .12rem; }.contributions__sources, .contributions__meta { grid-template-columns: minmax(0, 1fr) auto; } }
+</style>
