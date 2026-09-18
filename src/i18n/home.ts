@@ -261,6 +261,24 @@ export const home = {
           'The Telegram Client for Deep Focus — minimalist Telegram client (TypeScript + Rust backend).',
         macpurge: 'Developer-focused macOS disk cleaner utility.',
         'deadline-in-days': 'Deadline countdown app showing days remaining.',
+        'UI for Marketmaker.cc':
+          'Reusable open-source trading UI components for order books, portfolios, order forms, analytics, and dark mode.',
+        'Portfolio Optimizer':
+          'Portfolio allocation algorithms with interactive efficient-frontier comparisons and charts.',
+        'MarketMaker Sandbox':
+          'Exchange-compatible Binance, Bybit, and OKX REST sandbox with simulated funds and order placement, queries, amendments, and cancellations.',
+        'Trading Events Calendar':
+          'Calendar aggregating trading competitions, quant hackathons, and prop challenges.',
+        'Harness Analyzer':
+          'Coding-agent usage analytics with session and project aggregates, opt-in public profiles, and a leaderboard.',
+        Pocket: 'Personal finance app.',
+        'Vacation / Стыковка':
+          'Compares a tour package with a flight-and-apartment trip.',
+        SyncSong:
+          'Collaborative song and chord app with synchronized rooms, search, and playlists.',
+        Slippage: 'Browser game with a real-time backend.',
+        'Curved Games':
+          'Browser games: Curved Rangers, Curved Wings of Fury, and Curved Lava, with procedural worlds and audio.',
         'Deep.foundation & Deep.memo':
           'Open source startups. Fullstack dev: pseudo-graph DB, event-driven architecture, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–present.',
         'Dolphin.bi':
@@ -273,7 +291,7 @@ export const home = {
           'Open-source crypto trading terminal supporting 130+ crypto exchanges. Two versions: React (class-based) and Vue 2. 2018–2019.',
         'Kupi.ru': 'Marketplace. Went through FRII acceleration. 2013.',
         'Kupi.net': 'Website builder startup. Partner. 2019–2020.',
-        DeepChain: 'Blockchain on Cosmos SDK. 2024.',
+        'Deep chain': 'Participation in the 2024–2025 launch of a Cosmos SDK fork of cyb.ai. Network suspended.',
         'Dolphin.bi (graveyard)':
           'Open-source crypto analytics marketplace. Sentiment analysis, ICO fundamental analysis, ICOFaces. ICO (unsuccessful). Went through Startupbootcamp. 2017–2018.',
         'Bursa.dex':
@@ -566,6 +584,24 @@ export const home = {
           'Утилита очистки диска на macOS для разработчиков.',
         'deadline-in-days':
           'Приложение-обратный отсчёт дедлайнов с количеством оставшихся дней.',
+        'UI for Marketmaker.cc':
+          'Переиспользуемые компоненты интерфейса с открытым исходным кодом: стаканы, портфели, формы заявок, аналитика и темная тема.',
+        'Portfolio Optimizer':
+          'Алгоритмы распределения портфеля с интерактивным сравнением эффективных границ и графиками.',
+        'MarketMaker Sandbox':
+          'Совместимая с биржами REST-песочница Binance, Bybit и OKX с виртуальными средствами и размещением, запросом, изменением и отменой заявок.',
+        'Trading Events Calendar':
+          'Календарь торговых соревнований, хакатонов по алгоритмической торговле и отборочных испытаний трейдеров.',
+        'Harness Analyzer':
+          'Аналитика использования агентов программирования: статистика сессий и проектов, добровольно открываемые профили и таблица лидеров.',
+        Pocket: 'Приложение для личных финансов.',
+        'Vacation / Стыковка':
+          'Сравнивает турпакет с поездкой, собранной из перелета и апартаментов.',
+        SyncSong:
+          'Совместное приложение для песен и аккордов с синхронизированными комнатами, поиском и плейлистами.',
+        Slippage: 'Браузерная игра с бэкендом реального времени.',
+        'Curved Games':
+          'Браузерные игры Curved Rangers, Curved Wings of Fury и Curved Lava с процедурными мирами и звуком.',
         'Deep.foundation & Deep.memo':
           'Open-source стартапы. Fullstack-разработка: псевдо-граф БД, event-driven архитектура, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–настоящее время.',
         'Dolphin.bi':
@@ -578,7 +614,7 @@ export const home = {
           'Open-source крипто торговый терминал с поддержкой 130+ бирж. Две версии: React (классовые) и Vue 2. 2018–2019.',
         'Kupi.ru': 'Маркетплейс. Прошёл акселерацию ФРИИ. 2013.',
         'Kupi.net': 'Стартап-конструктор сайтов. Партнёр. 2019–2020.',
-        DeepChain: 'Блокчейн на Cosmos SDK. 2024.',
+        'Deep chain': 'Участие в запуске в 2024–2025 годах форка cyb.ai на Cosmos SDK. Сеть приостановлена.',
         'Dolphin.bi (graveyard)':
           'Open-source маркетплейс крипто-аналитики. Sentiment-анализ, фундаментальный анализ ICO, ICOFaces. ICO (неуспешное). Прошёл Startupbootcamp. 2017–2018.',
         'Bursa.dex':
@@ -861,6 +897,18 @@ export const home = {
           'The Telegram Client for Deep Focus —— 极简 Telegram 客户端（TypeScript + Rust 后端）。',
         macpurge: '面向开发者的 macOS 磁盘清理工具。',
         'deadline-in-days': '显示剩余天数的截止日期倒计时应用。',
+        'UI for Marketmaker.cc':
+          '可复用的开源交易 UI 组件，涵盖订单簿、投资组合、订单表单、分析和深色模式。',
+        'Portfolio Optimizer': '提供交互式有效前沿比较和图表的投资组合配置算法。',
+        'MarketMaker Sandbox':
+          '兼容 Binance、Bybit 和 OKX 的 REST 沙盒，提供模拟资金以及订单创建、查询、修改和取消。',
+        'Trading Events Calendar': '汇集交易竞赛、量化黑客松和自营交易挑战的日历。',
+        'Harness Analyzer': '编码代理使用分析，包含会话和项目汇总、可选公开资料和排行榜。',
+        Pocket: '个人财务应用。',
+        'Vacation / Стыковка': '比较旅游套餐与机票加公寓的行程。',
+        SyncSong: '支持同步房间、搜索和播放列表的协作歌曲与和弦应用。',
+        Slippage: '带实时后端的浏览器游戏。',
+        'Curved Games': '浏览器游戏：Curved Rangers、Curved Wings of Fury 和 Curved Lava，带有程序化世界和音频。',
         'Deep.foundation & Deep.memo':
           '开源创业项目。全栈开发：伪图数据库、事件驱动架构、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022 至今。',
         'Dolphin.bi':
@@ -873,7 +921,7 @@ export const home = {
           '支持 130+ 加密交易所的开源加密交易终端。两个版本：React（class-based）与 Vue 2。2018–2019。',
         'Kupi.ru': '电商平台。曾通过 FRII 加速器。2013。',
         'Kupi.net': '网站建站工具创业项目。合伙人。2019–2020。',
-        DeepChain: '基于 Cosmos SDK 的区块链。2024。',
+        'Deep chain': '参与了 2024–2025 年 cyb.ai 的 Cosmos SDK 分叉启动。网络已暂停。',
         'Dolphin.bi (graveyard)':
           '开源加密分析市场。情绪分析、ICO 基本面分析、ICOFaces。ICO 失败。曾通过 Startupbootcamp。2017–2018。',
         'Bursa.dex':
@@ -1161,6 +1209,18 @@ export const home = {
           'The Telegram Client for Deep Focus — 미니멀 Telegram 클라이언트 (TypeScript + Rust 백엔드).',
         macpurge: '개발자를 위한 macOS 디스크 클리너 유틸리티.',
         'deadline-in-days': '남은 일수를 보여주는 마감일 카운트다운 앱.',
+        'UI for Marketmaker.cc':
+          '주문장, 포트폴리오, 주문 양식, 분석, 다크 모드를 위한 재사용 가능한 오픈소스 트레이딩 UI 컴포넌트.',
+        'Portfolio Optimizer': '대화형 효율적 프런티어 비교와 차트를 갖춘 포트폴리오 배분 알고리즘.',
+        'MarketMaker Sandbox':
+          '모의 자금과 주문 생성, 조회, 수정, 취소를 제공하는 Binance, Bybit, OKX 호환 REST 샌드박스.',
+        'Trading Events Calendar': '트레이딩 대회, 퀀트 해커톤, 프롭 챌린지를 모은 캘린더.',
+        'Harness Analyzer': '세션과 프로젝트 집계, 선택적 공개 프로필 및 리더보드를 제공하는 코딩 에이전트 사용 분석.',
+        Pocket: '개인 재무 앱.',
+        'Vacation / Стыковка': '여행 패키지와 항공편 및 아파트 조합 여행을 비교합니다.',
+        SyncSong: '동기화된 룸, 검색, 플레이리스트를 갖춘 협업 노래 및 코드 앱.',
+        Slippage: '실시간 백엔드가 있는 브라우저 게임.',
+        'Curved Games': '절차적 월드와 오디오를 갖춘 Curved Rangers, Curved Wings of Fury, Curved Lava 브라우저 게임.',
         'Deep.foundation & Deep.memo':
           '오픈소스 스타트업. 풀스택 개발: 의사 그래프 DB, 이벤트 기반 아키텍처, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022~현재.',
         'Dolphin.bi':
@@ -1173,7 +1233,7 @@ export const home = {
           '130+ 암호화폐 거래소를 지원하는 오픈소스 암호화폐 트레이딩 터미널. 두 버전: React (클래스 기반)과 Vue 2. 2018–2019.',
         'Kupi.ru': '마켓플레이스. FRII 액셀러레이션 통과. 2013.',
         'Kupi.net': '웹사이트 빌더 스타트업. 파트너. 2019–2020.',
-        DeepChain: 'Cosmos SDK 기반 블록체인. 2024.',
+        'Deep chain': '2024–2025년 cyb.ai의 Cosmos SDK 포크 출시 참여. 네트워크는 중단되었습니다.',
         'Dolphin.bi (graveyard)':
           '오픈소스 암호화폐 분석 마켓플레이스. 감정 분석, ICO 펀더멘털 분석, ICOFaces. ICO (실패). Startupbootcamp 통과. 2017–2018.',
         'Bursa.dex':
@@ -1461,6 +1521,18 @@ export const home = {
           'The Telegram Client for Deep Focus — ミニマルな Telegram クライアント（TypeScript + Rust バックエンド）。',
         macpurge: '開発者向け macOS ディスククリーナーユーティリティ。',
         'deadline-in-days': '残日数を表示する締め切りカウントダウンアプリ。',
+        'UI for Marketmaker.cc':
+          '板情報、ポートフォリオ、注文フォーム、分析、ダークモード向けの再利用可能なオープンソース取引 UI コンポーネント。',
+        'Portfolio Optimizer': 'インタラクティブな効率的フロンティア比較とチャートを備えたポートフォリオ配分アルゴリズム。',
+        'MarketMaker Sandbox':
+          '模擬資金と注文の作成、照会、変更、取消に対応する Binance、Bybit、OKX 互換 REST サンドボックス。',
+        'Trading Events Calendar': 'トレーディング大会、クオンツハッカソン、プロップチャレンジを集約するカレンダー。',
+        'Harness Analyzer': 'セッションとプロジェクトの集計、任意の公開プロフィール、リーダーボードを備えたコーディングエージェント利用分析。',
+        Pocket: '個人財務アプリ。',
+        'Vacation / Стыковка': 'ツアーパッケージと航空券・アパートメントを組み合わせた旅行を比較。',
+        SyncSong: '同期ルーム、検索、プレイリストを備えた共同ソング・コードアプリ。',
+        Slippage: 'リアルタイムバックエンドを備えたブラウザゲーム。',
+        'Curved Games': 'プロシージャルな世界と音声を備えた Curved Rangers、Curved Wings of Fury、Curved Lava のブラウザゲーム。',
         'Deep.foundation & Deep.memo':
           'オープンソーススタートアップ。フルスタック開発: 擬グラフ DB、イベント駆動アーキテクチャ、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022–現在。',
         'Dolphin.bi':
@@ -1473,7 +1545,7 @@ export const home = {
           '130+ の暗号通貨取引所に対応するオープンソースの暗号通貨取引ターミナル。2 バージョン: React（クラスベース）と Vue 2。2018–2019。',
         'Kupi.ru': 'マーケットプレイス。FRII アクセラレーションを通過。2013。',
         'Kupi.net': 'ウェブサイトビルダーのスタートアップ。パートナー。2019–2020。',
-        DeepChain: 'Cosmos SDK 上のブロックチェーン。2024。',
+        'Deep chain': '2024〜2025年の cyb.ai の Cosmos SDK フォーク立ち上げに参加。ネットワークは停止中。',
         'Dolphin.bi (graveyard)':
           'オープンソース暗号通貨アナリティクスマーケットプレイス。センチメント分析、ICO ファンダメンタル分析、ICOFaces。ICO（失敗）。Startupbootcamp を通過。2017–2018。',
         'Bursa.dex':
@@ -1763,6 +1835,18 @@ export const home = {
           'The Telegram Client for Deep Focus — عميل Telegram بسيط (TypeScript + backend بـ Rust).',
         macpurge: 'أداة تنظيف القرص على macOS موجّهة للمطوّرين.',
         'deadline-in-days': 'تطبيق عدّ تنازلي للمواعيد النهائية يعرض الأيام المتبقية.',
+        'UI for Marketmaker.cc':
+          'مكوّنات UI مفتوحة المصدر قابلة لإعادة الاستخدام للتداول: دفاتر الأوامر والمحافظ ونماذج الأوامر والتحليلات والوضع الداكن.',
+        'Portfolio Optimizer': 'خوارزميات لتوزيع المحافظ مع مقارنة تفاعلية للحدود الكفوءة ورسوم بيانية.',
+        'MarketMaker Sandbox':
+          'بيئة REST متوافقة مع Binance وBybit وOKX، بأموال محاكية وعمليات وضع الأوامر والاستعلام عنها وتعديلها وإلغائها.',
+        'Trading Events Calendar': 'تقويم يجمع مسابقات التداول وهاكاثونات الكم وتحديات شركات التداول.',
+        'Harness Analyzer': 'تحليلات لاستخدام وكلاء البرمجة مع تجميعات للجلسات والمشاريع وملفات عامة اختيارية ولوحة صدارة.',
+        Pocket: 'تطبيق للتمويل الشخصي.',
+        'Vacation / Стыковка': 'يقارن بين باقة سياحية ورحلة من تذكرة طيران وشقة.',
+        SyncSong: 'تطبيق تعاوني للأغاني والأوتار مع غرف متزامنة وبحث وقوائم تشغيل.',
+        Slippage: 'لعبة متصفح بخلفية فورية.',
+        'Curved Games': 'ألعاب متصفح Curved Rangers وCurved Wings of Fury وCurved Lava بعوالم وصوت إجرائيين.',
         'Deep.foundation & Deep.memo':
           'شركات ناشئة مفتوحة المصدر. تطوير full-stack: قاعدة pseudo-graph، بنية event-driven، DevOps (Swarm، ArgoCD، Kubernetes، Terraform). 2022–حتى الآن.',
         'Dolphin.bi':
@@ -1775,7 +1859,7 @@ export const home = {
           'طرفية تداول عملات رقمية مفتوحة المصدر تدعم 130+ بورصة. نسختان: React (class-based) وVue 2. 2018–2019.',
         'Kupi.ru': 'سوق إلكتروني. اجتاز تسريع FRII. 2013.',
         'Kupi.net': 'شركة ناشئة لبناء المواقع. شريك. 2019–2020.',
-        DeepChain: 'بلوكتشين على Cosmos SDK. 2024.',
+        'Deep chain': 'مشاركة في إطلاق 2024–2025 لفورك cyb.ai على Cosmos SDK. الشبكة معلقة.',
         'Dolphin.bi (graveyard)':
           'سوق تحليلات عملات رقمية مفتوح المصدر. تحليل المشاعر، تحليل أساسي لـ ICO، ICOFaces. ICO (غير ناجح). اجتاز Startupbootcamp. 2017–2018.',
         'Bursa.dex':
