@@ -7,6 +7,14 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-09-18
+
+### Fixed
+
+- Corrected the project name to Bursa DEX and removed its unrelated link.
+- Corrected the contribution source to GitLab.com for user suenot and disconnected the unrelated self-hosted credential.
+- Kept individual source availability visible when both contribution providers are unavailable.
+
 ## [0.5.0] - 2026-09-18
 
 ### Added

@@ -32,6 +32,7 @@ test('contribution aggregates preserve dates, privacy and provider failures', as
     const gh = await github(window, 'test-token');
     assert.equal(gh.total, 7);
     const gl = await gitlab(window, 'test-token');
+    assert(requests.filter(([url]) => !url.includes('graphql')).every(([url]) => new URL(url).origin === 'https://gitlab.com'), 'GitLab activity must use the intended instance');
     assert.equal(gl.total, 2, 'pushes count as events, duplicate IDs and out-of-range events are excluded');
     assert.equal(gl.days.at(-1).count, 1);
     assert(!JSON.stringify(gl).includes('private'));

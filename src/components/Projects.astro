@@ -15,7 +15,7 @@ interface Project {
   name: string;
   descKey: DescKey;
   tags: string[];
-  url: string;
+  url?: string;
   status: StatusKey;
   private?: boolean;
 }
@@ -121,7 +121,7 @@ const projects: ProjectGroup[] = [
       { name: 'Kupi.ru', descKey: 'Kupi.ru', tags: ['PHP', 'JavaScript'], url: 'https://github.com/suenot', status: 'rip' },
       { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip' },
       { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused' },
-      { name: 'Bursa.dex', descKey: 'Bursa.dex', tags: ['Solidity', 'React', 'Django'], url: 'https://github.com/suenot', status: 'rip' },
+      { name: 'Bursa DEX', descKey: 'Bursa DEX', tags: ['Solidity', 'React', 'Django'], status: 'rip' },
       { name: 'de-core.net', descKey: 'de-core.net', tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'], url: 'https://github.com/suenot', status: 'rip' },
       { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip' },
     ],
@@ -172,21 +172,24 @@ const statusStyles: Record<StatusKey, string> = {
             <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE</span>
           </div>
           <ol>
-            {group.items.map((project, projectIndex) => (
+            {group.items.map((project, projectIndex) => {
+              const Row = project.url ? 'a' : 'div';
+              return (
               <li>
-                <a href={project.url} target="_blank" rel="noopener noreferrer">
+                <Row class="project-row" {...(project.url ? { href: project.url, target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <div class="project-row__name">
                     <span class="project-row__id">{String(groupIndex + 1).padStart(2, '0')}.{String(projectIndex + 1).padStart(2, '0')}</span>
                     <h4>{project.name}</h4>
-                    <span class="project-row__access" title={project.private ? 'Private repository' : 'Public link'}>{project.private ? 'LOCK' : 'OPEN'}</span>
+                    {project.url && <span class="project-row__access" title={project.private ? 'Private repository' : 'Public link'}>{project.private ? 'LOCK' : 'OPEN'}</span>}
                   </div>
                   <p>{t.descs[project.descKey]}</p>
                   <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
                   <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
-                  <span class="project-row__arrow" aria-hidden="true">↗</span>
-                </a>
+                  {project.url && <span class="project-row__arrow" aria-hidden="true">↗</span>}
+                </Row>
               </li>
-            ))}
+              );
+            })}
           </ol>
         </section>
       ))}
@@ -207,14 +210,14 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group__header > span { color: #ff3b30; font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group__header > span:last-child { color: var(--terminal-muted, #747a75); }
   .project-group__header h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.6rem, 2.8vw, 3rem); font-weight: 750; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
-  .project-group__columns, .project-group a { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 5rem 1rem; gap: 1.2rem; }
+  .project-group__columns, .project-row { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 5rem 1rem; gap: 1.2rem; }
   .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: #5d625e; font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group li { border-block-end: 1px solid var(--terminal-line, #303431); }
-  .project-group a { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
+  .project-row { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
   .project-row__name { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .7rem; align-items: start; min-width: 0; }
   .project-row__id, .project-row__access { color: #5d625e; font: .5rem/1.5 var(--font-mono, monospace); }
   .project-row__name h4 { color: var(--terminal-fg, #e7e9e3); font: 600 .72rem/1.35 var(--font-mono, monospace); overflow-wrap: anywhere; }
-  .project-group a > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
+  .project-row > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
   .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: var(--terminal-muted, #747a75); font: .52rem/1.35 var(--font-mono, monospace); }
   .project-row__tags span::before { content: "["; margin-inline-end: .2rem; }.project-row__tags span::after { content: "]"; margin-inline-start: .2rem; }
   .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
@@ -226,15 +229,15 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
   @media (max-width: 1050px) {
     .project-group__columns { display: none; }
-    .project-group a { grid-template-columns: minmax(12rem, .8fr) 1.2fr 5rem 1rem; }
+    .project-row { grid-template-columns: minmax(12rem, .8fr) 1.2fr 5rem 1rem; }
     .project-row__tags { grid-column: 2; }
     .project-row__status { grid-column: 3; grid-row: 1; }
   }
   @media (max-width: 760px) {
     .projects__header { grid-template-columns: 1fr; }
-    .project-group a { grid-template-columns: 1fr auto; gap: .8rem 1rem; }
+    .project-row { grid-template-columns: 1fr auto; gap: .8rem 1rem; }
     .project-row__name { grid-column: 1; }
-    .project-group a > p { grid-column: 1 / -1; }
+    .project-row > p { grid-column: 1 / -1; }
     .project-row__tags { grid-column: 1; }
     .project-row__status { grid-column: 2; grid-row: 1; }
     .project-row__arrow { grid-column: 2; grid-row: 3; align-self: end; opacity: 1; }

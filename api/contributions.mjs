@@ -1,5 +1,6 @@
 const DAY = 86_400_000;
 const HOUR = 3_600_000;
+const GITLAB_ORIGIN = 'https://gitlab.com';
 
 export function dateWindow(now = new Date()) {
   const end = new Date(now);
@@ -59,7 +60,7 @@ export async function github(window, token) {
   return result;
 }
 
-export async function gitlab(window, token, origin = 'https://gitlab.marketmaker.cc') {
+export async function gitlab(window, token, origin = GITLAB_ORIGIN) {
   if (!token) throw new Error('GitLab credentials unavailable');
   const base = new URL(origin);
   if (base.protocol !== 'https:' || base.username || base.password || base.pathname !== '/') throw new Error('Invalid GitLab origin');
@@ -97,7 +98,7 @@ let pending;
 export async function collect(now = new Date()) {
   const window = dateWindow(now);
   let gitlabLabel = 'GitLab';
-  try { gitlabLabel += ` · ${new URL(process.env.CONTRIBUTIONS_GITLAB_URL || 'https://gitlab.marketmaker.cc').hostname}`; } catch { /* Invalid configuration is reported as unavailable below. */ }
+  try { gitlabLabel += ` · ${new URL(process.env.CONTRIBUTIONS_GITLAB_URL || GITLAB_ORIGIN).hostname}`; } catch { /* Invalid configuration is reported as unavailable below. */ }
   const results = await Promise.allSettled([
     github(window, process.env.CONTRIBUTIONS_GITHUB_TOKEN),
     gitlab(window, process.env.CONTRIBUTIONS_GITLAB_TOKEN, process.env.CONTRIBUTIONS_GITLAB_URL),

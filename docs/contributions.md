@@ -14,13 +14,14 @@ Production environment variables (encrypted in the Vercel project):
   After refreshing the local CLI authorization with
   `gh auth refresh -h github.com -s read:user`, update this encrypted Vercel
   variable and redeploy so the function receives the refreshed credential.
-- `CONTRIBUTIONS_GITLAB_TOKEN`: dedicated `suenot` personal access token with `read_api`.
-- `CONTRIBUTIONS_GITLAB_URL`: `https://gitlab.marketmaker.cc`; change this together
-  with its token if a different GitLab instance is intended.
+- `CONTRIBUTIONS_GITLAB_TOKEN`: **GitLab.com** personal access token for `suenot`
+  with `read_api`. Leave unset until that credential is available.
+- `CONTRIBUTIONS_GITLAB_URL`: `https://gitlab.com`.
 
-The GitLab token is maintained in the central credential store documented by
-`~/projects/server/docs/gitlab.md`, under `SUENOT_CONTRIBUTIONS_TOKEN`. It expires
-on 2027-09-18. Token values must never be committed or prefixed with `PUBLIC_`.
+Load the GitLab.com token from `~/.zshrc` as `GITLAB_COM_READ_API_TOKEN`, following
+the owner's credential storage convention. The previously configured `SUENOT_CONTRIBUTIONS_TOKEN`
+belongs to the unrelated self-hosted GitLab instance: never send that token to
+GitLab.com. Token values must never be committed or prefixed with `PUBLIC_`.
 
 GitHub's authenticated GraphQL contribution calendar includes the private
 activity accessible to the token and follows GitHub's contribution rules.

@@ -292,7 +292,7 @@ export const home = {
         'Kupi.ru': 'Marketplace. Went through FRII acceleration. 2013.',
         'Kupi.net': 'Website builder startup. Partner. 2019–2020.',
         'Deep chain': 'Participation in the 2024–2025 launch of a Cosmos SDK fork of cyb.ai. Network suspended.',
-        'Bursa.dex':
+        'Bursa DEX':
           'Founder and full-stack developer of an open-source decentralized exchange. Solidity smart contract, Web3.js, and orderbook caching. 2018.',
         'de-core.net':
           'Web development studio. Started as solo freelancer, grew to team of 3-7 devs. ~200 websites built. 2010-2016.',
@@ -613,7 +613,7 @@ export const home = {
         'Kupi.ru': 'Маркетплейс. Прошёл акселерацию ФРИИ. 2013.',
         'Kupi.net': 'Стартап-конструктор сайтов. Партнёр. 2019–2020.',
         'Deep chain': 'Участие в запуске в 2024–2025 годах форка cyb.ai на Cosmos SDK. Сеть приостановлена.',
-        'Bursa.dex':
+        'Bursa DEX':
           'Основатель и разработчик фронтенда и бэкенда децентрализованной биржи с открытым исходным кодом. Смарт-контракты на Solidity, Web3.js и кэширование стакана. 2018.',
         'de-core.net':
           'Студия веб-разработки. Начинал как соло-фрилансер, вырос до команды 3–7 разработчиков. ~200 сайтов. 2010–2016.',
@@ -918,7 +918,7 @@ export const home = {
         'Kupi.ru': '电商平台。曾通过 FRII 加速器。2013。',
         'Kupi.net': '网站建站工具创业项目。合伙人。2019–2020。',
         'Deep chain': '参与了 2024–2025 年 cyb.ai 的 Cosmos SDK 分叉启动。网络已暂停。',
-        'Bursa.dex':
+        'Bursa DEX':
           '开源去中心化交易所的创始人兼全栈开发者。Solidity 智能合约、Web3.js 和订单簿缓存。2018。',
         'de-core.net':
           'Web 开发工作室。从单人自由职业起步，发展为 3–7 人团队，建立 ~200 个网站。2010–2016。',
@@ -1228,7 +1228,7 @@ export const home = {
         'Kupi.ru': '마켓플레이스. FRII 액셀러레이션 통과. 2013.',
         'Kupi.net': '웹사이트 빌더 스타트업. 파트너. 2019–2020.',
         'Deep chain': '2024–2025년 cyb.ai의 Cosmos SDK 포크 출시 참여. 네트워크는 중단되었습니다.',
-        'Bursa.dex':
+        'Bursa DEX':
           '오픈소스 탈중앙화 거래소의 창립자이자 풀스택 개발자. Solidity 스마트 컨트랙트, Web3.js, 오더북 캐싱. 2018.',
         'de-core.net':
           '웹 개발 스튜디오. 1인 프리랜서로 시작해 3-7명 팀으로 성장. ~200개 웹사이트 제작. 2010–2016.',
@@ -1538,7 +1538,7 @@ export const home = {
         'Kupi.ru': 'マーケットプレイス。FRII アクセラレーションを通過。2013。',
         'Kupi.net': 'ウェブサイトビルダーのスタートアップ。パートナー。2019–2020。',
         'Deep chain': '2024〜2025年の cyb.ai の Cosmos SDK フォーク立ち上げに参加。ネットワークは停止中。',
-        'Bursa.dex':
+        'Bursa DEX':
           'オープンソース分散型取引所の創業者兼フルスタック開発者。Solidity スマートコントラクト、Web3.js、板キャッシュ。2018。',
         'de-core.net':
           'ウェブ開発スタジオ。1 人のフリーランスから始まり、3-7 人のチームに成長。~200 サイト構築。2010–2016。',
@@ -1850,7 +1850,7 @@ export const home = {
         'Kupi.ru': 'سوق إلكتروني. اجتاز تسريع FRII. 2013.',
         'Kupi.net': 'شركة ناشئة لبناء المواقع. شريك. 2019–2020.',
         'Deep chain': 'مشاركة في إطلاق 2024–2025 لفورك cyb.ai على Cosmos SDK. الشبكة معلقة.',
-        'Bursa.dex':
+        'Bursa DEX':
           'مؤسس ومطور full-stack لبورصة لامركزية مفتوحة المصدر. عقد ذكي بـ Solidity، Web3.js، وتخزين مؤقت للـ orderbook. 2018.',
         'de-core.net':
           'استوديو لتطوير الويب. بدأ كعمل حر فردي، ونما إلى فريق من 3–7 مطوّرين. تم بناء ~200 موقع. 2010–2016.',
