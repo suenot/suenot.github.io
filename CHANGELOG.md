@@ -7,6 +7,13 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-25
+
+### Added
+
+- List Codex Jev Router and its benchmark repository among the AI projects in all six languages.
+- Publish a cost-focused Codex subagent routing article in Russian, English, Chinese, Korean, Japanese, and Arabic.
+
 ## [0.5.1] - 2026-09-18
 
 ### Fixed

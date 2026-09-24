@@ -233,6 +233,10 @@ export const home = {
           'Backup dashboard over restic: schedules, snapshots and restore status across all servers.',
         aicommit:
           'Rust CLI for AI-generated commit messages via OpenRouter. 105 releases, VS Code extension, jail/blacklist failover.',
+        'Codex Jev Router':
+          'Chooses a Codex model and reasoning level for each subagent task, with Jev or a local decision engine.',
+        'Codex Jev Router Benchmarks':
+          'Reproducible Django task runs, answer checks, traces, and estimated API costs for routed Codex subagents.',
         SDKRouter:
           'Unified OpenAI-compatible Python SDK for 300+ AI models with Pydantic structured output and cost tracking.',
         DjangoCFG:
@@ -552,6 +556,10 @@ export const home = {
           'Дашборд бэкапов поверх restic: расписания, снапшоты и статус восстановления по всем серверам.',
         aicommit:
           'Rust CLI для AI-генерации коммит-сообщений через OpenRouter. 105 релизов, расширение для VS Code, jail/blacklist failover.',
+        'Codex Jev Router':
+          'Выбирает модель Codex и уровень рассуждения для задачи субагента через Jev или локальный движок решений.',
+        'Codex Jev Router Benchmarks':
+          'Повторяемые запуски на задачах Django, проверки ответов, трассы и оценка стоимости API для субагентов Codex.',
         SDKRouter:
           'Унифицированный OpenAI-совместимый Python SDK для 300+ AI-моделей с Pydantic structured output и трекингом стоимости.',
         DjangoCFG:
@@ -865,6 +873,10 @@ export const home = {
           '基于 restic 的备份仪表盘：所有服务器的计划、快照与恢复状态。',
         aicommit:
           '通过 OpenRouter 用 AI 生成提交信息的 Rust CLI。105 个版本，VS Code 扩展，jail/blacklist 故障转移。',
+        'Codex Jev Router':
+          '通过 Jev 或本地决策引擎，为每项 Codex 子代理任务选择模型与推理级别。',
+        'Codex Jev Router Benchmarks':
+          '可复现的 Django 任务运行记录、答案检查、追踪数据和 Codex 子代理 API 成本估算。',
         SDKRouter:
           '统一的 OpenAI 兼容 Python SDK，支持 300+ AI 模型，含 Pydantic 结构化输出与成本追踪。',
         DjangoCFG:
@@ -1175,6 +1187,10 @@ export const home = {
           'restic 기반 백업 대시보드: 모든 서버의 일정, 스냅샷, 복구 상태.',
         aicommit:
           'OpenRouter를 통해 AI로 커밋 메시지를 생성하는 Rust CLI. 105개 릴리스, VS Code 확장, jail/blacklist 페일오버.',
+        'Codex Jev Router':
+          'Jev 또는 로컬 결정 엔진으로 Codex 하위 에이전트 작업의 모델과 추론 수준을 선택합니다.',
+        'Codex Jev Router Benchmarks':
+          'Django 작업의 재현 가능한 실행 기록, 답변 검사, 추적 데이터와 Codex 하위 에이전트 API 비용 추정치.',
         SDKRouter:
           '300+ AI 모델을 지원하는 통합 OpenAI 호환 Python SDK. Pydantic 구조화 출력 및 비용 추적.',
         DjangoCFG:
@@ -1485,6 +1501,10 @@ export const home = {
           'restic ベースのバックアップダッシュボード：全サーバーのスケジュール、スナップショット、リストア状況。',
         aicommit:
           'OpenRouter 経由で AI がコミットメッセージを生成する Rust CLI。105 リリース、VS Code 拡張、jail/blacklist フェイルオーバー。',
+        'Codex Jev Router':
+          'Jev またはローカルの判定エンジンを使い、Codex のサブエージェントのタスクごとにモデルと推論レベルを選びます。',
+        'Codex Jev Router Benchmarks':
+          'Django タスクの再現可能な実行記録、回答の検証、トレース、Codex サブエージェントの API 費用見積もり。',
         SDKRouter:
           '300+ AI モデルを統一する OpenAI 互換 Python SDK。Pydantic 構造化出力とコストトラッキング。',
         DjangoCFG:
@@ -1797,6 +1817,10 @@ export const home = {
           'لوحة نسخ احتياطي فوق restic: الجداول واللقطات وحالة الاستعادة عبر كل الخوادم.',
         aicommit:
           'أداة CLI بـ Rust لتوليد رسائل commit بالذكاء الاصطناعي عبر OpenRouter. 105 إصدارات، امتداد لـ VS Code، وآلية jail/blacklist.',
+        'Codex Jev Router':
+          'يختار نموذج Codex ومستوى الاستدلال لكل مهمة لوكيل فرعي باستخدام Jev أو محرك قرارات محلي.',
+        'Codex Jev Router Benchmarks':
+          'تشغيلات قابلة للتكرار لمهام Django، وفحص للإجابات وآثار التنفيذ وتقديرات تكلفة API لوكلاء Codex الفرعيين.',
         SDKRouter:
           'SDK موحّد بـ Python متوافق مع OpenAI لأكثر من 300 نموذج AI، مع إخراج Pydantic منظّم وتتبّع للتكاليف.',
         DjangoCFG:
