@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-25
+
+### Added
+
+- Publish a guide to thirteen open-source Jev alternatives, with a project index and individual reviews, in all six blog languages.
+
 ## [0.6.0] - 2026-09-25
 
 ### Added
