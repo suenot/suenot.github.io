@@ -1,7 +1,8 @@
 ---
-title: "Тринадцать открытых альтернатив Jev: что они решают и где пригодятся"
-description: "Laya, Kev, SemIf и еще десять проектов для типизированных решений. Разбираю их интерфейсы, ограничения и применимость к выбору моделей Codex."
+title: "Шестнадцать открытых альтернатив Jev: что они решают и где пригодятся"
+description: "Laya, Kev, GLiNER2.5-Decide и еще тринадцать проектов для типизированных решений. Разбираю их интерфейсы, ограничения и применимость к выбору моделей Codex."
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ Jev принимает состояние и набор вопросов, а в�
 ## Kev
 
 [Kev](https://github.com/jaredpalmer/kev) предлагает семейство открытых моделей разного размера и локальный endpoint `/v1/systemone`. В README отправной точкой назван вариант 4B; крупные варианты предъявляют заметно более высокие требования к памяти. Это прямой кандидат на замену удаленного движка решений, если есть ресурсы для локального запуска. Опубликованные автором измерения относятся к его тестам и не показывают качество маршрутизации субагентов Codex.
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) классифицирует текст по меткам, заданным при вызове. Англоязычный чекпойнт имеет 340 млн параметров; есть [версия 1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) и [многоязычная версия на 287 млн](https://huggingface.co/fastino/GLiNER2.5-multi-Decide). Через GLiNER2 и `AutoExtractor.classify_text()` можно получить несколько решений за один проход без генерации текста. Для Codex нужен адаптер: это не интерфейс Jev System One.
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5) — отдельный от Kev проект на основе Qwen3.5-4B. Он считывает вероятности вариантов из логитов по протоколу SemIf, а [локальный сервер](https://github.com/allebee/jevk5) предоставляет `/v1/systemone`. Скорость и точность на поручениях Codex нужно измерить отдельно.
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) — модель на базе DeBERTa с 575,6 млн параметров. Она классифицирует текст по переданным меткам и также извлекает сущности, связи и структурированные данные. Для текстового роутинга применима ее классификация; Python API потребует адаптера к Jev.
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ Jev принимает состояние и набор вопросов, а в�
 
 [open-jev от daseinlabs](https://github.com/daseinlabs/open-jev) оценивает варианты на Gemma 3 4B, повторно используя общий префикс и пакетную обработку. Есть локальные `/score` и `/v1/systemone`, реализации для MLX на Mac и PyTorch на других платформах, а также обучение головы под свою задачу. Веса Gemma требуют принятия условий доступа на Hugging Face. Это практичный вариант для эксперимента на Mac, если уже есть локальная модель и хочется проверить скорость полного маршрута.
 
+## Сравнение на fast-decisions
+
+На [странице GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) Fastino приводит точность полного совпадения на [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions): 17 англоязычных доменов, по 300 отложенных примеров в каждом. Текст и наборы меток одинаковы для всех моделей. Это результаты авторов, а не моя независимая проверка.
+
+| Модель | Среднее |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+Открытые файлы содержат по 100 примеров для разработки на домен; оценки относятся к отдельному отложенному набору. Эти результаты не показывают точность выбора моделей Codex на моих задачах или русских текстах.
+
 ## Что выбрать для Codex
 
-Если нужен локальный endpoint с привычным форматом, я бы начал с Laya, Kev, simple-jev или одного из серверных Open-Jev. Для собственного обучения интереснее NanoJev, jevlike, AnyJev и minojev. SemIf и mini-jev помогают разобраться, сколько дает сам способ получения короткого ответа. PlayJev решает другую, визуальную задачу.
+Если нужен локальный endpoint с привычным форматом, я бы начал с Laya, Kev, JevK5, simple-jev или одного из серверных Open-Jev. Для собственного обучения интереснее NanoJev, jevlike, AnyJev и minojev. SemIf и mini-jev помогают разобраться, сколько дает сам способ получения короткого ответа. PlayJev решает другую, визуальную задачу. GLiNER2.5-Decide и GLiFormer стоит проверять как классификаторы с собственным адаптером.
 
-Мой [Codex Jev Router](https://github.com/suenot/codex-jev-router) поддерживает несколько этих движков через адаптеры, но совместимый интерфейс еще не означает одинаковую точность или экономию. Перед заменой движка я проверяю полную стоимость решения вместе со временем запуска, ошибками выбора и ценой последующего субагента. Пока открытых измерений именно на моем потоке задач для сравнения всех тринадцати проектов нет.
+Мой [Codex Jev Router](https://github.com/suenot/codex-jev-router) поддерживает несколько этих движков через адаптеры, но совместимый интерфейс еще не означает одинаковую точность или экономию. Перед заменой движка я проверяю полную стоимость решения вместе со временем запуска, ошибками выбора и ценой последующего субагента. Пока открытых измерений именно на моем потоке задач для сравнения всех шестнадцати проектов нет.

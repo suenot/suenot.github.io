@@ -1,7 +1,8 @@
 ---
-title: "ثلاثة عشر بديلا مفتوح المصدر لـ Jev وما الذي يقدمه كل منها"
-description: "دليل إلى Laya وKev وSemIf وعشرة مشاريع أخرى للقرارات محددة البنية، مع حدود استخدامها لتوجيه وكلاء Codex الفرعيين."
+title: "ستة عشر بديلا مفتوح المصدر لـ Jev وما الذي يقدمه كل منها"
+description: "دليل إلى Laya وKev وGLiNER2.5-Decide وثلاثة عشر مشروعا آخر للقرارات محددة البنية، مع حدود استخدامها لتوجيه وكلاء Codex الفرعيين."
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ draft: false
 ## Kev
 
 يقدم [Kev](https://github.com/jaredpalmer/kev) عائلة نماذج مفتوحة بأحجام مختلفة ونقطة وصول محلية `/v1/systemone`. ينصح ملف README بالبدء بحجم 4B، فيما تحتاج الإصدارات الأكبر إلى ذاكرة أكثر بكثير. يصلح بديلا مباشرا لمحرك قرار بعيد إذا توفرت موارد التشغيل محليا. قياسات مؤلفه لا تثبت أداءه في توجيه وكلاء Codex.
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) يصنف النص وفق تسميات تحدد عند الاستدعاء. يضم النموذج الإنجليزي 340 مليون معلمة، وتوجد [نسخة بمليار معلمة](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) و[نسخة متعددة اللغات تضم 287 مليون معلمة](https://huggingface.co/fastino/GLiNER2.5-multi-Decide). تعيد `AutoExtractor.classify_text()` في GLiNER2 عدة تصنيفات من دون توليد نص. تختلف واجهتها عن Jev System One، لذا يحتاج Codex إلى موائم.
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5) مشروع مستقل عن Kev ومبني على Qwen3.5-4B. يستخرج احتمالات الخيارات من logits بطريقة SemIf، ويقدم [خادمه المحلي](https://github.com/allebee/jevk5) واجهة `/v1/systemone`. ينبغي قياس سرعته ودقته على مهام Codex الفعلية بصورة منفصلة.
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) نموذج مبني على DeBERTa ويضم 575.6 مليون معلمة. يصنف النص وفق تسميات محددة، ويدعم أيضا استخراج الكيانات والعلاقات والبيانات المنظمة. يمكن استعمال التصنيف لتوجيه المهام النصية، لكن ربط واجهة Python مع Jev يتطلب موائما.
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ draft: false
 
 يقيّم [daseinlabs/open-jev](https://github.com/daseinlabs/open-jev) الخيارات باستخدام Gemma 3 4B، مع إعادة استخدام المقدمة المشتركة والمعالجة على دفعات. يوفر `/score` و`/v1/systemone` محليا، وMLX على Mac وPyTorch على المنصات الأخرى، مع إمكان تدريب رأس خاص بالمهمة. يتطلب الحصول على أوزان Gemma قبول شروط الوصول في Hugging Face. يستحق تجربة زمن المسار الكامل إذا كنت تشغّل النماذج محليا على Mac.
 
+## مقارنة fast-decisions
+
+تنشر Fastino في [بطاقة النموذج](https://huggingface.co/fastino/GLiNER2.5-Decide) دقة التطابق التام على [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions): سبعة عشر مجالا باللغة الإنجليزية، مع 300 مثال محجوز في كل مجال. استعملت النماذج النصوص والتسميات المرشحة نفسها. هذه نتائج الجهة الناشرة وليست تقييما مستقلا مني.
+
+| النموذج | المتوسط |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+تضم الملفات العامة 100 مثال للتطوير في كل مجال، بينما تستند درجات الجدول إلى مجموعة محجوزة منفصلة. لا تثبت دقة التصنيف الإنجليزي جودة توجيه مهام Codex الخاصة بي أو النصوص العربية.
+
 ## أيها أختار مع Codex؟
 
-إذا أردت واجهة HTTP محلية مألوفة، فسأبدأ بـ Laya أو Kev أو simple-jev أو أحد خوادم Open-Jev. عند التدريب على مهامي، سأفحص NanoJev وjevlike وAnyJev وminojev. يساعد SemIf وmini-jev على دراسة طريقة إنتاج القرار القصير، بينما يركز PlayJev على الألعاب البصرية.
+إذا أردت واجهة HTTP محلية مألوفة، فسأبدأ بـ Laya أو Kev أو JevK5 أو simple-jev أو أحد خوادم Open-Jev. عند التدريب على مهامي، سأفحص NanoJev وjevlike وAnyJev وminojev. يساعد SemIf وmini-jev على دراسة طريقة إنتاج القرار القصير، بينما يركز PlayJev على الألعاب البصرية. ويمكن اختبار GLiNER2.5-Decide وGLiFormer كمصنفين بعد إضافة موائم.
 
-يدعم [Codex Jev Router](https://github.com/suenot/codex-jev-router) عددا من هذه المحركات عبر موائمات. توافق الواجهة لا يعني تساوي الدقة أو التوفير. قبل تغيير المحرك، سأقيس زمن القرار وكلفته، وأخطاء التوجيه، وكلفة الوكيل الذي يعمل بعده. لا توجد حتى الآن مقارنة منشورة للمشاريع الثلاثة عشر على مجموعة مهامي الخاصة.
+يدعم [Codex Jev Router](https://github.com/suenot/codex-jev-router) عددا من هذه المحركات عبر موائمات. توافق الواجهة لا يعني تساوي الدقة أو التوفير. قبل تغيير المحرك، سأقيس زمن القرار وكلفته، وأخطاء التوجيه، وكلفة الوكيل الذي يعمل بعده. لا توجد حتى الآن مقارنة منشورة للمشاريع الستة عشر على مجموعة مهامي الخاصة.

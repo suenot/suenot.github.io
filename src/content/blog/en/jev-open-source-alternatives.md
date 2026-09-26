@@ -1,7 +1,8 @@
 ---
-title: "Thirteen open-source Jev alternatives and what each one does"
-description: "A practical guide to Laya, Kev, SemIf, and ten more typed-decision projects, including their limits for Codex subagent routing."
+title: "Sixteen open-source Jev alternatives and what each one does"
+description: "A practical guide to Laya, Kev, GLiNER2.5-Decide, and thirteen more typed-decision projects, including their limits for Codex subagent routing."
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ Jev takes a state and a set of questions, then returns short typed decisions: a 
 ## Kev
 
 [Kev](https://github.com/jaredpalmer/kev) provides a family of open models at different sizes and a local `/v1/systemone` endpoint. Its README suggests starting with 4B; larger versions need substantially more memory. This is a direct candidate for replacing a remote decision engine when local compute is available. The published measurements describe the author's tests, not Codex subagent routing.
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) classifies text with labels supplied at inference time. The English checkpoint has 340M parameters; there is a [1B version](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) and a [287M multilingual version](https://huggingface.co/fastino/GLiNER2.5-multi-Decide). GLiNER2's `AutoExtractor.classify_text()` can answer several classification heads in one pass without generating text. A Codex router needs an adapter because this is not the Jev System One API.
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5) is a project separate from Kev, based on Qwen3.5-4B. It reads option probabilities from logits with the SemIf protocol, and its [local server](https://github.com/allebee/jevk5) provides `/v1/systemone`. Speed and accuracy on real Codex assignments need separate measurement.
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) is a 575.6M-parameter DeBERTa-based model. It classifies text using supplied labels and also extracts entities, relations, and structured data. Its classification head could route text tasks, but the Python API needs a Jev adapter.
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ Jev takes a state and a set of questions, then returns short typed decisions: a 
 
 [daseinlabs' open-jev](https://github.com/daseinlabs/open-jev) scores options on Gemma 3 4B, reusing a shared prefix and batching work. It offers local `/score` and `/v1/systemone` endpoints, MLX on Mac, PyTorch on other platforms, and optional task-specific head training. Gemma weights require accepting access terms on Hugging Face. It is a practical Mac experiment if you already have local inference running.
 
+## The fast-decisions benchmark
+
+On the [GLiNER2.5-Decide model card](https://huggingface.co/fastino/GLiNER2.5-Decide), Fastino reports exact-match accuracy on [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions): 17 English domains with 300 held-out examples each. Every model received the same text and candidate labels. These are the publisher's results, not my independent evaluation.
+
+| Model | Avg |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+The public dataset files contain 100 development examples per domain; these scores refer to a separate held-out set. They do not establish routing accuracy on my Codex tasks or on Russian input.
+
 ## Choosing one for Codex
 
-For a local endpoint with a familiar format, I would start with Laya, Kev, simple-jev, or one of the server-based Open-Jev projects. NanoJev, jevlike, AnyJev, and minojev are more interesting if I want to train for my own assignments. SemIf and mini-jev help examine the mechanics of a short decision. PlayJev targets visual games.
+For a local endpoint with a familiar format, I would start with Laya, Kev, JevK5, simple-jev, or one of the server-based Open-Jev projects. NanoJev, jevlike, AnyJev, and minojev are more interesting if I want to train for my own assignments. SemIf and mini-jev help examine the mechanics of a short decision. PlayJev targets visual games. GLiNER2.5-Decide and GLiFormer are classifiers to try with a separate adapter.
 
-My [Codex Jev Router](https://github.com/suenot/codex-jev-router) supports several of these engines through adapters. Protocol compatibility alone does not establish equal accuracy or savings. Before swapping engines, I would measure the full decision time and cost, routing mistakes, and the cost of the agent that follows. I do not yet have a public comparison of all thirteen on my own task mix.
+My [Codex Jev Router](https://github.com/suenot/codex-jev-router) supports several of these engines through adapters. Protocol compatibility alone does not establish equal accuracy or savings. Before swapping engines, I would measure the full decision time and cost, routing mistakes, and the cost of the agent that follows. I do not yet have a public comparison of all sixteen on my own task mix.

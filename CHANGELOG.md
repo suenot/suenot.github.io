@@ -7,6 +7,12 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-09-26
+
+### Added
+
+- Expand the Jev alternatives guide in all six languages with GLiNER2.5-Decide, JevK5, and GLiFormer, plus Fastino's sourced fast-decisions benchmark and its evaluation limits.
+
 ## [0.7.0] - 2026-09-25
 
 ### Added

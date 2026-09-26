@@ -1,7 +1,8 @@
 ---
-title: "オープンソースの Jev 代替プロジェクト13選"
-description: "Laya、Kev、SemIf などの仕組みと、Codex サブエージェントのモデル選択に使う際の注意点。"
+title: "オープンソースの Jev 代替プロジェクト16選"
+description: "Laya、Kev、GLiNER2.5-Decide などの仕組みと、Codex サブエージェントのモデル選択に使う際の注意点。"
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ Jev は状態と質問群を受け取り、選択肢、スコア、数値とい�
 ## Kev
 
 [Kev](https://github.com/jaredpalmer/kev) は複数サイズのオープンモデルとローカルの `/v1/systemone` を提供します。README は 4B からの開始を勧めており、大きな版ほどメモリを要します。ローカル計算資源があれば、リモートの判断エンジンの代替候補になります。公開された測定値は作者のテストに関するもので、Codex のルーティング品質を示すものではありません。
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) は推論時に指定したラベルでテキストを分類します。英語版は340Mパラメータで、[1B版](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) と [287Mの多言語版](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) もあります。GLiNER2 の `AutoExtractor.classify_text()` はテキストを生成せず、1回で複数の分類を返せます。Jev System One とは API が異なるため、Codex にはアダプターが必要です。
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5) は Kev とは別の Qwen3.5-4B ベースのプロジェクトです。SemIf の方式で logits から選択肢の確率を読み取り、[ローカルサーバー](https://github.com/allebee/jevk5) は `/v1/systemone` を提供します。Codex の依頼での速度と精度は別途測る必要があります。
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) は DeBERTa ベースの575.6Mパラメータのモデルです。指定したラベルによる分類に加え、エンティティ、関係、構造化データの抽出にも対応します。テキストの振り分けには分類機能を使えますが、Jev との接続にはアダプターが必要です。
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ Jev は状態と質問群を受け取り、選択肢、スコア、数値とい�
 
 [daseinlabs/open-jev](https://github.com/daseinlabs/open-jev) は Gemma 3 4B で選択肢を採点し、共通プレフィックスの再利用とバッチ処理で重複を減らします。ローカルの `/score` と `/v1/systemone`、Mac 向け MLX、他の環境向け PyTorch、タスク別のヘッド学習を用意しています。Gemma の重みには Hugging Face で利用条件への同意が必要です。Mac でローカル推論を使っているなら、ルート全体の時間を測る候補になります。
 
+## fast-decisions での比較
+
+Fastino は [モデルカード](https://huggingface.co/fastino/GLiNER2.5-Decide) で [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions) の完全一致率を公開しています。英語の17分野で各300件の保留例を使い、全モデルに同じテキストと候補ラベルを渡しています。以下は公開元の結果であり、独立した検証ではありません。
+
+| モデル | 平均 |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+公開データは各分野100件の開発用例で、表の数値は別の保留セットに基づきます。自分の Codex の依頼や日本語での振り分け精度は判断できません。
+
 ## Codex で選ぶなら
 
-慣れた HTTP 形式のローカルサービスが欲しい場合は、Laya、Kev、simple-jev、サーバー版の Open-Jev から試します。自分の委任タスクで学習するなら NanoJev、jevlike、AnyJev、minojev が候補です。SemIf と mini-jev は短い判断の仕組みを調べるのに役立ちます。PlayJev は視覚的なゲームを対象とします。
+慣れた HTTP 形式のローカルサービスが欲しい場合は、Laya、Kev、JevK5、simple-jev、サーバー版の Open-Jev から試します。自分の委任タスクで学習するなら NanoJev、jevlike、AnyJev、minojev が候補です。SemIf と mini-jev は短い判断の仕組みを調べるのに役立ちます。PlayJev は視覚的なゲームを対象とします。GLiNER2.5-Decide と GLiFormer は、別のアダプターを用意して分類器として検証できます。
 
-[Codex Jev Router](https://github.com/suenot/codex-jev-router) は、これらの一部をアダプター経由で利用できます。API が互換でも精度や費用の削減率が等しいわけではありません。切り替える前に、判断そのものの時間と費用、誤った振り分け、後続エージェントの費用を合わせて測ります。私自身のタスク群で13件すべてを比較した公開データは、まだありません。
+[Codex Jev Router](https://github.com/suenot/codex-jev-router) は、これらの一部をアダプター経由で利用できます。API が互換でも精度や費用の削減率が等しいわけではありません。切り替える前に、判断そのものの時間と費用、誤った振り分け、後続エージェントの費用を合わせて測ります。私自身のタスク群で16件すべてを比較した公開データは、まだありません。

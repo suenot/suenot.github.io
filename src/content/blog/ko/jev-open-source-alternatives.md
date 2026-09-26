@@ -1,7 +1,8 @@
 ---
-title: "오픈 소스 Jev 대안 13개, 각각 어디에 쓸까"
-description: "Laya, Kev, SemIf 등 타입이 있는 결정을 만드는 프로젝트와 Codex 서브에이전트 라우팅에 쓸 때의 한계."
+title: "오픈 소스 Jev 대안 16개, 각각 어디에 쓸까"
+description: "Laya, Kev, GLiNER2.5-Decide 등 타입이 있는 결정을 만드는 프로젝트와 Codex 서브에이전트 라우팅에 쓸 때의 한계."
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ Jev는 상태와 질문을 받아 선택, 점수, 숫자처럼 짧고 형식이 
 ## Kev
 
 [Kev](https://github.com/jaredpalmer/kev)는 크기가 다른 공개 모델들과 로컬 `/v1/systemone`을 제공합니다. README는 4B부터 시작하라고 권하며, 더 큰 모델은 메모리 요구량이 높습니다. 로컬 계산 자원이 있다면 원격 결정 엔진의 대안이 될 수 있습니다. 공개된 측정값이 Codex 서브에이전트 선택 성능을 보여 주는 것은 아닙니다.
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)는 추론 시 받은 후보 라벨로 텍스트를 분류합니다. 영어 모델은 3억 4천만 매개변수이며 [1B 모델](https://huggingface.co/fastino/GLiNER2.5-Decide-1B)과 [2억 8,700만 매개변수 다국어 모델](https://huggingface.co/fastino/GLiNER2.5-multi-Decide)도 있습니다. GLiNER2의 `AutoExtractor.classify_text()`는 텍스트 생성 없이 한 번에 여러 분류 결과를 냅니다. Jev System One과 API가 달라 Codex에는 어댑터가 필요합니다.
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5)는 Kev와 별개의 Qwen3.5-4B 기반 프로젝트입니다. SemIf 방식으로 logits에서 선택지의 확률을 읽고, [로컬 서버](https://github.com/allebee/jevk5)는 `/v1/systemone`을 제공합니다. 실제 Codex 작업에서의 속도와 정확도는 따로 검증해야 합니다.
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)은 DeBERTa 기반의 5억 7,560만 매개변수 모델입니다. 지정한 라벨로 분류할 수 있고 개체, 관계, 구조화 데이터도 추출합니다. 텍스트 라우팅에는 분류 기능을 쓸 수 있지만 Jev와 연결하려면 Python API 어댑터가 필요합니다.
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ Jev는 상태와 질문을 받아 선택, 점수, 숫자처럼 짧고 형식이 
 
 [daseinlabs/open-jev](https://github.com/daseinlabs/open-jev)는 Gemma 3 4B로 선택지를 평가하며 공통 접두부 재사용과 배치 처리를 활용합니다. 로컬 `/score`와 `/v1/systemone`, Mac용 MLX, 다른 플랫폼용 PyTorch, 작업별 헤드 학습을 제공합니다. Gemma 가중치를 받으려면 Hugging Face의 접근 조건에 동의해야 합니다. Mac에서 로컬 추론을 이미 쓴다면 전체 라우팅 시간을 재볼 만합니다.
 
+## fast-decisions 비교
+
+Fastino는 [모델 카드](https://huggingface.co/fastino/GLiNER2.5-Decide)에 [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions)의 완전 일치 정확도를 공개했습니다. 영어 17개 분야에서 각각 보류한 예제 300개를 사용했고 모든 모델에 같은 텍스트와 후보 라벨을 제공했습니다. 아래 수치는 공개자의 결과이며 독립 재검증은 아닙니다.
+
+| 모델 | 평균 |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+공개 파일에는 분야별 개발용 예제 100개가 있으며 표의 점수는 별도 보류 세트에서 나왔습니다. 내 Codex 작업이나 한국어 입력에서의 라우팅 정확도를 알 수는 없습니다.
+
 ## Codex에 쓸 때
 
-익숙한 HTTP 형식의 로컬 서비스를 원하면 Laya, Kev, simple-jev 또는 서버형 Open-Jev부터 살펴보겠습니다. 자신의 작업으로 학습하려면 NanoJev, jevlike, AnyJev, minojev가 더 흥미롭습니다. SemIf와 mini-jev는 짧은 결정의 구현을 살펴보는 데 좋고, PlayJev는 시각적 게임을 다룹니다.
+익숙한 HTTP 형식의 로컬 서비스를 원하면 Laya, Kev, JevK5, simple-jev 또는 서버형 Open-Jev부터 살펴보겠습니다. 자신의 작업으로 학습하려면 NanoJev, jevlike, AnyJev, minojev가 더 흥미롭습니다. SemIf와 mini-jev는 짧은 결정의 구현을 살펴보는 데 좋고, PlayJev는 시각적 게임을 다룹니다. GLiNER2.5-Decide와 GLiFormer는 별도 어댑터를 붙여 분류기로 검증할 수 있습니다.
 
-[Codex Jev Router](https://github.com/suenot/codex-jev-router)는 이들 중 여러 프로젝트를 어댑터로 지원합니다. API가 맞는다고 정확도와 절감액까지 같아지는 것은 아닙니다. 엔진을 바꾸기 전에 결정 시간과 비용, 잘못된 라우팅, 이후 에이전트 비용을 함께 측정해야 합니다. 내 작업 묶음에서 13개 모두를 비교한 공개 자료는 아직 없습니다.
+[Codex Jev Router](https://github.com/suenot/codex-jev-router)는 이들 중 여러 프로젝트를 어댑터로 지원합니다. API가 맞는다고 정확도와 절감액까지 같아지는 것은 아닙니다. 엔진을 바꾸기 전에 결정 시간과 비용, 잘못된 라우팅, 이후 에이전트 비용을 함께 측정해야 합니다. 내 작업 묶음에서 16개 모두를 비교한 공개 자료는 아직 없습니다.

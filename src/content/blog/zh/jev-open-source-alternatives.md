@@ -1,7 +1,8 @@
 ---
-title: "13 个开源 Jev 替代项目，各自适合做什么"
-description: "梳理 Laya、Kev、SemIf 等 13 个类型化决策项目，以及它们用于 Codex 子代理模型选择时的限制。"
+title: "16 个开源 Jev 替代项目，各自适合做什么"
+description: "梳理 Laya、Kev、GLiNER2.5-Decide 等 16 个类型化决策项目，以及它们用于 Codex 子代理模型选择时的限制。"
 pubDate: 2026-09-25
+updatedDate: 2026-09-26
 tags: ["jev", "open-source", "model-routing", "codex"]
 draft: false
 ---
@@ -10,6 +11,9 @@ draft: false
 
 - [Laya](https://github.com/NandhaKishorM/laya)
 - [Kev](https://github.com/jaredpalmer/kev)
+- [GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide)
+- [JevK5](https://huggingface.co/alibiserikbay/JevK5)
+- [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1)
 - [PlayJev](https://github.com/OmniJev/PlayJev)
 - [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev)
 - [NanoJev](https://github.com/TianyuCodings/NanoJev)
@@ -31,6 +35,18 @@ Jev 接收状态和一组问题，返回选择、分数或数值等简短的类�
 ## Kev
 
 [Kev](https://github.com/jaredpalmer/kev) 提供不同规模的开放模型和本地 `/v1/systemone` 接口。README 建议从 4B 开始，更大的版本需要更多内存。如果已有本地计算资源，它是远程决策服务的直接替代候选。作者公布的测试结果并不能直接说明它选 Codex 子代理模型的效果。
+
+## GLiNER2.5-Decide
+
+[GLiNER2.5-Decide](https://huggingface.co/fastino/GLiNER2.5-Decide) 在推理时接收候选标签并分类文本。英文版有 3.4 亿参数，另有 [10 亿参数版](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) 和 [2.87 亿参数多语言版](https://huggingface.co/fastino/GLiNER2.5-multi-Decide)。GLiNER2 的 `AutoExtractor.classify_text()` 能一次返回多个分类结果，无须生成文本。它与 Jev System One 的 API 不同，接入 Codex 需要适配器。
+
+## JevK5
+
+[JevK5](https://huggingface.co/alibiserikbay/JevK5) 独立于 Kev，基于 Qwen3.5-4B。它沿用 SemIf 的方式从 logits 读取候选项概率，[本地服务](https://github.com/allebee/jevk5) 提供 `/v1/systemone`。用于 Codex 任务时的速度和准确率仍需单独测量。
+
+## GLiFormer large-v1
+
+[GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) 是基于 DeBERTa 的 5.756 亿参数模型。它支持按给定标签分类，也能提取实体、关系和结构化数据。文本路由可以使用其分类功能，但 Python API 接入 Jev 需要适配器。
 
 ## PlayJev
 
@@ -76,8 +92,24 @@ Jev 接收状态和一组问题，返回选择、分数或数值等简短的类�
 
 [daseinlabs/open-jev](https://github.com/daseinlabs/open-jev) 基于 Gemma 3 4B 给选项打分，通过共享前缀和批处理减少重复计算。它提供 `/score`、`/v1/systemone`，Mac 上可用 MLX，其他平台可用 PyTorch，还能针对任务训练决策头。获取 Gemma 权重需要在 Hugging Face 接受访问条款。已有 Mac 本地推理环境时，可以拿它实测完整路由耗时。
 
+## fast-decisions 基准对比
+
+Fastino 在 [模型卡](https://huggingface.co/fastino/GLiNER2.5-Decide) 中公布了 [fast-decisions](https://huggingface.co/datasets/fastino/fast-decisions) 的完全匹配准确率：17 个英文领域，每个领域 300 个留出样本。所有模型使用相同文本和候选标签。下表是发布方报告的结果，并非我的独立复测。
+
+| 模型 | 平均 |
+|---|---:|
+| [GLiNER2.5-Decide (340M)](https://huggingface.co/fastino/GLiNER2.5-Decide) | 60.2% |
+| [GLiNER2.5-Decide-1B](https://huggingface.co/fastino/GLiNER2.5-Decide-1B) | 59.6% |
+| [JevK5](https://huggingface.co/alibiserikbay/JevK5) | 57.6% |
+| [GLiNER2.5-multi-Decide (287M)](https://huggingface.co/fastino/GLiNER2.5-multi-Decide) | 56.7% |
+| [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) (Qwen3.5-4B) | 56.4% |
+| [GLiFormer large-v1](https://huggingface.co/knowledgator/gliformer-large-v1) | 49.0% |
+| [Laya Router](https://github.com/NandhaKishorM/laya) | 46.6% |
+
+公开文件每个领域只有 100 个开发样本；表中分数来自单独留出的测试集。英文分类成绩不能直接代表我的 Codex 任务或中文输入的路由准确率。
+
 ## 用于 Codex 时怎么选
 
-若想要熟悉的本地 HTTP 接口，我会先看 Laya、Kev、simple-jev 和提供服务的 Open-Jev。若打算用自己的任务样本训练，则重点看 NanoJev、jevlike、AnyJev 和 minojev。SemIf 与 mini-jev 适合研究短决策的实现方式；PlayJev 面向视觉游戏。
+若想要熟悉的本地 HTTP 接口，我会先看 Laya、Kev、JevK5、simple-jev 和提供服务的 Open-Jev。若打算用自己的任务样本训练，则重点看 NanoJev、jevlike、AnyJev 和 minojev。SemIf 与 mini-jev 适合研究短决策的实现方式；PlayJev 面向视觉游戏。GLiNER2.5-Decide 和 GLiFormer 则需要适配器，适合按文本分类器来验证。
 
-我的 [Codex Jev Router](https://github.com/suenot/codex-jev-router) 通过适配器支持其中多个项目。接口兼容并不等于准确率或节省金额相同。替换引擎前，我会把决策耗时、错误路由以及后续代理成本一起算进去。目前还没有覆盖这 13 个项目、基于我自己任务分布的公开对比。
+我的 [Codex Jev Router](https://github.com/suenot/codex-jev-router) 通过适配器支持其中多个项目。接口兼容并不等于准确率或节省金额相同。替换引擎前，我会把决策耗时、错误路由以及后续代理成本一起算进去。目前还没有覆盖这 16 个项目、基于我自己任务分布的公开对比。
