@@ -238,7 +238,7 @@ export const home = {
         'News warehouse':
           'Go service that collects news, keeps every revision and builds a time-based event graph, digests and RSS. 283 Go and 108 Python tests. Reforms.ai, 2026.',
         'AI video pipeline':
-          'Short vertical videos built in code with HyperFrames and FFmpeg, 1080x1920 at 30 fps, with a style gate, independent reviews and automatic checks for loudness, shake and blur. 39 videos built in 19 days, 8 live on 7 platforms. Reforms.ai, 2026.',
+          'Short vertical videos built in code with HyperFrames and FFmpeg, 1080x1920 at 30 fps, with a style gate, independent reviews and automatic checks for loudness, shake and blur. 39 videos built, 8 live on 7 platforms. Reforms.ai, 2026.',
         'Motion CV site':
           'My CV as a motion-design site at production.suenot.com: work at Reforms.ai, projects and the video production method.',
         'gaia':
@@ -578,7 +578,7 @@ export const home = {
         'News warehouse':
           'Сервис на Go собирает новости, хранит каждую ревизию и строит граф событий во времени, дайджесты и RSS. 283 теста на Go и 108 на Python. Reforms.ai, 2026.',
         'AI video pipeline':
-          'Короткие вертикальные видео, собранные кодом на HyperFrames и FFmpeg, 1080x1920 при 30 к/с, со стилевым гейтом, независимыми ревью и автоматическими проверками громкости, тряски и размытия. 39 видео за 19 дней, 8 опубликованы на 7 площадках. Reforms.ai, 2026.',
+          'Короткие вертикальные видео, собранные кодом на HyperFrames и FFmpeg, 1080x1920 при 30 к/с, со стилевым гейтом, независимыми ревью и автоматическими проверками громкости, тряски и размытия. 39 видео собрано, 8 опубликованы на 7 площадках. Reforms.ai, 2026.',
         'Motion CV site':
           'Мое резюме в виде motion-сайта production.suenot.com: работа в Reforms.ai, проекты и метод производства видео.',
         'gaia':
@@ -912,7 +912,7 @@ export const home = {
         'News warehouse':
           'Go 服务：采集新闻，保存每一个修订版本，并生成按时间组织的事件图、摘要和 RSS。283 个 Go 测试和 108 个 Python 测试。Reforms.ai，2026。',
         'AI video pipeline':
-          '用 HyperFrames 和 FFmpeg 以代码制作竖屏短视频，1080x1920、30 帧/秒，带风格关卡、独立评审，以及响度、抖动和模糊的自动检查。19 天制作 39 条视频，8 条已在 7 个平台上线。Reforms.ai，2026。',
+          '用 HyperFrames 和 FFmpeg 以代码制作竖屏短视频，1080x1920、30 帧/秒，带风格关卡、独立评审，以及响度、抖动和模糊的自动检查。已制作 39 条视频，8 条已在 7 个平台上线。Reforms.ai，2026。',
         'Motion CV site':
           '我的简历做成了动效网站 production.suenot.com：Reforms.ai 的工作、项目与视频制作方法。',
         'gaia':
@@ -1243,7 +1243,7 @@ export const home = {
         'News warehouse':
           '뉴스를 수집하고 모든 수정본을 보관하며 시간 기반 이벤트 그래프, 다이제스트, RSS를 만드는 Go 서비스. Go 테스트 283개와 Python 테스트 108개. Reforms.ai, 2026.',
         'AI video pipeline':
-          'HyperFrames와 FFmpeg로 코드에서 만드는 세로형 짧은 영상, 1080x1920, 30fps. 스타일 게이트, 독립 리뷰, 음량·흔들림·흐림 자동 검사를 거칩니다. 19일 동안 영상 39개 제작, 8개를 7개 플랫폼에 공개. Reforms.ai, 2026.',
+          'HyperFrames와 FFmpeg로 코드에서 만드는 세로형 짧은 영상, 1080x1920, 30fps. 스타일 게이트, 독립 리뷰, 음량·흔들림·흐림 자동 검사를 거칩니다. 영상 39개 제작, 8개를 7개 플랫폼에 공개. Reforms.ai, 2026.',
         'Motion CV site':
           '모션 디자인 사이트로 만든 내 이력서 production.suenot.com: Reforms.ai 작업, 프로젝트, 영상 제작 방식.',
         'gaia':
@@ -1574,7 +1574,7 @@ export const home = {
         'News warehouse':
           'ニュースを収集し、すべての改訂を保存して、時間軸のイベントグラフ、ダイジェスト、RSSを生成するGoサービス。Goテスト283件とPythonテスト108件。Reforms.ai、2026年。',
         'AI video pipeline':
-          'HyperFramesとFFmpegでコードから作る縦型ショート動画（1080x1920、30fps）。スタイルゲート、独立レビュー、音量・手ブレ・ぼけの自動チェックを通します。19日で39本を制作し、8本を7プラットフォームで公開。Reforms.ai、2026年。',
+          'HyperFramesとFFmpegでコードから作る縦型ショート動画（1080x1920、30fps）。スタイルゲート、独立レビュー、音量・手ブレ・ぼけの自動チェックを通します。39本を制作し、8本を7プラットフォームで公開。Reforms.ai、2026年。',
         'Motion CV site':
           'モーションデザインのサイトにした私の履歴書 production.suenot.com。Reforms.aiでの仕事、プロジェクト、動画制作の方法。',
         'gaia':
@@ -1907,7 +1907,7 @@ export const home = {
         'News warehouse':
           'خدمة بلغة Go تجمع الأخبار وتحتفظ بكل نسخة معدلة وتبني رسما بيانيا للأحداث عبر الزمن وملخصات وRSS. 283 اختبارا بلغة Go و108 بلغة Python. Reforms.ai، 2026.',
         'AI video pipeline':
-          'فيديوهات عمودية قصيرة تُبنى بالكود عبر HyperFrames وFFmpeg بدقة 1080x1920 و30 إطارا في الثانية، مع بوابة أسلوب ومراجعات مستقلة وفحوص تلقائية لمستوى الصوت والاهتزاز والضبابية. 39 فيديو في 19 يوما، نُشر 8 منها على 7 منصات. Reforms.ai، 2026.',
+          'فيديوهات عمودية قصيرة تُبنى بالكود عبر HyperFrames وFFmpeg بدقة 1080x1920 و30 إطارا في الثانية، مع بوابة أسلوب ومراجعات مستقلة وفحوص تلقائية لمستوى الصوت والاهتزاز والضبابية. أُنتج 39 فيديو، نُشر 8 منها على 7 منصات. Reforms.ai، 2026.',
         'Motion CV site':
           'سيرتي الذاتية على شكل موقع حركي production.suenot.com: العمل في Reforms.ai والمشاريع وطريقة إنتاج الفيديو.',
         'gaia':
