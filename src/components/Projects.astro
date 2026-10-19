@@ -163,29 +163,29 @@ const statusStyles: Record<StatusKey, string> = {
         <p class="terminal-kicker">{t.eyebrow} / COMPLETE ARCHIVE</p>
         <h2 id="projects-heading" class="terminal-heading">{t.heading}</h2>
       </div>
-      <p>{t.intro}</p>
-      <dl aria-label="Archive summary">
-        <div><dt>GROUPS</dt><dd>{projects.length.toString().padStart(2, '0')}</dd></div>
-        <div><dt>RECORDS</dt><dd>{projects.reduce((sum, group) => sum + group.items.length, 0)}</dd></div>
+      <p data-reveal>{t.intro}</p>
+      <dl aria-label="Archive summary" data-reveal>
+        <div><dt>GROUPS</dt><dd data-count>{projects.length.toString().padStart(2, '0')}</dd></div>
+        <div><dt>RECORDS</dt><dd data-count>{projects.reduce((sum, group) => sum + group.items.length, 0)}</dd></div>
       </dl>
     </header>
 
     <div class="projects__archive">
       {projects.map((group, groupIndex) => (
         <section class="project-group">
-          <header class="project-group__header">
+          <header class="project-group__header" data-reveal>
             <span>{String(groupIndex + 1).padStart(2, '0')}</span>
             <h3 class="display-type">{t.categories[group.category]}</h3>
             <span>{String(group.items.length).padStart(2, '0')} RECORDS</span>
           </header>
-          <div class="project-group__columns" aria-hidden="true">
+          <div class="project-group__columns" aria-hidden="true" data-reveal>
             <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE</span>
           </div>
           <ol>
             {group.items.map((project, projectIndex) => {
               const Row = project.url ? 'a' : 'div';
               return (
-              <li>
+              <li data-reveal>
                 <Row class="project-row" {...(project.url ? { href: project.url, target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <div class="project-row__name">
                     <span class="project-row__id">{String(groupIndex + 1).padStart(2, '0')}.{String(projectIndex + 1).padStart(2, '0')}</span>
@@ -237,6 +237,19 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group a:hover, .project-group a:focus-visible { background: #151816; }
   .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }
   .project-group a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  /* Hover: an accent rail locks on at the inline start, the name steps forward,
+     the arrow arrives along its own diagonal. Pointer devices only. */
+  .project-row { position: relative; transition: background-color 160ms ease; }
+  .project-row::before { content: ""; position: absolute; inset-block: -1px; inset-inline-start: 0; inline-size: 2px; background: #ff3b30; opacity: 0; transform: scaleY(.35); transition: opacity 180ms ease, transform 240ms var(--ease-out); }
+  .project-group a:hover::before, .project-group a:focus-visible::before { opacity: 1; transform: none; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .project-row__name h4 { transition: transform 220ms var(--ease-out); }
+    .project-group a:hover .project-row__name h4 { transform: translate3d(calc(var(--dir, 1) * .3rem), 0, 0); }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (min-width: 761px) {
+    .project-row__arrow { transform: translate3d(-.3rem, .3rem, 0); transition: opacity 160ms ease, transform 240ms var(--ease-out); }
+    .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { transform: none; }
+  }
   @media (max-width: 1050px) {
     .project-group__columns { display: none; }
     .project-row { grid-template-columns: minmax(12rem, .8fr) 1.2fr 5rem 1rem; }

@@ -15,16 +15,16 @@ const t = getContributions(locale);
     <header class="contributions__header">
       <p class="terminal-kicker">{t.eyebrow} / SOURCE ACTIVITY</p>
       <h2 id="contributions-heading" class="terminal-heading">{t.heading}</h2>
-      <p>{t.intro}</p>
+      <p data-reveal>{t.intro}</p>
     </header>
     <div class="contributions__body">
-      <p class="contributions__status" aria-live="polite" data-contributions-status>{t.loading}</p>
+      <p class="contributions__status" aria-live="polite" data-contributions-status data-loading>{t.loading}</p>
       <dl class="contributions__sources" data-contributions-sources></dl>
       <dl class="contributions__meta" data-contributions-meta hidden></dl>
       <figure class="contributions__calendar" data-contributions-calendar hidden>
         <figcaption>{t.combined}</figcaption>
-        <div class="contributions__months" aria-hidden="true" data-contributions-months></div>
-        <div class="contributions__grid" role="img" data-contributions-grid></div>
+        <div class="contributions__months" aria-hidden="true" data-contributions-months data-draw="columns"></div>
+        <div class="contributions__grid" role="img" data-contributions-grid data-draw="calendar"></div>
       </figure>
       <p class="contributions__note" data-contributions-note hidden>{t.privateNote}</p>
       <p class="contributions__note" data-contributions-source-note hidden>{t.sourceNote}</p>
@@ -104,7 +104,9 @@ const t = getContributions(locale);
     sources.forEach((source) => {
       const value = appendTerm(sourcesList, source.label || sourceNames[source.id], source.status === 'ok' ? new Intl.NumberFormat(document.documentElement.lang).format(source.total) : texts.unavailableSource ?? 'unavailable');
       if (source.status !== 'ok') value.dataset.unavailable = 'true';
+      else { value.dataset.count = String(source.total); value.dataset.countLocale = ''; }
     });
+    status.removeAttribute('data-loading');
     if (available.length === 0) { status.textContent = texts.unavailable ?? ''; return; }
     status.textContent = available.length === sources.length ? '' : texts.partial ?? '';
 
@@ -173,6 +175,8 @@ const t = getContributions(locale);
       const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 2; cell.textContent = texts.noActivity ?? ''; row.append(cell); daysBody.append(row);
     }
     details.hidden = false;
+    // Motion layer (src/scripts/motion.ts): draw the calendar, count the totals.
+    root.dispatchEvent(new CustomEvent('hud:enhance', { bubbles: true }));
   }
 
   async function initializeContributions() {
@@ -188,7 +192,7 @@ const t = getContributions(locale);
         render(root, payload);
       } catch {
         const status = root.querySelector<HTMLElement>('[data-contributions-status]');
-        if (status) status.textContent = root.dataset.unavailable ?? '';
+        if (status) { status.textContent = root.dataset.unavailable ?? ''; status.removeAttribute('data-loading'); }
       } finally { window.clearTimeout(timeout); }
     });
   }
@@ -210,5 +214,7 @@ const t = getContributions(locale);
   .contributions__sources, .contributions__meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem 1rem; margin-block-start: 1rem; font: .64rem/1.45 var(--font-mono, monospace); }.contributions__sources { max-inline-size: 30rem; }.contributions__sources :global(dt), .contributions__meta :global(dt) { color: var(--terminal-muted, #747a75); text-transform: uppercase; }.contributions__sources :global(dd) { min-width: 0; margin: 0; color: var(--terminal-fg, #e7e9e3); font-size: 1.8rem; font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; text-align: end; }.contributions__meta :global(dd) { margin: 0; color: var(--terminal-fg, #e7e9e3); overflow-wrap: anywhere; text-align: end; }
   .contributions__meta { margin-block-start: 2rem; padding-block-start: 1rem; border-block-start: 1px solid var(--terminal-line, #303431); }.contributions__calendar { margin: 2rem 0 0; }.contributions__calendar figcaption, .contributions__note, .contributions__details { color: var(--terminal-muted, #969b97); font: .62rem/1.55 var(--font-mono, monospace); }.contributions__months { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); gap: .18rem; min-block-size: 1rem; margin-block-start: .75rem; overflow: hidden; color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); text-transform: uppercase; white-space: nowrap; }.contributions__months :global(.contributions__month) { overflow: visible; }.contributions__grid { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); grid-template-rows: repeat(7, .65rem); grid-auto-flow: column; gap: .18rem; margin-block-start: .25rem; overflow: hidden; }.contributions__grid :global(.contributions__cell) { min-inline-size: 0; background: #222622; }.contributions__grid :global(.contributions__cell--outside) { background: transparent; }.contributions__grid :global(.contributions__cell--level-1) { background: #235e2c; }.contributions__grid :global(.contributions__cell--level-2) { background: #2f8a3b; }.contributions__grid :global(.contributions__cell--level-3) { background: #43b34f; }.contributions__grid :global(.contributions__cell--level-4) { background: #70df61; }
   .contributions__note { margin: 1rem 0 0; max-inline-size: 68ch; }.contributions__details { margin-block-start: 1.5rem; }.contributions__details summary { cursor: pointer; color: var(--terminal-fg, #e7e9e3); }.contributions__table-wrap { max-block-size: 18rem; margin-block-start: .75rem; overflow: auto; border: 1px solid var(--terminal-line, #303431); } .contributions table { inline-size: 100%; border-collapse: collapse; } .contributions__table-wrap :global(th), .contributions__table-wrap :global(td) { padding: .55rem .7rem; border-block-end: 1px solid var(--terminal-line, #303431); text-align: start; } .contributions__table-wrap :global(th:last-child), .contributions__table-wrap :global(td:last-child) { text-align: end; }
+  @media (prefers-reduced-motion: no-preference) { .contributions__status[data-loading]::after { content: "_"; margin-inline-start: .35em; animation: contributions-cursor 1s steps(1, end) infinite; } }
+  @keyframes contributions-cursor { 50% { opacity: 0; } }
   @media (max-width: 760px) { .contributions__layout { grid-template-columns: 1fr; }.contributions__header { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }.contributions__months :global(.contributions__month:not(.contributions__month--mobile)) { display: none; }.contributions__grid { grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); grid-template-rows: repeat(7, .5rem); gap: .12rem; }.contributions__sources, .contributions__meta { grid-template-columns: minmax(0, 1fr) auto; } }
 </style>

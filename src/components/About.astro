@@ -12,28 +12,28 @@ const t = getHome(locale).about;
     <header class="about__header">
       <p class="terminal-kicker">{t.eyebrow} / IDENTITY FILE</p>
       <h2 id="about-heading" class="terminal-heading">{t.heading}</h2>
-      <span class="about__code" aria-hidden="true">[ BIO / 01 ]</span>
+      <span class="about__code" aria-hidden="true" data-reveal>[ BIO / 01 ]</span>
     </header>
 
     <div class="about__statement">
-      <p>
+      <p data-reveal>
         {t.p1_prefix}<strong>Marketmaker.cc</strong>{t.p1_marketmaker_suffix}<strong>Cmdop.com</strong>{t.p1_cmdop_suffix}
       </p>
-      <p>
+      <p data-reveal>
         {t.p2_prefix}<strong>{t.p2_year}</strong>{t.p2_suffix}
       </p>
-      <p>
+      <p data-reveal>
         {t.p3_prefix}<strong>{t.p3_langs}</strong>{t.p3_suffix}
       </p>
     </div>
 
     <aside class="about__focus" aria-label={t.focus_eyebrow}>
-      <div class="about__focus-head">
+      <div class="about__focus-head" data-reveal>
         <span>{t.focus_eyebrow}</span><span>STATUS / ACTIVE</span>
       </div>
       <ol>
         {t.focus.map((item, index) => (
-          <li>
+          <li data-reveal>
             <span class="about__focus-index">0{index + 1}</span>
             <div>
               <h3>{item.title}</h3>

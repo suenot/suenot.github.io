@@ -26,13 +26,13 @@ const frontier: FrontierProject[] = [
         <p class="terminal-kicker">{t.eyebrow} / COMMAND SYSTEMS</p>
         <h2 id="frontier-heading" class="terminal-heading">{t.heading}</h2>
       </div>
-      <p>{t.intro}</p>
-      <span aria-hidden="true">[ LEAD / BUILD / SHIP ]</span>
+      <p data-reveal>{t.intro}</p>
+      <span aria-hidden="true" data-reveal>[ LEAD / BUILD / SHIP ]</span>
     </header>
 
     <div class="frontier__projects">
       {frontier.map((project, index) => (
-        <a href={project.url} target="_blank" rel="noopener noreferrer" class="frontier__project">
+        <a href={project.url} target="_blank" rel="noopener noreferrer" class="frontier__project" data-reveal>
           <div class="project__meta">
             <span>0{index + 1}</span>
             <span>{project.signal}</span>
@@ -47,7 +47,7 @@ const frontier: FrontierProject[] = [
           <div class="project__tags">
             {project.tags.map((tag) => <span>{tag}</span>)}
           </div>
-          <svg viewBox="0 0 520 82" preserveAspectRatio="none" aria-hidden="true">
+          <svg viewBox="0 0 520 82" preserveAspectRatio="none" aria-hidden="true" data-wipe>
             <path d={index === 0 ? 'M0 58L37 55L74 59L111 31L148 47L185 24L222 46L259 12L296 35L333 28L370 42L407 19L444 34L481 22L520 27' : 'M0 43L37 40L74 48L111 45L148 22L185 33L222 29L259 35L296 16L333 24L370 20L407 30L444 12L481 21L520 17'} />
           </svg>
         </a>
@@ -80,6 +80,12 @@ const frontier: FrontierProject[] = [
   .frontier__project:hover { background: #151816; }
   .frontier__project:hover h3 { color: #ff3b30; }
   .frontier__project:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .frontier__project { transition: background-color 180ms ease; }
+  .project__title-row h3 { transition: color 180ms ease; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .project__title-row > span { transition: transform 260ms var(--ease-out); }
+    .frontier__project:hover .project__title-row > span { transform: translate3d(.35rem, -.35rem, 0); }
+  }
   @media (max-width: 800px) {
     .frontier__header { grid-template-columns: 1fr; }
     .frontier__header > span { display: none; }

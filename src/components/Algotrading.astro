@@ -22,10 +22,10 @@ const sectionTags = [
         <p class="terminal-kicker">{t.eyebrow} / EXECUTION SYSTEMS</p>
         <h2 id="trading-heading" class="terminal-heading">{t.heading}</h2>
       </div>
-      <p>{t.intro}</p>
-      <div class="trading__signal" aria-hidden="true">
+      <p data-reveal>{t.intro}</p>
+      <div class="trading__signal" aria-hidden="true" data-reveal>
         <span>LATENCY ENVELOPE</span>
-        <svg viewBox="0 0 240 55" preserveAspectRatio="none">
+        <svg viewBox="0 0 240 55" preserveAspectRatio="none" data-wipe>
           <path d="M0 38L14 36L28 39L42 29L56 34L70 12L84 36L98 30L112 35L126 26L140 31L154 18L168 34L182 32L196 22L210 36L224 29L240 33" />
         </svg>
       </div>
@@ -34,7 +34,7 @@ const sectionTags = [
     <ol class="trading__cases">
       {t.sections.map((section, index) => (
         <li class="trading__case">
-          <header class="case__header">
+          <header class="case__header" data-reveal>
             <span class="case__number">0{index + 1}</span>
             <p class="case__subtitle">{section.subtitle}</p>
             <h3 class="display-type">{section.title}</h3>
@@ -44,13 +44,13 @@ const sectionTags = [
           </header>
 
           <div class="case__body">
-            <div class="case__meta" aria-hidden="true">
+            <div class="case__meta" aria-hidden="true" data-reveal>
               <span>UNIT / HFT-{String(index + 1).padStart(2, '0')}</span>
               <span>MODE / PRODUCTION</span>
             </div>
             <ul>
               {section.bullets.map((bullet, bulletIndex) => (
-                <li>
+                <li data-reveal>
                   <span>{String(bulletIndex + 1).padStart(2, '0')}</span>
                   <p set:html={bullet} />
                 </li>

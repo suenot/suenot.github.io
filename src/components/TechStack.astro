@@ -182,7 +182,7 @@ const techCategories = [
     <header class="tech__header">
       <p class="terminal-kicker">{t.eyebrow} / CAPABILITY MATRIX</p>
       <h2 id="tech-heading" class="terminal-heading">{t.heading}</h2>
-      <div class="tech__legend" aria-hidden="true">
+      <div class="tech__legend" aria-hidden="true" data-reveal>
         <span>PRIMARY / HIGH</span><span>SECONDARY / OPERATIONAL</span>
       </div>
     </header>
@@ -190,7 +190,7 @@ const techCategories = [
     <div class="tech__matrix">
       {techCategories.map((category, categoryIndex) => (
         <section class:list={["tech__category", { "tech__category--primary": category.primary }]}>
-          <header>
+          <header data-reveal>
             <span>{String(categoryIndex + 1).padStart(2, '0')}</span>
             <h3>{t.categories[category.name as TechCategoryKey] ?? category.name}</h3>
             <span>{category.items.length} UNITS</span>
@@ -199,7 +199,7 @@ const techCategories = [
             {category.items.map((tech, techIndex) => {
               const icon = getIcon(tech.name);
               return (
-                <li>
+                <li data-reveal>
                   <span class="tech__id">{String(categoryIndex + 1).padStart(2, '0')}.{String(techIndex + 1).padStart(2, '0')}</span>
                   {icon ? (
                     <svg role="img" viewBox="0 0 24 24" aria-label={tech.name}><path d={icon.path} /></svg>

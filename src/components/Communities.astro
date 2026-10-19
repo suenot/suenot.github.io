@@ -42,12 +42,12 @@ const communities: Community[] = [
     <header class="communities__header">
       <p class="terminal-kicker">{t.eyebrow} / PUBLIC CHANNELS</p>
       <h2 id="communities-heading" class="terminal-heading">{t.heading}</h2>
-      <p aria-hidden="true">BROADCAST DIRECTORY<br />3 ACTIVE STREAMS</p>
+      <p aria-hidden="true" data-reveal>BROADCAST DIRECTORY<br />3 ACTIVE STREAMS</p>
     </header>
 
     <div class="communities__list">
       {communities.map((community, index) => (
-        <a href={community.url} target="_blank" rel="noopener noreferrer">
+        <a href={community.url} target="_blank" rel="noopener noreferrer" data-reveal>
           <span class="community__index">0{index + 1}</span>
           <div class="community__identity">
             <span>{community.platform} / {community.handle}</span>
@@ -76,6 +76,11 @@ const communities: Community[] = [
   .community__arrow { color: #ff3b30; font: 1.25rem/1 var(--font-mono, monospace); }
   .communities__list a:hover, .communities__list a:focus-visible { background: #151816; }
   .communities__list a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .communities__list a { transition: background-color 160ms ease; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .community__arrow { transition: transform 240ms var(--ease-out); }
+    .communities__list a:hover .community__arrow { transform: translate3d(.3rem, -.3rem, 0); }
+  }
   @media (max-width: 800px) {
     .communities__layout { grid-template-columns: 1fr; }
     .communities__header { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }

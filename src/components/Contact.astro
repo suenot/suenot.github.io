@@ -1,5 +1,5 @@
 ---
-import { defaultLocale, type Locale } from '../i18n/config';
+import { defaultLocale, isRtl, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
 interface Props {
@@ -27,18 +27,18 @@ const links = [
     <header class="contact__header">
       <p class="terminal-kicker">{t.eyebrow} / OPEN COMMUNICATION LINK</p>
       <h2 id="contact-heading" class="terminal-heading">{t.heading}</h2>
-      <p>{t.intro}</p>
+      <p data-reveal>{t.intro}</p>
     </header>
 
-    <a class="contact__primary" href="mailto:suenot@gmail.com">
+    <a class="contact__primary" href="mailto:suenot@gmail.com" data-reveal>
       <span>PRIMARY CHANNEL / EMAIL</span>
       <strong>suenot@gmail.com</strong>
-      <span aria-hidden="true">→</span>
+      <span aria-hidden="true">{isRtl(locale) ? '←' : '→'}</span>
     </a>
 
     <nav class="contact__links" aria-label="Contact channels">
       {links.map((link, index) => (
-        <a href={link.url} target={link.url.startsWith('mailto:') ? undefined : '_blank'} rel={link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>
+        <a href={link.url} target={link.url.startsWith('mailto:') ? undefined : '_blank'} rel={link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'} data-reveal>
           <span>{String(index + 1).padStart(2, '0')}</span>
           <div><strong>{link.name}</strong><span>{link.handle}</span></div>
           <span aria-hidden="true">↗</span>
@@ -71,6 +71,14 @@ const links = [
   .contact__links a:hover, .contact__links a:focus-visible { background: #151816; }
   .contact__links a:hover > span:last-child { color: #ff3b30; }
   .contact a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .contact__primary, .contact__links a { transition: background-color 180ms ease; }
+  .contact__primary strong { transition: color 180ms ease; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .contact__primary > span:last-child { transition: transform 260ms var(--ease-out); }
+    .contact__primary:hover > span:last-child { transform: translate3d(calc(var(--dir, 1) * .6rem), 0, 0); }
+    .contact__links a > span:last-child { transition: transform 240ms var(--ease-out), color 160ms ease; }
+    .contact__links a:hover > span:last-child { transform: translate3d(.25rem, -.25rem, 0); }
+  }
   @media (max-width: 800px) {
     .contact__header { grid-template-columns: 1fr; }
     .contact__header .terminal-kicker { grid-column: auto; }
