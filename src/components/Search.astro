@@ -103,6 +103,8 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
 </style>
 
 <script>
+  import { flip } from '../scripts/flip';
+
   const searchRoot = document.querySelector<HTMLElement>('[data-search-root]');
   const noResultsText = searchRoot?.dataset.noResults ?? '';
   const resultsText = searchRoot?.dataset.resultsText ?? '{count}';
@@ -129,24 +131,27 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
     const posts = getPosts();
     let visibleCount = 0;
 
-    posts.forEach((post) => {
-      const haystack = [
-        post.dataset.title,
-        post.dataset.description,
-        post.dataset.tags,
-      ].filter(Boolean).join(' ').toLocaleLowerCase();
-      const matches = !normalizedQuery || haystack.includes(normalizedQuery);
-      post.hidden = !matches;
-      if (matches) visibleCount += 1;
-    });
+    // Survivors glide to their new slots instead of jumping (src/scripts/flip.ts).
+    flip(posts, () => {
+      posts.forEach((post) => {
+        const haystack = [
+          post.dataset.title,
+          post.dataset.description,
+          post.dataset.tags,
+        ].filter(Boolean).join(' ').toLocaleLowerCase();
+        const matches = !normalizedQuery || haystack.includes(normalizedQuery);
+        post.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
 
-    const archiveStream = document.querySelector<HTMLElement>('.archive-stream');
-    if (archiveStream) {
-      const streamHasResults = Array.from(
-        archiveStream.querySelectorAll<HTMLElement>('[data-blog-post]')
-      ).some((post) => !post.hidden);
-      archiveStream.hidden = Boolean(normalizedQuery) && !streamHasResults;
-    }
+      const archiveStream = document.querySelector<HTMLElement>('.archive-stream');
+      if (archiveStream) {
+        const streamHasResults = Array.from(
+          archiveStream.querySelectorAll<HTMLElement>('[data-blog-post]')
+        ).some((post) => !post.hidden);
+        archiveStream.hidden = Boolean(normalizedQuery) && !streamHasResults;
+      }
+    });
 
     if (clear) clear.hidden = !normalizedQuery;
     setSearchStatus(visibleCount, Boolean(normalizedQuery));
