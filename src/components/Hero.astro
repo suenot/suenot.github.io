@@ -1,5 +1,5 @@
 ---
-import { defaultLocale, type Locale } from '../i18n/config';
+import { defaultLocale, isRtl, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
 interface Props { locale?: Locale; }
@@ -28,6 +28,12 @@ try {
   // Build remains deterministic when GitHub is unavailable.
 }
 
+// The name is split into letters at build time so the kinetic reveal is pure
+// CSS: it plays without JS and is skipped under reduced motion.
+const nameWords = ['Eugen', 'Soloviov'];
+let letterIndex = 0;
+const nameLines = nameWords.map((word) => [...word].map((char) => ({ char, index: letterIndex++ })));
+
 const currentYear = new Date().getFullYear();
 const stats = [
   { value: `${currentYear - 2006}+`, label: t.stat_dev, code: 'EXP/DEV' },
@@ -43,13 +49,20 @@ const stats = [
       <div class="hero__eyebrow terminal-kicker" aria-hidden="true"><span>PORTFOLIO / 2026</span><span>BUILD 26.08</span></div>
       <div class="hero__name-block">
         <span class="hero__rail" aria-hidden="true">C3 / 487</span>
-        <h1 id="hero-title" class="hero__name display-type"><span>Eugen</span><span>Soloviov</span></h1>
+        <h1 id="hero-title" class="hero__name display-type">
+          <span class="sr-only">{nameWords.join(' ')}</span>
+          <span class="hero__name-visual" aria-hidden="true">
+            {nameLines.map((letters) => (
+              <span class="hero__name-line"><span class="hero__name-mask" dir="ltr">{letters.map((letter) => <span class="hero__char" style={`--i:${letter.index}`}>{letter.char}</span>)}</span></span>
+            ))}
+          </span>
+        </h1>
       </div>
       <p class="hero__tagline">{t.tagline}</p>
       <p class="hero__description">{t.description}</p>
       <p class="hero__roles">┌ &nbsp;{t.badge}&nbsp; ┘</p>
       <div class="hero__actions">
-        <a href="#projects" class="terminal-button hero__button"><span aria-hidden="true">→</span><span>[ {t.cta_projects} ]</span></a>
+        <a href="#projects" class="terminal-button hero__button"><span aria-hidden="true">{isRtl(locale) ? '←' : '→'}</span><span>[ {t.cta_projects} ]</span></a>
         <a href="#contact" class="terminal-link hero__contact">{t.cta_contact} / COMM-LINK</a>
       </div>
     </div>
@@ -64,9 +77,9 @@ const stats = [
 
     <div class="hero__stats" aria-label="Career and GitHub statistics">
       {stats.map((stat, index) => (
-        <div class="hero__stat">
+        <div class="hero__stat" style={`--s:${index}`}>
           <span class="hero__stat-index">0{index + 1}</span>
-          <data value={stat.value}>{stat.value}</data>
+          <data value={stat.value} data-count data-count-intro={String(1000 + index * 70)}>{stat.value}</data>
           <span>{stat.label}</span>
           <samp>[ {stat.code} ]</samp>
         </div>
@@ -130,6 +143,15 @@ const stats = [
     let width = 1; let height = 1; let dpr = 1; let yaw = -0.55; let pitch = -0.38;
     let velocityX = 0; let velocityY = 0; let pointerId = -1; let previousX = 0; let previousY = 0;
     let frameId = 0; let stopped = false; let visible = true; let lastFrame = performance.now(); let lastPaint = 0; let nextTurn = lastFrame + 2100; let turn: Turn | null = null; let moveIndex = 0;
+    // Intro: the 27 units fly in from a scattered cloud and lock into the cube.
+    const introDuration = 900; const introSpread = .35;
+    const introStart = reducedMotion ? -Infinity : performance.now() + 150;
+    const introOffsets: Vec3[] = cubies.map((cubie) => {
+      const [x, y, z] = cubie.position; const length = Math.hypot(x, y, z) || 1; const reach = 2.2 + Math.random() * 1.6;
+      const jitter = () => (Math.random() - .5) * 1.4;
+      return [x / length * reach + jitter(), y / length * reach + jitter(), z / length * reach + jitter()];
+    });
+    const introDelays = cubies.map(() => Math.random() * introSpread);
     const moves: [0 | 1 | 2, number, number][] = [[1, 1, 1], [0, -1, -1], [2, 1, 1], [1, -1, -1], [2, 0, 1], [0, 1, 1]];
 
     function resize() {
@@ -163,13 +185,23 @@ const stats = [
         activeRotation = rotation(turn.axis, turn.direction * Math.PI / 2 * eased);
         if (progress === 1) finishTurn(turn);
       }
-      const view = multiply(rotation(1, yaw), rotation(0, pitch));
+      const introProgress = (now - introStart) / introDuration;
+      const inIntro = introProgress < 1;
+      const introEase = inIntro ? 1 - Math.pow(1 - Math.min(1, Math.max(0, introProgress)), 3) : 1;
+      const view = multiply(rotation(1, yaw - (1 - introEase) * .9), rotation(0, pitch));
       const projected: { x: number; y: number; z: number; radius: number; alpha: number; accent: boolean }[] = [];
       const scale = Math.min(width, height) * .175; const camera = 6.8;
-      for (const cubie of cubies) {
+      cubies.forEach((cubie, cubieIndex) => {
         const inSlice = turn && Math.round(cubie.position[turn.axis]) === turn.layer;
         const sliceRotation = inSlice ? activeRotation : null;
-        const center = sliceRotation ? transform(sliceRotation, cubie.position) : cubie.position;
+        let center = sliceRotation ? transform(sliceRotation, cubie.position) : cubie.position;
+        let fade = 1;
+        if (inIntro) {
+          const local = Math.min(1, Math.max(0, (introProgress - introDelays[cubieIndex]) / (1 - introSpread)));
+          const settle = 1 - Math.pow(1 - local, 3); const away = 1 - settle; const offset = introOffsets[cubieIndex];
+          center = [center[0] + offset[0] * away, center[1] + offset[1] * away, center[2] + offset[2] * away];
+          fade = .1 + .9 * settle;
+        }
         for (const particle of cubie.particles) {
           let local = transform(cubie.orientation, particle.point); let normal = transform(cubie.orientation, particle.normal);
           if (sliceRotation) { local = transform(sliceRotation, local); normal = transform(sliceRotation, normal); }
@@ -177,9 +209,9 @@ const stats = [
           const point = transform(view, world); const facing = transform(view, normal)[2];
           if (facing < -.08) continue;
           const perspective = camera / (camera - point[2]);
-          projected.push({ x: width / 2 + point[0] * scale * perspective, y: height / 2 + point[1] * scale * perspective, z: point[2], radius: Math.max(.55, perspective * 1.25), alpha: Math.min(.94, .22 + Math.max(0, facing) * .7), accent: particle.accent });
+          projected.push({ x: width / 2 + point[0] * scale * perspective, y: height / 2 + point[1] * scale * perspective, z: point[2], radius: Math.max(.55, perspective * 1.25), alpha: fade * Math.min(.94, .22 + Math.max(0, facing) * .7), accent: particle.accent });
         }
-      }
+      });
       projected.sort((a, b) => a.z - b.z);
       for (const particle of projected) {
         context.globalAlpha = particle.alpha;
@@ -265,11 +297,15 @@ const stats = [
   .hero__name-block { position: relative; padding-inline-start: 2.7rem; }
   .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: #ff3b30; font: 600 .58rem/1 var(--font-mono, monospace); letter-spacing: .14em; border-inline-start: 2px solid #ff3b30; padding-inline-start: .55rem; }
   .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5.4rem, 9.2vw, 11rem); font-weight: 950; letter-spacing: -.082em; line-height: .76; text-transform: uppercase; text-wrap: nowrap; }
-  .hero__name span { display: block; }
-  .hero__tagline { margin: 1.55rem 0 0 2.7rem; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.78rem, 1.2vw, 1.1rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .hero__description { max-inline-size: 39rem; margin: 1rem 0 0 2.7rem; color: var(--terminal-muted, #929792); font: .76rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
-  .hero__roles { margin: 1.2rem 0 0 2.7rem; color: var(--terminal-muted, #8b908c); font: .64rem/1.6 var(--font-mono, monospace); letter-spacing: .11em; text-transform: uppercase; }
-  .hero__actions { display: flex; align-items: center; gap: 2rem; margin: 1.45rem 0 0 2.7rem; }
+  .hero__name-visual, .hero__name-line { display: block; }
+  /* Each line is a mask; padding gives the condensed caps room, the negative
+     margin keeps the original line box. */
+  .hero__name-mask { display: inline-block; overflow: clip; padding: .16em .12em .12em; margin: -.16em -.12em -.12em; vertical-align: top; }
+  .hero__char { display: inline-block; }
+  .hero__tagline { margin-block: 1.55rem 0; margin-inline: 2.7rem 0; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.78rem, 1.2vw, 1.1rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
+  .hero__description { max-inline-size: 39rem; margin-block: 1rem 0; margin-inline: 2.7rem 0; color: var(--terminal-muted, #929792); font: .76rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
+  .hero__roles { margin-block: 1.2rem 0; margin-inline: 2.7rem 0; color: var(--terminal-muted, #8b908c); font: .64rem/1.6 var(--font-mono, monospace); letter-spacing: .11em; text-transform: uppercase; }
+  .hero__actions { display: flex; align-items: center; gap: 2rem; margin-block: 1.45rem 0; margin-inline: 2.7rem 0; }
   .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .65rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
   .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: #ff3b30; font-size: 1.5rem; }
   .hero__button:hover { background: var(--terminal-fg, #e7e9e3); color: var(--terminal-bg, #0b0d0c); }
@@ -323,4 +359,32 @@ const stats = [
     .hero__stat samp { display: none; }
   }
   @media (prefers-reduced-motion: reduce) { .cube__canvas { cursor: grab; } }
+
+  /* Intro, in reading order: frame, name, copy, object, readings. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__char { animation: hero-rise 820ms var(--ease-out) both; animation-delay: calc(140ms + var(--i) * 34ms); }
+    .hero__eyebrow { animation: hero-fade 500ms var(--ease-out) 60ms both; }
+    .hero__rail { animation: hero-fade 600ms var(--ease-out) 420ms both; }
+    .hero__tagline, .hero__description, .hero__roles, .hero__actions { animation: hero-lift 700ms var(--ease-out) both; }
+    .hero__tagline { animation-delay: 620ms; }
+    .hero__description { animation-delay: 690ms; }
+    .hero__roles { animation-delay: 760ms; }
+    .hero__actions { animation-delay: 830ms; }
+    .hero__cube { animation: hero-fade 700ms var(--ease-out) 120ms both; }
+    .cube__header, .cube__footer { animation: hero-fade 500ms var(--ease-out) 700ms both; }
+    .cube__marker--nw { animation: hero-marker-nw 600ms var(--ease-out) 760ms both; }
+    .cube__marker--se { animation: hero-marker-se 600ms var(--ease-out) 760ms both; }
+    .hero__stat { animation: hero-lift 700ms var(--ease-out) both; animation-delay: calc(900ms + var(--s) * 70ms); }
+    .hero__button { transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--ease-out); }
+    .hero__button:active { transform: scale(.97); }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .hero__button > :first-child { transition: transform 200ms var(--ease-out); }
+    .hero__button:hover > :first-child { transform: translate3d(calc(var(--dir, 1) * .2rem), 0, 0); }
+  }
+  @keyframes hero-rise { from { transform: translate3d(0, 118%, 0); } }
+  @keyframes hero-fade { from { opacity: 0; } }
+  @keyframes hero-lift { from { opacity: 0; transform: translate3d(0, .9rem, 0); } }
+  @keyframes hero-marker-nw { from { opacity: 0; transform: translate3d(-.5rem, -.5rem, 0); } }
+  @keyframes hero-marker-se { from { opacity: 0; transform: translate3d(.5rem, .5rem, 0); } }
 </style>
