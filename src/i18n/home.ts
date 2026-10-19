@@ -231,6 +231,22 @@ export const home = {
           'Self-hosted SSO for every marketmaker.cc service — Go + Next.js, forwardAuth via Traefik.',
         Backups:
           'Backup dashboard over restic: schedules, snapshots and restore status across all servers.',
+        'Publisher suite':
+          'Publishes one video to YouTube, Instagram, Facebook, TikTok, Threads, X and Pinterest through each platform\'s web editor, with one shared post log. 53 of 56 posts live, 540 offline tests. Reforms.ai, 2026.',
+        'Reference crawler':
+          'Collects a channel\'s videos, scene slides, audio and transcripts into a searchable store for competitor analysis. 4 channels, 266 tests. Reforms.ai, 2026.',
+        'News warehouse':
+          'Go service that collects news, keeps every revision and builds a time-based event graph, digests and RSS. 283 Go and 108 Python tests. Reforms.ai, 2026.',
+        'AI video pipeline':
+          'Short vertical videos built in code with HyperFrames and FFmpeg, 1080x1920 at 30 fps, with a style gate, independent reviews and automatic checks for loudness, shake and blur. 39 videos built in 19 days, 8 live on 7 platforms. Reforms.ai, 2026.',
+        'Motion CV site':
+          'My CV as a motion-design site at production.suenot.com: work at Reforms.ai, projects and the video production method.',
+        'gaia':
+          'Drives Gemini, Veo 3 and NotebookLM through a logged-in Camoufox session, no API keys. 14 stars, 214 tests.',
+        'Content factory':
+          'Article to slides and audio, to synced MP4, to subtitles and metadata, to YouTube upload (FFmpeg, Whisper, Camoufox).',
+        'AI form filling for websites':
+          'AI service that filled in forms on websites for the user. January to March 2025. Project closed.',
         aicommit:
           'Rust CLI for AI-generated commit messages via OpenRouter. 105 releases, VS Code extension, jail/blacklist failover.',
         'Codex Jev Router':
@@ -320,6 +336,7 @@ export const home = {
       },
     },
     contact: {
+      cv: 'CV',
       eyebrow: '07. contact',
       heading: 'Get in touch',
       intro:
@@ -554,6 +571,22 @@ export const home = {
           'Собственный SSO для всех сервисов marketmaker.cc — Go + Next.js, forwardAuth через Traefik.',
         Backups:
           'Дашборд бэкапов поверх restic: расписания, снапшоты и статус восстановления по всем серверам.',
+        'Publisher suite':
+          'Публикует одно видео на YouTube, Instagram, Facebook, TikTok, Threads, X и Pinterest через веб-редактор каждой площадки, с общим журналом публикаций. 53 из 56 постов опубликованы, 540 офлайн-тестов. Reforms.ai, 2026.',
+        'Reference crawler':
+          'Собирает видео канала, слайды сцен, аудио и транскрипты в поисковое хранилище для анализа конкурентов. 4 канала, 266 тестов. Reforms.ai, 2026.',
+        'News warehouse':
+          'Сервис на Go собирает новости, хранит каждую ревизию и строит граф событий во времени, дайджесты и RSS. 283 теста на Go и 108 на Python. Reforms.ai, 2026.',
+        'AI video pipeline':
+          'Короткие вертикальные видео, собранные кодом на HyperFrames и FFmpeg, 1080x1920 при 30 к/с, со стилевым гейтом, независимыми ревью и автоматическими проверками громкости, тряски и размытия. 39 видео за 19 дней, 8 опубликованы на 7 площадках. Reforms.ai, 2026.',
+        'Motion CV site':
+          'Мое резюме в виде motion-сайта production.suenot.com: работа в Reforms.ai, проекты и метод производства видео.',
+        'gaia':
+          'Управляет Gemini, Veo 3 и NotebookLM через залогиненную сессию Camoufox, без API-ключей. 14 звезд, 214 тестов.',
+        'Content factory':
+          'Статья превращается в слайды и озвучку, затем в синхронизированный MP4, субтитры и метаданные, и загружается на YouTube (FFmpeg, Whisper, Camoufox).',
+        'AI form filling for websites':
+          'ИИ-сервис, который заполнял формы на сайтах за пользователя. Январь-март 2025. Проект закрыт.',
         aicommit:
           'Rust CLI для AI-генерации коммит-сообщений через OpenRouter. 105 релизов, расширение для VS Code, jail/blacklist failover.',
         'Codex Jev Router':
@@ -645,6 +678,7 @@ export const home = {
       },
     },
     contact: {
+      cv: 'Резюме',
       eyebrow: '07. контакты',
       heading: 'Связаться со мной',
       intro:
@@ -871,6 +905,22 @@ export const home = {
           '自建 SSO，服务于全部 marketmaker.cc 服务——Go + Next.js，通过 Traefik forwardAuth。',
         Backups:
           '基于 restic 的备份仪表盘：所有服务器的计划、快照与恢复状态。',
+        'Publisher suite':
+          '通过各平台自己的网页编辑器，把一条视频发布到 YouTube、Instagram、Facebook、TikTok、Threads、X 和 Pinterest，共用一份发布日志。56 条帖子中 53 条已上线，540 个离线测试。Reforms.ai，2026。',
+        'Reference crawler':
+          '把一个频道的视频、场景幻灯片、音频和文字稿收集到可搜索的库中，用于竞品分析。4 个频道，266 个测试。Reforms.ai，2026。',
+        'News warehouse':
+          'Go 服务：采集新闻，保存每一个修订版本，并生成按时间组织的事件图、摘要和 RSS。283 个 Go 测试和 108 个 Python 测试。Reforms.ai，2026。',
+        'AI video pipeline':
+          '用 HyperFrames 和 FFmpeg 以代码制作竖屏短视频，1080x1920、30 帧/秒，带风格关卡、独立评审，以及响度、抖动和模糊的自动检查。19 天制作 39 条视频，8 条已在 7 个平台上线。Reforms.ai，2026。',
+        'Motion CV site':
+          '我的简历做成了动效网站 production.suenot.com：Reforms.ai 的工作、项目与视频制作方法。',
+        'gaia':
+          '通过已登录的 Camoufox 会话驱动 Gemini、Veo 3 和 NotebookLM，无需 API 密钥。14 颗星，214 个测试。',
+        'Content factory':
+          '文章转成幻灯片和配音，再合成同步的 MP4，生成字幕和元数据，并上传到 YouTube（FFmpeg、Whisper、Camoufox）。',
+        'AI form filling for websites':
+          '代用户填写网站表单的 AI 服务。2025 年 1 月至 3 月。项目已关闭。',
         aicommit:
           '通过 OpenRouter 用 AI 生成提交信息的 Rust CLI。105 个版本，VS Code 扩展，jail/blacklist 故障转移。',
         'Codex Jev Router':
@@ -954,6 +1004,7 @@ export const home = {
       },
     },
     contact: {
+      cv: '简历',
       eyebrow: '07. 联系',
       heading: '联系方式',
       intro:
@@ -1185,6 +1236,22 @@ export const home = {
           '모든 marketmaker.cc 서비스를 위한 자체 SSO — Go + Next.js, Traefik forwardAuth.',
         Backups:
           'restic 기반 백업 대시보드: 모든 서버의 일정, 스냅샷, 복구 상태.',
+        'Publisher suite':
+          '각 플랫폼의 웹 에디터를 통해 영상 하나를 YouTube, Instagram, Facebook, TikTok, Threads, X, Pinterest에 게시하며, 게시 로그는 하나를 공유합니다. 게시물 56개 중 53개 공개, 오프라인 테스트 540개. Reforms.ai, 2026.',
+        'Reference crawler':
+          '채널의 영상, 장면 슬라이드, 오디오, 대본을 검색 가능한 저장소에 모아 경쟁사 분석에 씁니다. 채널 4개, 테스트 266개. Reforms.ai, 2026.',
+        'News warehouse':
+          '뉴스를 수집하고 모든 수정본을 보관하며 시간 기반 이벤트 그래프, 다이제스트, RSS를 만드는 Go 서비스. Go 테스트 283개와 Python 테스트 108개. Reforms.ai, 2026.',
+        'AI video pipeline':
+          'HyperFrames와 FFmpeg로 코드에서 만드는 세로형 짧은 영상, 1080x1920, 30fps. 스타일 게이트, 독립 리뷰, 음량·흔들림·흐림 자동 검사를 거칩니다. 19일 동안 영상 39개 제작, 8개를 7개 플랫폼에 공개. Reforms.ai, 2026.',
+        'Motion CV site':
+          '모션 디자인 사이트로 만든 내 이력서 production.suenot.com: Reforms.ai 작업, 프로젝트, 영상 제작 방식.',
+        'gaia':
+          '로그인된 Camoufox 세션으로 Gemini, Veo 3, NotebookLM을 제어하며 API 키가 필요 없습니다. 별 14개, 테스트 214개.',
+        'Content factory':
+          '기사를 슬라이드와 음성으로 바꾸고, 동기화된 MP4, 자막과 메타데이터를 만든 뒤 YouTube에 업로드합니다 (FFmpeg, Whisper, Camoufox).',
+        'AI form filling for websites':
+          '사용자 대신 웹사이트의 양식을 채워 주던 AI 서비스. 2025년 1월~3월. 프로젝트 종료.',
         aicommit:
           'OpenRouter를 통해 AI로 커밋 메시지를 생성하는 Rust CLI. 105개 릴리스, VS Code 확장, jail/blacklist 페일오버.',
         'Codex Jev Router':
@@ -1268,6 +1335,7 @@ export const home = {
       },
     },
     contact: {
+      cv: '이력서',
       eyebrow: '07. 연락처',
       heading: '연락하기',
       intro:
@@ -1499,6 +1567,22 @@ export const home = {
           'marketmaker.cc 全サービス向けの自前 SSO — Go + Next.js、Traefik の forwardAuth。',
         Backups:
           'restic ベースのバックアップダッシュボード：全サーバーのスケジュール、スナップショット、リストア状況。',
+        'Publisher suite':
+          '各プラットフォームのWebエディタ経由で、1本の動画を YouTube、Instagram、Facebook、TikTok、Threads、X、Pinterest に投稿します。投稿ログは共通です。56投稿中53件が公開済み、オフラインテスト540件。Reforms.ai、2026年。',
+        'Reference crawler':
+          'チャンネルの動画、シーンのスライド、音声、文字起こしを検索可能なストアに集め、競合分析に使います。4チャンネル、テスト266件。Reforms.ai、2026年。',
+        'News warehouse':
+          'ニュースを収集し、すべての改訂を保存して、時間軸のイベントグラフ、ダイジェスト、RSSを生成するGoサービス。Goテスト283件とPythonテスト108件。Reforms.ai、2026年。',
+        'AI video pipeline':
+          'HyperFramesとFFmpegでコードから作る縦型ショート動画（1080x1920、30fps）。スタイルゲート、独立レビュー、音量・手ブレ・ぼけの自動チェックを通します。19日で39本を制作し、8本を7プラットフォームで公開。Reforms.ai、2026年。',
+        'Motion CV site':
+          'モーションデザインのサイトにした私の履歴書 production.suenot.com。Reforms.aiでの仕事、プロジェクト、動画制作の方法。',
+        'gaia':
+          'ログイン済みのCamoufoxセッションでGemini、Veo 3、NotebookLMを操作します。APIキーは不要。スター14、テスト214件。',
+        'Content factory':
+          '記事をスライドと音声にし、同期したMP4、字幕とメタデータを作り、YouTubeへアップロードします（FFmpeg、Whisper、Camoufox）。',
+        'AI form filling for websites':
+          'ユーザーに代わってWebサイトのフォームを入力するAIサービス。2025年1月から3月。プロジェクトは終了。',
         aicommit:
           'OpenRouter 経由で AI がコミットメッセージを生成する Rust CLI。105 リリース、VS Code 拡張、jail/blacklist フェイルオーバー。',
         'Codex Jev Router':
@@ -1582,6 +1666,7 @@ export const home = {
       },
     },
     contact: {
+      cv: '履歴書',
       eyebrow: '07. 連絡先',
       heading: 'お問い合わせ',
       intro:
@@ -1815,6 +1900,22 @@ export const home = {
           'نظام SSO ذاتي الاستضافة لكل خدمات marketmaker.cc — Go + Next.js عبر forwardAuth في Traefik.',
         Backups:
           'لوحة نسخ احتياطي فوق restic: الجداول واللقطات وحالة الاستعادة عبر كل الخوادم.',
+        'Publisher suite':
+          'ينشر فيديو واحدا على YouTube وInstagram وFacebook وTikTok وThreads وX وPinterest عبر محرر الويب الخاص بكل منصة، مع سجل نشر مشترك. نُشر 53 منشورا من أصل 56، و540 اختبارا يعمل دون اتصال. Reforms.ai، 2026.',
+        'Reference crawler':
+          'يجمع فيديوهات القناة وشرائح المشاهد والصوت والنصوص المكتوبة في مخزن قابل للبحث لتحليل المنافسين. 4 قنوات و266 اختبارا. Reforms.ai، 2026.',
+        'News warehouse':
+          'خدمة بلغة Go تجمع الأخبار وتحتفظ بكل نسخة معدلة وتبني رسما بيانيا للأحداث عبر الزمن وملخصات وRSS. 283 اختبارا بلغة Go و108 بلغة Python. Reforms.ai، 2026.',
+        'AI video pipeline':
+          'فيديوهات عمودية قصيرة تُبنى بالكود عبر HyperFrames وFFmpeg بدقة 1080x1920 و30 إطارا في الثانية، مع بوابة أسلوب ومراجعات مستقلة وفحوص تلقائية لمستوى الصوت والاهتزاز والضبابية. 39 فيديو في 19 يوما، نُشر 8 منها على 7 منصات. Reforms.ai، 2026.',
+        'Motion CV site':
+          'سيرتي الذاتية على شكل موقع حركي production.suenot.com: العمل في Reforms.ai والمشاريع وطريقة إنتاج الفيديو.',
+        'gaia':
+          'يتحكم في Gemini وVeo 3 وNotebookLM عبر جلسة Camoufox مسجل الدخول فيها، دون مفاتيح API. 14 نجمة و214 اختبارا.',
+        'Content factory':
+          'من مقال إلى شرائح وصوت، ثم إلى ملف MP4 متزامن وترجمات وبيانات وصفية، وصولا إلى الرفع على YouTube (FFmpeg وWhisper وCamoufox).',
+        'AI form filling for websites':
+          'خدمة ذكاء اصطناعي كانت تملأ نماذج المواقع نيابة عن المستخدم. من يناير إلى مارس 2025. أُغلق المشروع.',
         aicommit:
           'أداة CLI بـ Rust لتوليد رسائل commit بالذكاء الاصطناعي عبر OpenRouter. 105 إصدارات، امتداد لـ VS Code، وآلية jail/blacklist.',
         'Codex Jev Router':
@@ -1898,6 +1999,7 @@ export const home = {
       },
     },
     contact: {
+      cv: 'السيرة الذاتية',
       eyebrow: '07. اتصل',
       heading: 'تواصل معي',
       intro:

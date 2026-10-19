@@ -7,6 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+### Added
+
+- List 2026 Reforms.ai work (publisher suite, reference crawler, news warehouse, AI video pipeline, content factory, gaia, motion CV site) and a closed 2025 AI form-filling project in all six languages, with a CV link (production.suenot.com) in Contact and the footer.
+
 ## [0.8.0] - 2026-09-26
 
 ### Added
