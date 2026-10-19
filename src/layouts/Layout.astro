@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import { type Locale, isRtl, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 import '../styles/global.css';
+import '../styles/motion.css';
 
 interface Props {
   title?: string;
@@ -63,5 +64,8 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
     </main>
     <Footer locale={locale} />
     <Analytics />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

@@ -1,0 +1,146 @@
+/*
+ * Motion layer. One vocabulary for CSS and for src/scripts/motion.ts:
+ * ease-out for anything entering, ease-in-out for anything travelling on
+ * screen, 200-900 ms per element, transform and opacity only.
+ *
+ * Contract: server-rendered content is never hidden by CSS alone. A
+ * "pending" state exists only after motion.ts has run, only for elements
+ * below the fold, and only when the visitor has not asked for reduced
+ * motion. With JS off or under prefers-reduced-motion everything is static
+ * and visible.
+ */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 800ms;
+  /* +1 moves toward the inline end in LTR; RTL flips it. */
+  --dir: 1;
+  --hud-cover: var(--terminal-bg);
+}
+
+[dir='rtl'] {
+  --dir: -1;
+}
+
+/* Pending states (set by motion.ts, removed when the element animates in). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal][data-motion='pending'],
+  [data-blog-post][data-motion='pending'] {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+
+  .terminal-kicker[data-motion='pending'] {
+    opacity: 0;
+  }
+
+  .terminal-kicker[data-motion='pending']::before {
+    transform: scaleX(0);
+  }
+
+  .terminal-heading[data-motion='pending'] {
+    opacity: 0;
+  }
+
+  .terminal-section[data-motion='pending']::before {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.4);
+  }
+
+  [data-draw][data-motion='pending'] > * {
+    opacity: 0;
+  }
+}
+
+.terminal-kicker::before {
+  transform-origin: left center;
+}
+
+[dir='rtl'] .terminal-kicker::before {
+  transform-origin: right center;
+}
+
+/* HUD scan: a beam with a hard accent edge sweeps down the heading; the solid
+   cover under the beam keeps the text unrevealed until the edge passes. */
+.terminal-heading {
+  position: relative;
+}
+
+.hud-scan {
+  position: absolute;
+  z-index: 1;
+  /* Wider than the clip set in motion.ts (0.3em), so no glyph edge peeks out. */
+  inset-inline: -0.4em;
+  inset-block-start: -0.2em;
+  block-size: calc(2 * (100% + 0.4em));
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(50% - 0.7em),
+    rgba(255, 59, 48, 0.07) calc(50% - 2px),
+    var(--terminal-accent) calc(50% - 2px),
+    var(--terminal-accent) 50%,
+    var(--hud-cover) 50%
+  );
+  will-change: transform;
+}
+
+/* Sparkline acquisition: a cover with a leading accent edge slides off the line. */
+.hud-wipe {
+  pointer-events: none;
+}
+
+.hud-wipe__cover {
+  fill: var(--hud-cover);
+}
+
+.hud-wipe__edge {
+  fill: var(--terminal-accent);
+}
+
+/* Cross-document view transitions between home, blog and articles. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: hud-vt-out 160ms var(--ease-out) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: hud-vt-in 380ms var(--ease-out) both;
+  }
+}
+
+.site-nav {
+  view-transition-name: site-nav;
+}
+
+@keyframes hud-vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes hud-vt-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+}
+
+@media print {
+  [data-motion='pending'] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hud-scan,
+  .hud-wipe {
+    display: none !important;
+  }
+}
