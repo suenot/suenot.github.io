@@ -154,7 +154,7 @@ const stats = [
     const introDelays = cubies.map(() => Math.random() * introSpread);
     const moves: [0 | 1 | 2, number, number][] = [[1, 1, 1], [0, -1, -1], [2, 1, 1], [1, -1, -1], [2, 0, 1], [0, 1, 1]];
 
-    // Colors come from the tokens in global.css.
+    // Colors come from the theme tokens in global.css and follow theme changes.
     const palette = { particle: '', accent: '', crosshair: '', glow: '' };
     function readPalette() {
       const style = getComputedStyle(document.documentElement);
@@ -282,13 +282,14 @@ const stats = [
     const resizeObserver = new ResizeObserver(resize);
     const intersectionObserver = new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? true; resume(); }, { threshold: .01 });
     const visibilityChange = () => resume();
+    const themeChange = () => { readPalette(); draw(performance.now()); };
     function cleanup() {
       stopped = true; cancelAnimationFrame(frameId); resizeObserver.disconnect(); intersectionObserver.disconnect();
       canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove); canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', pointerUp); canvas.removeEventListener('lostpointercapture', lostPointerCapture); canvas.removeEventListener('keydown', keyDown);
       motionPreference.removeEventListener('change', motionPreferenceChange);
-      document.removeEventListener('visibilitychange', visibilityChange); document.removeEventListener('astro:before-swap', cleanup); cubeCleanups.delete(root);
+      document.removeEventListener('visibilitychange', visibilityChange); document.removeEventListener('hud:theme', themeChange); document.removeEventListener('astro:before-swap', cleanup); cubeCleanups.delete(root);
     }
-    resizeObserver.observe(canvas); intersectionObserver.observe(root); document.addEventListener('visibilitychange', visibilityChange); document.addEventListener('astro:before-swap', cleanup, { once: true });
+    resizeObserver.observe(canvas); intersectionObserver.observe(root); document.addEventListener('visibilitychange', visibilityChange); document.addEventListener('hud:theme', themeChange); document.addEventListener('astro:before-swap', cleanup, { once: true });
     resize(); resume(); cubeCleanups.set(root, cleanup);
   }
 

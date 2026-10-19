@@ -5,6 +5,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.suenot.com',
   integrations: [tailwind(), sitemap()],
+  markdown: {
+    shikiConfig: {
+      // Dark stays inline (the default theme, also with JS off); light ships as
+      // --shiki-light variables that global.css applies under [data-theme='light'].
+      themes: { dark: 'github-dark', light: 'github-light' },
+      defaultColor: 'dark',
+    },
+  },
   build: {
     inlineStylesheets: 'always',
   },
