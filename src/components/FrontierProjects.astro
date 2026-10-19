@@ -1,21 +1,25 @@
 ---
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
+import { useTranslations } from '../i18n/ui';
+import { formatYears, type Years } from '../i18n/utils';
 
 interface Props { locale?: Locale; }
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).frontier;
+const ui = useTranslations(locale);
 
 interface FrontierProject {
   name: keyof typeof t.descs;
   tags: string[];
   url: string;
   signal: string;
+  years: Years;
 }
 
 const frontier: FrontierProject[] = [
-  { name: 'Marketmaker.cc', tags: ['Go', 'TypeScript', 'QuestDB', 'DuckDB'], url: 'https://marketmaker.cc', signal: 'MM/CORE-01' },
-  { name: 'Cmdop.com', tags: ['TypeScript', 'React', 'Next.js', 'AI Agents'], url: 'https://cmdop.com', signal: 'CMD/OPS-02' },
+  { name: 'Marketmaker.cc', tags: ['Go', 'TypeScript', 'QuestDB', 'DuckDB'], url: 'https://marketmaker.cc', signal: 'MM/CORE-01', years: [2024, 'now'] },
+  { name: 'Cmdop.com', tags: ['TypeScript', 'React', 'Next.js', 'AI Agents'], url: 'https://cmdop.com', signal: 'CMD/OPS-02', years: [2025, 'now'] },
 ];
 ---
 
@@ -35,7 +39,7 @@ const frontier: FrontierProject[] = [
         <a href={project.url} target="_blank" rel="noopener noreferrer" class="frontier__project" data-reveal>
           <div class="project__meta">
             <span>0{index + 1}</span>
-            <span>{project.signal}</span>
+            <span>{project.signal} / <bdi data-years>{formatYears(project.years, ui('projects.present'))}</bdi></span>
             <span class="project__status"><i aria-hidden="true"></i>{t.status_active}</span>
           </div>
           <div class="project__title-row">

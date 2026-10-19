@@ -24,3 +24,12 @@ export function getLocalizedPath(path: string, locale: Locale): string {
 export function getStaticLocalePaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
+
+/** Project years, not translated: [start], [start, end] or [start, 'now']. */
+export type Years = readonly [number] | readonly [number, number | 'now'];
+
+export function formatYears(years: Years, presentLabel: string): string {
+  const [start, end] = years;
+  if (end === undefined || end === start) return String(start);
+  return `${start}\u2013${end === 'now' ? presentLabel : end}`;
+}

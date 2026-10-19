@@ -9,6 +9,7 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ### Added
 
+- Show years on every project with a known date (Projects archive rows and both Frontier cards), for example "2017–present" or "2026", in all six languages. Dates come from the owner CVs, GitHub repository dates and the site text; projects with no source stay undated. The word "present" is localized in `src/i18n/ui.ts`.
 - List 2026 Reforms.ai work (publisher suite, reference crawler, news warehouse, AI video pipeline, content factory, gaia, motion CV site) and a closed 2025 AI form-filling project in all six languages, with a CV link (production.suenot.com) in Contact and the footer.
 - Add a motion layer without an animation library: the hero name rises letter by letter from a mask (CSS only, plays without JavaScript), the particle cube assembles from a scattered cloud, section headings reveal with a HUD scan, lists and cards reveal in staggered batches, stats count up once with reserved width, the activity calendar draws column by column, sparklines are acquired by a sweep, project rows and cards get restrained hover motion, blog search results glide to their new places (FLIP), and pages cross-fade with native view transitions. Content stays visible with JavaScript off and under reduced motion; horizontal movement mirrors in Arabic. Rules and hooks are in `docs/motion.md`.
 - Add a scroll readout to the navigation bar (section index, section code, depth), a depth hairline along its top edge and a cursor under the link of the section in view.

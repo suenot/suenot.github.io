@@ -1,12 +1,15 @@
 ---
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
+import { useTranslations } from '../i18n/ui';
+import { formatYears, type Years } from '../i18n/utils';
 
 interface Props {
   locale?: Locale;
 }
 const { locale = defaultLocale } = Astro.props;
 const t = getHome(locale).projects;
+const ui = useTranslations(locale);
 type CategoryKey = keyof typeof t.categories;
 type StatusKey = keyof typeof t.status;
 type DescKey = keyof typeof t.descs;
@@ -18,6 +21,7 @@ interface Project {
   url?: string;
   status: StatusKey;
   private?: boolean;
+  years?: Years;
 }
 
 interface ProjectGroup {
@@ -29,66 +33,66 @@ const projects: ProjectGroup[] = [
   {
     category: 'Trading',
     items: [
-      { name: 'ZigBolt', descKey: 'ZigBolt', tags: ['Zig', 'HFT', 'IPC'], url: 'https://github.com/suenot/zigbolt', status: 'active' },
-      { name: 'trading-ipc-bench', descKey: 'trading-ipc-bench', tags: ['Go', 'C++', 'Benchmarks'], url: 'https://github.com/suenot/trading-ipc-bench', status: 'active' },
-      { name: 'UI for Marketmaker.cc', descKey: 'UI for Marketmaker.cc', tags: ['React', 'TypeScript', 'Tailwind CSS'], url: 'https://ui.marketmaker.cc/', status: 'active' },
-      { name: 'Portfolio Optimizer', descKey: 'Portfolio Optimizer', tags: ['Next.js', 'Rust'], url: 'https://portfolio-optimizer.marketmaker.cc/', status: 'active' },
-      { name: 'MarketMaker Sandbox', descKey: 'MarketMaker Sandbox', tags: ['REST API', 'Trading', 'Testing'], url: 'https://sandbox.marketmaker.cc/', status: 'active' },
+      { name: 'ZigBolt', descKey: 'ZigBolt', tags: ['Zig', 'HFT', 'IPC'], url: 'https://github.com/suenot/zigbolt', status: 'active', years: [2026] },
+      { name: 'trading-ipc-bench', descKey: 'trading-ipc-bench', tags: ['Go', 'C++', 'Benchmarks'], url: 'https://github.com/suenot/trading-ipc-bench', status: 'active', years: [2026] },
+      { name: 'UI for Marketmaker.cc', descKey: 'UI for Marketmaker.cc', tags: ['React', 'TypeScript', 'Tailwind CSS'], url: 'https://ui.marketmaker.cc/', status: 'active', years: [2026] },
+      { name: 'Portfolio Optimizer', descKey: 'Portfolio Optimizer', tags: ['Next.js', 'Rust'], url: 'https://portfolio-optimizer.marketmaker.cc/', status: 'active', years: [2026] },
+      { name: 'MarketMaker Sandbox', descKey: 'MarketMaker Sandbox', tags: ['REST API', 'Trading', 'Testing'], url: 'https://sandbox.marketmaker.cc/', status: 'active', years: [2026] },
       { name: 'Trading Events Calendar', descKey: 'Trading Events Calendar', tags: ['Trading', 'Events'], url: 'https://events.marketmaker.cc/', status: 'active' },
-      { name: 'bingx-leverages', descKey: 'bingx-leverages', tags: ['Python', 'BingX'], url: 'https://github.com/suenot', status: 'active', private: true },
+      { name: 'bingx-leverages', descKey: 'bingx-leverages', tags: ['Python', 'BingX'], url: 'https://github.com/suenot', status: 'active', private: true, years: [2025] },
       { name: 'StockAPIs.com', descKey: 'StockAPIs.com', tags: ['Python', 'QuestDB', 'Parquet', 'Redis'], url: 'https://stockapis.com', status: 'wip', private: true },
-      { name: 'Profitmaker.cc', descKey: 'Profitmaker.cc', tags: ['TypeScript', 'React', 'Vite'], url: 'https://profitmaker.cc', status: 'wip' },
-      { name: 'Trender', descKey: 'Trender', tags: ['Python', 'Zig', 'DuckDB', 'Numba'], url: 'https://trender.marketmaker.cc', status: 'wip', private: true },
+      { name: 'Profitmaker.cc', descKey: 'Profitmaker.cc', tags: ['TypeScript', 'React', 'Vite'], url: 'https://profitmaker.cc', status: 'wip', years: [2017, 'now'] },
+      { name: 'Trender', descKey: 'Trender', tags: ['Python', 'Zig', 'DuckDB', 'Numba'], url: 'https://trender.marketmaker.cc', status: 'wip', private: true, years: [2025, 'now'] },
       { name: 'PolyTracker', descKey: 'PolyTracker', tags: ['TypeScript', 'Python'], url: 'https://github.com/suenot', status: 'concept', private: true },
-      { name: 'Avellaneda-Stoikov', descKey: 'Avellaneda-Stoikov', tags: ['Python', 'HFT', 'Market Making'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Frontrunner', descKey: 'Frontrunner', tags: ['Go', 'Rust', 'fasthttp', 'HFT'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'simple-fast-fix-scalper', descKey: 'simple-fast-fix-scalper', tags: ['C++', 'FIX Protocol', 'HFT'], url: 'https://github.com/suenot/simple-fast-fix-scalper', status: 'paused' },
-      { name: 'vector-arbitrage', descKey: 'vector-arbitrage', tags: ['C++', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'solana-arbitrage', descKey: 'solana-arbitrage', tags: ['Rust', 'Solana', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Listing Monitor', descKey: 'Listing Monitor', tags: ['Rust', 'Zig', 'gRPC', 'Listing'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Binance Listing Rocket', descKey: 'Binance Listing Rocket', tags: ['Python', 'Listing', 'Binance'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Calculate Listing Profit', descKey: 'Calculate Listing Profit', tags: ['Python', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Markowitz Portfolio', descKey: 'Markowitz Portfolio', tags: ['Python', 'Portfolio'], url: 'https://github.com/suenot', status: 'paused', private: true },
+      { name: 'Avellaneda-Stoikov', descKey: 'Avellaneda-Stoikov', tags: ['Python', 'HFT', 'Market Making'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
+      { name: 'Frontrunner', descKey: 'Frontrunner', tags: ['Go', 'Rust', 'fasthttp', 'HFT'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2024, 2026] },
+      { name: 'simple-fast-fix-scalper', descKey: 'simple-fast-fix-scalper', tags: ['C++', 'FIX Protocol', 'HFT'], url: 'https://github.com/suenot/simple-fast-fix-scalper', status: 'paused', years: [2025] },
+      { name: 'vector-arbitrage', descKey: 'vector-arbitrage', tags: ['C++', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
+      { name: 'solana-arbitrage', descKey: 'solana-arbitrage', tags: ['Rust', 'Solana', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
+      { name: 'Listing Monitor', descKey: 'Listing Monitor', tags: ['Rust', 'Zig', 'gRPC', 'Listing'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
+      { name: 'Binance Listing Rocket', descKey: 'Binance Listing Rocket', tags: ['Python', 'Listing', 'Binance'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
+      { name: 'Calculate Listing Profit', descKey: 'Calculate Listing Profit', tags: ['Python', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
+      { name: 'Markowitz Portfolio', descKey: 'Markowitz Portfolio', tags: ['Python', 'Portfolio'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
       { name: 'copytrader', descKey: 'copytrader', tags: ['TypeScript', 'gRPC'], url: 'https://github.com/suenot', status: 'paused', private: true },
       { name: 'Pair Arbitrage (Binance)', descKey: 'Pair Arbitrage (Binance)', tags: ['Python', 'Binance', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'deep-profitmaker', descKey: 'deep-profitmaker', tags: ['TypeScript', 'Deep.Foundation'], url: 'https://github.com/suenot/deep-profitmaker', status: 'paused' },
-      { name: 'Tinkoff ETF Balancer Bot', descKey: 'Tinkoff ETF Balancer Bot', tags: ['Python', 'Tinkoff'], url: 'https://github.com/suenot/tinkoff-invest-etf-balancer-bot', status: 'paused' },
-      { name: 'candle-trade-visualizer', descKey: 'candle-trade-visualizer', tags: ['TypeScript', 'Charts'], url: 'https://github.com/suenot/candle-trade-visualizer', status: 'paused' },
+      { name: 'deep-profitmaker', descKey: 'deep-profitmaker', tags: ['TypeScript', 'Deep.Foundation'], url: 'https://github.com/suenot/deep-profitmaker', status: 'paused', years: [2022, 2023] },
+      { name: 'Tinkoff ETF Balancer Bot', descKey: 'Tinkoff ETF Balancer Bot', tags: ['Python', 'Tinkoff'], url: 'https://github.com/suenot/tinkoff-invest-etf-balancer-bot', status: 'paused', years: [2022, 2025] },
+      { name: 'candle-trade-visualizer', descKey: 'candle-trade-visualizer', tags: ['TypeScript', 'Charts'], url: 'https://github.com/suenot/candle-trade-visualizer', status: 'paused', years: [2025] },
       { name: 'benchmarks-trading', descKey: 'benchmarks-trading', tags: ['Go', 'Benchmarks', 'HFT'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'market-manipulator-detection', descKey: 'market-manipulator-detection', tags: ['Rust', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'candle_aggregator_benchmark', descKey: 'candle_aggregator_benchmark', tags: ['Rust', 'OHLCV'], url: 'https://github.com/suenot/candle_aggregator_benchmark', status: 'paused' },
-      { name: 'hyperliquid-c', descKey: 'hyperliquid-c', tags: ['C', 'HFT', 'Hyperliquid'], url: 'https://github.com/suenot/hyperliquid-c', status: 'paused' },
-      { name: 'listingapis.com', descKey: 'listingapis.com', tags: ['Next.js', 'Postgres', 'Listing'], url: 'https://listingapis.com', status: 'active' },
-      { name: 'Warehouse', descKey: 'Warehouse', tags: ['Go', 'IPFS', 'Market Data'], url: 'https://warehouse.marketmaker.cc', status: 'active' },
+      { name: 'market-manipulator-detection', descKey: 'market-manipulator-detection', tags: ['Rust', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
+      { name: 'candle_aggregator_benchmark', descKey: 'candle_aggregator_benchmark', tags: ['Rust', 'OHLCV'], url: 'https://github.com/suenot/candle_aggregator_benchmark', status: 'paused', years: [2025] },
+      { name: 'hyperliquid-c', descKey: 'hyperliquid-c', tags: ['C', 'HFT', 'Hyperliquid'], url: 'https://github.com/suenot/hyperliquid-c', status: 'paused', years: [2025] },
+      { name: 'listingapis.com', descKey: 'listingapis.com', tags: ['Next.js', 'Postgres', 'Listing'], url: 'https://listingapis.com', status: 'active', years: [2025, 'now'] },
+      { name: 'Warehouse', descKey: 'Warehouse', tags: ['Go', 'IPFS', 'Market Data'], url: 'https://warehouse.marketmaker.cc', status: 'active', years: [2024, 'now'] },
       { name: 'Kimchi', descKey: 'Kimchi', tags: ['Postgres', 'Arbitrage', 'Spreads'], url: 'https://kimchi.marketmaker.cc', status: 'active' },
       { name: 'Metrics', descKey: 'Metrics', tags: ['FastAPI', 'Next.js', 'Indicators'], url: 'https://metrics.marketmaker.cc', status: 'active', private: true },
       { name: 'Visual', descKey: 'Visual', tags: ['React Flow', 'FastAPI', 'Next.js'], url: 'https://visual.marketmaker.cc', status: 'active', private: true },
-      { name: 'Popularity', descKey: 'Popularity', tags: ['Go', 'Next.js', 'Parsers'], url: 'https://popularity.marketmaker.cc', status: 'active', private: true },
+      { name: 'Popularity', descKey: 'Popularity', tags: ['Go', 'Next.js', 'Parsers'], url: 'https://popularity.marketmaker.cc', status: 'active', private: true, years: [2026] },
       { name: 'CRM', descKey: 'CRM', tags: ['Next.js', 'Postgres', 'Telegram'], url: 'https://crm.marketmaker.cc', status: 'wip', private: true },
     ],
   },
   {
     category: 'AI',
     items: [
-      { name: 'GPUs', descKey: 'GPUs', tags: ['Next.js', 'Elysia', 'Bun', 'Postgres'], url: 'https://gpu.marketmaker.cc', status: 'active' },
-      { name: 'Harness Analyzer', descKey: 'Harness Analyzer', tags: ['React', 'Hono', 'PostgreSQL'], url: 'https://harness-analyzer.marketmaker.cc/', status: 'active' },
+      { name: 'GPUs', descKey: 'GPUs', tags: ['Next.js', 'Elysia', 'Bun', 'Postgres'], url: 'https://gpu.marketmaker.cc', status: 'active', years: [2026] },
+      { name: 'Harness Analyzer', descKey: 'Harness Analyzer', tags: ['React', 'Hono', 'PostgreSQL'], url: 'https://harness-analyzer.marketmaker.cc/', status: 'active', years: [2026] },
       { name: 'Solver', descKey: 'Solver', tags: ['Python', 'FastAPI', 'MCP', 'Next.js'], url: 'https://solver.marketmaker.cc', status: 'active', private: true },
-      { name: 'Publisher suite', descKey: 'Publisher suite', tags: ['Python', 'Camoufox', 'SQLite'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'Reference crawler', descKey: 'Reference crawler', tags: ['Python', 'FastAPI', 'yt-dlp', 'SQLite FTS5'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'News warehouse', descKey: 'News warehouse', tags: ['Go', 'PostgreSQL', 'Docker'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'AI video pipeline', descKey: 'AI video pipeline', tags: ['HyperFrames', 'FFmpeg', 'Python'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'Motion CV site', descKey: 'Motion CV site', tags: ['Astro', 'Motion design'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'gaia', descKey: 'gaia', tags: ['Python', 'Camoufox', 'Gemini', 'Veo 3'], url: 'https://github.com/suenot/gaia', status: 'active' },
-      { name: 'Content factory', descKey: 'Content factory', tags: ['FFmpeg', 'Whisper', 'Python', 'Camoufox'], url: 'https://production.suenot.com', status: 'active' },
-      { name: 'aicommit', descKey: 'aicommit', tags: ['Rust', 'CLI', 'LLM'], url: 'https://github.com/suenot/aicommit', status: 'active' },
-      { name: 'Codex Jev Router', descKey: 'Codex Jev Router', tags: ['Codex', 'Node.js', 'Model Routing'], url: 'https://github.com/suenot/codex-jev-router', status: 'active' },
-      { name: 'Codex Jev Router Benchmarks', descKey: 'Codex Jev Router Benchmarks', tags: ['Codex', 'Django', 'Benchmarks'], url: 'https://github.com/suenot/codex-jev-router-benchmarks', status: 'active' },
+      { name: 'Publisher suite', descKey: 'Publisher suite', tags: ['Python', 'Camoufox', 'SQLite'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'Reference crawler', descKey: 'Reference crawler', tags: ['Python', 'FastAPI', 'yt-dlp', 'SQLite FTS5'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'News warehouse', descKey: 'News warehouse', tags: ['Go', 'PostgreSQL', 'Docker'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'AI video pipeline', descKey: 'AI video pipeline', tags: ['HyperFrames', 'FFmpeg', 'Python'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'Motion CV site', descKey: 'Motion CV site', tags: ['Astro', 'Motion design'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'gaia', descKey: 'gaia', tags: ['Python', 'Camoufox', 'Gemini', 'Veo 3'], url: 'https://github.com/suenot/gaia', status: 'active', years: [2026] },
+      { name: 'Content factory', descKey: 'Content factory', tags: ['FFmpeg', 'Whisper', 'Python', 'Camoufox'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
+      { name: 'aicommit', descKey: 'aicommit', tags: ['Rust', 'CLI', 'LLM'], url: 'https://github.com/suenot/aicommit', status: 'active', years: [2024, 'now'] },
+      { name: 'Codex Jev Router', descKey: 'Codex Jev Router', tags: ['Codex', 'Node.js', 'Model Routing'], url: 'https://github.com/suenot/codex-jev-router', status: 'active', years: [2026] },
+      { name: 'Codex Jev Router Benchmarks', descKey: 'Codex Jev Router Benchmarks', tags: ['Codex', 'Django', 'Benchmarks'], url: 'https://github.com/suenot/codex-jev-router-benchmarks', status: 'active', years: [2026] },
       { name: 'SDKRouter', descKey: 'SDKRouter', tags: ['Python', 'Pydantic', 'OpenAI'], url: 'https://github.com/suenot', status: 'active', private: true },
       { name: 'DjangoCFG', descKey: 'DjangoCFG', tags: ['Python', 'Django', 'Pydantic AI'], url: 'https://djangocfg.com', status: 'active', private: true },
-      { name: 'OpenScreenshot', descKey: 'OpenScreenshot', tags: ['Swift', 'macOS', 'LLM'], url: 'https://openscreenshot.suenot.com/', status: 'active' },
+      { name: 'OpenScreenshot', descKey: 'OpenScreenshot', tags: ['Swift', 'macOS', 'LLM'], url: 'https://openscreenshot.suenot.com/', status: 'active', years: [2026] },
       { name: 'cmdop-claude', descKey: 'cmdop-claude', tags: ['Python', 'Claude', 'PyPI'], url: 'https://pypi.org/project/cmdop-claude/', status: 'active' },
-      { name: 'local-llm-proxy', descKey: 'local-llm-proxy', tags: ['Python', 'MCP', 'LLM'], url: 'https://github.com/suenot', status: 'active', private: true },
-      { name: 'Open Agent Manager', descKey: 'Open Agent Manager', tags: ['Tauri', 'Rust', 'React'], url: 'http://open-agent-manager.suenot.com/', status: 'paused' },
+      { name: 'local-llm-proxy', descKey: 'local-llm-proxy', tags: ['Python', 'MCP', 'LLM'], url: 'https://github.com/suenot', status: 'active', private: true, years: [2026] },
+      { name: 'Open Agent Manager', descKey: 'Open Agent Manager', tags: ['Tauri', 'Rust', 'React'], url: 'http://open-agent-manager.suenot.com/', status: 'paused', years: [2026] },
     ],
   },
   {
@@ -96,51 +100,51 @@ const projects: ProjectGroup[] = [
     items: [
       { name: 'asdf', descKey: 'asdf', tags: ['Go', 'Next.js', 'Postgres'], url: 'https://asdf.marketmaker.cc', status: 'active' },
       { name: 'Pocket', descKey: 'Pocket', tags: ['Next.js', 'Go', 'SQLite'], url: 'https://pocket.marketmaker.cc/', status: 'active' },
-      { name: 'Vacation / Стыковка', descKey: 'Vacation / Стыковка', tags: ['Next.js', 'Elysia', 'PostgreSQL'], url: 'https://vacation.marketmaker.cc/', status: 'active' },
+      { name: 'Vacation / Стыковка', descKey: 'Vacation / Стыковка', tags: ['Next.js', 'Elysia', 'PostgreSQL'], url: 'https://vacation.marketmaker.cc/', status: 'active', years: [2026] },
       { name: 'SyncSong', descKey: 'SyncSong', tags: ['Vue', 'Vite', 'WebSocket'], url: 'https://syncsong.marketmaker.cc/', status: 'active' },
-      { name: 'Slippage', descKey: 'Slippage', tags: ['Vite', 'Paper.js', 'Bun', 'WebSocket'], url: 'https://slippage.marketmaker.cc/', status: 'active' },
-      { name: 'Curved Games', descKey: 'Curved Games', tags: ['JavaScript', 'Canvas'], url: 'https://curves.marketmaker.cc/', status: 'active' },
+      { name: 'Slippage', descKey: 'Slippage', tags: ['Vite', 'Paper.js', 'Bun', 'WebSocket'], url: 'https://slippage.marketmaker.cc/', status: 'active', years: [2026] },
+      { name: 'Curved Games', descKey: 'Curved Games', tags: ['JavaScript', 'Canvas'], url: 'https://curves.marketmaker.cc/', status: 'active', years: [2026] },
       { name: 'auth-service', descKey: 'auth-service', tags: ['Go', 'Next.js', 'SSO', 'Traefik'], url: 'https://auth.marketmaker.cc', status: 'active' },
       { name: 'Backups', descKey: 'Backups', tags: ['Bun', 'restic', 'Infra'], url: 'https://backups.marketmaker.cc', status: 'active', private: true },
       { name: 'Researcher', descKey: 'Researcher', tags: ['Node.js', 'Meilisearch', 'Scrapers'], url: 'https://researcher.marketmaker.cc', status: 'active' },
-      { name: 'Hlider', descKey: 'Hlider', tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'], url: 'https://hlider.klava.org/', status: 'active' },
-      { name: 'karabiner-visualizer', descKey: 'karabiner-visualizer', tags: ['TypeScript', 'React', 'Karabiner', 'macOS'], url: 'https://karabiner-visualizer.vercel.app/', status: 'active' },
-      { name: 'distract-blocker', descKey: 'distract-blocker', tags: ['JavaScript', 'Chrome Extension', 'MV3', 'i18n'], url: 'https://distract-blocker.marketmaker.cc', status: 'active' },
-      { name: 'MacChill', descKey: 'MacChill', tags: ['Swift', 'SwiftUI', 'macOS'], url: 'https://github.com/suenot/macchill', status: 'active' },
-      { name: 'Sanctum', descKey: 'Sanctum', tags: ['TypeScript', 'AES-256-GCM'], url: 'https://github.com/suenot/sanctum', status: 'active' },
-      { name: 'OpenLastPass', descKey: 'OpenLastPass', tags: ['Rust', 'React', 'Tauri'], url: 'https://github.com/suenot', status: 'wip', private: true },
-      { name: 'Vasya', descKey: 'Vasya', tags: ['TypeScript', 'Rust', 'Telegram'], url: 'https://github.com/suenot/vasya', status: 'paused' },
-      { name: 'macpurge', descKey: 'macpurge', tags: ['TypeScript', 'macOS'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'deadline-in-days', descKey: 'deadline-in-days', tags: ['TypeScript'], url: 'https://github.com/suenot/deadline-in-days', status: 'paused' },
+      { name: 'Hlider', descKey: 'Hlider', tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'], url: 'https://hlider.klava.org/', status: 'active', years: [2013, 'now'] },
+      { name: 'karabiner-visualizer', descKey: 'karabiner-visualizer', tags: ['TypeScript', 'React', 'Karabiner', 'macOS'], url: 'https://karabiner-visualizer.vercel.app/', status: 'active', years: [2026] },
+      { name: 'distract-blocker', descKey: 'distract-blocker', tags: ['JavaScript', 'Chrome Extension', 'MV3', 'i18n'], url: 'https://distract-blocker.marketmaker.cc', status: 'active', years: [2026] },
+      { name: 'MacChill', descKey: 'MacChill', tags: ['Swift', 'SwiftUI', 'macOS'], url: 'https://github.com/suenot/macchill', status: 'active', years: [2026] },
+      { name: 'Sanctum', descKey: 'Sanctum', tags: ['TypeScript', 'AES-256-GCM'], url: 'https://github.com/suenot/sanctum', status: 'active', years: [2026] },
+      { name: 'OpenLastPass', descKey: 'OpenLastPass', tags: ['Rust', 'React', 'Tauri'], url: 'https://github.com/suenot', status: 'wip', private: true, years: [2026] },
+      { name: 'Vasya', descKey: 'Vasya', tags: ['TypeScript', 'Rust', 'Telegram'], url: 'https://github.com/suenot/vasya', status: 'paused', years: [2026] },
+      { name: 'macpurge', descKey: 'macpurge', tags: ['TypeScript', 'macOS'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2026] },
+      { name: 'deadline-in-days', descKey: 'deadline-in-days', tags: ['TypeScript'], url: 'https://github.com/suenot/deadline-in-days', status: 'paused', years: [2025] },
     ],
   },
   {
     category: 'Contract & Freelance',
     items: [
-      { name: 'Deep.foundation & Deep.memo', descKey: 'Deep.foundation & Deep.memo', tags: ['Node.js', 'React', 'GraphQL', 'Hasura'], url: 'https://deep.foundation', status: 'paused' },
-      { name: 'Dolphin.bi', descKey: 'Dolphin.bi', tags: ['Vue', 'Python'], url: 'https://www.crunchbase.com/organization/dolphin-bi', status: 'rip' },
-      { name: 'Shakeapp', descKey: 'Shakeapp', tags: ['React', 'Node.js', 'GraphQL', 'Hasura'], url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app', status: 'rip' },
-      { name: 'centrum-air.com', descKey: 'centrum-air.com', tags: ['React', 'Next.js'], url: 'https://centrum-air.com', status: 'left' },
+      { name: 'Deep.foundation & Deep.memo', descKey: 'Deep.foundation & Deep.memo', tags: ['Node.js', 'React', 'GraphQL', 'Hasura'], url: 'https://deep.foundation', status: 'paused', years: [2022, 'now'] },
+      { name: 'Dolphin.bi', descKey: 'Dolphin.bi', tags: ['Vue', 'Python'], url: 'https://www.crunchbase.com/organization/dolphin-bi', status: 'rip', years: [2016, 2018] },
+      { name: 'Shakeapp', descKey: 'Shakeapp', tags: ['React', 'Node.js', 'GraphQL', 'Hasura'], url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app', status: 'rip', years: [2020, 2022] },
+      { name: 'centrum-air.com', descKey: 'centrum-air.com', tags: ['React', 'Next.js'], url: 'https://centrum-air.com', status: 'left', years: [2023] },
     ],
   },
   {
     category: 'Graveyard',
     items: [
-      { name: 'Kupi.network', descKey: 'Kupi.network', tags: ['React', 'Vue', 'MobX'], url: 'https://github.com/suenot/kupi-terminal', status: 'rip' },
-      { name: 'Kupi.ru', descKey: 'Kupi.ru', tags: ['PHP', 'JavaScript'], url: 'https://github.com/suenot', status: 'rip' },
-      { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip' },
-      { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused' },
-      { name: 'Bursa DEX', descKey: 'Bursa DEX', tags: ['Solidity', 'React', 'Django'], status: 'rip' },
-      { name: 'de-core.net', descKey: 'de-core.net', tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'], url: 'https://github.com/suenot', status: 'rip' },
-      { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip' },
-      { name: 'AI form filling for websites', descKey: 'AI form filling for websites', tags: ['AI', 'Automation'], status: 'rip' },
+      { name: 'Kupi.network', descKey: 'Kupi.network', tags: ['React', 'Vue', 'MobX'], url: 'https://github.com/suenot/kupi-terminal', status: 'rip', years: [2018, 2019] },
+      { name: 'Kupi.ru', descKey: 'Kupi.ru', tags: ['PHP', 'JavaScript'], url: 'https://github.com/suenot', status: 'rip', years: [2013] },
+      { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip', years: [2019, 2020] },
+      { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused', years: [2024, 2025] },
+      { name: 'Bursa DEX', descKey: 'Bursa DEX', tags: ['Solidity', 'React', 'Django'], status: 'rip', years: [2017, 2018] },
+      { name: 'de-core.net', descKey: 'de-core.net', tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'], url: 'https://github.com/suenot', status: 'rip', years: [2010, 2016] },
+      { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip', years: [2016] },
+      { name: 'AI form filling for websites', descKey: 'AI form filling for websites', tags: ['AI', 'Automation'], status: 'rip', years: [2025] },
     ],
   },
   {
     category: 'Publications',
     items: [
-      { name: 'The Algotrading Book', descKey: 'The Algotrading Book', tags: ['Content', 'Algotrading'], url: 'https://the-algotrading-book-website.vercel.app/', status: 'active' },
-      { name: 'Mathematics for Trading', descKey: 'Mathematics for Trading', tags: ['Book', 'Math', 'Trading'], url: 'https://github.com/suenot/mathematics-learning-for-trading', status: 'wip' },
+      { name: 'The Algotrading Book', descKey: 'The Algotrading Book', tags: ['Content', 'Algotrading'], url: 'https://the-algotrading-book-website.vercel.app/', status: 'active', years: [2026] },
+      { name: 'Mathematics for Trading', descKey: 'Mathematics for Trading', tags: ['Book', 'Math', 'Trading'], url: 'https://github.com/suenot/mathematics-learning-for-trading', status: 'wip', years: [2025, 'now'] },
       { name: 'Blog on Marketmaker.cc', descKey: 'Blog on Marketmaker.cc', tags: ['Blog', 'Backtesting', 'Analytics'], url: 'https://marketmaker.cc/en/blog/1/', status: 'active' },
     ],
   },
@@ -179,7 +183,7 @@ const statusStyles: Record<StatusKey, string> = {
             <span>{String(group.items.length).padStart(2, '0')} RECORDS</span>
           </header>
           <div class="project-group__columns" aria-hidden="true" data-reveal>
-            <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE</span>
+            <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE / YEARS</span>
           </div>
           <ol>
             {group.items.map((project, projectIndex) => {
@@ -194,7 +198,10 @@ const statusStyles: Record<StatusKey, string> = {
                   </div>
                   <p>{t.descs[project.descKey]}</p>
                   <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
-                  <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
+                  <div class="project-row__state">
+                    <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
+                    {project.years && <bdi class="project-row__years" data-years>{formatYears(project.years, ui('projects.present'))}</bdi>}
+                  </div>
                   {project.url && <span class="project-row__arrow" aria-hidden="true">↗</span>}
                 </Row>
               </li>
@@ -220,7 +227,7 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group__header > span { color: #ff3b30; font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group__header > span:last-child { color: var(--terminal-muted, #747a75); }
   .project-group__header h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.6rem, 2.8vw, 3rem); font-weight: 750; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
-  .project-group__columns, .project-row { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 5rem 1rem; gap: 1.2rem; }
+  .project-group__columns, .project-row { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 6.5rem 1rem; gap: 1.2rem; }
   .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: #5d625e; font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group li { border-block-end: 1px solid var(--terminal-line, #303431); }
   .project-row { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
@@ -230,6 +237,8 @@ const statusStyles: Record<StatusKey, string> = {
   .project-row > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
   .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: var(--terminal-muted, #747a75); font: .52rem/1.35 var(--font-mono, monospace); }
   .project-row__tags span::before { content: "["; margin-inline-end: .2rem; }.project-row__tags span::after { content: "]"; margin-inline-start: .2rem; }
+  .project-row__state { display: grid; gap: .35rem; justify-items: start; }
+  .project-row__years { color: var(--terminal-fg, #e7e9e3); font: .52rem/1.3 var(--font-mono, monospace); font-variant-numeric: tabular-nums; letter-spacing: .04em; opacity: .75; }
   .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
   .project-row__status::before { content: ""; inline-size: .3rem; block-size: .3rem; border: 1px solid currentColor; }
   .status--active::before { border: 0; background: #4af626; }.status--wip { color: #ff3b30; }.status--rip { opacity: .55; }
@@ -252,9 +261,9 @@ const statusStyles: Record<StatusKey, string> = {
   }
   @media (max-width: 1050px) {
     .project-group__columns { display: none; }
-    .project-row { grid-template-columns: minmax(12rem, .8fr) 1.2fr 5rem 1rem; }
+    .project-row { grid-template-columns: minmax(12rem, .8fr) 1.2fr 6.5rem 1rem; }
     .project-row__tags { grid-column: 2; }
-    .project-row__status { grid-column: 3; grid-row: 1; }
+    .project-row__state { grid-column: 3; grid-row: 1; }
   }
   @media (max-width: 760px) {
     .projects__header { grid-template-columns: 1fr; }
@@ -262,7 +271,7 @@ const statusStyles: Record<StatusKey, string> = {
     .project-row__name { grid-column: 1; }
     .project-row > p { grid-column: 1 / -1; }
     .project-row__tags { grid-column: 1; }
-    .project-row__status { grid-column: 2; grid-row: 1; }
+    .project-row__state { grid-column: 2; grid-row: 1; justify-items: end; }
     .project-row__arrow { grid-column: 2; grid-row: 3; align-self: end; opacity: 1; }
   }
 </style>

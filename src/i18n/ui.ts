@@ -2,6 +2,7 @@ import type { Locale } from './config';
 
 export const ui = {
   en: {
+    'projects.present': 'present',
     'nav.about': 'About',
     'nav.tech': 'Tech',
     'nav.frontier': 'Frontier',
@@ -48,6 +49,7 @@ export const ui = {
     'footer.scroll_top': 'Back to top',
   },
   ru: {
+    'projects.present': 'н.в.',
     'nav.about': 'Обо мне',
     'nav.tech': 'Технологии',
     'nav.frontier': 'Флагманы',
@@ -94,6 +96,7 @@ export const ui = {
     'footer.scroll_top': 'Наверх',
   },
   zh: {
+    'projects.present': '至今',
     'nav.about': '关于',
     'nav.tech': '技术栈',
     'nav.frontier': '旗舰',
@@ -140,6 +143,7 @@ export const ui = {
     'footer.scroll_top': '返回顶部',
   },
   ko: {
+    'projects.present': '현재',
     'nav.about': '소개',
     'nav.tech': '기술 스택',
     'nav.frontier': '주요 프로젝트',
@@ -186,6 +190,7 @@ export const ui = {
     'footer.scroll_top': '맨 위로',
   },
   ja: {
+    'projects.present': '現在',
     'nav.about': '概要',
     'nav.tech': '技術スタック',
     'nav.frontier': '主要プロジェクト',
@@ -232,6 +237,7 @@ export const ui = {
     'footer.scroll_top': 'トップへ',
   },
   ar: {
+    'projects.present': 'حتى الآن',
     'nav.about': 'عن',
     'nav.tech': 'التقنيات',
     'nav.frontier': 'المشاريع الرائدة',
