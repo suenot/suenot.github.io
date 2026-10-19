@@ -14,9 +14,8 @@ import { defaultLocale } from '../i18n/config';
 const locale = defaultLocale;
 ---
 
-<Layout locale={locale}>
+<Layout locale={locale} footerCta={false}>
   <Hero locale={locale} />
-  <Contributions locale={locale} />
   <About locale={locale} />
   <Algotrading locale={locale} />
   <TechStack locale={locale} />
@@ -24,4 +23,5 @@ const locale = defaultLocale;
   <Projects locale={locale} />
   <Communities locale={locale} />
   <Contact locale={locale} />
+  <Contributions locale={locale} />
 </Layout>

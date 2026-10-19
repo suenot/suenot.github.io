@@ -18,6 +18,8 @@ interface Props {
   modifiedDate?: Date;
   tags?: string[];
   availableLocales?: readonly Locale[];
+  /** The footer contact block; off where the page has its own Contact section. */
+  footerCta?: boolean;
 }
 
 const {
@@ -30,6 +32,7 @@ const {
   modifiedDate,
   tags,
   availableLocales = locales,
+  footerCta = true,
 } = Astro.props;
 
 const dir = isRtl(locale) ? 'rtl' : 'ltr';
@@ -62,7 +65,7 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
     <main id="main-content">
       <slot />
     </main>
-    <Footer locale={locale} />
+    <Footer locale={locale} cta={footerCta} />
     <Analytics />
     <script>
       import '../scripts/motion';

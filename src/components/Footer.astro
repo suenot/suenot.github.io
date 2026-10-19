@@ -4,9 +4,11 @@ import { useTranslations } from '../i18n/ui';
 
 interface Props {
   locale?: Locale;
+  /** Contact block; the homepage hides it because its Contact section is the one contact block. */
+  cta?: boolean;
 }
 
-const { locale = defaultLocale } = Astro.props;
+const { locale = defaultLocale, cta = true } = Astro.props;
 const t = useTranslations(locale);
 const year = new Date().getFullYear();
 const prefix = locale === defaultLocale ? '' : `/${locale}`;
@@ -32,7 +34,7 @@ const socialLinks = [
 
 <footer class="site-footer">
   <div class="footer-shell">
-    <div class="footer-primary">
+    {cta && <div class="footer-primary">
       <div>
         <div class="terminal-label">{t('footer.status_available')}</div>
         <div class="footer-wordmark display-type" aria-hidden="true">SUENOT</div>
@@ -43,7 +45,7 @@ const socialLinks = [
           SUENOT@GMAIL.COM <span aria-hidden="true">→</span>
         </a>
       </div>
-    </div>
+    </div>}
 
     <div class="footer-index">
       <nav aria-label={t('footer.col_sitemap')}>
