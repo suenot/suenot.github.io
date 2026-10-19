@@ -13,6 +13,37 @@
   --terminal-line: #292e2a;
   --terminal-line-strong: #424943;
   --terminal-accent: #ff3b30;
+  --terminal-accent-hover: #ff655d;
+  --terminal-surface: #0b0d0c;
+  --terminal-surface-2: #111411;
+  --terminal-hover: #151816;
+  --terminal-code-bg: #080a09;
+  --terminal-code-ink: #ff8b84;
+  --terminal-footer: #070908;
+  --terminal-faint: #5d625e;
+  --terminal-signal: #4af626;
+  /* Channels for translucent tints: rgb(var(--ink-rgb) / 0.14). */
+  --ink-rgb: 231 233 227;
+  --accent-rgb: 255 59 48;
+  --bg-rgb: 9 11 10;
+  --surface-rgb: 11 13 12;
+  --glint-rgb: 255 255 255;
+  /* Lowest alpha translucent ink / accent text may use; lifted in the light theme for contrast. */
+  --ink-floor: 0;
+  --accent-floor: 0;
+  --scanline: rgba(0, 0, 0, 0.12);
+  --backdrop: rgba(3, 4, 3, 0.78);
+  /* Contribution calendar, empty to busiest. */
+  --cal-0: #222622;
+  --cal-1: #235e2c;
+  --cal-2: #2f8a3b;
+  --cal-3: #43b34f;
+  --cal-4: #70df61;
+  /* Particle cube (read by Hero.astro on load and on theme change). */
+  --cube-particle: #e7e9e3;
+  --cube-accent: #ff493f;
+  --cube-crosshair: rgba(145, 151, 146, 0.1);
+  --cube-glow: rgba(255, 59, 48, 0.65);
   --terminal-max: 100rem;
   --terminal-header: 4.5rem;
   --font-display: "DIN Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Noto Sans Condensed", "Liberation Sans Narrow", ui-sans-serif, system-ui, sans-serif;
@@ -37,7 +68,7 @@ body {
   margin: 0;
   overflow-x: clip;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(rgb(var(--glint-rgb) / 0.012) 1px, transparent 1px),
     var(--terminal-bg);
   background-size: 100% 4px;
   color: var(--terminal-ink);
@@ -58,8 +89,8 @@ body::before {
     0deg,
     transparent 0,
     transparent 2px,
-    rgba(0, 0, 0, 0.12) 2px,
-    rgba(0, 0, 0, 0.12) 4px
+    var(--scanline) 2px,
+    var(--scanline) 4px
   );
   opacity: 0.42;
 }

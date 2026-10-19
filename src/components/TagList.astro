@@ -39,7 +39,7 @@ const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b, locale))
   .tag-index {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-top: 1px solid rgba(231, 233, 227, 0.14);
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
   }
 
   .tag-index__item {
@@ -48,9 +48,9 @@ const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b, locale))
     gap: 0.65rem;
     align-items: baseline;
     min-width: 0;
-    border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+    border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
     padding: 0.75rem 0.7rem;
-    color: rgba(231, 233, 227, 0.55);
+    color: rgb(var(--ink-rgb) / max(0.55, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.7rem;
     letter-spacing: 0.06em;
@@ -60,28 +60,28 @@ const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b, locale))
   }
 
   .tag-index__item:nth-child(odd) {
-    border-inline-end: 1px solid rgba(231, 233, 227, 0.14);
+    border-inline-end: 1px solid rgb(var(--ink-rgb) / 0.14);
   }
 
   .tag-index__item:hover,
   .tag-index__item--active {
-    background: rgba(231, 233, 227, 0.045);
-    color: #e7e9e3;
+    background: rgb(var(--ink-rgb) / 0.045);
+    color: var(--terminal-ink);
   }
 
   .tag-index__item--active {
-    box-shadow: inset 2px 0 #ff3b30;
+    box-shadow: inset 2px 0 var(--terminal-accent);
   }
 
   .tag-index__item:focus-visible {
     position: relative;
     z-index: 1;
-    outline: 1px solid #ff3b30;
+    outline: 1px solid var(--terminal-accent);
     outline-offset: -2px;
   }
 
   .tag-index__marker {
-    color: rgba(231, 233, 227, 0.25);
+    color: rgb(var(--ink-rgb) / max(0.25, var(--ink-floor)));
     font-variant-numeric: tabular-nums;
   }
 

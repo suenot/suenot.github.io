@@ -69,13 +69,13 @@ const communities: Community[] = [
   .communities__header > p:last-child { margin-block-start: 5rem; color: var(--terminal-muted, #747a75); font: .57rem/1.7 var(--font-mono, monospace); letter-spacing: .1em; }
   .communities__list a { display: grid; grid-template-columns: 2.5rem minmax(12rem, .8fr) 1.2fr auto; gap: 1.25rem; align-items: center; min-block-size: 9.5rem; padding: 1.5rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: inherit; text-decoration: none; }
   .communities__list a:last-child { border-block-end: 0; }
-  .community__index { color: #ff3b30; font: .6rem/1 var(--font-mono, monospace); }
+  .community__index { color: var(--terminal-accent); font: .6rem/1 var(--font-mono, monospace); }
   .community__identity > span { color: var(--terminal-muted, #747a75); font: .54rem/1 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
   .community__identity h3 { margin-block-start: .6rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.25rem, 2.2vw, 2.25rem); font-weight: 700; letter-spacing: -.035em; line-height: 1; }
   .communities__list a > p { max-inline-size: 55ch; color: var(--terminal-muted, #8b908c); font-size: .75rem; line-height: 1.55; }
-  .community__arrow { color: #ff3b30; font: 1.25rem/1 var(--font-mono, monospace); }
-  .communities__list a:hover, .communities__list a:focus-visible { background: #151816; }
-  .communities__list a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .community__arrow { color: var(--terminal-accent); font: 1.25rem/1 var(--font-mono, monospace); }
+  .communities__list a:hover, .communities__list a:focus-visible { background: var(--terminal-hover); }
+  .communities__list a:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -3px; }
   .communities__list a { transition: background-color 160ms ease; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .community__arrow { transition: transform 240ms var(--ease-out); }

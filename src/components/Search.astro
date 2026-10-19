@@ -39,20 +39,20 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
     align-items: center;
     height: 3rem;
     min-width: 0;
-    border: 1px solid rgba(231, 233, 227, 0.2);
-    background: rgba(231, 233, 227, 0.025);
-    color: #e7e9e3;
+    border: 1px solid rgb(var(--ink-rgb) / 0.2);
+    background: rgb(var(--ink-rgb) / 0.025);
+    color: var(--terminal-ink);
     transition: border-color 180ms ease, background-color 180ms ease;
   }
 
   .terminal-search:focus-within {
-    border-color: rgba(255, 59, 48, 0.82);
-    background: rgba(231, 233, 227, 0.045);
+    border-color: rgb(var(--accent-rgb) / 0.82);
+    background: rgb(var(--ink-rgb) / 0.045);
   }
 
   .terminal-search__prompt {
     padding-inline-start: 1rem;
-    color: #ff3b30;
+    color: var(--terminal-accent);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 1rem;
   }
@@ -64,14 +64,14 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
     outline: 0;
     background: transparent;
     padding: 0.85rem 0.8rem;
-    color: #e7e9e3;
+    color: var(--terminal-ink);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.78rem;
     letter-spacing: 0.06em;
   }
 
   .terminal-search__input::placeholder {
-    color: rgba(231, 233, 227, 0.38);
+    color: rgb(var(--ink-rgb) / max(0.38, var(--ink-floor)));
     opacity: 1;
   }
 
@@ -82,10 +82,10 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
   .terminal-search__clear {
     align-self: stretch;
     border: 0;
-    border-inline-start: 1px solid rgba(231, 233, 227, 0.14);
+    border-inline-start: 1px solid rgb(var(--ink-rgb) / 0.14);
     background: transparent;
     padding: 0 0.8rem;
-    color: rgba(231, 233, 227, 0.48);
+    color: rgb(var(--ink-rgb) / max(0.48, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.58rem;
     letter-spacing: 0.1em;
@@ -93,11 +93,11 @@ const { placeholder, noResultsText, clearLabel, resultsText } = Astro.props;
   }
 
   .terminal-search__clear:hover {
-    color: #ff3b30;
+    color: var(--terminal-accent);
   }
 
   .terminal-search__clear:focus-visible {
-    outline: 1px solid #ff3b30;
+    outline: 1px solid var(--terminal-accent);
     outline-offset: -3px;
   }
 </style>

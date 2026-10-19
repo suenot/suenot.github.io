@@ -144,7 +144,7 @@ const breadcrumbLd = {
       padding-top: clamp(6.5rem, 10vw, 9rem);
       padding-bottom: clamp(5rem, 10vw, 9rem);
       overflow: clip;
-      background: #0b0d0c;
+      background: var(--terminal-surface);
     }
 
     .article-shell::before {
@@ -160,8 +160,8 @@ const breadcrumbLd = {
         0deg,
         transparent 0,
         transparent 3px,
-        rgba(231, 233, 227, 0.025) 3px,
-        rgba(231, 233, 227, 0.025) 4px
+        rgb(var(--ink-rgb) / 0.025) 3px,
+        rgb(var(--ink-rgb) / 0.025) 4px
       );
     }
 
@@ -176,7 +176,7 @@ const breadcrumbLd = {
       align-items: center;
       gap: 0.65rem;
       margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
-      color: rgba(231, 233, 227, 0.52);
+      color: rgb(var(--ink-rgb) / max(0.52, var(--ink-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.68rem;
       letter-spacing: 0.12em;
@@ -186,15 +186,15 @@ const breadcrumbLd = {
     }
 
     .article-back span:first-child {
-      color: #ff3b30;
+      color: var(--terminal-accent);
     }
 
     .article-back:hover {
-      color: #e7e9e3;
+      color: var(--terminal-ink);
     }
 
     .article-back:focus-visible {
-      outline: 1px solid #ff3b30;
+      outline: 1px solid var(--terminal-accent);
       outline-offset: 5px;
     }
 
@@ -202,7 +202,7 @@ const breadcrumbLd = {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem);
       column-gap: clamp(2rem, 6vw, 7rem);
-      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
       padding-top: 1rem;
     }
 
@@ -211,7 +211,7 @@ const breadcrumbLd = {
       align-items: center;
       gap: 0.75rem;
       min-width: 0;
-      color: rgba(255, 59, 48, 0.72);
+      color: rgb(var(--accent-rgb) / max(0.72, var(--accent-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.6rem;
       letter-spacing: 0.13em;
@@ -222,7 +222,7 @@ const breadcrumbLd = {
       width: 1.5rem;
       height: 1px;
       flex: 0 0 auto;
-      background: #ff3b30;
+      background: var(--terminal-accent);
     }
 
     .article-header__signal span:last-child {
@@ -236,14 +236,14 @@ const breadcrumbLd = {
       grid-row: 1 / span 3;
       display: grid;
       align-content: start;
-      border-top: 1px solid rgba(231, 233, 227, 0.14);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
     }
 
     .article-header__metadata > div {
       display: grid;
       grid-template-columns: minmax(5rem, 0.7fr) minmax(0, 1fr);
       gap: 1rem;
-      border-bottom: 1px solid rgba(231, 233, 227, 0.12);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.12);
       padding: 0.72rem 0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.63rem;
@@ -253,12 +253,12 @@ const breadcrumbLd = {
     }
 
     .article-header__metadata span {
-      color: rgba(231, 233, 227, 0.56);
+      color: rgb(var(--ink-rgb) / max(0.56, var(--ink-floor)));
     }
 
     .article-header__metadata time,
     .article-header__metadata strong {
-      color: rgba(231, 233, 227, 0.62);
+      color: rgb(var(--ink-rgb) / max(0.62, var(--ink-floor)));
       font-weight: 400;
       font-variant-numeric: tabular-nums;
     }
@@ -267,7 +267,7 @@ const breadcrumbLd = {
       grid-column: 1;
       max-width: 20ch;
       margin: clamp(2rem, 5vw, 4rem) 0 0;
-      color: #e7e9e3;
+      color: var(--terminal-ink);
       font-size: clamp(2.8rem, 7.4vw, 7rem);
       font-weight: 780;
       letter-spacing: -0.07em;
@@ -279,7 +279,7 @@ const breadcrumbLd = {
       grid-column: 1;
       max-width: 62ch;
       margin: 1.75rem 0 0;
-      color: rgba(231, 233, 227, 0.62);
+      color: rgb(var(--ink-rgb) / max(0.62, var(--ink-floor)));
       font-size: clamp(1rem, 1.8vw, 1.25rem);
       line-height: 1.55;
       text-wrap: pretty;
@@ -292,8 +292,8 @@ const breadcrumbLd = {
       gap: 1.5rem;
       align-items: start;
       margin-top: clamp(2.5rem, 5vw, 4.5rem);
-      border-top: 1px solid rgba(231, 233, 227, 0.14);
-      border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
       padding-block: 1rem;
     }
 
@@ -319,15 +319,15 @@ const breadcrumbLd = {
     }
 
     .article-header__taxonomy :global(.tag-index__item:hover) {
-      color: #ff3b30;
+      color: var(--terminal-accent);
     }
 
     .article-hero {
       position: relative;
       margin: clamp(2.5rem, 7vw, 6rem) 0 0;
       overflow: hidden;
-      border: 1px solid rgba(231, 233, 227, 0.18);
-      background: #111411;
+      border: 1px solid rgb(var(--ink-rgb) / 0.18);
+      background: var(--terminal-surface-2);
     }
 
     .article-hero::after {
@@ -335,7 +335,7 @@ const breadcrumbLd = {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px);
+      background: repeating-linear-gradient(0deg, rgb(var(--glint-rgb) / 0.018) 0 1px, transparent 1px 4px);
     }
 
     .article-hero img {
@@ -354,10 +354,10 @@ const breadcrumbLd = {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
-      border-top: 1px solid rgba(231, 233, 227, 0.18);
-      background: rgba(11, 13, 12, 0.92);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+      background: rgb(var(--surface-rgb) / 0.92);
       padding: 0.7rem 0.85rem;
-      color: rgba(231, 233, 227, 0.42);
+      color: rgb(var(--ink-rgb) / max(0.42, var(--ink-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.58rem;
       letter-spacing: 0.11em;
@@ -365,7 +365,7 @@ const breadcrumbLd = {
     }
 
     .article-hero figcaption span:first-child {
-      color: rgba(255, 59, 48, 0.75);
+      color: rgb(var(--accent-rgb) / max(0.75, var(--accent-floor)));
     }
 
     .article-grid {
@@ -378,7 +378,7 @@ const breadcrumbLd = {
 
     .prose-container {
       min-width: 0;
-      color: rgba(231, 233, 227, 0.72);
+      color: rgb(var(--ink-rgb) / max(0.72, var(--ink-floor)));
       font-size: clamp(1rem, 1.2vw, 1.08rem);
       line-height: 1.78;
     }
@@ -391,7 +391,7 @@ const breadcrumbLd = {
     .prose-container :global(h2),
     .prose-container :global(h3),
     .prose-container :global(h4) {
-      color: #e7e9e3;
+      color: var(--terminal-ink);
       font-weight: 670;
       letter-spacing: -0.035em;
       line-height: 1.08;
@@ -406,7 +406,7 @@ const breadcrumbLd = {
     .prose-container :global(h2) {
       margin: 4.5rem 0 1.2rem;
       padding-top: 1rem;
-      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
       font-size: clamp(1.8rem, 4vw, 2.7rem);
       scroll-margin-top: 7rem;
     }
@@ -414,7 +414,7 @@ const breadcrumbLd = {
     .prose-container :global(h2::before) {
       content: '//';
       margin-inline-end: 0.65rem;
-      color: #ff3b30;
+      color: var(--terminal-accent);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.55em;
       letter-spacing: 0;
@@ -438,20 +438,20 @@ const breadcrumbLd = {
     }
 
     .prose-container :global(a) {
-      color: #e7e9e3;
-      text-decoration-color: rgba(255, 59, 48, 0.65);
+      color: var(--terminal-ink);
+      text-decoration-color: rgb(var(--accent-rgb) / 0.65);
       text-decoration-thickness: 1px;
       text-underline-offset: 0.22em;
       transition: color 160ms ease, text-decoration-color 160ms ease;
     }
 
     .prose-container :global(a:hover) {
-      color: #ff655d;
-      text-decoration-color: #ff3b30;
+      color: var(--terminal-accent-hover);
+      text-decoration-color: var(--terminal-accent);
     }
 
     .prose-container :global(a:focus-visible) {
-      outline: 1px solid #ff3b30;
+      outline: 1px solid var(--terminal-accent);
       outline-offset: 3px;
     }
 
@@ -467,7 +467,7 @@ const breadcrumbLd = {
     }
 
     .prose-container :global(li::marker) {
-      color: #ff3b30;
+      color: var(--terminal-accent);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.78em;
     }
@@ -475,10 +475,10 @@ const breadcrumbLd = {
     .prose-container :global(blockquote) {
       position: relative;
       margin: 2rem 0;
-      border-inline-start: 2px solid #ff3b30;
-      background: rgba(231, 233, 227, 0.035);
+      border-inline-start: 2px solid var(--terminal-accent);
+      background: rgb(var(--ink-rgb) / 0.035);
       padding: 1.2rem 1.4rem;
-      color: rgba(231, 233, 227, 0.62);
+      color: rgb(var(--ink-rgb) / max(0.62, var(--ink-floor)));
       font-size: 1.03em;
     }
 
@@ -487,10 +487,10 @@ const breadcrumbLd = {
     }
 
     .prose-container :global(code) {
-      border: 1px solid rgba(231, 233, 227, 0.12);
-      background: rgba(231, 233, 227, 0.055);
+      border: 1px solid rgb(var(--ink-rgb) / 0.12);
+      background: rgb(var(--ink-rgb) / 0.055);
       padding: 0.12rem 0.35rem;
-      color: #ff8b84;
+      color: var(--terminal-code-ink);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.84em;
       overflow-wrap: anywhere;
@@ -500,11 +500,11 @@ const breadcrumbLd = {
       max-width: 100%;
       margin: 2rem 0;
       overflow-x: auto;
-      border: 1px solid rgba(231, 233, 227, 0.16);
-      border-inline-start: 2px solid rgba(255, 59, 48, 0.75);
-      background: #080a09;
+      border: 1px solid rgb(var(--ink-rgb) / 0.16);
+      border-inline-start: 2px solid rgb(var(--accent-rgb) / 0.75);
+      background: var(--terminal-code-bg);
       padding: 1.25rem;
-      color: rgba(231, 233, 227, 0.76);
+      color: rgb(var(--ink-rgb) / max(0.76, var(--ink-floor)));
       font-size: 0.83rem;
       line-height: 1.65;
       tab-size: 2;
@@ -523,13 +523,13 @@ const breadcrumbLd = {
       max-width: 100%;
       height: auto;
       margin: 2rem 0;
-      border: 1px solid rgba(231, 233, 227, 0.16);
+      border: 1px solid rgb(var(--ink-rgb) / 0.16);
     }
 
     .prose-container :global(hr) {
       margin: 3.5rem 0;
       border: 0;
-      border-top: 1px solid rgba(231, 233, 227, 0.18);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
     }
 
     .prose-container :global(table) {
@@ -546,13 +546,13 @@ const breadcrumbLd = {
 
     .prose-container :global(th),
     .prose-container :global(td) {
-      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.13);
       padding: 0.7rem 0.85rem;
       text-align: start;
     }
 
     .prose-container :global(th) {
-      color: rgba(231, 233, 227, 0.48);
+      color: rgb(var(--ink-rgb) / max(0.48, var(--ink-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.68rem;
       font-weight: 500;
@@ -561,7 +561,7 @@ const breadcrumbLd = {
     }
 
     .prose-container :global(strong) {
-      color: #e7e9e3;
+      color: var(--terminal-ink);
       font-weight: 650;
     }
 
@@ -579,7 +579,7 @@ const breadcrumbLd = {
 
       .article-header__metadata > div {
         grid-template-columns: 1fr;
-        border-inline-end: 1px solid rgba(231, 233, 227, 0.12);
+        border-inline-end: 1px solid rgb(var(--ink-rgb) / 0.12);
         padding-inline: 0.75rem;
       }
 

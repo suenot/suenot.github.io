@@ -117,7 +117,7 @@ function getSlug(id: string): string {
       min-height: 100dvh;
       overflow: clip;
       padding: clamp(7rem, 11vw, 10rem) 0 clamp(5rem, 10vw, 9rem);
-      background: #0b0d0c;
+      background: var(--terminal-surface);
     }
 
     .archive-shell::before {
@@ -129,7 +129,7 @@ function getSlug(id: string): string {
       border: 0;
       pointer-events: none;
       opacity: 0.22;
-      background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(231, 233, 227, 0.025) 3px 4px);
+      background: repeating-linear-gradient(0deg, transparent 0 3px, rgb(var(--ink-rgb) / 0.025) 3px 4px);
     }
 
     .archive-container {
@@ -139,8 +139,8 @@ function getSlug(id: string): string {
     }
 
     .archive-hero {
-      border-top: 1px solid rgba(231, 233, 227, 0.2);
-      border-bottom: 1px solid rgba(231, 233, 227, 0.2);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.2);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.2);
     }
 
     .archive-hero__kicker,
@@ -155,9 +155,9 @@ function getSlug(id: string): string {
       display: flex;
       align-items: center;
       gap: 0.7rem;
-      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.13);
       padding: 0.7rem 0;
-      color: rgba(231, 233, 227, 0.42);
+      color: rgb(var(--ink-rgb) / max(0.42, var(--ink-floor)));
       font-size: 0.62rem;
       letter-spacing: 0.13em;
     }
@@ -173,14 +173,14 @@ function getSlug(id: string): string {
 
     .archive-hero__code {
       margin: 0 0 1.2rem;
-      color: #ff3b30;
+      color: var(--terminal-accent);
       font-size: 0.68rem;
       letter-spacing: 0.15em;
     }
 
     .archive-hero h1 {
       margin: 0;
-      color: #e7e9e3;
+      color: var(--terminal-ink);
       font-size: clamp(5rem, 16vw, 13rem);
       font-weight: 800;
       letter-spacing: -0.085em;
@@ -192,14 +192,14 @@ function getSlug(id: string): string {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      border-inline-start: 1px solid rgba(231, 233, 227, 0.16);
+      border-inline-start: 1px solid rgb(var(--ink-rgb) / 0.16);
       padding: clamp(1.5rem, 3vw, 2.5rem);
     }
 
     .archive-hero__summary > p {
       max-width: 35ch;
       margin: 0 0 2rem;
-      color: rgba(231, 233, 227, 0.55);
+      color: rgb(var(--ink-rgb) / max(0.55, var(--ink-floor)));
       font-size: 0.9rem;
       line-height: 1.65;
       text-wrap: pretty;
@@ -207,7 +207,7 @@ function getSlug(id: string): string {
 
     .archive-hero__summary dl {
       margin: 0;
-      border-top: 1px solid rgba(231, 233, 227, 0.13);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.13);
       font-size: 0.62rem;
       letter-spacing: 0.1em;
     }
@@ -216,22 +216,22 @@ function getSlug(id: string): string {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
-      border-bottom: 1px solid rgba(231, 233, 227, 0.13);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.13);
       padding: 0.65rem 0;
     }
 
     .archive-hero__summary dt {
-      color: rgba(231, 233, 227, 0.3);
+      color: rgb(var(--ink-rgb) / max(0.3, var(--ink-floor)));
     }
 
     .archive-hero__summary dd {
       margin: 0;
-      color: rgba(231, 233, 227, 0.7);
+      color: rgb(var(--ink-rgb) / max(0.7, var(--ink-floor)));
       font-variant-numeric: tabular-nums;
     }
 
     .archive-hero__summary a {
-      color: #ff3b30;
+      color: var(--terminal-accent);
       text-decoration: none;
     }
 
@@ -246,9 +246,9 @@ function getSlug(id: string): string {
       display: inline-flex;
       align-items: center;
       height: 3rem;
-      border: 1px solid rgba(231, 233, 227, 0.2);
+      border: 1px solid rgb(var(--ink-rgb) / 0.2);
       padding: 0 1rem;
-      color: rgba(231, 233, 227, 0.55);
+      color: rgb(var(--ink-rgb) / max(0.55, var(--ink-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.68rem;
       letter-spacing: 0.12em;
@@ -258,12 +258,12 @@ function getSlug(id: string): string {
     }
 
     .archive-controls__tags:hover {
-      border-color: rgba(255, 59, 48, 0.72);
-      color: #e7e9e3;
+      border-color: rgb(var(--accent-rgb) / 0.72);
+      color: var(--terminal-ink);
     }
 
     .archive-controls__tags:focus-visible {
-      outline: 1px solid #ff3b30;
+      outline: 1px solid var(--terminal-accent);
       outline-offset: 3px;
     }
 
@@ -276,20 +276,20 @@ function getSlug(id: string): string {
       align-items: baseline;
       justify-content: space-between;
       gap: 1rem;
-      border-top: 1px solid rgba(231, 233, 227, 0.22);
+      border-top: 1px solid rgb(var(--ink-rgb) / 0.22);
       padding: 0.75rem 0 1.25rem;
     }
 
     .archive-stream__header h2 {
       margin: 0;
-      color: #e7e9e3;
+      color: var(--terminal-ink);
       font-size: 0.82rem;
       font-weight: 500;
       letter-spacing: 0.12em;
     }
 
     .archive-stream__header span {
-      color: rgba(231, 233, 227, 0.32);
+      color: rgb(var(--ink-rgb) / max(0.32, var(--ink-floor)));
       font-size: 0.62rem;
       letter-spacing: 0.11em;
     }
@@ -298,18 +298,18 @@ function getSlug(id: string): string {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       column-gap: clamp(2rem, 5vw, 5rem);
-      border-bottom: 1px solid rgba(231, 233, 227, 0.14);
+      border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
     }
 
     .archive-stream__list > div:nth-child(odd) {
-      border-inline-end: 1px solid rgba(231, 233, 227, 0.12);
+      border-inline-end: 1px solid rgb(var(--ink-rgb) / 0.12);
       padding-inline-end: clamp(2rem, 5vw, 5rem);
     }
 
     .archive-empty {
-      border: 1px solid rgba(231, 233, 227, 0.16);
+      border: 1px solid rgb(var(--ink-rgb) / 0.16);
       padding: 4rem 1rem;
-      color: rgba(231, 233, 227, 0.45);
+      color: rgb(var(--ink-rgb) / max(0.45, var(--ink-floor)));
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
@@ -323,7 +323,7 @@ function getSlug(id: string): string {
       }
 
       .archive-hero__summary {
-        border-top: 1px solid rgba(231, 233, 227, 0.16);
+        border-top: 1px solid rgb(var(--ink-rgb) / 0.16);
         border-inline-start: 0;
       }
 
@@ -334,7 +334,7 @@ function getSlug(id: string): string {
 
       .archive-hero__summary dl > div {
         display: grid;
-        border-inline-end: 1px solid rgba(231, 233, 227, 0.13);
+        border-inline-end: 1px solid rgb(var(--ink-rgb) / 0.13);
         padding-inline: 0.7rem;
       }
 

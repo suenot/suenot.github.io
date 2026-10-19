@@ -154,6 +154,17 @@ const stats = [
     const introDelays = cubies.map(() => Math.random() * introSpread);
     const moves: [0 | 1 | 2, number, number][] = [[1, 1, 1], [0, -1, -1], [2, 1, 1], [1, -1, -1], [2, 0, 1], [0, 1, 1]];
 
+    // Colors come from the tokens in global.css.
+    const palette = { particle: '', accent: '', crosshair: '', glow: '' };
+    function readPalette() {
+      const style = getComputedStyle(document.documentElement);
+      palette.particle = style.getPropertyValue('--cube-particle').trim() || '#e7e9e3';
+      palette.accent = style.getPropertyValue('--cube-accent').trim() || '#ff493f';
+      palette.crosshair = style.getPropertyValue('--cube-crosshair').trim() || 'rgba(145,151,146,.10)';
+      palette.glow = style.getPropertyValue('--cube-glow').trim() || 'rgba(255,59,48,.65)';
+    }
+    readPalette();
+
     function resize() {
       const rect = canvas.getBoundingClientRect();
       width = Math.max(1, rect.width); height = Math.max(1, rect.height); dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -174,7 +185,7 @@ const stats = [
     function draw(now: number) {
       context.clearRect(0, 0, width, height);
       context.save();
-      context.strokeStyle = 'rgba(145,151,146,.10)'; context.lineWidth = 1;
+      context.strokeStyle = palette.crosshair; context.lineWidth = 1;
       context.beginPath(); context.moveTo(width * .5, height * .13); context.lineTo(width * .5, height * .87); context.moveTo(width * .13, height * .5); context.lineTo(width * .87, height * .5); context.stroke();
       context.restore();
 
@@ -215,8 +226,8 @@ const stats = [
       projected.sort((a, b) => a.z - b.z);
       for (const particle of projected) {
         context.globalAlpha = particle.alpha;
-        context.fillStyle = particle.accent ? '#ff493f' : '#e7e9e3';
-        context.shadowColor = 'rgba(255,59,48,.65)';
+        context.fillStyle = particle.accent ? palette.accent : palette.particle;
+        context.shadowColor = palette.glow;
         context.shadowBlur = particle.accent ? 4 : 0;
         context.beginPath(); context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2); context.fill();
       }
@@ -295,7 +306,7 @@ const stats = [
   .hero__primary { position: relative; min-width: 0; padding: clamp(1.5rem, 3.7vw, 4.5rem) clamp(1rem, 3.2vw, 3.5rem) 2.5rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
   .hero__eyebrow { display: flex; justify-content: space-between; color: var(--terminal-muted, #747a75); margin-block-end: clamp(2.8rem, 5vw, 5.5rem); }
   .hero__name-block { position: relative; padding-inline-start: 2.7rem; }
-  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: #ff3b30; font: 600 .58rem/1 var(--font-mono, monospace); letter-spacing: .14em; border-inline-start: 2px solid #ff3b30; padding-inline-start: .55rem; }
+  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: var(--terminal-accent); font: 600 .58rem/1 var(--font-mono, monospace); letter-spacing: .14em; border-inline-start: 2px solid var(--terminal-accent); padding-inline-start: .55rem; }
   .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5.4rem, 9.2vw, 11rem); font-weight: 950; letter-spacing: -.082em; line-height: .76; text-transform: uppercase; text-wrap: nowrap; }
   .hero__name-visual, .hero__name-line { display: block; }
   /* Each line is a mask; padding gives the condensed caps room, the negative
@@ -307,18 +318,18 @@ const stats = [
   .hero__roles { margin-block: 1.2rem 0; margin-inline: 2.7rem 0; color: var(--terminal-muted, #8b908c); font: .64rem/1.6 var(--font-mono, monospace); letter-spacing: .11em; text-transform: uppercase; }
   .hero__actions { display: flex; align-items: center; gap: 2rem; margin-block: 1.45rem 0; margin-inline: 2.7rem 0; }
   .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .65rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: #ff3b30; font-size: 1.5rem; }
+  .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: var(--terminal-accent); font-size: 1.5rem; }
   .hero__button:hover { background: var(--terminal-fg, #e7e9e3); color: var(--terminal-bg, #0b0d0c); }
   .hero__contact { color: var(--terminal-muted, #8b908c); font: .64rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: .45rem; }
-  .hero__contact:hover { color: #ff3b30; }
+  .hero__contact:hover { color: var(--terminal-accent); }
 
-  .hero__cube { position: relative; align-self: stretch; min-width: 0; min-height: 38rem; margin: clamp(1.5rem, 3.7vw, 4.5rem) clamp(.8rem, 1.5vw, 1.5rem) 1.5rem; overflow: hidden; border: 1px solid var(--terminal-line, #303431); background: #090b0a; }
-  .cube__header, .cube__footer { position: absolute; z-index: 2; inset-inline: 0; display: flex; justify-content: space-between; gap: 1rem; padding: .68rem .8rem; color: #858b86; font: .54rem/1 var(--font-mono, monospace); letter-spacing: .14em; pointer-events: none; }
+  .hero__cube { position: relative; align-self: stretch; min-width: 0; min-height: 38rem; margin: clamp(1.5rem, 3.7vw, 4.5rem) clamp(.8rem, 1.5vw, 1.5rem) 1.5rem; overflow: hidden; border: 1px solid var(--terminal-line, #303431); background: var(--terminal-bg); }
+  .cube__header, .cube__footer { position: absolute; z-index: 2; inset-inline: 0; display: flex; justify-content: space-between; gap: 1rem; padding: .68rem .8rem; color: var(--terminal-muted); font: .54rem/1 var(--font-mono, monospace); letter-spacing: .14em; pointer-events: none; }
   .cube__header { inset-block-start: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
   .cube__footer { inset-block-end: 0; border-block-start: 1px solid var(--terminal-line, #303431); }
   .cube__canvas { display: block; inline-size: 100%; block-size: 100%; min-block-size: 38rem; cursor: grab; touch-action: none; }
   .cube__canvas.is-dragging { cursor: grabbing; }
-  .cube__marker { position: absolute; z-index: 3; color: #ff3b30; font: .65rem/1 var(--font-mono, monospace); pointer-events: none; }
+  .cube__marker { position: absolute; z-index: 3; color: var(--terminal-accent); font: .65rem/1 var(--font-mono, monospace); pointer-events: none; }
   .cube__marker--nw { inset: 2.55rem auto auto .35rem; }
   .cube__marker--se { inset: auto .35rem 2.55rem auto; }
 
@@ -329,7 +340,7 @@ const stats = [
   .hero__stat data { justify-self: end; color: var(--terminal-fg, #e7e9e3); font: 700 clamp(1.4rem, 2.4vw, 2.5rem)/.9 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
   .hero__stat > span:not(.hero__stat-index), .hero__stat samp { align-self: end; color: var(--terminal-muted, #8b908c); font: .55rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
   .hero__stat samp { justify-self: end; }
-  .hero a:focus-visible, .cube__canvas:focus-visible { outline: 2px solid #ff3b30; outline-offset: 4px; }
+  .hero a:focus-visible, .cube__canvas:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 4px; }
 
   @media (max-width: 1180px) {
     .hero__frame { grid-template-columns: 1fr; }
