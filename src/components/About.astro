@@ -54,7 +54,7 @@ const t = getHome(locale).about;
   .about__header, .about__statement { border-inline-end: 1px solid var(--terminal-line, #303431); }
   .about__header { display: flex; flex-direction: column; align-items: flex-start; }
   .about__header .terminal-heading { max-inline-size: 8ch; margin-block-start: 1.4rem; font-size: clamp(3.4rem, 5.6vw, 6.5rem); line-height: .86; }
-  .about__code { margin-block-start: auto; padding-block-start: 4rem; color: #ff3b30; font: .62rem/1 var(--font-mono, monospace); letter-spacing: .13em; }
+  .about__code { margin-block-start: auto; padding-block-start: 4rem; color: var(--terminal-accent); font: .62rem/1 var(--font-mono, monospace); letter-spacing: .13em; }
   .about__statement { display: grid; align-content: center; gap: 2rem; color: var(--terminal-muted, #969b97); font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.65; }
   .about__statement p { max-inline-size: 48rem; text-wrap: pretty; }
   .about__statement strong { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
@@ -62,7 +62,7 @@ const t = getHome(locale).about;
   .about__focus-head { display: flex; justify-content: space-between; gap: 1rem; padding: 0 1.5rem 1rem; color: var(--terminal-muted, #747a75); font: .6rem/1 var(--font-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
   .about__focus ol { border-block-start: 1px solid var(--terminal-line, #303431); }
   .about__focus li { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; padding: 1.35rem 1.5rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .about__focus-index { color: #ff3b30; font: .6rem/1.4 var(--font-mono, monospace); }
+  .about__focus-index { color: var(--terminal-accent); font: .6rem/1.4 var(--font-mono, monospace); }
   .about__focus h3 { color: var(--terminal-fg, #e7e9e3); font: 650 .8rem/1.2 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
   .about__focus li p { max-inline-size: 46ch; margin-block-start: .55rem; color: var(--terminal-muted, #8b908c); font: .69rem/1.55 var(--font-mono, monospace); }
   .about__marker { align-self: end; color: var(--terminal-muted, #747a75); font: 1rem/1 var(--font-mono, monospace); }

@@ -76,14 +76,14 @@ const sectionTags = [
   .trading__case:nth-child(even) .case__header { grid-column: 2; border-inline-end: 0; border-inline-start: 1px solid var(--terminal-line, #303431); }
   .trading__case:nth-child(even) .case__body { grid-column: 1; grid-row: 1; }
   .case__header { position: relative; min-block-size: 22rem; padding: 2rem clamp(1rem, 3vw, 3rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .case__number { display: block; color: #ff3b30; font: .75rem/1 var(--font-mono, monospace); }
+  .case__number { display: block; color: var(--terminal-accent); font: .75rem/1 var(--font-mono, monospace); }
   .case__subtitle { margin-block-start: 3.5rem; color: var(--terminal-muted, #8b908c); font: .57rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
   .case__header h3 { max-inline-size: 12ch; margin-block-start: .65rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(2.1rem, 3.6vw, 4rem); font-weight: 800; letter-spacing: -.045em; line-height: .9; text-transform: uppercase; text-wrap: balance; }
   .case__tags { position: absolute; inset-block-end: 2rem; inset-inline: clamp(1rem, 3vw, 3rem); display: flex; flex-wrap: wrap; gap: .75rem; color: var(--terminal-muted, #747a75); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .06em; }
   .case__body { align-self: stretch; padding: 2rem clamp(1rem, 4vw, 4.5rem); }
   .case__meta { display: flex; justify-content: space-between; gap: 1rem; padding-block-end: 1rem; color: var(--terminal-muted, #666b67); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; border-block-end: 1px solid var(--terminal-line, #303431); }
   .case__body > ul > li { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; padding-block: 1.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .case__body li > span { color: #ff3b30; font: .58rem/1.55 var(--font-mono, monospace); }
+  .case__body li > span { color: var(--terminal-accent); font: .58rem/1.55 var(--font-mono, monospace); }
   .case__body li p { max-inline-size: 85ch; color: var(--terminal-muted, #969b97); font-size: .83rem; line-height: 1.65; }
   .case__body li :global(strong) { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
   @media (max-width: 900px) {

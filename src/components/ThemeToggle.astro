@@ -1,0 +1,134 @@
+---
+import { type Locale, defaultLocale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale?: Locale;
+  /** `bar`: glyph button in the nav bar. `menu`: labelled row in the mobile menu. */
+  variant?: 'bar' | 'menu';
+}
+
+const { locale = defaultLocale, variant = 'bar' } = Astro.props;
+const t = useTranslations(locale);
+const label = t('theme.light');
+---
+
+{variant === 'bar' ? (
+  <button
+    class="theme-toggle"
+    type="button"
+    data-theme-toggle
+    aria-pressed="false"
+    aria-label={label}
+    title={label}
+  >
+    <span aria-hidden="true">[</span>
+    <svg class="theme-toggle__glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <circle cx="8" cy="8" r="6.25" />
+      <path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" />
+    </svg>
+    <span aria-hidden="true">]</span>
+  </button>
+) : (
+  <button class="theme-row" type="button" data-theme-toggle aria-pressed="false">
+    <span class="theme-row__box" aria-hidden="true"></span>
+    <span>{label}</span>
+  </button>
+)}
+
+<style>
+  /* Toggles need JS; the head script marks <html> with data-theme before paint. */
+  .theme-toggle,
+  .theme-row {
+    display: none;
+  }
+
+  :global(:root[data-theme]) .theme-toggle {
+    display: inline-flex;
+  }
+
+  :global(:root[data-theme]) .theme-row {
+    display: flex;
+  }
+
+  .theme-toggle {
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.35rem;
+    padding-inline: 0.5rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: color 160ms ease;
+  }
+
+  .theme-toggle:hover,
+  .theme-toggle[aria-pressed='true'] {
+    color: var(--terminal-ink);
+  }
+
+  .theme-toggle__glyph {
+    width: 0.8rem;
+    height: 0.8rem;
+    transition: transform 200ms var(--ease-out, ease-out);
+  }
+
+  .theme-toggle__glyph circle {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .theme-toggle__glyph path {
+    fill: currentColor;
+  }
+
+  /* The filled half swings to the other side; mirrored reading order does not apply to a glyph. */
+  .theme-toggle[aria-pressed='true'] .theme-toggle__glyph {
+    transform: rotate(180deg);
+  }
+
+  .theme-row {
+    width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 0;
+    border-block-end: 1px solid var(--terminal-line);
+    border-radius: 0;
+    background: transparent;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-align: start;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .theme-row__box {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex: none;
+    border: 1px solid var(--terminal-line-strong);
+    background: transparent;
+  }
+
+  .theme-row[aria-pressed='true'] {
+    color: var(--terminal-ink);
+  }
+
+  .theme-row[aria-pressed='true'] .theme-row__box {
+    border-color: var(--terminal-accent);
+    background: var(--terminal-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle__glyph {
+      transition: none;
+    }
+  }
+</style>

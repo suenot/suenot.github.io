@@ -65,25 +65,25 @@ const frontier: FrontierProject[] = [
   .frontier__header { display: grid; grid-template-columns: 1fr .55fr auto; align-items: end; gap: 3rem; padding: clamp(3.5rem, 7vw, 7rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
   .frontier__header .terminal-heading { max-inline-size: 12ch; margin-block-start: 1.25rem; font-size: clamp(3.5rem, 6.5vw, 7.5rem); line-height: .85; }
   .frontier__header > p { color: var(--terminal-muted, #8b908c); font: .75rem/1.65 var(--font-mono, monospace); }
-  .frontier__header > span { color: #ff3b30; font: .56rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .frontier__header > span { color: var(--terminal-accent); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .frontier__projects { display: grid; grid-template-columns: 1.12fr .88fr; }
   .frontier__project { position: relative; min-width: 0; min-block-size: 34rem; padding: clamp(1.5rem, 3.5vw, 3.75rem); overflow: hidden; color: inherit; text-decoration: none; }
   .frontier__project:first-child { border-inline-end: 1px solid var(--terminal-line, #303431); }
   .project__meta { display: grid; grid-template-columns: 2rem 1fr auto; gap: 1rem; color: var(--terminal-muted, #747a75); font: .58rem/1 var(--font-mono, monospace); letter-spacing: .09em; }
   .project__status { display: inline-flex; align-items: center; gap: .55rem; text-transform: uppercase; }
-  .project__status i { inline-size: .35rem; block-size: .35rem; background: #4af626; }
+  .project__status i { inline-size: .35rem; block-size: .35rem; background: var(--terminal-signal); }
   .project__title-row { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-block-start: 5rem; }
   .project__title-row h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(2.8rem, 5.7vw, 6.8rem); font-weight: 850; letter-spacing: -.065em; line-height: .82; text-transform: uppercase; overflow-wrap: anywhere; }
-  .project__title-row > span { color: #ff3b30; font: 2rem/1 var(--font-mono, monospace); }
-  .project__role { margin-block-start: 1.5rem; color: #ff3b30; font: .62rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .project__title-row > span { color: var(--terminal-accent); font: 2rem/1 var(--font-mono, monospace); }
+  .project__role { margin-block-start: 1.5rem; color: var(--terminal-accent); font: .62rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project__desc { max-inline-size: 55ch; margin-block-start: 2.25rem; color: var(--terminal-muted, #969b97); font-size: .85rem; line-height: 1.65; }
   .project__tags { position: absolute; inset-inline: clamp(1.5rem, 3.5vw, 3.75rem); inset-block-end: 2.2rem; display: flex; flex-wrap: wrap; gap: 1rem; color: var(--terminal-muted, #747a75); font: .57rem/1 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
   .project__tags span::before { content: "[ "; }.project__tags span::after { content: " ]"; }
   .frontier__project > svg { position: absolute; inset-inline: 45% -3rem; inset-block-end: 5rem; inline-size: 58%; block-size: 5rem; opacity: .45; }
   .frontier__project > svg path { fill: none; stroke: var(--terminal-muted, #747a75); stroke-width: 1; vector-effect: non-scaling-stroke; }
-  .frontier__project:hover { background: #151816; }
-  .frontier__project:hover h3 { color: #ff3b30; }
-  .frontier__project:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .frontier__project:hover { background: var(--terminal-hover); }
+  .frontier__project:hover h3 { color: var(--terminal-accent); }
+  .frontier__project:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -3px; }
   .frontier__project { transition: background-color 180ms ease; }
   .project__title-row h3 { transition: color 180ms ease; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {

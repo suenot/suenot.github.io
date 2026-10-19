@@ -72,12 +72,12 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
 
 <style>
   .blog-entry {
-    --entry-border: rgba(231, 233, 227, 0.14);
+    --entry-border: rgb(var(--ink-rgb) / 0.14);
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     border-top: 1px solid var(--entry-border);
-    background: rgba(231, 233, 227, 0.012);
+    background: rgb(var(--ink-rgb) / 0.012);
     transition: background-color 180ms ease, border-color 180ms ease;
   }
 
@@ -87,7 +87,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     inset-block: -1px;
     inset-inline-start: 0;
     width: 2px;
-    background: #ff3b30;
+    background: var(--terminal-accent);
     opacity: 0;
     transform: scaleY(0.35);
     transform-origin: center;
@@ -96,8 +96,8 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
 
   .blog-entry:hover,
   .blog-entry:focus-within {
-    border-color: rgba(231, 233, 227, 0.32);
-    background: rgba(231, 233, 227, 0.035);
+    border-color: rgb(var(--ink-rgb) / 0.32);
+    background: rgb(var(--ink-rgb) / 0.035);
   }
 
   .blog-entry:hover::before,
@@ -117,7 +117,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
-    color: rgba(231, 233, 227, 0.62);
+    color: rgb(var(--ink-rgb) / max(0.62, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.66rem;
     font-variant-numeric: tabular-nums;
@@ -127,13 +127,13 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
   }
 
   .blog-entry__channel {
-    color: rgba(255, 59, 48, 0.78);
+    color: rgb(var(--accent-rgb) / max(0.78, var(--accent-floor)));
   }
 
   .blog-entry__title {
     max-width: 26ch;
     margin: 0.75rem 0 0;
-    color: #e7e9e3;
+    color: var(--terminal-ink);
     font-size: clamp(1.3rem, 2.4vw, 2rem);
     font-weight: 650;
     letter-spacing: -0.035em;
@@ -154,14 +154,14 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
   }
 
   .blog-entry__title a:focus-visible {
-    outline: 1px solid #ff3b30;
+    outline: 1px solid var(--terminal-accent);
     outline-offset: 5px;
   }
 
   .blog-entry__description {
     max-width: 65ch;
     margin: 0.7rem 0 0;
-    color: rgba(231, 233, 227, 0.58);
+    color: rgb(var(--ink-rgb) / max(0.58, var(--ink-floor)));
     font-size: 0.9rem;
     line-height: 1.65;
     text-wrap: pretty;
@@ -183,7 +183,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     margin: 0;
     padding: 0;
     list-style: none;
-    color: rgba(231, 233, 227, 0.58);
+    color: rgb(var(--ink-rgb) / max(0.58, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.65rem;
     letter-spacing: 0.07em;
@@ -197,7 +197,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     flex: 0 0 auto;
     align-items: center;
     gap: 0.55rem;
-    color: #e7e9e3;
+    color: var(--terminal-ink);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.68rem;
     letter-spacing: 0.1em;
@@ -206,7 +206,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
   }
 
   .blog-entry__link span:last-child {
-    color: #ff3b30;
+    color: var(--terminal-accent);
     transition: transform 180ms ease;
   }
 
@@ -251,7 +251,7 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     min-height: 24rem;
     overflow: hidden;
     border-inline-start: 1px solid var(--entry-border);
-    background: #111411;
+    background: var(--terminal-surface-2);
   }
 
   .blog-entry__image {
@@ -272,8 +272,8 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(11, 13, 12, 0.35), transparent 40%),
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px);
+    background: linear-gradient(90deg, rgb(var(--surface-rgb) / 0.35), transparent 40%),
+      repeating-linear-gradient(0deg, rgb(var(--glint-rgb) / 0.018) 0 1px, transparent 1px 4px);
     pointer-events: none;
   }
 
@@ -282,8 +282,8 @@ const forwardArrow = locale === 'ar' ? '\u2190' : '\u2192';
     inset-inline: 0;
     top: 22%;
     height: 1px;
-    background: rgba(255, 59, 48, 0.7);
-    box-shadow: 0 0 18px rgba(255, 59, 48, 0.35);
+    background: rgb(var(--accent-rgb) / 0.7);
+    box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.35);
     opacity: 0.75;
   }
 

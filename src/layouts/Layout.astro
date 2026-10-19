@@ -44,6 +44,16 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
 <html lang={locale} dir={dir}>
   <head>
     <meta charset="UTF-8" />
+    <!-- Theme before first paint: the stored choice, else dark (also the no-JS look). -->
+    <script is:inline>
+      (function () {
+        var theme = 'dark';
+        try {
+          if (localStorage.getItem('suenot-theme') === 'light') theme = 'light';
+        } catch (error) {}
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={`Eugen Soloviov — Blog (${locale})`} href={rssHref} />
@@ -68,6 +78,7 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
     <Footer locale={locale} cta={footerCta} />
     <Analytics />
     <script>
+      import '../scripts/theme';
       import '../scripts/motion';
       import '../scripts/hud-readout';
     </script>

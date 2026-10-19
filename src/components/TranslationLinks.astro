@@ -32,7 +32,7 @@ const otherLocales = availableLocales.filter((locale) => locale !== currentLocal
     flex-wrap: wrap;
     align-items: center;
     gap: 0.55rem 0.8rem;
-    color: rgba(231, 233, 227, 0.4);
+    color: rgb(var(--ink-rgb) / max(0.4, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.62rem;
     letter-spacing: 0.09em;
@@ -42,29 +42,29 @@ const otherLocales = availableLocales.filter((locale) => locale !== currentLocal
   .translation-links__line {
     width: 1.5rem;
     height: 1px;
-    background: rgba(231, 233, 227, 0.2);
+    background: rgb(var(--ink-rgb) / 0.2);
   }
 
   .translation-links a {
     display: inline-flex;
     gap: 0.45rem;
-    border-inline-start: 1px solid rgba(231, 233, 227, 0.16);
+    border-inline-start: 1px solid rgb(var(--ink-rgb) / 0.16);
     padding-inline-start: 0.8rem;
-    color: rgba(231, 233, 227, 0.56);
+    color: rgb(var(--ink-rgb) / max(0.56, var(--ink-floor)));
     text-decoration: none;
     transition: color 160ms ease;
   }
 
   .translation-links a span:first-child {
-    color: #ff3b30;
+    color: var(--terminal-accent);
   }
 
   .translation-links a:hover {
-    color: #e7e9e3;
+    color: var(--terminal-ink);
   }
 
   .translation-links a:focus-visible {
-    outline: 1px solid #ff3b30;
+    outline: 1px solid var(--terminal-accent);
     outline-offset: 3px;
   }
 </style>

@@ -224,15 +224,15 @@ const statusStyles: Record<StatusKey, string> = {
   .projects__header dt { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .projects__header dd { color: var(--terminal-fg, #e7e9e3); font: 600 1.65rem/1 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
   .project-group__header { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; min-block-size: 5.6rem; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
-  .project-group__header > span { color: #ff3b30; font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .project-group__header > span { color: var(--terminal-accent); font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group__header > span:last-child { color: var(--terminal-muted, #747a75); }
   .project-group__header h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.6rem, 2.8vw, 3rem); font-weight: 750; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
   .project-group__columns, .project-row { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 6.5rem 1rem; gap: 1.2rem; }
-  .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: #5d625e; font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: var(--terminal-faint); font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
   .project-group li { border-block-end: 1px solid var(--terminal-line, #303431); }
   .project-row { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
   .project-row__name { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .7rem; align-items: start; min-width: 0; }
-  .project-row__id, .project-row__access { color: #5d625e; font: .5rem/1.5 var(--font-mono, monospace); }
+  .project-row__id, .project-row__access { color: var(--terminal-faint); font: .5rem/1.5 var(--font-mono, monospace); }
   .project-row__name h4 { color: var(--terminal-fg, #e7e9e3); font: 600 .72rem/1.35 var(--font-mono, monospace); overflow-wrap: anywhere; }
   .project-row > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
   .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: var(--terminal-muted, #747a75); font: .52rem/1.35 var(--font-mono, monospace); }
@@ -241,15 +241,15 @@ const statusStyles: Record<StatusKey, string> = {
   .project-row__years { color: var(--terminal-fg, #e7e9e3); font: .52rem/1.3 var(--font-mono, monospace); font-variant-numeric: tabular-nums; letter-spacing: .04em; opacity: .75; }
   .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
   .project-row__status::before { content: ""; inline-size: .3rem; block-size: .3rem; border: 1px solid currentColor; }
-  .status--active::before { border: 0; background: #4af626; }.status--wip { color: #ff3b30; }.status--rip { opacity: .55; }
-  .project-row__arrow { color: #ff3b30; font: .8rem/1 var(--font-mono, monospace); opacity: 0; }
-  .project-group a:hover, .project-group a:focus-visible { background: #151816; }
+  .status--active::before { border: 0; background: var(--terminal-signal); }.status--wip { color: var(--terminal-accent); }.status--rip { color: var(--terminal-dim); }
+  .project-row__arrow { color: var(--terminal-accent); font: .8rem/1 var(--font-mono, monospace); opacity: 0; }
+  .project-group a:hover, .project-group a:focus-visible { background: var(--terminal-hover); }
   .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }
-  .project-group a:focus-visible { outline: 2px solid #ff3b30; outline-offset: -3px; }
+  .project-group a:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -3px; }
   /* Hover: an accent rail locks on at the inline start, the name steps forward,
      the arrow arrives along its own diagonal. Pointer devices only. */
   .project-row { position: relative; transition: background-color 160ms ease; }
-  .project-row::before { content: ""; position: absolute; inset-block: -1px; inset-inline-start: 0; inline-size: 2px; background: #ff3b30; opacity: 0; transform: scaleY(.35); transition: opacity 180ms ease, transform 240ms var(--ease-out); }
+  .project-row::before { content: ""; position: absolute; inset-block: -1px; inset-inline-start: 0; inline-size: 2px; background: var(--terminal-accent); opacity: 0; transform: scaleY(.35); transition: opacity 180ms ease, transform 240ms var(--ease-out); }
   .project-group a:hover::before, .project-group a:focus-visible::before { opacity: 1; transform: none; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .project-row__name h4 { transition: transform 220ms var(--ease-out); }

@@ -80,7 +80,7 @@
     to bottom,
     transparent 0,
     transparent calc(50% - 0.7em),
-    rgba(255, 59, 48, 0.07) calc(50% - 2px),
+    rgb(var(--accent-rgb) / 0.07) calc(50% - 2px),
     var(--terminal-accent) calc(50% - 2px),
     var(--terminal-accent) 50%,
     var(--hud-cover) 50%
@@ -96,12 +96,12 @@
   inset-inline-start: -1.5rem;
   inline-size: 1.5rem;
   pointer-events: none;
-  background: linear-gradient(to right, transparent, rgba(255, 59, 48, 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
+  background: linear-gradient(to right, transparent, rgb(var(--accent-rgb) / 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
   will-change: transform;
 }
 
 [dir='rtl'] .hud-playhead {
-  background: linear-gradient(to left, transparent, rgba(255, 59, 48, 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
+  background: linear-gradient(to left, transparent, rgb(var(--accent-rgb) / 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
 }
 
 /* Sparkline acquisition: a cover with a leading accent edge slides off the line. */

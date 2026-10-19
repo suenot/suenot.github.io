@@ -13,12 +13,100 @@
   --terminal-line: #292e2a;
   --terminal-line-strong: #424943;
   --terminal-accent: #ff3b30;
+  --terminal-accent-hover: #ff655d;
+  --terminal-surface: #0b0d0c;
+  --terminal-surface-2: #111411;
+  --terminal-hover: #151816;
+  --terminal-code-bg: #080a09;
+  --terminal-code-ink: #ff8b84;
+  --terminal-footer: #070908;
+  --terminal-faint: #5d625e;
+  --terminal-signal: #4af626;
+  /* Channels for translucent tints: rgb(var(--ink-rgb) / 0.14). */
+  --ink-rgb: 231 233 227;
+  --accent-rgb: 255 59 48;
+  --bg-rgb: 9 11 10;
+  --surface-rgb: 11 13 12;
+  --glint-rgb: 255 255 255;
+  /* Lowest alpha translucent ink / accent text may use; lifted in the light theme for contrast. */
+  --ink-floor: 0;
+  --accent-floor: 0;
+  --scanline: rgba(0, 0, 0, 0.12);
+  --backdrop: rgba(3, 4, 3, 0.78);
+  /* Contribution calendar, empty to busiest. */
+  --cal-0: #222622;
+  --cal-1: #235e2c;
+  --cal-2: #2f8a3b;
+  --cal-3: #43b34f;
+  --cal-4: #70df61;
+  /* Particle cube (read by Hero.astro on load and on theme change). */
+  --cube-particle: #e7e9e3;
+  --cube-accent: #ff493f;
+  --cube-crosshair: rgba(145, 151, 146, 0.1);
+  --cube-glow: rgba(255, 59, 48, 0.65);
   --terminal-max: 100rem;
   --terminal-header: 4.5rem;
   --font-display: "DIN Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Noto Sans Condensed", "Liberation Sans Narrow", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", "Roboto Mono", "Noto Sans Mono", "Liberation Mono", monospace;
   color-scheme: dark;
   font-synthesis: none;
+}
+
+/* Light theme: paper and ink, same HUD. Set on <html> by the head script in Layout.astro.
+   Text colors hold at least 4.5:1 on every surface they sit on. */
+:root[data-theme='light'] {
+  --terminal-bg: #f3f1ea;
+  --terminal-fg: #121412;
+  --terminal-panel: #eceae2;
+  --terminal-panel-strong: #e4e2d9;
+  --terminal-ink: #121412;
+  --terminal-muted: #545953;
+  --terminal-dim: #60655f;
+  --terminal-line: #d6d3c9;
+  --terminal-line-strong: #aeaba0;
+  --terminal-accent: #bd281e;
+  --terminal-accent-hover: #941c14;
+  --terminal-surface: #eeece4;
+  --terminal-surface-2: #e9e7df;
+  --terminal-hover: #e6e4db;
+  --terminal-code-bg: #f9f8f4;
+  --terminal-code-ink: #a3241b;
+  --terminal-footer: #ebe9e1;
+  --terminal-faint: #60655f;
+  --terminal-signal: #1a7f2b;
+  --ink-rgb: 18 20 18;
+  --accent-rgb: 189 40 30;
+  --bg-rgb: 243 241 234;
+  --surface-rgb: 238 236 228;
+  --glint-rgb: 18 20 18;
+  --ink-floor: 0.64;
+  --accent-floor: 1;
+  --scanline: rgba(18, 20, 18, 0.05);
+  --backdrop: rgba(18, 20, 18, 0.32);
+  --cal-0: #e0ded4;
+  --cal-1: #b3dcab;
+  --cal-2: #6abd6e;
+  --cal-3: #2f9a45;
+  --cal-4: #17652b;
+  --cube-particle: #1b1e1b;
+  --cube-accent: #c8271c;
+  --cube-crosshair: rgba(18, 20, 18, 0.14);
+  --cube-glow: rgba(189, 40, 30, 0.3);
+  color-scheme: light;
+}
+
+/* Theme switch cross-fade: colors only. theme.ts sets the attribute for the
+   length of the fade and never under reduced motion. */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    outline-color 180ms ease,
+    fill 180ms ease,
+    stroke 180ms ease !important;
 }
 
 * {
@@ -37,7 +125,7 @@ body {
   margin: 0;
   overflow-x: clip;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(rgb(var(--glint-rgb) / 0.012) 1px, transparent 1px),
     var(--terminal-bg);
   background-size: 100% 4px;
   color: var(--terminal-ink);
@@ -58,10 +146,20 @@ body::before {
     0deg,
     transparent 0,
     transparent 2px,
-    rgba(0, 0, 0, 0.12) 2px,
-    rgba(0, 0, 0, 0.12) 4px
+    var(--scanline) 2px,
+    var(--scanline) 4px
   );
   opacity: 0.42;
+}
+
+/* Code blocks: Shiki renders github-dark inline with github-light as --shiki-light. */
+:root[data-theme='light'] .astro-code {
+  background-color: var(--terminal-code-bg) !important;
+}
+
+:root[data-theme='light'] .astro-code,
+:root[data-theme='light'] .astro-code span {
+  color: var(--shiki-light) !important;
 }
 
 ::selection {
