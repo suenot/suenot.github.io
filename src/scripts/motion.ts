@@ -16,7 +16,7 @@
  *   .terminal-section      the corner reticle locks on
  *   [data-count]           counts up once, width reserved (see prepareCount)
  *   svg[data-wipe]         the line is acquired by a sweeping cover
- *   [data-draw]            children appear column by column (activity calendar)
+ *   [data-draw]            children appear column by column; "calendar" adds a playhead
  * Dynamic content dispatches `hud:enhance` on its root after rendering.
  */
 
@@ -82,11 +82,28 @@ function playKicker(el: HTMLElement, delay: number) {
 }
 
 function playHeading(el: HTMLElement, delay: number) {
+  // Size the cover from the ink extents, not the box: a heading set in a wide
+  // fallback face can overflow its column, and no glyph edge may peek out.
+  const box = el.getBoundingClientRect();
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const ink = range.getBoundingClientRect();
+  const pad = (Number.parseFloat(getComputedStyle(el).fontSize) || 16) * 0.2;
+  const left = Math.max(0, box.left - ink.left) + pad;
+  const right = Math.max(0, ink.right - box.right) + pad;
+  const top = Math.max(0, box.top - ink.top) + pad;
+  const bottom = Math.max(0, ink.bottom - box.bottom) + pad;
   const scan = document.createElement('span');
   scan.className = 'hud-scan';
   scan.setAttribute('aria-hidden', 'true');
+  Object.assign(scan.style, {
+    left: `${-left - 2}px`,
+    right: `${-right - 2}px`,
+    top: `${-top}px`,
+    height: `${2 * (box.height + top + bottom)}px`,
+  });
   el.append(scan);
-  el.style.clipPath = 'inset(-0.2em -0.3em)';
+  el.style.clipPath = `inset(${-top}px ${-right}px ${-bottom}px ${-left}px)`;
   el.removeAttribute('data-motion');
   const sweep = scan.animate([{ transform: 'translate3d(0, -50%, 0)' }, { transform: 'translate3d(0, 0, 0)' }], {
     duration: 780,
@@ -247,8 +264,30 @@ function prepareDraw(el: HTMLElement) {
   return true;
 }
 
+const WEEK_MS = 12;
+
+/** A playhead crosses the calendar once; each week lights up just behind it. */
+function sweepPlayhead(grid: HTMLElement, delay: number, weeks: number) {
+  const width = grid.getBoundingClientRect().width;
+  if (!width) return;
+  const head = document.createElement('span');
+  head.className = 'hud-playhead';
+  head.setAttribute('aria-hidden', 'true');
+  grid.append(head);
+  head
+    .animate([{ transform: 'translate3d(0, 0, 0)' }, { transform: `translate3d(${width * dirSign()}px, 0, 0)` }], {
+      duration: Math.max(200, weeks * WEEK_MS),
+      delay,
+      easing: 'linear',
+      fill: 'both',
+    })
+    .finished.then(() => head.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: 'ease-out', fill: 'forwards' }).finished)
+    .catch(() => undefined)
+    .finally(() => head.remove());
+}
+
 function playDraw(el: HTMLElement, delay: number) {
-  const children = Array.from(el.children) as HTMLElement[];
+  const children = (Array.from(el.children) as HTMLElement[]).filter((child) => !child.classList.contains('hud-playhead'));
   const calendar = el.dataset.draw === 'calendar';
   el.removeAttribute('data-motion');
   children.forEach((child, index) => {
@@ -259,9 +298,10 @@ function playDraw(el: HTMLElement, delay: number) {
         { opacity: 0, transform: 'scale(0.55)' },
         { opacity: 1, transform: 'none' },
       ],
-      { duration: 360, delay: delay + week * 11 + day * 16, easing: EASE_OUT, fill: 'backwards' },
+      { duration: 360, delay: delay + 40 + week * WEEK_MS + day * 14, easing: EASE_OUT, fill: 'backwards' },
     );
   });
+  if (calendar) sweepPlayhead(el, delay, Math.ceil(children.length / 7));
 }
 
 /* ------------------------------------------------------------- dispatcher */
@@ -311,7 +351,7 @@ function onIntersect(entries: IntersectionObserverEntry[]) {
       settle(el);
       continue;
     }
-    if (kind === 'reveal') {
+    if (kind === 'reveal' || kind === 'count') {
       play(el, kind, (hasHeading ? 220 : 0) + Math.min(staggerIndex, STAGGER_CAP) * STAGGER_MS);
       staggerIndex += 1;
     } else {

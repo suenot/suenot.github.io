@@ -13,6 +13,11 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - Add a motion layer without an animation library: the hero name rises letter by letter from a mask (CSS only, plays without JavaScript), the particle cube assembles from a scattered cloud, section headings reveal with a HUD scan, lists and cards reveal in staggered batches, stats count up once with reserved width, the activity calendar draws column by column, sparklines are acquired by a sweep, project rows and cards get restrained hover motion, blog search results glide to their new places (FLIP), and pages cross-fade with native view transitions. Content stays visible with JavaScript off and under reduced motion; horizontal movement mirrors in Arabic. Rules and hooks are in `docs/motion.md`.
 - Add a scroll readout to the navigation bar (section index, section code, depth), a depth hairline along its top edge and a cursor under the link of the section in view.
 
+### Changed
+
+- Move Code activity to the end of the homepage, after Contact, in place of the footer's duplicate contact block (status line, wordmark and mail button), which now shows only on pages without a Contact section; number it 08 in all six languages and size its heading to its column.
+- Animate Code activity: source rows enter in sequence, totals count up, the calendar draws week by week behind a one-time playhead (mirrored in Arabic), and hovering a day locks the cell and shows its date and count in the caption. Without JavaScript the section says activity is unavailable instead of loading forever.
+
 ### Fixed
 
 - Align the hero tagline, description, roles and actions with the name in the Arabic right-to-left layout, and point the hero and contact arrows in the reading direction.

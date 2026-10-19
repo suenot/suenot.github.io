@@ -44,18 +44,25 @@ are scanned, numbers settle, the calendar is drawn. It never hides content.
 | `[data-count]` | counts up once; `data-count-locale` formats with `Intl` |
 | `[data-count-intro="ms"]` | count starts on a timer as part of the hero intro |
 | `svg[data-wipe]` | the line is acquired by a sweeping cover |
-| `[data-draw="calendar" or "columns"]` | children appear column by column |
+| `[data-draw="calendar" or "columns"]` | children appear column by column; a calendar also gets one playhead sweep |
 | `[data-motion-skip]` | opt a subtree out |
 
 Content rendered after load dispatches `hud:enhance` on its root (see
 `Contributions.astro`); new elements in it may then play in place.
+
+Code activity (the last section on the homepage, numbered 08): source rows
+enter in sequence and available totals count up; an unavailable source shows
+its label instead of a number. The calendar draws week by week behind a
+playhead that crosses it once (right to left in Arabic). Hovering a day locks
+the cell and writes its date and count into the caption line. Without
+JavaScript the section states that activity is unavailable.
 
 New projects, categories and posts need no motion code: rows rendered from
 data carry the hooks.
 
 ## Budget
 
-Home page first-load JS: 6.96 KB gzip before the motion layer, 10.97 KB after
+Home page first-load JS: 6.96 KB gzip before the motion layer, 11.40 KB after
 (no animation library).
 
 ## Verification

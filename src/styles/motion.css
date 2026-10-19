@@ -71,7 +71,7 @@
 .hud-scan {
   position: absolute;
   z-index: 1;
-  /* Wider than the clip set in motion.ts (0.3em), so no glyph edge peeks out. */
+  /* Fallback extents; motion.ts sizes the cover and the clip from the ink box. */
   inset-inline: -0.4em;
   inset-block-start: -0.2em;
   block-size: calc(2 * (100% + 0.4em));
@@ -86,6 +86,22 @@
     var(--hud-cover) 50%
   );
   will-change: transform;
+}
+
+/* Calendar playhead: a 1px accent edge with a short trail, crossing once. */
+.hud-playhead {
+  position: absolute;
+  z-index: 2;
+  inset-block: 0;
+  inset-inline-start: -1.5rem;
+  inline-size: 1.5rem;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, rgba(255, 59, 48, 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
+  will-change: transform;
+}
+
+[dir='rtl'] .hud-playhead {
+  background: linear-gradient(to left, transparent, rgba(255, 59, 48, 0.14) calc(100% - 1px), var(--terminal-accent) calc(100% - 1px));
 }
 
 /* Sparkline acquisition: a cover with a leading accent edge slides off the line. */
@@ -140,7 +156,8 @@
   }
 
   .hud-scan,
-  .hud-wipe {
+  .hud-wipe,
+  .hud-playhead {
     display: none !important;
   }
 }
