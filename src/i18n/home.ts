@@ -300,7 +300,7 @@ export const home = {
         'Curved Games':
           'Browser games: Curved Rangers, Curved Wings of Fury, and Curved Lava, with procedural worlds and audio.',
         'Deep.foundation & Deep.memo':
-          'Open source startups. Fullstack dev: pseudo-graph DB, event-driven architecture, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–present.',
+          'Open source startups. Fullstack dev: pseudo-graph DB, event-driven architecture, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–2024.',
         'Dolphin.bi':
           'Frontend developer for an open-source crypto analytics marketplace. Sentiment analysis and ICO fundamental analysis. The project participated in Startupbootcamp. 2016–2017.',
         Shakeapp:
@@ -642,7 +642,7 @@ export const home = {
         'Curved Games':
           'Браузерные игры Curved Rangers, Curved Wings of Fury и Curved Lava с процедурными мирами и звуком.',
         'Deep.foundation & Deep.memo':
-          'Open-source стартапы. Fullstack-разработка: псевдо-граф БД, event-driven архитектура, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–настоящее время.',
+          'Open-source стартапы. Fullstack-разработка: псевдо-граф БД, event-driven архитектура, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–2024.',
         'Dolphin.bi':
           'Разработчик фронтенда маркетплейса криптоаналитики с открытым исходным кодом: анализ настроений и фундаментальный анализ ICO. Проект участвовал в акселераторе Startupbootcamp. 2016–2017.',
         Shakeapp:
@@ -968,7 +968,7 @@ export const home = {
         Slippage: '带实时后端的浏览器游戏。',
         'Curved Games': '浏览器游戏：Curved Rangers、Curved Wings of Fury 和 Curved Lava，带有程序化世界和音频。',
         'Deep.foundation & Deep.memo':
-          '开源创业项目。全栈开发：伪图数据库、事件驱动架构、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022 至今。',
+          '开源创业项目。全栈开发：伪图数据库、事件驱动架构、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022–2024。',
         'Dolphin.bi':
           '开源加密分析市场的前端开发者，提供情绪分析和 ICO 基本面分析。项目曾参与 Startupbootcamp 加速器。2016–2017。',
         Shakeapp:
@@ -1299,7 +1299,7 @@ export const home = {
         Slippage: '실시간 백엔드가 있는 브라우저 게임.',
         'Curved Games': '절차적 월드와 오디오를 갖춘 Curved Rangers, Curved Wings of Fury, Curved Lava 브라우저 게임.',
         'Deep.foundation & Deep.memo':
-          '오픈소스 스타트업. 풀스택 개발: 의사 그래프 DB, 이벤트 기반 아키텍처, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022~현재.',
+          '오픈소스 스타트업. 풀스택 개발: 의사 그래프 DB, 이벤트 기반 아키텍처, DevOps (Swarm, ArgoCD, Kubernetes, Terraform). 2022–2024.',
         'Dolphin.bi':
           '감정 분석과 ICO 펀더멘털 분석을 제공하는 오픈소스 암호화폐 분석 마켓플레이스의 프런트엔드 개발자. 프로젝트는 Startupbootcamp 액셀러레이터에 참여했습니다. 2016–2017.',
         Shakeapp:
@@ -1630,7 +1630,7 @@ export const home = {
         Slippage: 'リアルタイムバックエンドを備えたブラウザゲーム。',
         'Curved Games': 'プロシージャルな世界と音声を備えた Curved Rangers、Curved Wings of Fury、Curved Lava のブラウザゲーム。',
         'Deep.foundation & Deep.memo':
-          'オープンソーススタートアップ。フルスタック開発: 擬グラフ DB、イベント駆動アーキテクチャ、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022–現在。',
+          'オープンソーススタートアップ。フルスタック開発: 擬グラフ DB、イベント駆動アーキテクチャ、DevOps（Swarm、ArgoCD、Kubernetes、Terraform）。2022–2024。',
         'Dolphin.bi':
           'センチメント分析と ICO ファンダメンタル分析を提供するオープンソース暗号通貨分析マーケットプレイスのフロントエンド開発者。プロジェクトは Startupbootcamp に参加。2016–2017。',
         Shakeapp:
@@ -1963,7 +1963,7 @@ export const home = {
         Slippage: 'لعبة متصفح بخلفية فورية.',
         'Curved Games': 'ألعاب متصفح Curved Rangers وCurved Wings of Fury وCurved Lava بعوالم وصوت إجرائيين.',
         'Deep.foundation & Deep.memo':
-          'شركات ناشئة مفتوحة المصدر. تطوير full-stack: قاعدة pseudo-graph، بنية event-driven، DevOps (Swarm، ArgoCD، Kubernetes، Terraform). 2022–حتى الآن.',
+          'شركات ناشئة مفتوحة المصدر. تطوير full-stack: قاعدة pseudo-graph، بنية event-driven، DevOps (Swarm، ArgoCD، Kubernetes، Terraform). 2022–2024.',
         'Dolphin.bi':
           'مطور الواجهة الأمامية لسوق تحليلات عملات رقمية مفتوح المصدر، لتحليل المشاعر والتحليل الأساسي لـ ICO. شارك المشروع في مسرعة Startupbootcamp. 2016–2017.',
         Shakeapp:
