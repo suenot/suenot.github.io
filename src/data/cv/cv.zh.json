@@ -4,7 +4,7 @@
   "headline": "软件工程师与量化开发者：Web、交易系统、区块链、人工智能",
   "location": "格鲁吉亚巴统",
   "email": "suenot@gmail.com",
-  "summary": "拥有 20 多年软件交付经验的软件工程师。早在人工智能热潮兴起之前，我就已端到端打造网站和产品，涵盖设计、架构、前端、后端与 DevOps，并经营自己的网络工作室达六年。量化开发者与研究员：自 2011 年开始交易，自 2017 年起开发交易机器人、策略、回测、研究与分析工具。在区块链领域，我从零打造过 ICO 分析平台和自己的 DEX，并基于 Cosmos SDK 启动了一条区块链。我也开发过一些游戏、剪辑过视频并从事过电子制作。人工智能让这些技能都得到了进一步提升。",
+  "summary": "拥有 20+ 年软件交付经验的软件工程师。早在人工智能热潮兴起之前，我就已端到端打造网站和产品，涵盖设计、架构、前端、后端与 DevOps，并经营自己的网络工作室达六年。量化开发者与研究员：自 2011 年开始交易，自 2017 年起开发交易机器人、策略、回测、研究与分析工具。在区块链领域，我从零打造过 ICO 分析平台和自己的 DEX，并基于 Cosmos SDK 启动了一条区块链。我也开发过一些游戏、剪辑过视频并从事过电子制作。人工智能让这些技能都得到了进一步提升。",
   "links": [
     {
       "label": "GitHub",
@@ -120,9 +120,9 @@
       "track": "quant",
       "summary": "面向加密货币交易者的剥头皮交易终端、市场数据仓库与回测系统。",
       "bullets": [
-        "覆盖 60 多家交易所的剥头皮交易终端，配备逐笔回测器，可重放实盘机器人的行为",
+        "覆盖 60+ 家交易所的剥头皮交易终端，配备逐笔回测器，可重放实盘机器人的行为",
         "历史市场数据仓库（warehouse.marketmaker.cc）",
-        "使用 Optuna（TPE、CMA-ES）在 50 多个线程上搜索策略；三节点集群通过内存缓存将回测速度提升至 26 倍"
+        "使用 Optuna（TPE、CMA-ES）在 50+ 个线程上搜索策略；3 节点集群通过内存缓存将回测速度提升至 26 倍"
       ],
       "stack": [
         "Go",
@@ -159,7 +159,7 @@
       "start": "2020",
       "end": "2022",
       "track": "web",
-      "summary": "面向个人对个人及企业对个人的汽车和房屋租赁共享平台。",
+      "summary": "面向 C2C 和 C2B 汽车及房屋租赁的共享平台。",
       "bullets": [
         "基于 Node.js、React、Next.js、GraphQL、Apollo Server 和 Hasura 构建移动端与 Web 产品，采用事件驱动架构"
       ]
@@ -183,7 +183,7 @@
       "track": "quant",
       "summary": "自主开源加密货币交易终端。",
       "bullets": [
-        "终端覆盖 130 多家交易所",
+        "终端覆盖 130+ 家交易所",
         "两个版本：先使用带类组件的 React 和 MobX，随后改用 Vue 2 和 MobX"
       ]
     },
@@ -197,7 +197,7 @@
       "summary": "加密货币与 ICO 分析开源市场平台。",
       "bullets": [
         "分析 bitcointalk.org 新闻情绪；通过指标和专家评审进行 ICO 基本面分析",
-        "诞生于 waves.tech 黑客马拉松（2016 年一等奖）；入选阿姆斯特丹 Startupbootcamp 加速器",
+        "诞生于 waves.tech 黑客马拉松（第1名，2016）；随后入选阿姆斯特丹 Startupbootcamp 加速器",
         "发起过一次未达到目标的 ICO；使用 Vue 2 开发前端"
       ]
     },
@@ -222,7 +222,7 @@
       "summary": "人体工学键盘、键盘制作者社群及屏幕键盘。",
       "bullets": [
         "Catboard 及此后约十款人体工学键盘原型",
-        "键盘制作者社群 t.me/klavaorgwork：1,000 名活跃成员，消息超过 60 万条",
+        "键盘制作者社群 t.me/klavaorgwork：1,000 名活跃成员，消息超过 600k+ 条",
         "为 Android（Kotlin）和 iOS（Swift、SwiftUI、UIKit）开发 Hlider 屏幕键盘"
       ]
     },
@@ -398,7 +398,7 @@
       "url": "https://github.com/suenot/profitmaker",
       "years": "2017-present",
       "track": "quant",
-      "summary": "可自行托管、支持模块扩展的开源交易终端，通过 CCXT 支持 100 多家交易所。",
+      "summary": "可自行托管、支持模块扩展的开源交易终端，通过 CCXT 支持 100+ 家交易所。",
       "metric": "365 个 Star，93 个 Fork",
       "stack": [
         "TypeScript",
@@ -423,7 +423,7 @@
       "name": "ICOFaces",
       "years": "2017-2018",
       "track": "chain",
-      "summary": "分析 ICO 参与者的历史。荣获 2017 年 BlockchainHack 一等奖。"
+      "summary": "分析 ICO 参与者的历史。荣获 2017 年 BlockchainHack 第 1 名。"
     },
     {
       "name": "Inter-exchange arbitrage",
@@ -635,12 +635,12 @@
     },
     {
       "date": "2016",
-      "title": "waves.tech 黑客马拉松：一等奖",
+      "title": "waves.tech 黑客马拉松：第 1 名",
       "detail": "Dolphin BI"
     },
     {
       "date": "Nov 2014",
-      "title": "Yandex BEM 黑客马拉松：一等奖",
+      "title": "Yandex BEM 黑客马拉松：第 1 名",
       "detail": "团队"
     },
     {

@@ -159,7 +159,7 @@
       "start": "2020",
       "end": "2022",
       "track": "web",
-      "summary": "個人間・企業間で自動車や住宅を貸し借りできるシェアリングプラットフォーム。",
+      "summary": "C2C・C2B型の、自動車や住宅を貸し借りできるシェアリングプラットフォーム。",
       "bullets": [
         "Node.js、React、Next.js、GraphQL、Apollo Server、Hasuraによるイベント駆動型のモバイル・ウェブプロダクト"
       ]
@@ -222,7 +222,7 @@
       "summary": "エルゴノミクスキーボード、キーボード製作者のコミュニティ、オンスクリーンキーボード。",
       "bullets": [
         "Catboardと、その後に開発した約10種類のエルゴノミクスキーボードの試作機",
-        "キーボード製作者のコミュニティ t.me/klavaorgwork：アクティブメンバー1,000人、メッセージ60万件以上",
+        "キーボード製作者のコミュニティ t.me/klavaorgwork：アクティブメンバー1,000人、メッセージ600k+",
         "Android（Kotlin）とiOS（Swift、SwiftUI、UIKit）向けオンスクリーンキーボードHlider"
       ]
     },

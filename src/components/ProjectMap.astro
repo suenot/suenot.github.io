@@ -1,5 +1,5 @@
 ---
-import { defaultLocale, type Locale } from '../i18n/config';
+import { defaultLocale, locales, localeNames, type Locale } from '../i18n/config';
 import { getCv, getCvLabels, buildProjectMap, resumeUrl } from '../lib/cv';
 
 interface Props {
@@ -19,10 +19,27 @@ const pct = (f: number) => (f * 100).toFixed(3);
         <h2 id="career-heading" class="terminal-heading">{t.career}</h2>
         <p class="pmap__intro">{t.careerIntro}</p>
       </div>
-      <a class="pmap__resume" href={resumeUrl(locale)} download>
-        <span>{t.download}</span>
-        <strong>{t.resume}</strong>
-      </a>
+      <div class="pmap__dl">
+        <a class="pmap__resume" href={resumeUrl(locale)} download>
+          <span>{t.download}</span>
+          <strong>{t.resume}</strong>
+        </a>
+        <details class="pmap__langs">
+          <summary aria-label={t.download + ' — ' + localeNames[locale]}>
+            <span aria-hidden="true">▾</span>
+          </summary>
+          <ul role="list">
+            {locales.map((l) => (
+              <li>
+                <a href={resumeUrl(l)} download hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
+                  <span>{localeNames[l]}</span>
+                  <span aria-hidden="true">PDF ↓</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      </div>
     </header>
 
     <ul class="pmap__legend" role="list">
@@ -109,6 +126,61 @@ const pct = (f: number) => (f * 100).toFixed(3);
   .pmap__resume:focus-visible {
     border-color: var(--terminal-accent);
     background: var(--terminal-panel-strong);
+  }
+  .pmap__dl {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+  .pmap__langs summary {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding-inline: 1rem;
+    border: 1px solid var(--terminal-line-strong);
+    border-inline-start: 0;
+    background: var(--terminal-panel);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .pmap__langs summary::-webkit-details-marker {
+    display: none;
+  }
+  .pmap__langs summary:hover,
+  .pmap__langs[open] summary,
+  .pmap__langs summary:focus-visible {
+    border-color: var(--terminal-accent);
+    background: var(--terminal-panel-strong);
+  }
+  .pmap__langs ul {
+    position: absolute;
+    z-index: 5;
+    inset-block-start: calc(100% + 0.25rem);
+    inset-inline-end: 0;
+    min-width: 14rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--terminal-line-strong);
+    background: var(--terminal-panel-strong);
+  }
+  .pmap__langs li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.65rem 1rem;
+    text-decoration: none;
+  }
+  .pmap__langs li a span:last-child {
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+  }
+  .pmap__langs li a:hover,
+  .pmap__langs li a:focus-visible,
+  .pmap__langs li a[aria-current] {
+    background: var(--terminal-panel);
+    box-shadow: inset 2px 0 0 var(--terminal-accent);
   }
   .pmap__legend {
     display: flex;
@@ -225,8 +297,11 @@ const pct = (f: number) => (f * 100).toFixed(3);
     z-index: 2;
   }
   @media (max-width: 640px) {
-    .pmap__resume {
+    .pmap__dl {
       width: 100%;
+    }
+    .pmap__resume {
+      flex: 1;
     }
   }
 </style>
