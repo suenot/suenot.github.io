@@ -1,6 +1,7 @@
 ---
 import LanguageSelector from './LanguageSelector.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import CvMenu from './CvMenu.astro';
 import { type Locale, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
@@ -50,6 +51,7 @@ const links = [
     </ul>
 
     <div class="nav-actions">
+      <CvMenu locale={locale} />
       <LanguageSelector currentLocale={locale} availableLocales={availableLocales} />
       <ThemeToggle locale={locale} />
       <button
@@ -83,6 +85,7 @@ const links = [
         </li>
       ))}
     </ul>
+    <CvMenu locale={locale} variant="list" />
     <ThemeToggle locale={locale} variant="menu" />
     <a class="mobile-github" href="https://github.com/suenot" target="_blank" rel="noopener noreferrer">
       GITHUB / SOURCE INDEX ↗

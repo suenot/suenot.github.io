@@ -1,0 +1,132 @@
+---
+import { locales, localeNames, type Locale } from '../i18n/config';
+import { getCvLabels, resumeUrl } from '../lib/cv';
+
+interface Props {
+  locale: Locale;
+  variant?: 'bar' | 'list';
+}
+const { locale, variant = 'bar' } = Astro.props;
+const label = getCvLabels(locale).resume;
+---
+
+{variant === 'bar' ? (
+  <details class="cv-menu" data-cv-menu>
+    <summary aria-label={`${label} PDF`}>
+      <span>CV</span>
+      <span aria-hidden="true">▾</span>
+    </summary>
+    <div class="cv-menu__panel">
+      <div class="cv-menu__label">{label} / PDF</div>
+      {locales.map((l) => (
+        <a href={resumeUrl(l)} download hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
+          <span>{String(locales.indexOf(l) + 1).padStart(2, '0')}</span>
+          <span>{localeNames[l]}</span>
+          <span aria-hidden="true">↓</span>
+        </a>
+      ))}
+    </div>
+  </details>
+) : (
+  <div class="cv-list">
+    <div class="cv-menu__label">{label} / PDF</div>
+    <ul role="list">
+      {locales.map((l) => (
+        <li>
+          <a href={resumeUrl(l)} download hreflang={l} lang={l}>{localeNames[l]} ↓</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<style>
+  .cv-menu { position: relative; }
+  .cv-menu summary {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.45rem;
+    padding-inline: 0.5rem;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .cv-menu summary::-webkit-details-marker { display: none; }
+  .cv-menu summary:hover,
+  .cv-menu[open] summary { color: var(--terminal-ink); }
+  .cv-menu__panel {
+    position: absolute;
+    z-index: 70;
+    inset-block-start: calc(100% + 1rem);
+    inset-inline-end: 0;
+    width: min(19rem, calc(100vw - 2rem));
+    border: 1px solid var(--terminal-line-strong);
+    background: var(--terminal-bg);
+  }
+  .cv-menu__label {
+    padding: 0.65rem 0.75rem;
+    border-block-end: 1px solid var(--terminal-line);
+    color: var(--terminal-dim);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .cv-menu__panel a {
+    display: grid;
+    align-items: center;
+    padding: 0.7rem 0.75rem;
+    border-block-end: 1px solid var(--terminal-line);
+    grid-template-columns: 2rem 1fr auto;
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    text-decoration: none;
+  }
+  .cv-menu__panel a:last-child { border-block-end: 0; }
+  .cv-menu__panel a:hover,
+  .cv-menu__panel a[aria-current='true'] {
+    background: var(--terminal-panel-strong);
+    color: var(--terminal-ink);
+  }
+  .cv-menu__panel a[aria-current='true'] span:first-child { color: var(--terminal-accent); }
+  @media (max-width: 38rem) {
+    .cv-menu__panel {
+      position: fixed;
+      inset-block-start: calc(var(--terminal-header) + 0.5rem);
+      inset-inline: 1rem;
+      width: auto;
+    }
+  }
+
+  .cv-list { border-block-end: 1px solid var(--terminal-line); }
+  .cv-list ul { display: flex; flex-wrap: wrap; margin: 0; padding: 0 1rem 1rem; list-style: none; gap: 0.5rem; }
+  .cv-list .cv-menu__label { border: 0; padding-inline: 1rem; }
+  .cv-list a {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--terminal-line-strong);
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  .cv-list a:hover { color: var(--terminal-ink); border-color: var(--terminal-accent); }
+</style>
+
+<script>
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-cv-menu][open]').forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll<HTMLDetailsElement>('[data-cv-menu][open]').forEach((d) => {
+      d.open = false;
+      d.querySelector('summary')?.focus();
+    });
+  });
+</script>
