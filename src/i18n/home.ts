@@ -239,8 +239,6 @@ export const home = {
           'Go service that collects news, keeps every revision and builds a time-based event graph, digests and RSS. 283 Go and 108 Python tests. Reforms.ai, 2026.',
         'AI video pipeline':
           'Short vertical videos built in code with HyperFrames and FFmpeg, 1080x1920 at 30 fps, with a style gate, independent reviews and automatic checks for loudness, shake and blur. 39 videos built, 8 live on 7 platforms. Reforms.ai, 2026.',
-        'Motion CV site':
-          'My CV as a motion-design site at production.suenot.com: work at Reforms.ai, projects and the video production method.',
         'gaia':
           'Drives Gemini, Veo 3 and NotebookLM through a logged-in Camoufox session, no API keys. 14 stars, 214 tests.',
         'Content factory':
@@ -579,8 +577,6 @@ export const home = {
           'Сервис на Go собирает новости, хранит каждую ревизию и строит граф событий во времени, дайджесты и RSS. 283 теста на Go и 108 на Python. Reforms.ai, 2026.',
         'AI video pipeline':
           'Короткие вертикальные видео, собранные кодом на HyperFrames и FFmpeg, 1080x1920 при 30 к/с, со стилевым гейтом, независимыми ревью и автоматическими проверками громкости, тряски и размытия. 39 видео собрано, 8 опубликованы на 7 площадках. Reforms.ai, 2026.',
-        'Motion CV site':
-          'Мое резюме в виде motion-сайта production.suenot.com: работа в Reforms.ai, проекты и метод производства видео.',
         'gaia':
           'Управляет Gemini, Veo 3 и NotebookLM через залогиненную сессию Camoufox, без API-ключей. 14 звезд, 214 тестов.',
         'Content factory':
@@ -913,8 +909,6 @@ export const home = {
           'Go 服务：采集新闻，保存每一个修订版本，并生成按时间组织的事件图、摘要和 RSS。283 个 Go 测试和 108 个 Python 测试。Reforms.ai，2026。',
         'AI video pipeline':
           '用 HyperFrames 和 FFmpeg 以代码制作竖屏短视频，1080x1920、30 帧/秒，带风格关卡、独立评审，以及响度、抖动和模糊的自动检查。已制作 39 条视频，8 条已在 7 个平台上线。Reforms.ai，2026。',
-        'Motion CV site':
-          '我的简历做成了动效网站 production.suenot.com：Reforms.ai 的工作、项目与视频制作方法。',
         'gaia':
           '通过已登录的 Camoufox 会话驱动 Gemini、Veo 3 和 NotebookLM，无需 API 密钥。14 颗星，214 个测试。',
         'Content factory':
@@ -1244,8 +1238,6 @@ export const home = {
           '뉴스를 수집하고 모든 수정본을 보관하며 시간 기반 이벤트 그래프, 다이제스트, RSS를 만드는 Go 서비스. Go 테스트 283개와 Python 테스트 108개. Reforms.ai, 2026.',
         'AI video pipeline':
           'HyperFrames와 FFmpeg로 코드에서 만드는 세로형 짧은 영상, 1080x1920, 30fps. 스타일 게이트, 독립 리뷰, 음량·흔들림·흐림 자동 검사를 거칩니다. 영상 39개 제작, 8개를 7개 플랫폼에 공개. Reforms.ai, 2026.',
-        'Motion CV site':
-          '모션 디자인 사이트로 만든 내 이력서 production.suenot.com: Reforms.ai 작업, 프로젝트, 영상 제작 방식.',
         'gaia':
           '로그인된 Camoufox 세션으로 Gemini, Veo 3, NotebookLM을 제어하며 API 키가 필요 없습니다. 별 14개, 테스트 214개.',
         'Content factory':
@@ -1575,8 +1567,6 @@ export const home = {
           'ニュースを収集し、すべての改訂を保存して、時間軸のイベントグラフ、ダイジェスト、RSSを生成するGoサービス。Goテスト283件とPythonテスト108件。Reforms.ai、2026年。',
         'AI video pipeline':
           'HyperFramesとFFmpegでコードから作る縦型ショート動画（1080x1920、30fps）。スタイルゲート、独立レビュー、音量・手ブレ・ぼけの自動チェックを通します。39本を制作し、8本を7プラットフォームで公開。Reforms.ai、2026年。',
-        'Motion CV site':
-          'モーションデザインのサイトにした私の履歴書 production.suenot.com。Reforms.aiでの仕事、プロジェクト、動画制作の方法。',
         'gaia':
           'ログイン済みのCamoufoxセッションでGemini、Veo 3、NotebookLMを操作します。APIキーは不要。スター14、テスト214件。',
         'Content factory':
@@ -1908,8 +1898,6 @@ export const home = {
           'خدمة بلغة Go تجمع الأخبار وتحتفظ بكل نسخة معدلة وتبني رسما بيانيا للأحداث عبر الزمن وملخصات وRSS. 283 اختبارا بلغة Go و108 بلغة Python. Reforms.ai، 2026.',
         'AI video pipeline':
           'فيديوهات عمودية قصيرة تُبنى بالكود عبر HyperFrames وFFmpeg بدقة 1080x1920 و30 إطارا في الثانية، مع بوابة أسلوب ومراجعات مستقلة وفحوص تلقائية لمستوى الصوت والاهتزاز والضبابية. أُنتج 39 فيديو، نُشر 8 منها على 7 منصات. Reforms.ai، 2026.',
-        'Motion CV site':
-          'سيرتي الذاتية على شكل موقع حركي production.suenot.com: العمل في Reforms.ai والمشاريع وطريقة إنتاج الفيديو.',
         'gaia':
           'يتحكم في Gemini وVeo 3 وNotebookLM عبر جلسة Camoufox مسجل الدخول فيها، دون مفاتيح API. 14 نجمة و214 اختبارا.',
         'Content factory':

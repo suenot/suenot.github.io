@@ -1,4 +1,5 @@
 ---
+import { resumeUrl } from '../lib/cv';
 import { defaultLocale, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
@@ -21,7 +22,7 @@ const navLinks = [
   { label: t('nav.projects'), href: `${prefix}/#projects` },
   { label: t('nav.blog'), href: blogHref },
   { label: t('nav.contact'), href: `${prefix}/#contact` },
-  { label: t('nav.cv'), href: 'https://production.suenot.com' },
+  { label: t('nav.cv'), href: resumeUrl(locale) },
 ];
 
 const socialLinks = [
