@@ -1,0 +1,750 @@
+{
+  "name": "Eugen Soloviov",
+  "handle": "suenot",
+  "headline": "软件工程师与量化开发者：Web、交易系统、区块链、人工智能",
+  "location": "格鲁吉亚巴统",
+  "email": "suenot@gmail.com",
+  "summary": "拥有 20 多年软件交付经验的软件工程师。早在人工智能热潮兴起之前，我就已端到端打造网站和产品，涵盖设计、架构、前端、后端与 DevOps，并经营自己的网络工作室达六年。量化开发者与研究员：自 2011 年开始交易，自 2017 年起开发交易机器人、策略、回测、研究与分析工具。在区块链领域，我从零打造过 ICO 分析平台和自己的 DEX，并基于 Cosmos SDK 启动了一条区块链。我也开发过一些游戏、剪辑过视频并从事过电子制作。人工智能让这些技能都得到了进一步提升。",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/suenot",
+      "display": "github.com/suenot"
+    },
+    {
+      "label": "个人网站",
+      "url": "https://suenot.com",
+      "display": "suenot.com"
+    },
+    {
+      "label": "Marketmaker",
+      "url": "https://marketmaker.cc",
+      "display": "marketmaker.cc"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suenot/",
+      "display": "linkedin.com/in/suenot"
+    },
+    {
+      "label": "Telegram",
+      "url": "https://t.me/suenot",
+      "display": "@suenot"
+    },
+    {
+      "label": "频道",
+      "url": "https://t.me/suenot_dev",
+      "display": "t.me/suenot_dev"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/suenot",
+      "display": "x.com/suenot"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/soloviov.evgeniy",
+      "display": "facebook.com/soloviov.evgeniy"
+    }
+  ],
+  "stats": [
+    {
+      "value": "20+",
+      "label": "多年软件交付经验"
+    },
+    {
+      "value": "~200",
+      "label": "在自己的网络工作室打造的网站"
+    },
+    {
+      "value": "15+",
+      "label": "年交易经验"
+    },
+    {
+      "value": "130+",
+      "label": "已接入的交易所：30 个自有适配器，约 100 个通过 CCXT 接入"
+    },
+    {
+      "value": "3",
+      "label": "次黑客马拉松一等奖"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "web",
+      "label": "Web 与产品"
+    },
+    {
+      "id": "quant",
+      "label": "交易与量化"
+    },
+    {
+      "id": "chain",
+      "label": "区块链"
+    },
+    {
+      "id": "ai",
+      "label": "人工智能与自动化"
+    },
+    {
+      "id": "hw",
+      "label": "硬件与社群"
+    }
+  ],
+  "experience": [
+    {
+      "org": "Cmdop",
+      "url": "https://cmdop.com",
+      "role": "合伙人、首席技术官",
+      "start": "2025",
+      "end": "present",
+      "track": "ai",
+      "summary": "通过人工智能智能体远程管理服务器。",
+      "bullets": [
+        "负责整个产品技术栈：智能体控制、Telegram、Discord 和 Slack 聊天机器人、浏览器自动化",
+        "使用 React、Next.js 和 TypeScript 开发前端；为智能体打造技能市场"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Python"
+      ]
+    },
+    {
+      "org": "Marketmaker.cc",
+      "url": "https://marketmaker.cc",
+      "role": "创始人、首席执行官",
+      "start": "2024",
+      "end": "present",
+      "track": "quant",
+      "summary": "面向加密货币交易者的剥头皮交易终端、市场数据仓库与回测系统。",
+      "bullets": [
+        "覆盖 60 多家交易所的剥头皮交易终端，配备逐笔回测器，可重放实盘机器人的行为",
+        "历史市场数据仓库（warehouse.marketmaker.cc）",
+        "使用 Optuna（TPE、CMA-ES）在 50 多个线程上搜索策略；三节点集群通过内存缓存将回测速度提升至 26 倍"
+      ],
+      "stack": [
+        "Go",
+        "TypeScript",
+        "Rust",
+        "QuestDB",
+        "DuckDB"
+      ]
+    },
+    {
+      "org": "Deep.foundation, Deep.memo",
+      "url": "https://deep.foundation",
+      "role": "全栈开发工程师",
+      "start": "2022",
+      "end": "2024",
+      "track": "web",
+      "summary": "基于伪图数据库构建的开源初创项目。",
+      "bullets": [
+        "基于 GraphQL、Apollo Server 和 Hasura 构建事件驱动后端及 React/Next.js 前端",
+        "DevOps：Docker Swarm、Dokploy、Argo CD、Kubernetes Crossplane、Terraform、垂直扩展"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "GraphQL",
+        "Hasura"
+      ]
+    },
+    {
+      "org": "Shakeapp",
+      "url": "https://play.google.com/store/apps/details?id=shakeapp.mobile.app",
+      "role": "React 开发工程师",
+      "start": "2020",
+      "end": "2022",
+      "track": "web",
+      "summary": "面向个人对个人及企业对个人的汽车和房屋租赁共享平台。",
+      "bullets": [
+        "基于 Node.js、React、Next.js、GraphQL、Apollo Server 和 Hasura 构建移动端与 Web 产品，采用事件驱动架构"
+      ]
+    },
+    {
+      "org": "Kupi.net",
+      "role": "初创公司合伙人",
+      "start": "2019",
+      "end": "2020",
+      "track": "web",
+      "summary": "网站构建工具。",
+      "bullets": [
+        "使用 React 和 Django 构建"
+      ]
+    },
+    {
+      "org": "Kupi.network",
+      "role": "创始人、全栈开发工程师",
+      "start": "2018",
+      "end": "2019",
+      "track": "quant",
+      "summary": "自主开源加密货币交易终端。",
+      "bullets": [
+        "终端覆盖 130 多家交易所",
+        "两个版本：先使用带类组件的 React 和 MobX，随后改用 Vue 2 和 MobX"
+      ]
+    },
+    {
+      "org": "Dolphin BI",
+      "url": "https://www.crunchbase.com/organization/dolphin-bi",
+      "role": "前端开发工程师、初创团队成员",
+      "start": "2016",
+      "end": "2018",
+      "track": "chain",
+      "summary": "加密货币与 ICO 分析开源市场平台。",
+      "bullets": [
+        "分析 bitcointalk.org 新闻情绪；通过指标和专家评审进行 ICO 基本面分析",
+        "诞生于 waves.tech 黑客马拉松（2016 年一等奖）；入选阿姆斯特丹 Startupbootcamp 加速器",
+        "发起过一次未达到目标的 ICO；使用 Vue 2 开发前端"
+      ]
+    },
+    {
+      "org": "Thermom",
+      "role": "初创公司合伙人、前端开发工程师",
+      "start": "2016",
+      "end": "2016",
+      "track": "web",
+      "summary": "曾入选拜耳加速器的初创公司。",
+      "bullets": [
+        "使用 Vue 2 开发前端，2016 年 1 月至 5 月"
+      ]
+    },
+    {
+      "org": "klava.org",
+      "url": "https://klava.org",
+      "role": "开发合伙人",
+      "start": "2013",
+      "end": "present",
+      "track": "hw",
+      "summary": "人体工学键盘、键盘制作者社群及屏幕键盘。",
+      "bullets": [
+        "Catboard 及此后约十款人体工学键盘原型",
+        "键盘制作者社群 t.me/klavaorgwork：1,000 名活跃成员，消息超过 60 万条",
+        "为 Android（Kotlin）和 iOS（Swift、SwiftUI、UIKit）开发 Hlider 屏幕键盘"
+      ]
+    },
+    {
+      "org": "Independent trading",
+      "role": "交易员、量化开发者",
+      "start": "2011",
+      "end": "present",
+      "track": "quant",
+      "summary": "从挖矿和手动交易到自动化策略。",
+      "bullets": [
+        "挖掘 BTC 和 LTC，投资并手动交易，随后实现自动化：数据解析器、信号、机器人",
+        "自 2017 年起从事套利与剥头皮交易，自 2021 年起开发趋势算法，自 2022 年起进行投资组合管理与加密货币期货交易",
+        "为 30 家交易所开发自有适配器，另通过 CCXT 接入约 100 家；支持股票经纪商 Tinkoff、Freedom Finance 和 Alor；2020 年获得合格投资者身份",
+        "数据技术栈：Node.js、Python、MongoDB、Tarantool（内存 Lua）、ClickHouse"
+      ]
+    },
+    {
+      "org": "De-core.net",
+      "role": "创始人、网络工作室",
+      "start": "2010",
+      "end": "2016",
+      "track": "web",
+      "summary": "从个人自由职业者起步，后来经营拥有 3 至 7 名开发者的工作室。",
+      "bullets": [
+        "打造约 200 个网站：页面标记、前端、原型设计与视觉设计",
+        "webpack、BEM、Web Components、Angular、React、Vue、Meteor、Node.js、Ionic 和 Cordova",
+        "使用 Sketch、Figma、Inkscape 和 Fireworks 进行界面设计"
+      ]
+    },
+    {
+      "org": "Early web",
+      "role": "业余 Web 开发者",
+      "start": "2005",
+      "end": "2010",
+      "track": "web",
+      "summary": "使用 phpBB、vBulletin 和 Joomla 搭建网站与论坛。",
+      "bullets": [
+        "1998 年用 FrontPage 和 Dreamweaver 制作首批网站；之后使用 HTML、CSS、JavaScript 和 PHP"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Scalper terminal prototype",
+      "url": "https://scalper.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "使用 Rust 和 iced 框架开发的原生剥头皮交易终端。",
+      "stack": [
+        "Rust",
+        "iced"
+      ]
+    },
+    {
+      "name": "AI agents for news trading",
+      "years": "2026",
+      "track": "ai",
+      "summary": "基于新闻进行交易的智能体系统。"
+    },
+    {
+      "name": "Trender",
+      "url": "https://trender.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "用于快速测试趋势算法的回测引擎及配套机器人。"
+    },
+    {
+      "name": "gaia",
+      "url": "https://github.com/suenot/gaia",
+      "years": "2026",
+      "track": "ai",
+      "summary": "通过已登录的 Camoufox 会话驱动 Gemini、Veo 3 和 NotebookLM，无需 API 密钥。",
+      "metric": "14 个 Star",
+      "stack": [
+        "Python",
+        "Camoufox"
+      ]
+    },
+    {
+      "name": "Content factory",
+      "years": "2026",
+      "track": "ai",
+      "summary": "从文章生成幻灯片和音频，再制作同步 MP4、字幕与元数据，最后上传至 YouTube。",
+      "stack": [
+        "FFmpeg",
+        "Whisper",
+        "Python"
+      ]
+    },
+    {
+      "name": "Listingapis.com",
+      "url": "https://listingapis.com",
+      "years": "2025-present",
+      "track": "quant",
+      "summary": "挂牌策略：回测并降低信号与下单之间的网络延迟。"
+    },
+    {
+      "name": "AI form filling",
+      "years": "2025",
+      "track": "ai",
+      "summary": "为用户自动填写网站表单的人工智能服务。项目于 2025 年 1 月至 3 月期间运行，之后关闭。"
+    },
+    {
+      "name": "aicommit",
+      "url": "https://github.com/suenot/aicommit",
+      "years": "2024-present",
+      "track": "ai",
+      "summary": "使用大语言模型编写 git 提交说明，并在需要时切换到免费模型的命令行工具。",
+      "metric": "25 个 Star",
+      "stack": [
+        "Rust"
+      ]
+    },
+    {
+      "name": "Front-runner",
+      "years": "2024",
+      "track": "quant",
+      "summary": "通过信号和机器人搜索市场异常：在 1 毫秒内下单，并自动选择靠近交易所的最佳服务器。"
+    },
+    {
+      "name": "Cosmos SDK chain",
+      "years": "2024-2025",
+      "track": "chain",
+      "summary": "基于 Cosmos SDK 启动区块链；网络运行约一年后停止了节点。",
+      "stack": [
+        "Cosmos SDK",
+        "Go"
+      ]
+    },
+    {
+      "name": "Vue scalper terminal",
+      "years": "2023",
+      "track": "quant",
+      "summary": "基于 Vue.js 的剥头皮交易终端。",
+      "stack": [
+        "Vue"
+      ]
+    },
+    {
+      "name": "centrum-air.com",
+      "url": "https://centrum-air.com",
+      "years": "2023",
+      "track": "web",
+      "summary": "为乌兹别克斯坦一家私人航空公司制作的网站。",
+      "stack": [
+        "React",
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Tinkoff Bot Balancer",
+      "url": "https://github.com/suenot/tinkoff-invest-contest",
+      "years": "2022-2025",
+      "track": "quant",
+      "summary": "在 2022 年 Tinkoff 黑客马拉松期间开发的开源投资组合再平衡机器人。"
+    },
+    {
+      "name": "Deep Profitmaker",
+      "url": "https://github.com/suenot/deep-profitmaker",
+      "years": "2022",
+      "track": "quant",
+      "summary": "基于伪图结构的交易架构概念。"
+    },
+    {
+      "name": "Pair trading research",
+      "years": "2022",
+      "track": "quant",
+      "summary": "协整与统计套利。"
+    },
+    {
+      "name": "profitmaker",
+      "url": "https://github.com/suenot/profitmaker",
+      "years": "2017-present",
+      "track": "quant",
+      "summary": "可自行托管、支持模块扩展的开源交易终端，通过 CCXT 支持 100 多家交易所。",
+      "metric": "365 个 Star，93 个 Fork",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Bun",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "name": "Bursa.dex",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "从零打造的自有去中心化交易所：使用 Solidity 智能合约、web3.js、React 和 Django。自行筹资并开发前端与后端。",
+      "stack": [
+        "Solidity",
+        "web3.js",
+        "React",
+        "Django"
+      ]
+    },
+    {
+      "name": "ICOFaces",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "分析 ICO 参与者的历史。荣获 2017 年 BlockchainHack 一等奖。"
+    },
+    {
+      "name": "Inter-exchange arbitrage",
+      "years": "2017",
+      "track": "quant",
+      "summary": "在最多 30 家交易所上使用指标、信号和机器人：比较最新价格，并在价格相关性脱离时模拟成交。"
+    },
+    {
+      "name": "Kupi.ru",
+      "years": "2013",
+      "track": "web",
+      "summary": "曾入选 FRII 加速器的电商初创项目。"
+    }
+  ],
+  "skills": [
+    {
+      "group": "编程语言",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Go",
+        "Swift",
+        "Rust (basics)",
+        "Zig (basics)",
+        "Kotlin (basics)",
+        "C++ (basics)",
+        "C# (basics)",
+        "Lua (basics)",
+        "Haskell (basics)"
+      ]
+    },
+    {
+      "group": "前端",
+      "items": [
+        "React",
+        "Next.js",
+        "Astro",
+        "Vue",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Meteor",
+        "MobX",
+        "Apache ECharts",
+        "React Stockcharts",
+        "BEM",
+        "Sass",
+        "Stylus",
+        "web components"
+      ]
+    },
+    {
+      "group": "移动端与桌面端",
+      "items": [
+        "SwiftUI",
+        "UIKit",
+        "Kotlin (Android)",
+        "Electron",
+        "Tauri",
+        "Ionic",
+        "Cordova",
+        "Capacitor"
+      ]
+    },
+    {
+      "group": "后端与 API",
+      "items": [
+        "Node.js",
+        "Bun",
+        "Elysia",
+        "Django",
+        "FastAPI",
+        "GraphQL",
+        "Apollo Server",
+        "Hasura",
+        "gRPC",
+        "REST",
+        "WebSocket",
+        "FIX Protocol"
+      ]
+    },
+    {
+      "group": "数据库与流式处理",
+      "items": [
+        "PostgreSQL",
+        "QuestDB",
+        "ClickHouse",
+        "DuckDB",
+        "Redis",
+        "MongoDB",
+        "MySQL",
+        "SQLite",
+        "Tarantool",
+        "Parquet",
+        "Apache Kafka"
+      ]
+    },
+    {
+      "group": "DevOps 与基础设施",
+      "items": [
+        "Docker",
+        "Docker Compose",
+        "Docker Swarm",
+        "Kubernetes",
+        "Crossplane",
+        "containerd",
+        "CRI-O",
+        "Nginx",
+        "Apache",
+        "Traefik",
+        "Istio",
+        "Gateway API",
+        "Dokploy",
+        "Terraform",
+        "Pulumi",
+        "Argo CD",
+        "GitLab CI",
+        "Prometheus",
+        "Grafana"
+      ]
+    },
+    {
+      "group": "量化与交易",
+      "items": [
+        "Trading robots",
+        "Market making",
+        "Arbitrage",
+        "Scalping",
+        "Trend algorithms",
+        "Portfolio management",
+        "Crypto futures",
+        "Pair trading",
+        "Statistical arbitrage",
+        "Tick-level backtesting",
+        "Optuna (TPE, CMA-ES)",
+        "Listing monitors",
+        "HFT messaging",
+        "CCXT",
+        "Binance",
+        "Bybit",
+        "Gate.io",
+        "MEXC",
+        "Bitget",
+        "Tinkoff Invest",
+        "Freedom Finance",
+        "Alor",
+        "MOEX"
+      ]
+    },
+    {
+      "group": "区块链",
+      "items": [
+        "Solidity",
+        "web3.js",
+        "Cosmos SDK",
+        "DEX design",
+        "ICO analytics"
+      ]
+    },
+    {
+      "group": "人工智能与智能体",
+      "items": [
+        "Claude Code",
+        "Codex",
+        "Subagent orchestration",
+        "MCP servers",
+        "Pydantic AI",
+        "Multi-model routing"
+      ]
+    },
+    {
+      "group": "设计",
+      "items": [
+        "Figma",
+        "Sketch",
+        "Inkscape",
+        "Fireworks",
+        "Prototyping"
+      ]
+    },
+    {
+      "group": "视频与动效",
+      "items": [
+        "HyperFrames",
+        "GSAP",
+        "FFmpeg",
+        "Final Cut Pro",
+        "iMovie"
+      ]
+    },
+    {
+      "group": "硬件及其他",
+      "items": [
+        "Ergonomic keyboards",
+        "LabVIEW (Core 1, Core 2, DAQ)",
+        "Electronics",
+        "Game development",
+        "Touch typing: 500+ cpm Russian, 400+ English"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "date": "Jul 2017",
+      "title": "BlockchainHack by Waves：冠军",
+      "detail": "ICOFaces",
+      "url": "https://wavesplatform.com/"
+    },
+    {
+      "date": "2016",
+      "title": "waves.tech 黑客马拉松：一等奖",
+      "detail": "Dolphin BI"
+    },
+    {
+      "date": "Nov 2014",
+      "title": "Yandex BEM 黑客马拉松：一等奖",
+      "detail": "团队"
+    },
+    {
+      "date": "Oct 2014",
+      "title": "Fablab 周末：最佳推广奖"
+    },
+    {
+      "date": "Sep 2014",
+      "title": "Lomonosov 莫斯科国立大学机器人黑客马拉松：LabVIEW 特别奖"
+    }
+  ],
+  "education": [
+    {
+      "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
+      "degree": "计算机辅助设计（CAD）系统，信息技术学院；完成 3 年学业，未毕业",
+      "years": "2008-2011"
+    }
+  ],
+  "courses": [
+    {
+      "date": "Apr 2018",
+      "title": "修辞学",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/101634"
+    },
+    {
+      "date": "Mar 2018",
+      "title": "论证理论",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/97106"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "科学思维",
+      "org": "SKB Kontur",
+      "url": "https://stepik.org/cert/51382"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Web 技术",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/50978"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Haskell 函数式编程",
+      "org": "Computer Science Center",
+      "url": "https://stepik.org/cert/50337"
+    },
+    {
+      "date": "Jan 2017",
+      "title": "软件需求编写",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/45358"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "统计学基础",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/44208"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Linux 入门",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/42290"
+    },
+    {
+      "date": "Nov 2016",
+      "title": "Python 编程"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "投资银行内幕",
+      "org": "European University at St Petersburg",
+      "url": "https://stepik.org/cert/34726"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "Web 项目安全分析"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "学会学习",
+      "org": "University of California, San Diego"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "无线通信新兴技术",
+      "org": "Yonsei University (Coursera)"
+    },
+    {
+      "date": "Feb 2015",
+      "title": "LabVIEW Core 1、Core 2 与 DAQ"
+    }
+  ],
+  "languages": [
+    {
+      "name": "俄语",
+      "level": "母语"
+    },
+    {
+      "name": "英语",
+      "level": "B2"
+    }
+  ]
+}

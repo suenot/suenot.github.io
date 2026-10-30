@@ -1,0 +1,232 @@
+---
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getCv, getCvLabels, buildProjectMap, resumeUrl } from '../lib/cv';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = defaultLocale } = Astro.props;
+const t = getCvLabels(locale);
+const map = buildProjectMap(getCv(locale), t.now);
+const pct = (f: number) => (f * 100).toFixed(3);
+---
+
+<section id="career" class="pmap terminal-section" aria-labelledby="career-heading">
+  <div class="terminal-container">
+    <header class="pmap__header">
+      <div>
+        <p class="terminal-kicker">{t.careerKicker}</p>
+        <h2 id="career-heading" class="terminal-heading">{t.career}</h2>
+        <p class="pmap__intro">{t.careerIntro}</p>
+      </div>
+      <a class="pmap__resume" href={resumeUrl(locale)} download>
+        <span>{t.download}</span>
+        <strong>{t.resume}</strong>
+      </a>
+    </header>
+
+    <ul class="pmap__legend" role="list">
+      <li><i class="sw sw--role"></i>{t.legendRole}</li>
+      <li><i class="sw sw--project"></i>{t.legendProject}</li>
+    </ul>
+
+    <div class="pmap__scroll" tabindex="0" role="group" aria-label={t.career}>
+      <div class="pmap__chart" dir="ltr">
+        <div class="pmap__row pmap__row--ruler">
+          <div class="pmap__head"></div>
+          <div class="pmap__lane pmap__lane--ruler">
+            {map.ticks.map((tick) => (
+              <span class="pmap__tick" style={`left:${pct(tick.x)}%;width:${pct(tick.w)}%`}>{tick.year}</span>
+            ))}
+          </div>
+        </div>
+        {map.tracks.map((track) => (
+          <div class="pmap__row">
+            <div class="pmap__head" dir="auto">{track.label}</div>
+            <div class="pmap__lane" style={`--rows:${track.rows}`}>
+              {map.ticks.map((tick) => <span class="pmap__grid" style={`left:${pct(tick.x)}%`}></span>)}
+              {map.clips.filter((c) => c.track === track).map((c) => {
+                const Tag = c.url ? 'a' : 'div';
+                const tip = [`${c.title}${c.role ? ` — ${c.role}` : ''} (${c.range})`, c.summary].filter(Boolean).join('\n');
+                return (
+                  <Tag
+                    class:list={['pmap__clip', `pmap__clip--${c.kind}`, { 'is-ongoing': c.ongoing }]}
+                    style={`left:${pct(c.x0)}%;width:${pct(c.x1 - c.x0)}%;--row:${c.row}`}
+                    title={tip}
+                    {...(c.url ? { href: c.url, target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <span dir="auto">{c.title}</span>
+                  </Tag>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pmap {
+    padding-block: clamp(4rem, 9vw, 8rem);
+  }
+  .pmap__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-block-end: 2rem;
+  }
+  .pmap__header .terminal-heading {
+    margin-block: 1.25rem 1rem;
+  }
+  .pmap__intro {
+    margin: 0;
+    color: var(--terminal-muted);
+    max-width: 38rem;
+  }
+  .pmap__resume {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--terminal-line-strong);
+    background: var(--terminal-panel);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .pmap__resume span {
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .pmap__resume strong {
+    font-size: 1.125rem;
+  }
+  .pmap__resume:hover,
+  .pmap__resume:focus-visible {
+    border-color: var(--terminal-accent);
+    background: var(--terminal-panel-strong);
+  }
+  .pmap__legend {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    color: var(--terminal-muted);
+    font-size: 0.75rem;
+  }
+  .pmap__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sw {
+    display: inline-block;
+    width: 1.125rem;
+    height: 0.625rem;
+  }
+  .sw--role {
+    background: var(--terminal-line-strong);
+    box-shadow: inset 0 2px 0 var(--terminal-accent);
+  }
+  .sw--project {
+    border: 1px dashed var(--terminal-muted);
+  }
+
+  .pmap__scroll {
+    overflow-x: auto;
+    border: 1px solid var(--terminal-line);
+    background: var(--terminal-panel);
+  }
+  .pmap__chart {
+    min-width: 62rem;
+  }
+  .pmap__row {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    border-block-end: 1px solid var(--terminal-line);
+  }
+  .pmap__row:last-child {
+    border-block-end: 0;
+  }
+  .pmap__head {
+    padding: 0.6rem 0.75rem;
+    border-inline-end: 1px solid var(--terminal-line);
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .pmap__lane {
+    --row-h: 1.625rem;
+    position: relative;
+    height: calc(var(--rows) * (var(--row-h) + 0.25rem) + 0.5rem);
+  }
+  .pmap__lane--ruler {
+    --rows: 0;
+    height: 2rem;
+  }
+  .pmap__tick {
+    position: absolute;
+    inset-block: 0;
+    padding: 0.5rem 0 0 0.35rem;
+    border-inline-start: 1px solid var(--terminal-line);
+    color: var(--terminal-muted);
+    font-size: 0.6875rem;
+    overflow: hidden;
+  }
+  .pmap__grid {
+    position: absolute;
+    inset-block: 0;
+    border-inline-start: 1px solid var(--terminal-line);
+    opacity: 0.45;
+  }
+  .pmap__clip {
+    position: absolute;
+    top: calc(0.25rem + var(--row) * (var(--row-h) + 0.25rem));
+    height: var(--row-h);
+    min-width: 0.5rem;
+    padding-inline: 0.4rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    font-size: 0.6875rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  .pmap__clip span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pmap__clip--role {
+    background: var(--terminal-line-strong);
+    box-shadow: inset 0 2px 0 var(--terminal-accent);
+    color: var(--terminal-ink);
+  }
+  .pmap__clip--project {
+    border: 1px dashed var(--terminal-muted);
+    background: var(--terminal-panel-strong);
+    color: var(--terminal-ink);
+  }
+  .pmap__clip.is-ongoing {
+    border-inline-end-width: 3px;
+    border-inline-end-style: solid;
+    border-inline-end-color: var(--terminal-accent);
+  }
+  a.pmap__clip:hover,
+  a.pmap__clip:focus-visible {
+    outline: 1px solid var(--terminal-accent);
+    z-index: 2;
+  }
+  @media (max-width: 640px) {
+    .pmap__resume {
+      width: 100%;
+    }
+  }
+</style>

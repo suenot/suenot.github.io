@@ -1,0 +1,750 @@
+{
+  "name": "Eugen Soloviov",
+  "handle": "suenot",
+  "headline": "Software engineer and quant developer: web, trading systems, blockchain, AI",
+  "location": "Batumi, Georgia",
+  "email": "suenot@gmail.com",
+  "summary": "Software engineer with 20+ years of shipping. Long before the AI boom I built websites and products end to end: design, architecture, frontend, backend and DevOps, including six years running my own web studio. Quant developer and researcher: trading since 2011, building trading robots, strategies, backtests, research and analytics since 2017. In blockchain I built an ICO analytics platform and my own DEX from scratch, and launched a chain on Cosmos SDK. I have also made a few games, edited video and worked with electronics. With AI, all of these skills only got stronger.",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/suenot",
+      "display": "github.com/suenot"
+    },
+    {
+      "label": "Site",
+      "url": "https://suenot.com",
+      "display": "suenot.com"
+    },
+    {
+      "label": "Marketmaker",
+      "url": "https://marketmaker.cc",
+      "display": "marketmaker.cc"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suenot/",
+      "display": "linkedin.com/in/suenot"
+    },
+    {
+      "label": "Telegram",
+      "url": "https://t.me/suenot",
+      "display": "@suenot"
+    },
+    {
+      "label": "Channel",
+      "url": "https://t.me/suenot_dev",
+      "display": "t.me/suenot_dev"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/suenot",
+      "display": "x.com/suenot"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/soloviov.evgeniy",
+      "display": "facebook.com/soloviov.evgeniy"
+    }
+  ],
+  "stats": [
+    {
+      "value": "20+",
+      "label": "years shipping software"
+    },
+    {
+      "value": "~200",
+      "label": "sites built at my own web studio"
+    },
+    {
+      "value": "15+",
+      "label": "years trading"
+    },
+    {
+      "value": "130+",
+      "label": "exchanges connected: 30 own adapters, ~100 via CCXT"
+    },
+    {
+      "value": "3",
+      "label": "hackathon first places"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "web",
+      "label": "Web & products"
+    },
+    {
+      "id": "quant",
+      "label": "Trading & quant"
+    },
+    {
+      "id": "chain",
+      "label": "Blockchain"
+    },
+    {
+      "id": "ai",
+      "label": "AI & automation"
+    },
+    {
+      "id": "hw",
+      "label": "Hardware & communities"
+    }
+  ],
+  "experience": [
+    {
+      "org": "Cmdop",
+      "url": "https://cmdop.com",
+      "role": "Partner, CTO",
+      "start": "2025",
+      "end": "present",
+      "track": "ai",
+      "summary": "Remote server management through AI agents.",
+      "bullets": [
+        "Own the product stack: agent control, chat bots for Telegram, Discord and Slack, browser automation",
+        "Frontend in React, Next.js and TypeScript; a skills marketplace for agents"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Python"
+      ]
+    },
+    {
+      "org": "Marketmaker.cc",
+      "url": "https://marketmaker.cc",
+      "role": "Founder, CEO",
+      "start": "2024",
+      "end": "present",
+      "track": "quant",
+      "summary": "Scalping terminal, market data warehouse and backtesting for crypto traders.",
+      "bullets": [
+        "Scalping terminal covering 60+ exchanges, with a tick-level backtester that replays live-bot behavior",
+        "Historical market data warehouse (warehouse.marketmaker.cc)",
+        "Strategy search with Optuna (TPE, CMA-ES) on 50+ threads; a 3-node cluster with an in-memory cache made backtests 26x faster"
+      ],
+      "stack": [
+        "Go",
+        "TypeScript",
+        "Rust",
+        "QuestDB",
+        "DuckDB"
+      ]
+    },
+    {
+      "org": "Deep.foundation, Deep.memo",
+      "url": "https://deep.foundation",
+      "role": "Full-stack developer",
+      "start": "2022",
+      "end": "2024",
+      "track": "web",
+      "summary": "Open-source startups built on a pseudo-graph database.",
+      "bullets": [
+        "Event-driven backend and React/Next.js frontend over GraphQL, Apollo Server and Hasura",
+        "DevOps: Docker Swarm, Dokploy, Argo CD, Kubernetes Crossplane, Terraform, vertical scaling"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "GraphQL",
+        "Hasura"
+      ]
+    },
+    {
+      "org": "Shakeapp",
+      "url": "https://play.google.com/store/apps/details?id=shakeapp.mobile.app",
+      "role": "React developer",
+      "start": "2020",
+      "end": "2022",
+      "track": "web",
+      "summary": "C2C and C2B sharing platform for renting cars and homes.",
+      "bullets": [
+        "Mobile and web product on Node.js, React, Next.js, GraphQL, Apollo Server and Hasura, event-driven"
+      ]
+    },
+    {
+      "org": "Kupi.net",
+      "role": "Startup partner",
+      "start": "2019",
+      "end": "2020",
+      "track": "web",
+      "summary": "Website builder.",
+      "bullets": [
+        "Built on React and Django"
+      ]
+    },
+    {
+      "org": "Kupi.network",
+      "role": "Founder, full-stack developer",
+      "start": "2018",
+      "end": "2019",
+      "track": "quant",
+      "summary": "Own open-source crypto trading terminal.",
+      "bullets": [
+        "Terminal covering 130+ exchanges",
+        "Two versions: React with class components and MobX, then Vue 2 and MobX"
+      ]
+    },
+    {
+      "org": "Dolphin BI",
+      "url": "https://www.crunchbase.com/organization/dolphin-bi",
+      "role": "Frontend developer, startup team",
+      "start": "2016",
+      "end": "2018",
+      "track": "chain",
+      "summary": "Open-source marketplace of crypto and ICO analytics.",
+      "bullets": [
+        "Sentiment analysis of bitcointalk.org news; ICO fundamental analysis with metrics and expert reviews",
+        "Born at the waves.tech hackathon (1st place, 2016); Startupbootcamp accelerator in Amsterdam",
+        "Ran an ICO that did not reach its target; frontend in Vue 2"
+      ]
+    },
+    {
+      "org": "Thermom",
+      "role": "Startup partner, frontend developer",
+      "start": "2016",
+      "end": "2016",
+      "track": "web",
+      "summary": "Startup that went through the Bayer accelerator.",
+      "bullets": [
+        "Frontend in Vue 2, January to May 2016"
+      ]
+    },
+    {
+      "org": "klava.org",
+      "url": "https://klava.org",
+      "role": "Development partner",
+      "start": "2013",
+      "end": "present",
+      "track": "hw",
+      "summary": "Ergonomic keyboards, a keyboard builders' community and an on-screen keyboard.",
+      "bullets": [
+        "Catboard and about ten later ergonomic keyboard prototypes",
+        "Keyboard builders' community t.me/klavaorgwork: 1,000 active members, 600k+ messages",
+        "Hlider on-screen keyboard for Android (Kotlin) and iOS (Swift, SwiftUI, UIKit)"
+      ]
+    },
+    {
+      "org": "Independent trading",
+      "role": "Trader, quant developer",
+      "start": "2011",
+      "end": "present",
+      "track": "quant",
+      "summary": "From mining and manual trading to automated strategies.",
+      "bullets": [
+        "Mined BTC and LTC, invested and traded by hand, then automated: data parsers, signals, bots",
+        "Arbitrage and scalping since 2017, trend algorithms since 2021, portfolio management and crypto futures since 2022",
+        "Own adapters to 30 exchanges plus about 100 through CCXT; stock brokers Tinkoff, Freedom Finance and Alor; qualified investor status in 2020",
+        "Data stack: Node.js, Python, MongoDB, Tarantool (in-memory Lua), ClickHouse"
+      ]
+    },
+    {
+      "org": "De-core.net",
+      "role": "Founder, web studio",
+      "start": "2010",
+      "end": "2016",
+      "track": "web",
+      "summary": "Started as a solo freelancer, then ran a studio of 3 to 7 developers.",
+      "bullets": [
+        "About 200 sites: markup, frontend, prototyping and design",
+        "webpack, BEM, web components, Angular, React, Vue, Meteor, Node.js, Ionic and Cordova",
+        "Interface design in Sketch, Figma, Inkscape and Fireworks"
+      ]
+    },
+    {
+      "org": "Early web",
+      "role": "Hobby web developer",
+      "start": "2005",
+      "end": "2010",
+      "track": "web",
+      "summary": "Sites and forums on phpBB, vBulletin and Joomla.",
+      "bullets": [
+        "First sites in 1998 with FrontPage and Dreamweaver; later HTML, CSS, JavaScript and PHP"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Scalper terminal prototype",
+      "url": "https://scalper.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "Native scalping terminal in Rust with the iced framework.",
+      "stack": [
+        "Rust",
+        "iced"
+      ]
+    },
+    {
+      "name": "AI agents for news trading",
+      "years": "2026",
+      "track": "ai",
+      "summary": "Agent system that trades on news."
+    },
+    {
+      "name": "Trender",
+      "url": "https://trender.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "Backtest engine for fast testing of trend algorithms, plus a bot."
+    },
+    {
+      "name": "gaia",
+      "url": "https://github.com/suenot/gaia",
+      "years": "2026",
+      "track": "ai",
+      "summary": "Drives Gemini, Veo 3 and NotebookLM through a logged-in Camoufox session, no API keys.",
+      "metric": "14 stars",
+      "stack": [
+        "Python",
+        "Camoufox"
+      ]
+    },
+    {
+      "name": "Content factory",
+      "years": "2026",
+      "track": "ai",
+      "summary": "Article to slides and audio, to synced MP4, to subtitles and metadata, to YouTube upload.",
+      "stack": [
+        "FFmpeg",
+        "Whisper",
+        "Python"
+      ]
+    },
+    {
+      "name": "Listingapis.com",
+      "url": "https://listingapis.com",
+      "years": "2025-present",
+      "track": "quant",
+      "summary": "Listing strategies: backtests and network latency cut between signal and order."
+    },
+    {
+      "name": "AI form filling",
+      "years": "2025",
+      "track": "ai",
+      "summary": "AI service that filled in forms on websites for the user. January to March 2025; the project was closed."
+    },
+    {
+      "name": "aicommit",
+      "url": "https://github.com/suenot/aicommit",
+      "years": "2024-present",
+      "track": "ai",
+      "summary": "CLI that writes git commit messages with LLMs and falls back to free models.",
+      "metric": "25 stars",
+      "stack": [
+        "Rust"
+      ]
+    },
+    {
+      "name": "Front-runner",
+      "years": "2024",
+      "track": "quant",
+      "summary": "Market anomaly search with signals and a bot: orders placed within 1 ms, best servers near exchanges picked automatically."
+    },
+    {
+      "name": "Cosmos SDK chain",
+      "years": "2024-2025",
+      "track": "chain",
+      "summary": "Launched a blockchain on Cosmos SDK; the network ran about a year, then the nodes were stopped.",
+      "stack": [
+        "Cosmos SDK",
+        "Go"
+      ]
+    },
+    {
+      "name": "Vue scalper terminal",
+      "years": "2023",
+      "track": "quant",
+      "summary": "Scalping terminal on Vue.js.",
+      "stack": [
+        "Vue"
+      ]
+    },
+    {
+      "name": "centrum-air.com",
+      "url": "https://centrum-air.com",
+      "years": "2023",
+      "track": "web",
+      "summary": "Website for a private airline of Uzbekistan.",
+      "stack": [
+        "React",
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Tinkoff Bot Balancer",
+      "url": "https://github.com/suenot/tinkoff-invest-contest",
+      "years": "2022-2025",
+      "track": "quant",
+      "summary": "Open-source portfolio rebalancing bot, built at the Tinkoff hackathon in 2022."
+    },
+    {
+      "name": "Deep Profitmaker",
+      "url": "https://github.com/suenot/deep-profitmaker",
+      "years": "2022",
+      "track": "quant",
+      "summary": "Concept of a trading architecture on pseudo-graphs."
+    },
+    {
+      "name": "Pair trading research",
+      "years": "2022",
+      "track": "quant",
+      "summary": "Cointegration and statistical arbitrage."
+    },
+    {
+      "name": "profitmaker",
+      "url": "https://github.com/suenot/profitmaker",
+      "years": "2017-present",
+      "track": "quant",
+      "summary": "Open-source, self-hosted trading terminal, extensible with modules, for 100+ exchanges via CCXT.",
+      "metric": "365 stars, 93 forks",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Bun",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "name": "Bursa.dex",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "Own decentralized exchange from scratch: Solidity smart contracts, web3.js, React, Django. Funded the work and built frontend and backend.",
+      "stack": [
+        "Solidity",
+        "web3.js",
+        "React",
+        "Django"
+      ]
+    },
+    {
+      "name": "ICOFaces",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "Analysis of ICO participants' history. 1st place at BlockchainHack 2017."
+    },
+    {
+      "name": "Inter-exchange arbitrage",
+      "years": "2017",
+      "track": "quant",
+      "summary": "Metrics, signals and bots on up to 30 exchanges: compare last prices, then emulate fills when prices decorrelate."
+    },
+    {
+      "name": "Kupi.ru",
+      "years": "2013",
+      "track": "web",
+      "summary": "Marketplace startup; went through the FRII accelerator."
+    }
+  ],
+  "skills": [
+    {
+      "group": "Languages",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Go",
+        "Swift",
+        "Rust (basics)",
+        "Zig (basics)",
+        "Kotlin (basics)",
+        "C++ (basics)",
+        "C# (basics)",
+        "Lua (basics)",
+        "Haskell (basics)"
+      ]
+    },
+    {
+      "group": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "Astro",
+        "Vue",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Meteor",
+        "MobX",
+        "Apache ECharts",
+        "React Stockcharts",
+        "BEM",
+        "Sass",
+        "Stylus",
+        "web components"
+      ]
+    },
+    {
+      "group": "Mobile & desktop",
+      "items": [
+        "SwiftUI",
+        "UIKit",
+        "Kotlin (Android)",
+        "Electron",
+        "Tauri",
+        "Ionic",
+        "Cordova",
+        "Capacitor"
+      ]
+    },
+    {
+      "group": "Backend & APIs",
+      "items": [
+        "Node.js",
+        "Bun",
+        "Elysia",
+        "Django",
+        "FastAPI",
+        "GraphQL",
+        "Apollo Server",
+        "Hasura",
+        "gRPC",
+        "REST",
+        "WebSocket",
+        "FIX Protocol"
+      ]
+    },
+    {
+      "group": "Databases & streaming",
+      "items": [
+        "PostgreSQL",
+        "QuestDB",
+        "ClickHouse",
+        "DuckDB",
+        "Redis",
+        "MongoDB",
+        "MySQL",
+        "SQLite",
+        "Tarantool",
+        "Parquet",
+        "Apache Kafka"
+      ]
+    },
+    {
+      "group": "DevOps & infra",
+      "items": [
+        "Docker",
+        "Docker Compose",
+        "Docker Swarm",
+        "Kubernetes",
+        "Crossplane",
+        "containerd",
+        "CRI-O",
+        "Nginx",
+        "Apache",
+        "Traefik",
+        "Istio",
+        "Gateway API",
+        "Dokploy",
+        "Terraform",
+        "Pulumi",
+        "Argo CD",
+        "GitLab CI",
+        "Prometheus",
+        "Grafana"
+      ]
+    },
+    {
+      "group": "Quant & trading",
+      "items": [
+        "Trading robots",
+        "Market making",
+        "Arbitrage",
+        "Scalping",
+        "Trend algorithms",
+        "Portfolio management",
+        "Crypto futures",
+        "Pair trading",
+        "Statistical arbitrage",
+        "Tick-level backtesting",
+        "Optuna (TPE, CMA-ES)",
+        "Listing monitors",
+        "HFT messaging",
+        "CCXT",
+        "Binance",
+        "Bybit",
+        "Gate.io",
+        "MEXC",
+        "Bitget",
+        "Tinkoff Invest",
+        "Freedom Finance",
+        "Alor",
+        "MOEX"
+      ]
+    },
+    {
+      "group": "Blockchain",
+      "items": [
+        "Solidity",
+        "web3.js",
+        "Cosmos SDK",
+        "DEX design",
+        "ICO analytics"
+      ]
+    },
+    {
+      "group": "AI & agents",
+      "items": [
+        "Claude Code",
+        "Codex",
+        "Subagent orchestration",
+        "MCP servers",
+        "Pydantic AI",
+        "Multi-model routing"
+      ]
+    },
+    {
+      "group": "Design",
+      "items": [
+        "Figma",
+        "Sketch",
+        "Inkscape",
+        "Fireworks",
+        "Prototyping"
+      ]
+    },
+    {
+      "group": "Video & motion",
+      "items": [
+        "HyperFrames",
+        "GSAP",
+        "FFmpeg",
+        "Final Cut Pro",
+        "iMovie"
+      ]
+    },
+    {
+      "group": "Hardware & other",
+      "items": [
+        "Ergonomic keyboards",
+        "LabVIEW (Core 1, Core 2, DAQ)",
+        "Electronics",
+        "Game development",
+        "Touch typing: 500+ cpm Russian, 400+ English"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "date": "Jul 2017",
+      "title": "BlockchainHack by Waves: winner",
+      "detail": "ICOFaces",
+      "url": "https://wavesplatform.com/"
+    },
+    {
+      "date": "2016",
+      "title": "waves.tech hackathon: 1st place",
+      "detail": "Dolphin BI"
+    },
+    {
+      "date": "Nov 2014",
+      "title": "Yandex hackathon on BEM: 1st place",
+      "detail": "team"
+    },
+    {
+      "date": "Oct 2014",
+      "title": "Fablab weekend: best promotion award"
+    },
+    {
+      "date": "Sep 2014",
+      "title": "Robohack robotics hackathon, Lomonosov Moscow State University: special award from LabVIEW"
+    }
+  ],
+  "education": [
+    {
+      "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
+      "degree": "Computer-aided design (CAD) systems, Faculty of Information Technologies; 3 years completed, not graduated",
+      "years": "2008-2011"
+    }
+  ],
+  "courses": [
+    {
+      "date": "Apr 2018",
+      "title": "Rhetoric",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/101634"
+    },
+    {
+      "date": "Mar 2018",
+      "title": "Theory of argumentation",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/97106"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Scientific thinking",
+      "org": "SKB Kontur",
+      "url": "https://stepik.org/cert/51382"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Web technologies",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/50978"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Functional programming in Haskell",
+      "org": "Computer Science Center",
+      "url": "https://stepik.org/cert/50337"
+    },
+    {
+      "date": "Jan 2017",
+      "title": "Writing software requirements",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/45358"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Basics of statistics",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/44208"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Introduction to Linux",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/42290"
+    },
+    {
+      "date": "Nov 2016",
+      "title": "Programming in Python"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "Investment banking from the inside",
+      "org": "European University at St Petersburg",
+      "url": "https://stepik.org/cert/34726"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "Web project security analysis"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "Learning How to Learn",
+      "org": "University of California, San Diego"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "Wireless Communication Emerging Technologies",
+      "org": "Yonsei University (Coursera)"
+    },
+    {
+      "date": "Feb 2015",
+      "title": "LabVIEW Core 1, Core 2 and DAQ"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Russian",
+      "level": "native"
+    },
+    {
+      "name": "English",
+      "level": "B2"
+    }
+  ]
+}

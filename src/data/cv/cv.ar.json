@@ -1,0 +1,750 @@
+{
+  "name": "Eugen Soloviov",
+  "handle": "suenot",
+  "headline": "مهندس برمجيات ومطوّر كمي: الويب، أنظمة التداول، البلوك تشين، والذكاء الاصطناعي",
+  "location": "باتومي، جورجيا",
+  "email": "suenot@gmail.com",
+  "summary": "مهندس برمجيات بخبرة تتجاوز 20 عامًا في إطلاق المنتجات البرمجية. قبل طفرة الذكاء الاصطناعي بوقت طويل، طوّرت مواقع ومنتجات من البداية إلى النهاية، من التصميم والهندسة إلى الواجهات الأمامية والخلفية وعمليات التطوير والتشغيل (DevOps)، وأدرت استوديو الويب الخاص بي لمدة ست سنوات. مطوّر وباحث كمي: أتداول منذ 2011، وأبني روبوتات التداول والاستراتيجيات وأنظمة الاختبار التاريخي وأجري الأبحاث والتحليلات منذ 2017. في مجال البلوك تشين، أنشأت منصة لتحليلات ICO وبورصة لامركزية خاصة بي من الصفر، وأطلقت سلسلة بلوك تشين باستخدام Cosmos SDK. كما طوّرت بعض الألعاب، وحرّرت الفيديو، وعملت في مجال الإلكترونيات. وقد عزز الذكاء الاصطناعي كل هذه المهارات.",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/suenot",
+      "display": "github.com/suenot"
+    },
+    {
+      "label": "الموقع",
+      "url": "https://suenot.com",
+      "display": "suenot.com"
+    },
+    {
+      "label": "Marketmaker",
+      "url": "https://marketmaker.cc",
+      "display": "marketmaker.cc"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suenot/",
+      "display": "linkedin.com/in/suenot"
+    },
+    {
+      "label": "Telegram",
+      "url": "https://t.me/suenot",
+      "display": "@suenot"
+    },
+    {
+      "label": "القناة",
+      "url": "https://t.me/suenot_dev",
+      "display": "t.me/suenot_dev"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/suenot",
+      "display": "x.com/suenot"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/soloviov.evgeniy",
+      "display": "facebook.com/soloviov.evgeniy"
+    }
+  ],
+  "stats": [
+    {
+      "value": "20+",
+      "label": "سنوات من تسليم البرمجيات"
+    },
+    {
+      "value": "~200",
+      "label": "موقعًا أنجزها استوديو الويب الخاص بي"
+    },
+    {
+      "value": "15+",
+      "label": "عامًا من التداول"
+    },
+    {
+      "value": "130+",
+      "label": "منصة تداول متصلة: 30 محولًا خاصًا ونحو 100 عبر CCXT"
+    },
+    {
+      "value": "3",
+      "label": "مراكز أولى في مسابقات الهاكاثون"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "web",
+      "label": "الويب والمنتجات"
+    },
+    {
+      "id": "quant",
+      "label": "التداول والتحليل الكمي"
+    },
+    {
+      "id": "chain",
+      "label": "البلوك تشين"
+    },
+    {
+      "id": "ai",
+      "label": "الذكاء الاصطناعي والأتمتة"
+    },
+    {
+      "id": "hw",
+      "label": "الأجهزة والمجتمعات"
+    }
+  ],
+  "experience": [
+    {
+      "org": "Cmdop",
+      "url": "https://cmdop.com",
+      "role": "شريك، مدير تقني",
+      "start": "2025",
+      "end": "present",
+      "track": "ai",
+      "summary": "إدارة الخوادم عن بُعد من خلال وكلاء الذكاء الاصطناعي.",
+      "bullets": [
+        "مسؤولية كاملة عن منظومة المنتج: التحكم بالوكلاء، وروبوتات المحادثة في Telegram وDiscord وSlack، وأتمتة المتصفح",
+        "تطوير الواجهة الأمامية باستخدام React وNext.js وTypeScript؛ وسوق للمهارات المخصصة للوكلاء"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Python"
+      ]
+    },
+    {
+      "org": "Marketmaker.cc",
+      "url": "https://marketmaker.cc",
+      "role": "المؤسس، الرئيس التنفيذي",
+      "start": "2024",
+      "end": "present",
+      "track": "quant",
+      "summary": "منصة تداول للمضاربة السريعة، ومستودع لبيانات السوق، وأدوات للاختبار التاريخي لمتداولي العملات المشفرة.",
+      "bullets": [
+        "منصة مضاربة سريعة تغطي أكثر من 60 منصة تداول، مع أداة اختبار تاريخي على مستوى كل صفقة تعيد تشغيل سلوك روبوت التداول المباشر",
+        "مستودع لبيانات السوق التاريخية (warehouse.marketmaker.cc)",
+        "البحث عن الاستراتيجيات باستخدام Optuna (TPE, CMA-ES) على أكثر من 50 خيطًا؛ وقد جعلت مجموعة من 3 عقد مع ذاكرة مؤقتة داخلية الاختبارات التاريخية أسرع بـ 26 مرة"
+      ],
+      "stack": [
+        "Go",
+        "TypeScript",
+        "Rust",
+        "QuestDB",
+        "DuckDB"
+      ]
+    },
+    {
+      "org": "Deep.foundation, Deep.memo",
+      "url": "https://deep.foundation",
+      "role": "مطوّر متكامل",
+      "start": "2022",
+      "end": "2024",
+      "track": "web",
+      "summary": "شركات ناشئة مفتوحة المصدر مبنية على قاعدة بيانات زائفة الرسم البياني.",
+      "bullets": [
+        "خلفية مدفوعة بالأحداث وواجهة React/Next.js باستخدام GraphQL وApollo Server وHasura",
+        "عمليات التطوير والتشغيل: Docker Swarm وDokploy وArgo CD وKubernetes Crossplane وTerraform والتوسع الرأسي"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "GraphQL",
+        "Hasura"
+      ]
+    },
+    {
+      "org": "Shakeapp",
+      "url": "https://play.google.com/store/apps/details?id=shakeapp.mobile.app",
+      "role": "مطوّر React",
+      "start": "2020",
+      "end": "2022",
+      "track": "web",
+      "summary": "منصة مشاركة من نوع C2C وC2B لتأجير السيارات والمنازل.",
+      "bullets": [
+        "منتج للجوال والويب باستخدام Node.js وReact وNext.js وGraphQL وApollo Server وHasura، ببنية مدفوعة بالأحداث"
+      ]
+    },
+    {
+      "org": "Kupi.net",
+      "role": "شريك في شركة ناشئة",
+      "start": "2019",
+      "end": "2020",
+      "track": "web",
+      "summary": "أداة لإنشاء المواقع.",
+      "bullets": [
+        "بُنيت باستخدام React وDjango"
+      ]
+    },
+    {
+      "org": "Kupi.network",
+      "role": "المؤسس، مطوّر متكامل",
+      "start": "2018",
+      "end": "2019",
+      "track": "quant",
+      "summary": "منصة تداول مفتوحة المصدر للعملات المشفرة للاستخدام الشخصي.",
+      "bullets": [
+        "منصة تغطي أكثر من 130 منصة تداول",
+        "نسختان: الأولى باستخدام React بمكونات الأصناف وMobX، ثم Vue 2 وMobX"
+      ]
+    },
+    {
+      "org": "Dolphin BI",
+      "url": "https://www.crunchbase.com/organization/dolphin-bi",
+      "role": "مطوّر واجهات أمامية، ضمن فريق شركة ناشئة",
+      "start": "2016",
+      "end": "2018",
+      "track": "chain",
+      "summary": "سوق مفتوح المصدر لتحليلات العملات المشفرة وعمليات ICO.",
+      "bullets": [
+        "تحليل توجهات الأخبار في bitcointalk.org؛ وتحليل أساسي لعمليات ICO باستخدام المؤشرات ومراجعات الخبراء",
+        "انطلق المشروع في هاكاثون waves.tech (المركز الأول، 2016)؛ ثم التحق بمسرّعة Startupbootcamp في أمستردام",
+        "أطلقنا ICO لم يبلغ هدفه؛ وطُوّرت الواجهة الأمامية باستخدام Vue 2"
+      ]
+    },
+    {
+      "org": "Thermom",
+      "role": "شريك في شركة ناشئة، مطوّر واجهات أمامية",
+      "start": "2016",
+      "end": "2016",
+      "track": "web",
+      "summary": "شركة ناشئة شاركت في مسرّعة Bayer.",
+      "bullets": [
+        "تطوير الواجهة الأمامية باستخدام Vue 2، من يناير إلى مايو 2016"
+      ]
+    },
+    {
+      "org": "klava.org",
+      "url": "https://klava.org",
+      "role": "شريك تطوير",
+      "start": "2013",
+      "end": "present",
+      "track": "hw",
+      "summary": "لوحات مفاتيح مريحة، ومجتمع لصانعي لوحات المفاتيح، ولوحة مفاتيح على الشاشة.",
+      "bullets": [
+        "Catboard ونحو عشرة نماذج لاحقة من لوحات المفاتيح المريحة",
+        "مجتمع صانعي لوحات المفاتيح t.me/klavaorgwork: 1,000 عضو نشط وأكثر من 600 ألف رسالة",
+        "لوحة مفاتيح Hlider على الشاشة لنظام Android (Kotlin) وiOS (Swift وSwiftUI وUIKit)"
+      ]
+    },
+    {
+      "org": "Independent trading",
+      "role": "متداول، مطوّر كمي",
+      "start": "2011",
+      "end": "present",
+      "track": "quant",
+      "summary": "من التعدين والتداول اليدوي إلى الاستراتيجيات الآلية.",
+      "bullets": [
+        "عدّنت BTC وLTC، واستثمرت وتداولت يدويًا، ثم أتمتّ العمليات: محللات البيانات والإشارات والروبوتات",
+        "المراجحة والمضاربة السريعة منذ 2017، وخوارزميات الاتجاه منذ 2021، وإدارة المحافظ وعقود العملات المشفرة الآجلة منذ 2022",
+        "محولات خاصة لـ 30 منصة تداول ونحو 100 أخرى عبر CCXT؛ ووسطاء أسهم Tinkoff وFreedom Finance وAlor؛ وحصلت على صفة مستثمر مؤهل في 2020",
+        "منظومة البيانات: Node.js وPython وMongoDB وTarantool (لغة Lua داخل الذاكرة) وClickHouse"
+      ]
+    },
+    {
+      "org": "De-core.net",
+      "role": "المؤسس، استوديو ويب",
+      "start": "2010",
+      "end": "2016",
+      "track": "web",
+      "summary": "بدأت كمستقل منفرد، ثم أدرت استوديو يضم من 3 إلى 7 مطورين.",
+      "bullets": [
+        "نحو 200 موقع: ترميز الصفحات، والواجهات الأمامية، والنماذج الأولية، والتصميم",
+        "webpack وBEM ومكونات الويب وAngular وReact وVue وMeteor وNode.js وIonic وCordova",
+        "تصميم الواجهات باستخدام Sketch وFigma وInkscape وFireworks"
+      ]
+    },
+    {
+      "org": "Early web",
+      "role": "مطوّر ويب هاوٍ",
+      "start": "2005",
+      "end": "2010",
+      "track": "web",
+      "summary": "مواقع ومنتديات باستخدام phpBB وvBulletin وJoomla.",
+      "bullets": [
+        "أنشأت أولى المواقع في 1998 باستخدام FrontPage وDreamweaver؛ ثم HTML وCSS وJavaScript وPHP"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Scalper terminal prototype",
+      "url": "https://scalper.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "منصة مضاربة سريعة أصلية بلغة Rust باستخدام إطار iced.",
+      "stack": [
+        "Rust",
+        "iced"
+      ]
+    },
+    {
+      "name": "AI agents for news trading",
+      "years": "2026",
+      "track": "ai",
+      "summary": "نظام وكلاء يتداولون بناءً على الأخبار."
+    },
+    {
+      "name": "Trender",
+      "url": "https://trender.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "محرك اختبار تاريخي لاختبار خوارزميات الاتجاه بسرعة، مع روبوت تداول."
+    },
+    {
+      "name": "gaia",
+      "url": "https://github.com/suenot/gaia",
+      "years": "2026",
+      "track": "ai",
+      "summary": "يشغّل Gemini وVeo 3 وNotebookLM من خلال جلسة Camoufox مسجّلة الدخول، دون مفاتيح API.",
+      "metric": "14 نجمة",
+      "stack": [
+        "Python",
+        "Camoufox"
+      ]
+    },
+    {
+      "name": "Content factory",
+      "years": "2026",
+      "track": "ai",
+      "summary": "من المقال إلى الشرائح والصوت، ثم إلى MP4 متزامن وترجمات وبيانات وصفية، ثم الرفع إلى YouTube.",
+      "stack": [
+        "FFmpeg",
+        "Whisper",
+        "Python"
+      ]
+    },
+    {
+      "name": "Listingapis.com",
+      "url": "https://listingapis.com",
+      "years": "2025-present",
+      "track": "quant",
+      "summary": "استراتيجيات الإدراج: اختبارات تاريخية وخفض زمن الشبكة بين الإشارة والأمر."
+    },
+    {
+      "name": "AI form filling",
+      "years": "2025",
+      "track": "ai",
+      "summary": "خدمة ذكاء اصطناعي كانت تملأ النماذج على المواقع نيابةً عن المستخدم. استمر المشروع من يناير إلى مارس 2025 ثم أُغلق."
+    },
+    {
+      "name": "aicommit",
+      "url": "https://github.com/suenot/aicommit",
+      "years": "2024-present",
+      "track": "ai",
+      "summary": "أداة سطر أوامر تكتب رسائل git للالتزام باستخدام نماذج اللغة الكبيرة وتلجأ إلى النماذج المجانية عند الحاجة.",
+      "metric": "25 نجمة",
+      "stack": [
+        "Rust"
+      ]
+    },
+    {
+      "name": "Front-runner",
+      "years": "2024",
+      "track": "quant",
+      "summary": "البحث عن اختلالات السوق باستخدام الإشارات والروبوتات: تنفيذ الأوامر خلال 1 ms واختيار أفضل الخوادم القريبة من منصات التداول تلقائيًا."
+    },
+    {
+      "name": "Cosmos SDK chain",
+      "years": "2024-2025",
+      "track": "chain",
+      "summary": "إطلاق بلوك تشين باستخدام Cosmos SDK؛ استمرت الشبكة نحو عام، ثم أُوقفت العقد.",
+      "stack": [
+        "Cosmos SDK",
+        "Go"
+      ]
+    },
+    {
+      "name": "Vue scalper terminal",
+      "years": "2023",
+      "track": "quant",
+      "summary": "منصة مضاربة سريعة باستخدام Vue.js.",
+      "stack": [
+        "Vue"
+      ]
+    },
+    {
+      "name": "centrum-air.com",
+      "url": "https://centrum-air.com",
+      "years": "2023",
+      "track": "web",
+      "summary": "موقع لشركة طيران خاصة في أوزبكستان.",
+      "stack": [
+        "React",
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Tinkoff Bot Balancer",
+      "url": "https://github.com/suenot/tinkoff-invest-contest",
+      "years": "2022-2025",
+      "track": "quant",
+      "summary": "روبوت مفتوح المصدر لإعادة موازنة المحفظة، طُوّر في هاكاثون Tinkoff عام 2022."
+    },
+    {
+      "name": "Deep Profitmaker",
+      "url": "https://github.com/suenot/deep-profitmaker",
+      "years": "2022",
+      "track": "quant",
+      "summary": "تصور لبنية تداول تعتمد على الرسوم البيانية الزائفة."
+    },
+    {
+      "name": "Pair trading research",
+      "years": "2022",
+      "track": "quant",
+      "summary": "التكامل المشترك والمراجحة الإحصائية."
+    },
+    {
+      "name": "profitmaker",
+      "url": "https://github.com/suenot/profitmaker",
+      "years": "2017-present",
+      "track": "quant",
+      "summary": "منصة تداول مفتوحة المصدر قابلة للاستضافة الذاتية والتوسعة بالوحدات، لأكثر من 100 منصة عبر CCXT.",
+      "metric": "365 نجمة، 93 تفرعًا",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Bun",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "name": "Bursa.dex",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "بورصة لامركزية خاصة بُنيت من الصفر: عقود Solidity ذكية وweb3.js وReact وDjango. موّلت العمل وبنيت الواجهتين الأمامية والخلفية.",
+      "stack": [
+        "Solidity",
+        "web3.js",
+        "React",
+        "Django"
+      ]
+    },
+    {
+      "name": "ICOFaces",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "تحليل السجل السابق للمشاركين في ICO. المركز 1 في BlockchainHack 2017."
+    },
+    {
+      "name": "Inter-exchange arbitrage",
+      "years": "2017",
+      "track": "quant",
+      "summary": "مؤشرات وإشارات وروبوتات على ما يصل إلى 30 منصة: مقارنة آخر الأسعار ومحاكاة التنفيذ عند انفصال تحركات الأسعار."
+    },
+    {
+      "name": "Kupi.ru",
+      "years": "2013",
+      "track": "web",
+      "summary": "شركة ناشئة للتجارة الإلكترونية شاركت في مسرّعة FRII."
+    }
+  ],
+  "skills": [
+    {
+      "group": "لغات البرمجة",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Go",
+        "Swift",
+        "Rust (basics)",
+        "Zig (basics)",
+        "Kotlin (basics)",
+        "C++ (basics)",
+        "C# (basics)",
+        "Lua (basics)",
+        "Haskell (basics)"
+      ]
+    },
+    {
+      "group": "الواجهات الأمامية",
+      "items": [
+        "React",
+        "Next.js",
+        "Astro",
+        "Vue",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Meteor",
+        "MobX",
+        "Apache ECharts",
+        "React Stockcharts",
+        "BEM",
+        "Sass",
+        "Stylus",
+        "web components"
+      ]
+    },
+    {
+      "group": "تطبيقات الجوال وسطح المكتب",
+      "items": [
+        "SwiftUI",
+        "UIKit",
+        "Kotlin (Android)",
+        "Electron",
+        "Tauri",
+        "Ionic",
+        "Cordova",
+        "Capacitor"
+      ]
+    },
+    {
+      "group": "الواجهات الخلفية وواجهات API",
+      "items": [
+        "Node.js",
+        "Bun",
+        "Elysia",
+        "Django",
+        "FastAPI",
+        "GraphQL",
+        "Apollo Server",
+        "Hasura",
+        "gRPC",
+        "REST",
+        "WebSocket",
+        "FIX Protocol"
+      ]
+    },
+    {
+      "group": "قواعد البيانات وتدفق البيانات",
+      "items": [
+        "PostgreSQL",
+        "QuestDB",
+        "ClickHouse",
+        "DuckDB",
+        "Redis",
+        "MongoDB",
+        "MySQL",
+        "SQLite",
+        "Tarantool",
+        "Parquet",
+        "Apache Kafka"
+      ]
+    },
+    {
+      "group": "DevOps والبنية التحتية",
+      "items": [
+        "Docker",
+        "Docker Compose",
+        "Docker Swarm",
+        "Kubernetes",
+        "Crossplane",
+        "containerd",
+        "CRI-O",
+        "Nginx",
+        "Apache",
+        "Traefik",
+        "Istio",
+        "Gateway API",
+        "Dokploy",
+        "Terraform",
+        "Pulumi",
+        "Argo CD",
+        "GitLab CI",
+        "Prometheus",
+        "Grafana"
+      ]
+    },
+    {
+      "group": "التحليل الكمي والتداول",
+      "items": [
+        "Trading robots",
+        "Market making",
+        "Arbitrage",
+        "Scalping",
+        "Trend algorithms",
+        "Portfolio management",
+        "Crypto futures",
+        "Pair trading",
+        "Statistical arbitrage",
+        "Tick-level backtesting",
+        "Optuna (TPE, CMA-ES)",
+        "Listing monitors",
+        "HFT messaging",
+        "CCXT",
+        "Binance",
+        "Bybit",
+        "Gate.io",
+        "MEXC",
+        "Bitget",
+        "Tinkoff Invest",
+        "Freedom Finance",
+        "Alor",
+        "MOEX"
+      ]
+    },
+    {
+      "group": "البلوك تشين",
+      "items": [
+        "Solidity",
+        "web3.js",
+        "Cosmos SDK",
+        "DEX design",
+        "ICO analytics"
+      ]
+    },
+    {
+      "group": "الذكاء الاصطناعي والوكلاء",
+      "items": [
+        "Claude Code",
+        "Codex",
+        "Subagent orchestration",
+        "MCP servers",
+        "Pydantic AI",
+        "Multi-model routing"
+      ]
+    },
+    {
+      "group": "التصميم",
+      "items": [
+        "Figma",
+        "Sketch",
+        "Inkscape",
+        "Fireworks",
+        "Prototyping"
+      ]
+    },
+    {
+      "group": "الفيديو والرسوم المتحركة",
+      "items": [
+        "HyperFrames",
+        "GSAP",
+        "FFmpeg",
+        "Final Cut Pro",
+        "iMovie"
+      ]
+    },
+    {
+      "group": "الأجهزة ومجالات أخرى",
+      "items": [
+        "Ergonomic keyboards",
+        "LabVIEW (Core 1, Core 2, DAQ)",
+        "Electronics",
+        "Game development",
+        "Touch typing: 500+ cpm Russian, 400+ English"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "date": "Jul 2017",
+      "title": "BlockchainHack by Waves: الفائز",
+      "detail": "ICOFaces",
+      "url": "https://wavesplatform.com/"
+    },
+    {
+      "date": "2016",
+      "title": "هاكاثون waves.tech: المركز 1",
+      "detail": "Dolphin BI"
+    },
+    {
+      "date": "Nov 2014",
+      "title": "هاكاثون Yandex حول BEM: المركز 1",
+      "detail": "الفريق"
+    },
+    {
+      "date": "Oct 2014",
+      "title": "عطلة نهاية أسبوع Fablab: جائزة أفضل ترويج"
+    },
+    {
+      "date": "Sep 2014",
+      "title": "هاكاثون الروبوتات Robohack، جامعة لومونوسوف موسكو الحكومية: جائزة خاصة من LabVIEW"
+    }
+  ],
+  "education": [
+    {
+      "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
+      "degree": "أنظمة التصميم بمساعدة الحاسوب (CAD)، كلية تقنيات المعلومات؛ أكملت 3 سنوات ولم أتخرج",
+      "years": "2008-2011"
+    }
+  ],
+  "courses": [
+    {
+      "date": "Apr 2018",
+      "title": "الخطابة",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/101634"
+    },
+    {
+      "date": "Mar 2018",
+      "title": "نظرية الحجاج",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/97106"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "التفكير العلمي",
+      "org": "SKB Kontur",
+      "url": "https://stepik.org/cert/51382"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "تقنيات الويب",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/50978"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "البرمجة الوظيفية بلغة Haskell",
+      "org": "Computer Science Center",
+      "url": "https://stepik.org/cert/50337"
+    },
+    {
+      "date": "Jan 2017",
+      "title": "كتابة متطلبات البرمجيات",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/45358"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "أساسيات الإحصاء",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/44208"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "مقدمة إلى Linux",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/42290"
+    },
+    {
+      "date": "Nov 2016",
+      "title": "البرمجة بلغة Python"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "الأعمال المصرفية الاستثمارية من الداخل",
+      "org": "European University at St Petersburg",
+      "url": "https://stepik.org/cert/34726"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "تحليل أمن مشاريع الويب"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "تعلّم كيف تتعلّم",
+      "org": "University of California, San Diego"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "تقنيات الاتصالات اللاسلكية الناشئة",
+      "org": "Yonsei University (Coursera)"
+    },
+    {
+      "date": "Feb 2015",
+      "title": "LabVIEW Core 1 وCore 2 وDAQ"
+    }
+  ],
+  "languages": [
+    {
+      "name": "الروسية",
+      "level": "اللغة الأم"
+    },
+    {
+      "name": "الإنجليزية",
+      "level": "B2"
+    }
+  ]
+}

@@ -1,0 +1,750 @@
+{
+  "name": "Eugen Soloviov",
+  "handle": "suenot",
+  "headline": "소프트웨어 엔지니어 및 퀀트 개발자: 웹, 트레이딩 시스템, 블록체인, AI",
+  "location": "조지아 바투미",
+  "email": "suenot@gmail.com",
+  "summary": "20년 넘게 소프트웨어를 출시해 온 엔지니어입니다. AI 붐이 오기 훨씬 전부터 디자인, 아키텍처, 프런트엔드, 백엔드, DevOps까지 웹사이트와 제품을 처음부터 끝까지 만들었으며, 6년 동안 자체 웹 스튜디오를 운영했습니다. 퀀트 개발자이자 리서처로서 2011년부터 트레이딩을 해 왔고, 2017년부터 트레이딩 로봇, 전략, 백테스트, 리서치 및 분석 도구를 개발했습니다. 블록체인 분야에서는 ICO 분석 플랫폼과 자체 DEX를 처음부터 구축하고 Cosmos SDK 기반 체인을 출시했습니다. 게임을 몇 편 만들고, 영상을 편집하고, 전자 회로도 다뤘습니다. AI를 활용하면서 이 모든 역량이 한층 강화됐습니다.",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/suenot",
+      "display": "github.com/suenot"
+    },
+    {
+      "label": "사이트",
+      "url": "https://suenot.com",
+      "display": "suenot.com"
+    },
+    {
+      "label": "Marketmaker",
+      "url": "https://marketmaker.cc",
+      "display": "marketmaker.cc"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suenot/",
+      "display": "linkedin.com/in/suenot"
+    },
+    {
+      "label": "Telegram",
+      "url": "https://t.me/suenot",
+      "display": "@suenot"
+    },
+    {
+      "label": "채널",
+      "url": "https://t.me/suenot_dev",
+      "display": "t.me/suenot_dev"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/suenot",
+      "display": "x.com/suenot"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/soloviov.evgeniy",
+      "display": "facebook.com/soloviov.evgeniy"
+    }
+  ],
+  "stats": [
+    {
+      "value": "20+",
+      "label": "소프트웨어 출시 경력"
+    },
+    {
+      "value": "~200",
+      "label": "자체 웹 스튜디오에서 구축한 사이트"
+    },
+    {
+      "value": "15+",
+      "label": "트레이딩 경력"
+    },
+    {
+      "value": "130+",
+      "label": "연동 거래소: 자체 어댑터 30개, CCXT로 약 100개"
+    },
+    {
+      "value": "3",
+      "label": "해커톤 1위 수상"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "web",
+      "label": "웹 및 제품"
+    },
+    {
+      "id": "quant",
+      "label": "트레이딩 및 퀀트"
+    },
+    {
+      "id": "chain",
+      "label": "블록체인"
+    },
+    {
+      "id": "ai",
+      "label": "AI 및 자동화"
+    },
+    {
+      "id": "hw",
+      "label": "하드웨어 및 커뮤니티"
+    }
+  ],
+  "experience": [
+    {
+      "org": "Cmdop",
+      "url": "https://cmdop.com",
+      "role": "파트너, CTO",
+      "start": "2025",
+      "end": "present",
+      "track": "ai",
+      "summary": "AI 에이전트를 통한 원격 서버 관리.",
+      "bullets": [
+        "제품 전체 스택 담당: 에이전트 제어, Telegram·Discord·Slack 챗봇, 브라우저 자동화",
+        "React, Next.js, TypeScript 기반 프런트엔드; 에이전트용 스킬 마켓플레이스"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Python"
+      ]
+    },
+    {
+      "org": "Marketmaker.cc",
+      "url": "https://marketmaker.cc",
+      "role": "창업자, CEO",
+      "start": "2024",
+      "end": "present",
+      "track": "quant",
+      "summary": "암호화폐 트레이더를 위한 스캘핑 터미널, 시장 데이터 웨어하우스 및 백테스팅.",
+      "bullets": [
+        "60개 이상 거래소를 지원하는 스캘핑 터미널과 라이브 봇 동작을 재현하는 틱 단위 백테스터",
+        "과거 시장 데이터 웨어하우스(warehouse.marketmaker.cc)",
+        "Optuna(TPE, CMA-ES)를 이용해 50개 이상 스레드에서 전략 탐색; 메모리 캐시를 갖춘 3노드 클러스터로 백테스트를 26배 가속"
+      ],
+      "stack": [
+        "Go",
+        "TypeScript",
+        "Rust",
+        "QuestDB",
+        "DuckDB"
+      ]
+    },
+    {
+      "org": "Deep.foundation, Deep.memo",
+      "url": "https://deep.foundation",
+      "role": "풀스택 개발자",
+      "start": "2022",
+      "end": "2024",
+      "track": "web",
+      "summary": "의사 그래프 데이터베이스 기반 오픈소스 스타트업.",
+      "bullets": [
+        "GraphQL, Apollo Server, Hasura 기반 이벤트 중심 백엔드와 React/Next.js 프런트엔드",
+        "DevOps: Docker Swarm, Dokploy, Argo CD, Kubernetes Crossplane, Terraform, 수직 확장"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "GraphQL",
+        "Hasura"
+      ]
+    },
+    {
+      "org": "Shakeapp",
+      "url": "https://play.google.com/store/apps/details?id=shakeapp.mobile.app",
+      "role": "React 개발자",
+      "start": "2020",
+      "end": "2022",
+      "track": "web",
+      "summary": "자동차와 주택 대여를 위한 C2C 및 C2B 공유 플랫폼.",
+      "bullets": [
+        "Node.js, React, Next.js, GraphQL, Apollo Server, Hasura 기반 이벤트 중심 모바일 및 웹 제품"
+      ]
+    },
+    {
+      "org": "Kupi.net",
+      "role": "스타트업 파트너",
+      "start": "2019",
+      "end": "2020",
+      "track": "web",
+      "summary": "웹사이트 빌더.",
+      "bullets": [
+        "React와 Django로 구축"
+      ]
+    },
+    {
+      "org": "Kupi.network",
+      "role": "창업자, 풀스택 개발자",
+      "start": "2018",
+      "end": "2019",
+      "track": "quant",
+      "summary": "자체 오픈소스 암호화폐 트레이딩 터미널.",
+      "bullets": [
+        "130개 이상 거래소를 지원하는 터미널",
+        "두 가지 버전: 클래스 컴포넌트와 MobX를 사용한 React 버전, 이후 Vue 2와 MobX 버전"
+      ]
+    },
+    {
+      "org": "Dolphin BI",
+      "url": "https://www.crunchbase.com/organization/dolphin-bi",
+      "role": "프런트엔드 개발자, 스타트업 팀",
+      "start": "2016",
+      "end": "2018",
+      "track": "chain",
+      "summary": "암호화폐 및 ICO 분석을 제공하는 오픈소스 마켓플레이스.",
+      "bullets": [
+        "bitcointalk.org 뉴스 감성 분석; 지표와 전문가 리뷰를 포함한 ICO 펀더멘털 분석",
+        "waves.tech 해커톤에서 탄생(2016년 1위); 암스테르담 Startupbootcamp 액셀러레이터",
+        "목표액을 달성하지 못한 ICO를 진행; Vue 2 프런트엔드"
+      ]
+    },
+    {
+      "org": "Thermom",
+      "role": "스타트업 파트너, 프런트엔드 개발자",
+      "start": "2016",
+      "end": "2016",
+      "track": "web",
+      "summary": "Bayer 액셀러레이터를 거친 스타트업.",
+      "bullets": [
+        "Vue 2 프런트엔드, 2016년 1월~5월"
+      ]
+    },
+    {
+      "org": "klava.org",
+      "url": "https://klava.org",
+      "role": "개발 파트너",
+      "start": "2013",
+      "end": "present",
+      "track": "hw",
+      "summary": "인체공학 키보드, 키보드 제작자 커뮤니티 및 화면 키보드.",
+      "bullets": [
+        "Catboard와 이후 제작한 인체공학 키보드 프로토타입 약 10종",
+        "키보드 제작자 커뮤니티 t.me/klavaorgwork: 활동 회원 1,000명, 메시지 60만 건 이상",
+        "Android(Kotlin), iOS(Swift, SwiftUI, UIKit)용 화면 키보드 Hlider"
+      ]
+    },
+    {
+      "org": "Independent trading",
+      "role": "트레이더, 퀀트 개발자",
+      "start": "2011",
+      "end": "present",
+      "track": "quant",
+      "summary": "채굴과 수동 매매에서 자동화 전략까지.",
+      "bullets": [
+        "BTC와 LTC를 채굴하고 투자 및 수동 매매를 한 뒤 데이터 파서, 시그널, 봇을 자동화",
+        "2017년부터 차익거래와 스캘핑, 2021년부터 추세 알고리즘, 2022년부터 포트폴리오 관리 및 암호화폐 선물",
+        "30개 거래소용 자체 어댑터와 CCXT를 통한 약 100개 거래소 지원; 주식 브로커 Tinkoff, Freedom Finance, Alor; 2020년 적격 투자자 자격 취득",
+        "데이터 스택: Node.js, Python, MongoDB, Tarantool(메모리 내 Lua), ClickHouse"
+      ]
+    },
+    {
+      "org": "De-core.net",
+      "role": "창업자, 웹 스튜디오",
+      "start": "2010",
+      "end": "2016",
+      "track": "web",
+      "summary": "1인 프리랜서로 시작해 개발자 3~7명 규모의 스튜디오를 운영.",
+      "bullets": [
+        "약 200개 사이트: 마크업, 프런트엔드, 프로토타이핑 및 디자인",
+        "webpack, BEM, 웹 컴포넌트, Angular, React, Vue, Meteor, Node.js, Ionic, Cordova",
+        "Sketch, Figma, Inkscape, Fireworks를 활용한 인터페이스 디자인"
+      ]
+    },
+    {
+      "org": "Early web",
+      "role": "취미 웹 개발자",
+      "start": "2005",
+      "end": "2010",
+      "track": "web",
+      "summary": "phpBB, vBulletin, Joomla 기반 사이트와 포럼.",
+      "bullets": [
+        "1998년 FrontPage와 Dreamweaver로 첫 사이트 제작; 이후 HTML, CSS, JavaScript, PHP 사용"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Scalper terminal prototype",
+      "url": "https://scalper.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "iced 프레임워크를 사용한 Rust 네이티브 스캘핑 터미널.",
+      "stack": [
+        "Rust",
+        "iced"
+      ]
+    },
+    {
+      "name": "AI agents for news trading",
+      "years": "2026",
+      "track": "ai",
+      "summary": "뉴스를 기반으로 매매하는 에이전트 시스템."
+    },
+    {
+      "name": "Trender",
+      "url": "https://trender.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "추세 알고리즘을 빠르게 테스트하는 백테스트 엔진과 봇."
+    },
+    {
+      "name": "gaia",
+      "url": "https://github.com/suenot/gaia",
+      "years": "2026",
+      "track": "ai",
+      "summary": "로그인된 Camoufox 세션을 통해 API 키 없이 Gemini, Veo 3, NotebookLM을 제어.",
+      "metric": "별 14개",
+      "stack": [
+        "Python",
+        "Camoufox"
+      ]
+    },
+    {
+      "name": "Content factory",
+      "years": "2026",
+      "track": "ai",
+      "summary": "기사에서 슬라이드와 오디오를 만들고, 동기화된 MP4, 자막, 메타데이터를 생성한 뒤 YouTube에 업로드.",
+      "stack": [
+        "FFmpeg",
+        "Whisper",
+        "Python"
+      ]
+    },
+    {
+      "name": "Listingapis.com",
+      "url": "https://listingapis.com",
+      "years": "2025-present",
+      "track": "quant",
+      "summary": "상장 전략: 백테스트와 시그널에서 주문까지의 네트워크 지연을 줄임."
+    },
+    {
+      "name": "AI form filling",
+      "years": "2025",
+      "track": "ai",
+      "summary": "사용자를 대신해 웹사이트 양식을 작성하는 AI 서비스. 2025년 1월~3월 운영 후 프로젝트 종료."
+    },
+    {
+      "name": "aicommit",
+      "url": "https://github.com/suenot/aicommit",
+      "years": "2024-present",
+      "track": "ai",
+      "summary": "LLM으로 git 커밋 메시지를 작성하고 무료 모델로 대체하는 CLI.",
+      "metric": "별 25개",
+      "stack": [
+        "Rust"
+      ]
+    },
+    {
+      "name": "Front-runner",
+      "years": "2024",
+      "track": "quant",
+      "summary": "시그널과 봇을 이용한 시장 이상 탐지: 1ms 이내 주문, 거래소 인근 최적 서버 자동 선정."
+    },
+    {
+      "name": "Cosmos SDK chain",
+      "years": "2024-2025",
+      "track": "chain",
+      "summary": "Cosmos SDK 기반 블록체인을 출시. 네트워크는 약 1년간 운영된 뒤 노드를 중지.",
+      "stack": [
+        "Cosmos SDK",
+        "Go"
+      ]
+    },
+    {
+      "name": "Vue scalper terminal",
+      "years": "2023",
+      "track": "quant",
+      "summary": "Vue.js 기반 스캘핑 터미널.",
+      "stack": [
+        "Vue"
+      ]
+    },
+    {
+      "name": "centrum-air.com",
+      "url": "https://centrum-air.com",
+      "years": "2023",
+      "track": "web",
+      "summary": "우즈베키스탄 민간 항공사 웹사이트.",
+      "stack": [
+        "React",
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Tinkoff Bot Balancer",
+      "url": "https://github.com/suenot/tinkoff-invest-contest",
+      "years": "2022-2025",
+      "track": "quant",
+      "summary": "2022년 Tinkoff 해커톤에서 만든 오픈소스 포트폴리오 리밸런싱 봇."
+    },
+    {
+      "name": "Deep Profitmaker",
+      "url": "https://github.com/suenot/deep-profitmaker",
+      "years": "2022",
+      "track": "quant",
+      "summary": "의사 그래프 기반 트레이딩 아키텍처 개념."
+    },
+    {
+      "name": "Pair trading research",
+      "years": "2022",
+      "track": "quant",
+      "summary": "공적분 및 통계적 차익거래."
+    },
+    {
+      "name": "profitmaker",
+      "url": "https://github.com/suenot/profitmaker",
+      "years": "2017-present",
+      "track": "quant",
+      "summary": "CCXT를 통해 100개 이상 거래소를 지원하고 모듈로 확장할 수 있는 오픈소스 자체 호스팅 트레이딩 터미널.",
+      "metric": "별 365개, 포크 93개",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Bun",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "name": "Bursa.dex",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "Solidity 스마트 계약, web3.js, React, Django로 처음부터 구축한 자체 탈중앙화 거래소. 자금을 조달해 프런트엔드와 백엔드를 개발.",
+      "stack": [
+        "Solidity",
+        "web3.js",
+        "React",
+        "Django"
+      ]
+    },
+    {
+      "name": "ICOFaces",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "ICO 참여자의 이력 분석. BlockchainHack 2017 1위."
+    },
+    {
+      "name": "Inter-exchange arbitrage",
+      "years": "2017",
+      "track": "quant",
+      "summary": "최대 30개 거래소의 지표, 시그널, 봇: 최종 가격을 비교하고 가격 상관관계가 깨질 때 체결을 모의 실행."
+    },
+    {
+      "name": "Kupi.ru",
+      "years": "2013",
+      "track": "web",
+      "summary": "FRII 액셀러레이터를 거친 마켓플레이스 스타트업."
+    }
+  ],
+  "skills": [
+    {
+      "group": "프로그래밍 언어",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Go",
+        "Swift",
+        "Rust (basics)",
+        "Zig (basics)",
+        "Kotlin (basics)",
+        "C++ (basics)",
+        "C# (basics)",
+        "Lua (basics)",
+        "Haskell (basics)"
+      ]
+    },
+    {
+      "group": "프런트엔드",
+      "items": [
+        "React",
+        "Next.js",
+        "Astro",
+        "Vue",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Meteor",
+        "MobX",
+        "Apache ECharts",
+        "React Stockcharts",
+        "BEM",
+        "Sass",
+        "Stylus",
+        "web components"
+      ]
+    },
+    {
+      "group": "모바일 및 데스크톱",
+      "items": [
+        "SwiftUI",
+        "UIKit",
+        "Kotlin (Android)",
+        "Electron",
+        "Tauri",
+        "Ionic",
+        "Cordova",
+        "Capacitor"
+      ]
+    },
+    {
+      "group": "백엔드 및 API",
+      "items": [
+        "Node.js",
+        "Bun",
+        "Elysia",
+        "Django",
+        "FastAPI",
+        "GraphQL",
+        "Apollo Server",
+        "Hasura",
+        "gRPC",
+        "REST",
+        "WebSocket",
+        "FIX Protocol"
+      ]
+    },
+    {
+      "group": "데이터베이스 및 스트리밍",
+      "items": [
+        "PostgreSQL",
+        "QuestDB",
+        "ClickHouse",
+        "DuckDB",
+        "Redis",
+        "MongoDB",
+        "MySQL",
+        "SQLite",
+        "Tarantool",
+        "Parquet",
+        "Apache Kafka"
+      ]
+    },
+    {
+      "group": "DevOps 및 인프라",
+      "items": [
+        "Docker",
+        "Docker Compose",
+        "Docker Swarm",
+        "Kubernetes",
+        "Crossplane",
+        "containerd",
+        "CRI-O",
+        "Nginx",
+        "Apache",
+        "Traefik",
+        "Istio",
+        "Gateway API",
+        "Dokploy",
+        "Terraform",
+        "Pulumi",
+        "Argo CD",
+        "GitLab CI",
+        "Prometheus",
+        "Grafana"
+      ]
+    },
+    {
+      "group": "퀀트 및 트레이딩",
+      "items": [
+        "Trading robots",
+        "Market making",
+        "Arbitrage",
+        "Scalping",
+        "Trend algorithms",
+        "Portfolio management",
+        "Crypto futures",
+        "Pair trading",
+        "Statistical arbitrage",
+        "Tick-level backtesting",
+        "Optuna (TPE, CMA-ES)",
+        "Listing monitors",
+        "HFT messaging",
+        "CCXT",
+        "Binance",
+        "Bybit",
+        "Gate.io",
+        "MEXC",
+        "Bitget",
+        "Tinkoff Invest",
+        "Freedom Finance",
+        "Alor",
+        "MOEX"
+      ]
+    },
+    {
+      "group": "블록체인",
+      "items": [
+        "Solidity",
+        "web3.js",
+        "Cosmos SDK",
+        "DEX design",
+        "ICO analytics"
+      ]
+    },
+    {
+      "group": "AI 및 에이전트",
+      "items": [
+        "Claude Code",
+        "Codex",
+        "Subagent orchestration",
+        "MCP servers",
+        "Pydantic AI",
+        "Multi-model routing"
+      ]
+    },
+    {
+      "group": "디자인",
+      "items": [
+        "Figma",
+        "Sketch",
+        "Inkscape",
+        "Fireworks",
+        "Prototyping"
+      ]
+    },
+    {
+      "group": "영상 및 모션",
+      "items": [
+        "HyperFrames",
+        "GSAP",
+        "FFmpeg",
+        "Final Cut Pro",
+        "iMovie"
+      ]
+    },
+    {
+      "group": "하드웨어 및 기타",
+      "items": [
+        "Ergonomic keyboards",
+        "LabVIEW (Core 1, Core 2, DAQ)",
+        "Electronics",
+        "Game development",
+        "Touch typing: 500+ cpm Russian, 400+ English"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "date": "Jul 2017",
+      "title": "BlockchainHack by Waves: 우승",
+      "detail": "ICOFaces",
+      "url": "https://wavesplatform.com/"
+    },
+    {
+      "date": "2016",
+      "title": "waves.tech 해커톤: 1위",
+      "detail": "Dolphin BI"
+    },
+    {
+      "date": "Nov 2014",
+      "title": "Yandex hackathon on BEM: 1위",
+      "detail": "팀"
+    },
+    {
+      "date": "Oct 2014",
+      "title": "Fablab 주말 행사: 최고의 홍보상"
+    },
+    {
+      "date": "Sep 2014",
+      "title": "모스크바 국립대학교 Lomonosov 로보틱스 해커톤 Robohack: LabVIEW 특별상"
+    }
+  ],
+  "education": [
+    {
+      "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
+      "degree": "정보기술학부 컴퓨터 지원 설계(CAD) 시스템 전공; 3년 수료, 졸업하지 않음",
+      "years": "2008-2011"
+    }
+  ],
+  "courses": [
+    {
+      "date": "Apr 2018",
+      "title": "수사학",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/101634"
+    },
+    {
+      "date": "Mar 2018",
+      "title": "논증 이론",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/97106"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "과학적 사고",
+      "org": "SKB Kontur",
+      "url": "https://stepik.org/cert/51382"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "웹 기술",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/50978"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Haskell 함수형 프로그래밍",
+      "org": "Computer Science Center",
+      "url": "https://stepik.org/cert/50337"
+    },
+    {
+      "date": "Jan 2017",
+      "title": "소프트웨어 요구사항 작성",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/45358"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "통계 기초",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/44208"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Linux 입문",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/42290"
+    },
+    {
+      "date": "Nov 2016",
+      "title": "Python 프로그래밍"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "투자은행 내부 들여다보기",
+      "org": "European University at St Petersburg",
+      "url": "https://stepik.org/cert/34726"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "웹 프로젝트 보안 분석"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "학습하는 법 배우기",
+      "org": "University of California, San Diego"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "무선 통신 신기술",
+      "org": "Yonsei University (Coursera)"
+    },
+    {
+      "date": "Feb 2015",
+      "title": "LabVIEW Core 1, Core 2 및 DAQ"
+    }
+  ],
+  "languages": [
+    {
+      "name": "러시아어",
+      "level": "모국어"
+    },
+    {
+      "name": "영어",
+      "level": "B2"
+    }
+  ]
+}

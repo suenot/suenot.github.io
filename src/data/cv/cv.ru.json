@@ -1,0 +1,750 @@
+{
+  "name": "Eugen Soloviov",
+  "handle": "suenot",
+  "headline": "Инженер-программист и квант-разработчик: веб, торговые системы, блокчейн, ИИ",
+  "location": "Батуми, Грузия",
+  "email": "suenot@gmail.com",
+  "summary": "Инженер-программист с более чем 20-летним опытом выпуска продуктов. Задолго до бума ИИ я создавал сайты и продукты под ключ: от дизайна и архитектуры до frontend, backend и DevOps; шесть лет руководил собственной веб-студией. Квант-разработчик и исследователь: торгую с 2011 года, с 2017 года создаю торговых роботов, стратегии, бэктесты, исследования и аналитику. В блокчейне я с нуля создал платформу аналитики ICO и собственную DEX, а также запустил блокчейн на Cosmos SDK. Еще я сделал несколько игр, монтировал видео и работал с электроникой. ИИ только усилил все эти навыки.",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/suenot",
+      "display": "github.com/suenot"
+    },
+    {
+      "label": "Сайт",
+      "url": "https://suenot.com",
+      "display": "suenot.com"
+    },
+    {
+      "label": "Marketmaker",
+      "url": "https://marketmaker.cc",
+      "display": "marketmaker.cc"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suenot/",
+      "display": "linkedin.com/in/suenot"
+    },
+    {
+      "label": "Telegram",
+      "url": "https://t.me/suenot",
+      "display": "@suenot"
+    },
+    {
+      "label": "Канал",
+      "url": "https://t.me/suenot_dev",
+      "display": "t.me/suenot_dev"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/suenot",
+      "display": "x.com/suenot"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/soloviov.evgeniy",
+      "display": "facebook.com/soloviov.evgeniy"
+    }
+  ],
+  "stats": [
+    {
+      "value": "20+",
+      "label": "лет выпускаю программные продукты"
+    },
+    {
+      "value": "~200",
+      "label": "сайтов создано в собственной веб-студии"
+    },
+    {
+      "value": "15+",
+      "label": "лет торгую"
+    },
+    {
+      "value": "130+",
+      "label": "подключенных бирж: 30 собственных адаптеров, около 100 через CCXT"
+    },
+    {
+      "value": "3",
+      "label": "первых мест на хакатонах"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "web",
+      "label": "Веб и продукты"
+    },
+    {
+      "id": "quant",
+      "label": "Трейдинг и квант-разработка"
+    },
+    {
+      "id": "chain",
+      "label": "Блокчейн"
+    },
+    {
+      "id": "ai",
+      "label": "ИИ и автоматизация"
+    },
+    {
+      "id": "hw",
+      "label": "Электроника и сообщества"
+    }
+  ],
+  "experience": [
+    {
+      "org": "Cmdop",
+      "url": "https://cmdop.com",
+      "role": "Партнер, технический директор",
+      "start": "2025",
+      "end": "present",
+      "track": "ai",
+      "summary": "Удаленное управление серверами с помощью ИИ-агентов.",
+      "bullets": [
+        "Отвечаю за весь стек продукта: управление агентами, чат-боты для Telegram, Discord и Slack, автоматизация браузера",
+        "Frontend на React, Next.js и TypeScript; маркетплейс навыков для агентов"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Python"
+      ]
+    },
+    {
+      "org": "Marketmaker.cc",
+      "url": "https://marketmaker.cc",
+      "role": "Основатель, генеральный директор",
+      "start": "2024",
+      "end": "present",
+      "track": "quant",
+      "summary": "Терминал для скальпинга, хранилище рыночных данных и бэктестинг для криптотрейдеров.",
+      "bullets": [
+        "Терминал для скальпинга с поддержкой более 60 бирж и бэктестером на уровне тиков, который воспроизводит поведение боевого бота",
+        "Хранилище исторических рыночных данных (warehouse.marketmaker.cc)",
+        "Поиск стратегий с Optuna (TPE, CMA-ES) на более чем 50 потоках; кластер из 3 узлов с кэшем в памяти ускорил бэктесты в 26 раз"
+      ],
+      "stack": [
+        "Go",
+        "TypeScript",
+        "Rust",
+        "QuestDB",
+        "DuckDB"
+      ]
+    },
+    {
+      "org": "Deep.foundation, Deep.memo",
+      "url": "https://deep.foundation",
+      "role": "Full-stack-разработчик",
+      "start": "2022",
+      "end": "2024",
+      "track": "web",
+      "summary": "Стартапы с открытым исходным кодом на псевдографовой базе данных.",
+      "bullets": [
+        "Событийный backend и frontend на React/Next.js поверх GraphQL, Apollo Server и Hasura",
+        "DevOps: Docker Swarm, Dokploy, Argo CD, Kubernetes Crossplane, Terraform, вертикальное масштабирование"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "GraphQL",
+        "Hasura"
+      ]
+    },
+    {
+      "org": "Shakeapp",
+      "url": "https://play.google.com/store/apps/details?id=shakeapp.mobile.app",
+      "role": "React-разработчик",
+      "start": "2020",
+      "end": "2022",
+      "track": "web",
+      "summary": "Платформа совместного использования автомобилей и жилья между людьми и бизнесом.",
+      "bullets": [
+        "Мобильный и веб-продукт на Node.js, React, Next.js, GraphQL, Apollo Server и Hasura с событийной архитектурой"
+      ]
+    },
+    {
+      "org": "Kupi.net",
+      "role": "Партнер стартапа",
+      "start": "2019",
+      "end": "2020",
+      "track": "web",
+      "summary": "Конструктор сайтов.",
+      "bullets": [
+        "Создан на React и Django"
+      ]
+    },
+    {
+      "org": "Kupi.network",
+      "role": "Основатель, full-stack-разработчик",
+      "start": "2018",
+      "end": "2019",
+      "track": "quant",
+      "summary": "Собственный торговый терминал для криптовалют с открытым исходным кодом.",
+      "bullets": [
+        "Терминал с поддержкой более 130 бирж",
+        "Две версии: сначала React с классовыми компонентами и MobX, затем Vue 2 и MobX"
+      ]
+    },
+    {
+      "org": "Dolphin BI",
+      "url": "https://www.crunchbase.com/organization/dolphin-bi",
+      "role": "Frontend-разработчик в команде стартапа",
+      "start": "2016",
+      "end": "2018",
+      "track": "chain",
+      "summary": "Маркетплейс аналитики криптовалют и ICO с открытым исходным кодом.",
+      "bullets": [
+        "Анализ настроений по новостям bitcointalk.org; фундаментальный анализ ICO с метриками и экспертными оценками",
+        "Проект появился на хакатоне waves.tech (1-е место, 2016); акселератор Startupbootcamp в Амстердаме",
+        "Провел ICO, не достигшее цели; frontend на Vue 2"
+      ]
+    },
+    {
+      "org": "Thermom",
+      "role": "Партнер стартапа, frontend-разработчик",
+      "start": "2016",
+      "end": "2016",
+      "track": "web",
+      "summary": "Стартап, прошедший акселератор Bayer.",
+      "bullets": [
+        "Frontend на Vue 2, с января по май 2016 года"
+      ]
+    },
+    {
+      "org": "klava.org",
+      "url": "https://klava.org",
+      "role": "Партнер по разработке",
+      "start": "2013",
+      "end": "present",
+      "track": "hw",
+      "summary": "Эргономичные клавиатуры, сообщество их создателей и экранная клавиатура.",
+      "bullets": [
+        "Catboard и около десяти последующих прототипов эргономичных клавиатур",
+        "Сообщество создателей клавиатур t.me/klavaorgwork: 1 000 активных участников, более 600 тыс. сообщений",
+        "Экранная клавиатура Hlider для Android (Kotlin) и iOS (Swift, SwiftUI, UIKit)"
+      ]
+    },
+    {
+      "org": "Independent trading",
+      "role": "Трейдер, квант-разработчик",
+      "start": "2011",
+      "end": "present",
+      "track": "quant",
+      "summary": "От майнинга и ручной торговли до автоматизированных стратегий.",
+      "bullets": [
+        "Майнил BTC и LTC, инвестировал и торговал вручную, затем автоматизировал процессы: парсеры данных, сигналы, боты",
+        "Арбитраж и скальпинг с 2017 года, трендовые алгоритмы с 2021 года, управление портфелем и фьючерсы на криптовалюты с 2022 года",
+        "Собственные адаптеры к 30 биржам и около 100 через CCXT; брокеры: Тинькофф, Freedom Finance и Alor; статус квалифицированного инвестора с 2020 года",
+        "Стек данных: Node.js, Python, MongoDB, Tarantool (Lua в памяти), ClickHouse"
+      ]
+    },
+    {
+      "org": "De-core.net",
+      "role": "Основатель веб-студии",
+      "start": "2010",
+      "end": "2016",
+      "track": "web",
+      "summary": "Начал как независимый фрилансер, затем руководил студией из 3–7 разработчиков.",
+      "bullets": [
+        "Около 200 сайтов: верстка, frontend, прототипирование и дизайн",
+        "webpack, BEM, web components, Angular, React, Vue, Meteor, Node.js, Ionic и Cordova",
+        "Дизайн интерфейсов в Sketch, Figma, Inkscape и Fireworks"
+      ]
+    },
+    {
+      "org": "Early web",
+      "role": "Веб-разработчик-любитель",
+      "start": "2005",
+      "end": "2010",
+      "track": "web",
+      "summary": "Сайты и форумы на phpBB, vBulletin и Joomla.",
+      "bullets": [
+        "Первые сайты создал в 1998 году на FrontPage и Dreamweaver; позже работал с HTML, CSS, JavaScript и PHP"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Scalper terminal prototype",
+      "url": "https://scalper.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "Нативный терминал для скальпинга на Rust с фреймворком iced.",
+      "stack": [
+        "Rust",
+        "iced"
+      ]
+    },
+    {
+      "name": "AI agents for news trading",
+      "years": "2026",
+      "track": "ai",
+      "summary": "Система ИИ-агентов для торговли на новостях."
+    },
+    {
+      "name": "Trender",
+      "url": "https://trender.marketmaker.cc",
+      "years": "2026",
+      "track": "quant",
+      "summary": "Движок бэктестинга для быстрого тестирования трендовых алгоритмов и бот."
+    },
+    {
+      "name": "gaia",
+      "url": "https://github.com/suenot/gaia",
+      "years": "2026",
+      "track": "ai",
+      "summary": "Управляет Gemini, Veo 3 и NotebookLM через авторизованную сессию Camoufox, без API-ключей.",
+      "metric": "14 звезд",
+      "stack": [
+        "Python",
+        "Camoufox"
+      ]
+    },
+    {
+      "name": "Content factory",
+      "years": "2026",
+      "track": "ai",
+      "summary": "От статьи к слайдам и аудио, затем к синхронизированному MP4, субтитрам и метаданным, после чего — загрузка на YouTube.",
+      "stack": [
+        "FFmpeg",
+        "Whisper",
+        "Python"
+      ]
+    },
+    {
+      "name": "Listingapis.com",
+      "url": "https://listingapis.com",
+      "years": "2025-present",
+      "track": "quant",
+      "summary": "Стратегии листинга: бэктесты и сокращение сетевой задержки между сигналом и ордером."
+    },
+    {
+      "name": "AI form filling",
+      "years": "2025",
+      "track": "ai",
+      "summary": "ИИ-сервис, который заполнял формы на сайтах за пользователя. Январь — март 2025 года; проект закрыт."
+    },
+    {
+      "name": "aicommit",
+      "url": "https://github.com/suenot/aicommit",
+      "years": "2024-present",
+      "track": "ai",
+      "summary": "CLI, который создает сообщения коммитов Git с помощью LLM и при необходимости использует бесплатные модели.",
+      "metric": "25 звезд",
+      "stack": [
+        "Rust"
+      ]
+    },
+    {
+      "name": "Front-runner",
+      "years": "2024",
+      "track": "quant",
+      "summary": "Поиск рыночных аномалий с сигналами и ботом: ордера выставлялись за 1 мс, лучшие серверы рядом с биржами выбирались автоматически."
+    },
+    {
+      "name": "Cosmos SDK chain",
+      "years": "2024-2025",
+      "track": "chain",
+      "summary": "Запустил блокчейн на Cosmos SDK; сеть работала около года, затем узлы остановили.",
+      "stack": [
+        "Cosmos SDK",
+        "Go"
+      ]
+    },
+    {
+      "name": "Vue scalper terminal",
+      "years": "2023",
+      "track": "quant",
+      "summary": "Терминал для скальпинга на Vue.js.",
+      "stack": [
+        "Vue"
+      ]
+    },
+    {
+      "name": "centrum-air.com",
+      "url": "https://centrum-air.com",
+      "years": "2023",
+      "track": "web",
+      "summary": "Сайт для частной авиакомпании Узбекистана.",
+      "stack": [
+        "React",
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Tinkoff Bot Balancer",
+      "url": "https://github.com/suenot/tinkoff-invest-contest",
+      "years": "2022-2025",
+      "track": "quant",
+      "summary": "Бот для ребалансировки портфеля с открытым исходным кодом, созданный на хакатоне Тинькофф в 2022 году."
+    },
+    {
+      "name": "Deep Profitmaker",
+      "url": "https://github.com/suenot/deep-profitmaker",
+      "years": "2022",
+      "track": "quant",
+      "summary": "Концепция торговой архитектуры на псевдографах."
+    },
+    {
+      "name": "Pair trading research",
+      "years": "2022",
+      "track": "quant",
+      "summary": "Коинтеграция и статистический арбитраж."
+    },
+    {
+      "name": "profitmaker",
+      "url": "https://github.com/suenot/profitmaker",
+      "years": "2017-present",
+      "track": "quant",
+      "summary": "Самостоятельно размещаемый торговый терминал с открытым исходным кодом и модульной архитектурой для более чем 100 бирж через CCXT.",
+      "metric": "365 звезд, 93 форка",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Bun",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "name": "Bursa.dex",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "Собственная децентрализованная биржа, созданная с нуля: смарт-контракты на Solidity, web3.js, React, Django. Я профинансировал проект и создал frontend и backend.",
+      "stack": [
+        "Solidity",
+        "web3.js",
+        "React",
+        "Django"
+      ]
+    },
+    {
+      "name": "ICOFaces",
+      "years": "2017-2018",
+      "track": "chain",
+      "summary": "Анализ истории участников ICO. 1-е место на BlockchainHack 2017."
+    },
+    {
+      "name": "Inter-exchange arbitrage",
+      "years": "2017",
+      "track": "quant",
+      "summary": "Метрики, сигналы и боты для 30 бирж: сравнение последних цен и симуляция исполнения при расхождении цен."
+    },
+    {
+      "name": "Kupi.ru",
+      "years": "2013",
+      "track": "web",
+      "summary": "Стартап-маркетплейс, прошедший акселератор ФРИИ."
+    }
+  ],
+  "skills": [
+    {
+      "group": "Языки программирования",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Go",
+        "Swift",
+        "Rust (basics)",
+        "Zig (basics)",
+        "Kotlin (basics)",
+        "C++ (basics)",
+        "C# (basics)",
+        "Lua (basics)",
+        "Haskell (basics)"
+      ]
+    },
+    {
+      "group": "Фронтенд",
+      "items": [
+        "React",
+        "Next.js",
+        "Astro",
+        "Vue",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Meteor",
+        "MobX",
+        "Apache ECharts",
+        "React Stockcharts",
+        "BEM",
+        "Sass",
+        "Stylus",
+        "web components"
+      ]
+    },
+    {
+      "group": "Мобильные и настольные приложения",
+      "items": [
+        "SwiftUI",
+        "UIKit",
+        "Kotlin (Android)",
+        "Electron",
+        "Tauri",
+        "Ionic",
+        "Cordova",
+        "Capacitor"
+      ]
+    },
+    {
+      "group": "Backend и API",
+      "items": [
+        "Node.js",
+        "Bun",
+        "Elysia",
+        "Django",
+        "FastAPI",
+        "GraphQL",
+        "Apollo Server",
+        "Hasura",
+        "gRPC",
+        "REST",
+        "WebSocket",
+        "FIX Protocol"
+      ]
+    },
+    {
+      "group": "Базы данных и потоки данных",
+      "items": [
+        "PostgreSQL",
+        "QuestDB",
+        "ClickHouse",
+        "DuckDB",
+        "Redis",
+        "MongoDB",
+        "MySQL",
+        "SQLite",
+        "Tarantool",
+        "Parquet",
+        "Apache Kafka"
+      ]
+    },
+    {
+      "group": "DevOps и инфраструктура",
+      "items": [
+        "Docker",
+        "Docker Compose",
+        "Docker Swarm",
+        "Kubernetes",
+        "Crossplane",
+        "containerd",
+        "CRI-O",
+        "Nginx",
+        "Apache",
+        "Traefik",
+        "Istio",
+        "Gateway API",
+        "Dokploy",
+        "Terraform",
+        "Pulumi",
+        "Argo CD",
+        "GitLab CI",
+        "Prometheus",
+        "Grafana"
+      ]
+    },
+    {
+      "group": "Квант-разработка и трейдинг",
+      "items": [
+        "Trading robots",
+        "Market making",
+        "Arbitrage",
+        "Scalping",
+        "Trend algorithms",
+        "Portfolio management",
+        "Crypto futures",
+        "Pair trading",
+        "Statistical arbitrage",
+        "Tick-level backtesting",
+        "Optuna (TPE, CMA-ES)",
+        "Listing monitors",
+        "HFT messaging",
+        "CCXT",
+        "Binance",
+        "Bybit",
+        "Gate.io",
+        "MEXC",
+        "Bitget",
+        "Tinkoff Invest",
+        "Freedom Finance",
+        "Alor",
+        "MOEX"
+      ]
+    },
+    {
+      "group": "Блокчейн",
+      "items": [
+        "Solidity",
+        "web3.js",
+        "Cosmos SDK",
+        "DEX design",
+        "ICO analytics"
+      ]
+    },
+    {
+      "group": "ИИ и агенты",
+      "items": [
+        "Claude Code",
+        "Codex",
+        "Subagent orchestration",
+        "MCP servers",
+        "Pydantic AI",
+        "Multi-model routing"
+      ]
+    },
+    {
+      "group": "Дизайн",
+      "items": [
+        "Figma",
+        "Sketch",
+        "Inkscape",
+        "Fireworks",
+        "Prototyping"
+      ]
+    },
+    {
+      "group": "Видео и анимация",
+      "items": [
+        "HyperFrames",
+        "GSAP",
+        "FFmpeg",
+        "Final Cut Pro",
+        "iMovie"
+      ]
+    },
+    {
+      "group": "Электроника и другое",
+      "items": [
+        "Ergonomic keyboards",
+        "LabVIEW (Core 1, Core 2, DAQ)",
+        "Electronics",
+        "Game development",
+        "Touch typing: 500+ cpm Russian, 400+ English"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "date": "Jul 2017",
+      "title": "Победитель BlockchainHack от Waves",
+      "detail": "ICOFaces",
+      "url": "https://wavesplatform.com/"
+    },
+    {
+      "date": "2016",
+      "title": "1-е место на хакатоне waves.tech",
+      "detail": "Dolphin BI"
+    },
+    {
+      "date": "Nov 2014",
+      "title": "1-е место на хакатоне Яндекса по BEM",
+      "detail": "команда"
+    },
+    {
+      "date": "Oct 2014",
+      "title": "Fablab weekend: награда за лучшее продвижение"
+    },
+    {
+      "date": "Sep 2014",
+      "title": "Хакатон по робототехнике Robohack, МГУ имени М. В. Ломоносова: специальная награда от LabVIEW"
+    }
+  ],
+  "education": [
+    {
+      "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
+      "degree": "Системы автоматизированного проектирования (САПР), факультет информационных технологий; обучение в течение 3 лет, без выпуска",
+      "years": "2008-2011"
+    }
+  ],
+  "courses": [
+    {
+      "date": "Apr 2018",
+      "title": "Риторика",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/101634"
+    },
+    {
+      "date": "Mar 2018",
+      "title": "Теория аргументации",
+      "org": "Kant Baltic Federal University",
+      "url": "https://stepik.org/cert/97106"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Научное мышление",
+      "org": "SKB Kontur",
+      "url": "https://stepik.org/cert/51382"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Веб-технологии",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/50978"
+    },
+    {
+      "date": "Mar 2017",
+      "title": "Функциональное программирование на Haskell",
+      "org": "Computer Science Center",
+      "url": "https://stepik.org/cert/50337"
+    },
+    {
+      "date": "Jan 2017",
+      "title": "Написание требований к программному обеспечению",
+      "org": "Mail.ru Group",
+      "url": "https://stepik.org/cert/45358"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Основы статистики",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/44208"
+    },
+    {
+      "date": "Dec 2016",
+      "title": "Введение в Linux",
+      "org": "Bioinformatics Institute",
+      "url": "https://stepik.org/cert/42290"
+    },
+    {
+      "date": "Nov 2016",
+      "title": "Программирование на Python"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "Инвестиционный банкинг изнутри",
+      "org": "European University at St Petersburg",
+      "url": "https://stepik.org/cert/34726"
+    },
+    {
+      "date": "Oct 2016",
+      "title": "Анализ безопасности веб-проектов"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "Учимся учиться",
+      "org": "University of California, San Diego"
+    },
+    {
+      "date": "Jan 2016",
+      "title": "Беспроводная связь: новые технологии",
+      "org": "Yonsei University (Coursera)"
+    },
+    {
+      "date": "Feb 2015",
+      "title": "LabVIEW: Core 1, Core 2 и DAQ"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Русский",
+      "level": "родной"
+    },
+    {
+      "name": "Английский",
+      "level": "B2"
+    }
+  ]
+}
