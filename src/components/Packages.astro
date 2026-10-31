@@ -15,6 +15,7 @@ const copy: Record<Locale, { heading: string; own: string; hired: string; all: s
   ar: { heading: 'الحزم المنشورة', own: 'خاصة', hired: 'أثناء العمل في Deep.foundation', all: 'الكل' },
 };
 const t = copy[locale] ?? copy.en;
+const nf = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
 interface Pkg {
   name: string;
@@ -26,6 +27,7 @@ interface Registry {
   /** Counts shown next to the registry name. */
   total: number;
   hired?: number;
+  stats?: Stats | null;
   packages: Pkg[];
 }
 
@@ -33,12 +35,67 @@ const npm = (name: string): Pkg => ({ name, url: `https://www.npmjs.com/package/
 const crate = (name: string): Pkg => ({ name, url: `https://crates.io/crates/${name}` });
 const image = (name: string): Pkg => ({ name, url: `https://hub.docker.com/r/suenot/${name}` });
 
+/** Live numbers fetched at build time; null when a registry is unreachable. */
+interface Stats {
+  total: number;
+  hired?: number;
+  downloads: number | null;
+  period: string;
+}
+const getJson = async (url: string) => {
+  const response = await fetch(url, { headers: { 'user-agent': 'suenot.com build' }, signal: AbortSignal.timeout(15000) });
+  if (!response.ok) throw new Error(`${url}: ${response.status}`);
+  return response.json();
+};
+const safe = async <T,>(job: () => Promise<T>): Promise<T | null> => {
+  try {
+    return await job();
+  } catch {
+    return null;
+  }
+};
+
+const npmStats = await safe(async (): Promise<Stats> => {
+  const names: string[] = [];
+  for (let from = 0, total = 1; from < total; from += 250) {
+    const page = await getJson(`https://registry.npmjs.org/-/v1/search?text=maintainer:suenot&size=250&from=${from}`);
+    total = page.total;
+    names.push(...page.objects.map((entry: { package: { name: string } }) => entry.package.name));
+  }
+  return {
+    total: names.length,
+    hired: names.filter((name) => name.startsWith('@deep-foundation/')).length,
+    downloads: null,
+    period: '',
+  };
+});
+
+const cratesStats = await safe(async (): Promise<Stats> => {
+  const user = await getJson('https://crates.io/api/v1/users/suenot');
+  const list = await getJson(`https://crates.io/api/v1/crates?user_id=${user.user.id}&per_page=100`);
+  return {
+    total: list.meta.total,
+    downloads: list.crates.reduce((sum: number, crate: { downloads: number }) => sum + crate.downloads, 0),
+    period: 'all time',
+  };
+});
+
+const dockerStats = await safe(async (): Promise<Stats> => {
+  const list = await getJson('https://hub.docker.com/v2/repositories/suenot/?page_size=100');
+  return {
+    total: list.count,
+    downloads: list.results.reduce((sum: number, repo: { pull_count: number }) => sum + repo.pull_count, 0),
+    period: 'pulls',
+  };
+});
+
 const registries: Registry[] = [
   {
     name: 'npm',
     url: 'https://www.npmjs.com/~suenot',
-    total: 198,
-    hired: 148,
+    total: npmStats?.total ?? 198,
+    hired: npmStats?.hired ?? 148,
+    stats: npmStats,
     packages: [
       npm('@suenot/aicommit'),
       npm('@suenot/aicommit-mcp'),
@@ -54,17 +111,19 @@ const registries: Registry[] = [
   {
     name: 'crates.io',
     url: 'https://crates.io/users/suenot',
-    total: 3,
+    total: cratesStats?.total ?? 3,
+    stats: cratesStats,
     packages: [crate('aicommit'), crate('contextify'), crate('gen_pass')],
   },
   {
     name: 'Docker Hub',
     url: 'https://hub.docker.com/u/suenot',
-    total: 7,
+    total: dockerStats?.total ?? 7,
+    stats: dockerStats,
     packages: [image('sentiments-highcharts'), image('coinindex-agency'), image('default-widgets'), image('sentiments-comments'), image('sentiments-line-chart')],
   },
   { name: 'PyPI', url: 'https://pypi.org/user/suenot/', total: 0, packages: [{ name: 'cmdop-claude', url: 'https://pypi.org/project/cmdop-claude/' }] },
-  { name: 'GitHub Packages', url: 'https://github.com/suenot?tab=packages', total: 0, packages: [] },
+  { name: 'GitHub Packages', url: 'https://github.com/suenot?tab=packages', total: 1, packages: [{ name: 'tts-backend', url: 'https://github.com/users/suenot/packages/container/package/tts-backend' }] },
 ];
 ---
 
@@ -73,6 +132,10 @@ const registries: Registry[] = [
     <header class="packages__header">
       <p class="terminal-kicker">PACKAGE REGISTRIES</p>
       <h2 id="packages-heading" class="terminal-heading">{t.heading}</h2>
+      <dl class="packages__totals" aria-label="Registry totals" data-reveal>
+        <div><dt>REGISTRIES</dt><dd>{String(registries.length).padStart(2, '0')}</dd></div>
+        <div><dt>PACKAGES</dt><dd>{registries.reduce((sum, r) => sum + r.total, 0)}</dd></div>
+      </dl>
     </header>
     <ul class="packages__list">
       {registries.map((registry, index) => (
@@ -84,6 +147,9 @@ const registries: Registry[] = [
               <span class="packages__count">
                 {registry.total} {t.all}{registry.hired ? ` · ${registry.total - registry.hired} ${t.own} · ${registry.hired} ${t.hired}` : ''}
               </span>
+            )}
+            {registry.stats?.downloads != null && (
+              <span class="packages__downloads">{nf.format(registry.stats.downloads)} <i>{registry.stats.period === 'pulls' ? 'pulls' : `downloads / ${registry.stats.period}`}</i></span>
             )}
             <span aria-hidden="true">↗</span>
           </a>
@@ -108,6 +174,12 @@ const registries: Registry[] = [
   .packages__registry { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .2rem .7rem; align-items: baseline; color: inherit; text-decoration: none; }
   .packages__registry strong { color: var(--terminal-fg, #e7e9e3); font: 600 .8rem/1.35 var(--font-mono, monospace); }
   .packages__registry > span:last-child { color: var(--terminal-accent); font: .8rem/1 var(--font-mono, monospace); }
+  .packages__downloads { grid-column: 2 / -1; color: var(--terminal-fg, #e7e9e3); font: 600 .72rem/1.4 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
+  .packages__downloads i { color: var(--terminal-muted, #747a75); font: normal .5rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .packages__totals { display: flex; gap: 1.6rem; margin-block-start: 2rem; }
+  .packages__totals div { display: grid; gap: .5rem; }
+  .packages__totals dt { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
+  .packages__totals dd { color: var(--terminal-fg, #e7e9e3); font: 600 1.65rem/1 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
   .packages__id { color: var(--terminal-faint); font: .5rem/1.5 var(--font-mono, monospace); }
   .packages__count { grid-column: 2 / -1; color: var(--terminal-muted, #747a75); font: .52rem/1.5 var(--font-mono, monospace); letter-spacing: .06em; }
   .packages__items { display: flex; flex-wrap: wrap; gap: .35rem .9rem; font: .56rem/1.5 var(--font-mono, monospace); }
