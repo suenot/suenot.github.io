@@ -109,7 +109,8 @@
         "Next.js",
         "TypeScript",
         "Python"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Marketmaker.cc",
@@ -130,7 +131,8 @@
         "Rust",
         "QuestDB",
         "DuckDB"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Deep.foundation, Deep.memo",
@@ -150,7 +152,8 @@
         "Next.js",
         "GraphQL",
         "Hasura"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Shakeapp",
@@ -162,7 +165,8 @@
       "summary": "C2C- и C2B-платформа для совместного использования автомобилей и жилья.",
       "bullets": [
         "Мобильный и веб-продукт на Node.js, React, Next.js, GraphQL, Apollo Server и Hasura с событийной архитектурой"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Kupi.net",
@@ -173,7 +177,8 @@
       "summary": "Конструктор сайтов.",
       "bullets": [
         "Создан на React и Django"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Kupi.network",
@@ -185,7 +190,8 @@
       "bullets": [
         "Терминал с поддержкой более 130 бирж",
         "Две версии: сначала React с классовыми компонентами и MobX, затем Vue 2 и MobX"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Dolphin BI",
@@ -199,7 +205,8 @@
         "Анализ настроений по новостям bitcointalk.org; фундаментальный анализ ICO с метриками и экспертными оценками",
         "Проект появился на хакатоне waves.tech (1-е место, 2016); акселератор Startupbootcamp в Амстердаме",
         "Провел ICO, не достигшее цели; frontend на Vue 2"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Thermom",
@@ -210,7 +217,8 @@
       "summary": "Стартап, прошедший акселератор Bayer.",
       "bullets": [
         "Frontend на Vue 2, с января по май 2016 года"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "klava.org",
@@ -224,7 +232,8 @@
         "Catboard и около десяти последующих прототипов эргономичных клавиатур",
         "Сообщество создателей клавиатур t.me/klavaorgwork: 1 000 активных участников, 600k+ сообщений",
         "Экранная клавиатура Hlider для Android (Kotlin) и iOS (Swift, SwiftUI, UIKit)"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Independent trading",
@@ -238,7 +247,8 @@
         "Арбитраж и скальпинг с 2017 года, трендовые алгоритмы с 2021 года, управление портфелем и фьючерсы на криптовалюты с 2022 года",
         "Собственные адаптеры к 30 биржам и около 100 через CCXT; брокеры: Тинькофф, Freedom Finance и Alor; статус квалифицированного инвестора с 2020 года",
         "Стек данных: Node.js, Python, MongoDB, Tarantool (Lua в памяти), ClickHouse"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "De-core.net",
@@ -251,18 +261,20 @@
         "Около 200 сайтов: верстка, frontend, прототипирование и дизайн",
         "webpack, BEM, web components, Angular, React, Vue, Meteor, Node.js, Ionic и Cordova",
         "Дизайн интерфейсов в Sketch, Figma, Inkscape и Fireworks"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Early web",
       "role": "Веб-разработчик-любитель",
-      "start": "2005",
+      "start": "1998",
       "end": "2010",
       "track": "web",
       "summary": "Сайты и форумы на phpBB, vBulletin и Joomla.",
       "bullets": [
         "Первые сайты создал в 1998 году на FrontPage и Dreamweaver; позже работал с HTML, CSS, JavaScript и PHP"
-      ]
+      ],
+      "stake": "founder"
     }
   ],
   "projects": [
@@ -371,7 +383,8 @@
       "stack": [
         "React",
         "Next.js"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "name": "Tinkoff Bot Balancer",
@@ -656,7 +669,8 @@
     {
       "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
       "degree": "Системы автоматизированного проектирования (САПР), факультет информационных технологий; обучение в течение 3 лет, без выпуска",
-      "years": "2008-2011"
+      "years": "2008-2011",
+      "stake": "none"
     }
   ],
   "courses": [

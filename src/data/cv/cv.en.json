@@ -109,7 +109,8 @@
         "Next.js",
         "TypeScript",
         "Python"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Marketmaker.cc",
@@ -130,7 +131,8 @@
         "Rust",
         "QuestDB",
         "DuckDB"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Deep.foundation, Deep.memo",
@@ -150,7 +152,8 @@
         "Next.js",
         "GraphQL",
         "Hasura"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Shakeapp",
@@ -162,7 +165,8 @@
       "summary": "C2C and C2B sharing platform for renting cars and homes.",
       "bullets": [
         "Mobile and web product on Node.js, React, Next.js, GraphQL, Apollo Server and Hasura, event-driven"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Kupi.net",
@@ -173,7 +177,8 @@
       "summary": "Website builder.",
       "bullets": [
         "Built on React and Django"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Kupi.network",
@@ -185,7 +190,8 @@
       "bullets": [
         "Terminal covering 130+ exchanges",
         "Two versions: React with class components and MobX, then Vue 2 and MobX"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Dolphin BI",
@@ -199,7 +205,8 @@
         "Sentiment analysis of bitcointalk.org news; ICO fundamental analysis with metrics and expert reviews",
         "Born at the waves.tech hackathon (1st place, 2016); Startupbootcamp accelerator in Amsterdam",
         "Ran an ICO that did not reach its target; frontend in Vue 2"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Thermom",
@@ -210,7 +217,8 @@
       "summary": "Startup that went through the Bayer accelerator.",
       "bullets": [
         "Frontend in Vue 2, January to May 2016"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "klava.org",
@@ -224,7 +232,8 @@
         "Catboard and about ten later ergonomic keyboard prototypes",
         "Keyboard builders' community t.me/klavaorgwork: 1,000 active members, 600k+ messages",
         "Hlider on-screen keyboard for Android (Kotlin) and iOS (Swift, SwiftUI, UIKit)"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Independent trading",
@@ -238,7 +247,8 @@
         "Arbitrage and scalping since 2017, trend algorithms since 2021, portfolio management and crypto futures since 2022",
         "Own adapters to 30 exchanges plus about 100 through CCXT; stock brokers Tinkoff, Freedom Finance and Alor; qualified investor status in 2020",
         "Data stack: Node.js, Python, MongoDB, Tarantool (in-memory Lua), ClickHouse"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "De-core.net",
@@ -251,18 +261,20 @@
         "About 200 sites: markup, frontend, prototyping and design",
         "webpack, BEM, web components, Angular, React, Vue, Meteor, Node.js, Ionic and Cordova",
         "Interface design in Sketch, Figma, Inkscape and Fireworks"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Early web",
       "role": "Hobby web developer",
-      "start": "2005",
+      "start": "1998",
       "end": "2010",
       "track": "web",
       "summary": "Sites and forums on phpBB, vBulletin and Joomla.",
       "bullets": [
         "First sites in 1998 with FrontPage and Dreamweaver; later HTML, CSS, JavaScript and PHP"
-      ]
+      ],
+      "stake": "founder"
     }
   ],
   "projects": [
@@ -371,7 +383,8 @@
       "stack": [
         "React",
         "Next.js"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "name": "Tinkoff Bot Balancer",
@@ -656,7 +669,8 @@
     {
       "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
       "degree": "Computer-aided design (CAD) systems, Faculty of Information Technologies; 3 years completed, not graduated",
-      "years": "2008-2011"
+      "years": "2008-2011",
+      "stake": "none"
     }
   ],
   "courses": [

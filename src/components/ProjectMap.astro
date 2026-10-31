@@ -7,7 +7,8 @@ interface Props {
 }
 const { locale = defaultLocale } = Astro.props;
 const t = getCvLabels(locale);
-const map = buildProjectMap(getCv(locale), t.now);
+const map = buildProjectMap(getCv(locale), t.now, t.sections.education);
+const years = map.ticks.length;
 const pct = (f: number) => (f * 100).toFixed(3);
 ---
 
@@ -45,10 +46,14 @@ const pct = (f: number) => (f * 100).toFixed(3);
     <ul class="pmap__legend" role="list">
       <li><i class="sw sw--role"></i>{t.legendRole}</li>
       <li><i class="sw sw--project"></i>{t.legendProject}</li>
+      <li><i class="sw sw--edu"></i>{t.legendEdu}</li>
+      <li><i class="sw sw--stake sw--founder"></i>{t.stakeFounder}</li>
+      <li><i class="sw sw--stake sw--hired"></i>{t.stakeHired}</li>
+      <li><i class="sw sw--stake sw--partner"></i>{t.stakePartner}</li>
     </ul>
 
-    <div class="pmap__scroll" tabindex="0" role="group" aria-label={t.career}>
-      <div class="pmap__chart" dir="ltr">
+    <div class="pmap__scroll" tabindex="0" role="group" aria-label={t.career} data-pmap-scroll>
+      <div class="pmap__chart" dir="ltr" style={`--years:${years}`}>
         <div class="pmap__row pmap__row--ruler">
           <div class="pmap__head"></div>
           <div class="pmap__lane pmap__lane--ruler">
@@ -67,7 +72,7 @@ const pct = (f: number) => (f * 100).toFixed(3);
                 const tip = [`${c.title}${c.role ? ` — ${c.role}` : ''} (${c.range})`, c.summary].filter(Boolean).join('\n');
                 return (
                   <Tag
-                    class:list={['pmap__clip', `pmap__clip--${c.kind}`, { 'is-ongoing': c.ongoing }]}
+                    class:list={['pmap__clip', `pmap__clip--${c.kind}`, `pmap__clip--${c.stake}`, { 'is-ongoing': c.ongoing }]}
                     style={`left:${pct(c.x0)}%;width:${pct(c.x1 - c.x0)}%;--row:${c.row}`}
                     title={tip}
                     {...(c.url ? { href: c.url, target: '_blank', rel: 'noopener noreferrer' } : {})}
@@ -83,6 +88,29 @@ const pct = (f: number) => (f * 100).toFixed(3);
     </div>
   </div>
 </section>
+
+<script>
+  // Drag to scroll sideways; start at the present (right edge).
+  document.querySelectorAll<HTMLElement>('[data-pmap-scroll]').forEach((box) => {
+    box.scrollLeft = box.scrollWidth;
+    let startX = 0;
+    let startLeft = 0;
+    let dragging = false;
+    box.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      dragging = true;
+      startX = event.clientX;
+      startLeft = box.scrollLeft;
+    });
+    window.addEventListener('pointermove', (event) => {
+      if (dragging) box.scrollLeft = startLeft - (event.clientX - startX);
+    });
+    window.addEventListener('pointerup', () => (dragging = false));
+    box.addEventListener('click', (event) => {
+      if (Math.abs(box.scrollLeft - startLeft) > 4) event.preventDefault();
+    }, true);
+  });
+</script>
 
 <style>
   .pmap {
@@ -184,6 +212,7 @@ const pct = (f: number) => (f * 100).toFixed(3);
   }
   .pmap__legend {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     margin: 0 0 1rem;
     padding: 0;
@@ -208,14 +237,23 @@ const pct = (f: number) => (f * 100).toFixed(3);
   .sw--project {
     border: 1px dashed var(--terminal-muted);
   }
+  .sw--edu {
+    border: 1px dotted var(--terminal-ink);
+  }
+  .sw--stake {
+    background: var(--stake);
+  }
 
   .pmap__scroll {
     overflow-x: auto;
+    cursor: grab;
+    overscroll-behavior-x: contain;
     border: 1px solid var(--terminal-line);
     background: var(--terminal-panel);
   }
   .pmap__chart {
-    min-width: 62rem;
+    /* Horizontal scroll: a fixed width per year, so 1998-today is wider than the screen. */
+    min-width: calc(9.5rem + var(--years) * 5rem);
   }
   .pmap__row {
     display: grid;
@@ -226,6 +264,10 @@ const pct = (f: number) => (f * 100).toFixed(3);
     border-block-end: 0;
   }
   .pmap__head {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 3;
+    background: var(--terminal-panel);
     padding: 0.6rem 0.75rem;
     border-inline-end: 1px solid var(--terminal-line);
     color: var(--terminal-muted);
@@ -276,16 +318,30 @@ const pct = (f: number) => (f * 100).toFixed(3);
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  /* Shape = kind (solid role, dashed project, dotted education); colour = stake (founder, hired, partner). */
   .pmap__clip--role {
     background: var(--terminal-line-strong);
-    box-shadow: inset 0 2px 0 var(--terminal-accent);
+    box-shadow: inset 0 2px 0 var(--stake, var(--terminal-accent));
     color: var(--terminal-ink);
   }
   .pmap__clip--project {
-    border: 1px dashed var(--terminal-muted);
+    border: 1px dashed var(--stake, var(--terminal-muted));
     background: var(--terminal-panel-strong);
     color: var(--terminal-ink);
   }
+  .pmap__clip--edu {
+    border: 1px dotted var(--terminal-ink);
+    background: var(--terminal-panel-strong);
+    color: var(--terminal-ink);
+  }
+  .pmap__clip--founder,
+  .sw--founder { --stake: var(--terminal-accent); }
+  .pmap__clip--hired,
+  .sw--hired { --stake: var(--terminal-muted); }
+  .pmap__clip--partner,
+  .sw--partner { --stake: #d9a441; }
+  .pmap__clip--founder.pmap__clip--role { background: color-mix(in srgb, var(--terminal-accent) 28%, var(--terminal-line-strong)); }
+  .pmap__clip--partner.pmap__clip--role { background: color-mix(in srgb, #d9a441 22%, var(--terminal-line-strong)); }
   .pmap__clip.is-ongoing {
     border-inline-end-width: 3px;
     border-inline-end-style: solid;

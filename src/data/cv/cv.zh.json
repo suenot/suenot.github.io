@@ -109,7 +109,8 @@
         "Next.js",
         "TypeScript",
         "Python"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Marketmaker.cc",
@@ -130,7 +131,8 @@
         "Rust",
         "QuestDB",
         "DuckDB"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Deep.foundation, Deep.memo",
@@ -150,7 +152,8 @@
         "Next.js",
         "GraphQL",
         "Hasura"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Shakeapp",
@@ -162,7 +165,8 @@
       "summary": "面向 C2C 和 C2B 汽车及房屋租赁的共享平台。",
       "bullets": [
         "基于 Node.js、React、Next.js、GraphQL、Apollo Server 和 Hasura 构建移动端与 Web 产品，采用事件驱动架构"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Kupi.net",
@@ -173,7 +177,8 @@
       "summary": "网站构建工具。",
       "bullets": [
         "使用 React 和 Django 构建"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Kupi.network",
@@ -185,7 +190,8 @@
       "bullets": [
         "终端覆盖 130+ 家交易所",
         "两个版本：先使用带类组件的 React 和 MobX，随后改用 Vue 2 和 MobX"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Dolphin BI",
@@ -199,7 +205,8 @@
         "分析 bitcointalk.org 新闻情绪；通过指标和专家评审进行 ICO 基本面分析",
         "诞生于 waves.tech 黑客马拉松（第1名，2016）；随后入选阿姆斯特丹 Startupbootcamp 加速器",
         "发起过一次未达到目标的 ICO；使用 Vue 2 开发前端"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Thermom",
@@ -210,7 +217,8 @@
       "summary": "曾入选拜耳加速器的初创公司。",
       "bullets": [
         "使用 Vue 2 开发前端，2016 年 1 月至 5 月"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "klava.org",
@@ -224,7 +232,8 @@
         "Catboard 及此后约十款人体工学键盘原型",
         "键盘制作者社群 t.me/klavaorgwork：1,000 名活跃成员，消息超过 600k+ 条",
         "为 Android（Kotlin）和 iOS（Swift、SwiftUI、UIKit）开发 Hlider 屏幕键盘"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Independent trading",
@@ -238,7 +247,8 @@
         "自 2017 年起从事套利与剥头皮交易，自 2021 年起开发趋势算法，自 2022 年起进行投资组合管理与加密货币期货交易",
         "为 30 家交易所开发自有适配器，另通过 CCXT 接入约 100 家；支持股票经纪商 Tinkoff、Freedom Finance 和 Alor；2020 年获得合格投资者身份",
         "数据技术栈：Node.js、Python、MongoDB、Tarantool（内存 Lua）、ClickHouse"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "De-core.net",
@@ -251,18 +261,20 @@
         "打造约 200 个网站：页面标记、前端、原型设计与视觉设计",
         "webpack、BEM、Web Components、Angular、React、Vue、Meteor、Node.js、Ionic 和 Cordova",
         "使用 Sketch、Figma、Inkscape 和 Fireworks 进行界面设计"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Early web",
       "role": "业余 Web 开发者",
-      "start": "2005",
+      "start": "1998",
       "end": "2010",
       "track": "web",
       "summary": "使用 phpBB、vBulletin 和 Joomla 搭建网站与论坛。",
       "bullets": [
         "1998 年用 FrontPage 和 Dreamweaver 制作首批网站；之后使用 HTML、CSS、JavaScript 和 PHP"
-      ]
+      ],
+      "stake": "founder"
     }
   ],
   "projects": [
@@ -371,7 +383,8 @@
       "stack": [
         "React",
         "Next.js"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "name": "Tinkoff Bot Balancer",
@@ -656,7 +669,8 @@
     {
       "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
       "degree": "计算机辅助设计（CAD）系统，信息技术学院；完成 3 年学业，未毕业",
-      "years": "2008-2011"
+      "years": "2008-2011",
+      "stake": "none"
     }
   ],
   "courses": [

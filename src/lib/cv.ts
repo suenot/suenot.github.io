@@ -13,16 +13,18 @@ import ja from '../data/cv/cv.ja.json';
 import ar from '../data/cv/cv.ar.json';
 import labels from '../data/cv/labels.json';
 
+export type Stake = 'founder' | 'hired' | 'partner' | 'none';
 export interface Track { id: string; label: string }
 export interface Experience {
   org: string; url?: string; role?: string; start?: string; end?: string;
-  track?: string; summary?: string; bullets?: string[]; stack?: string[];
+  track?: string; summary?: string; bullets?: string[]; stack?: string[]; stake?: Stake;
 }
 export interface Project {
   name: string; url?: string; years?: string; track?: string;
-  summary?: string; metric?: string; stack?: string[];
+  summary?: string; metric?: string; stack?: string[]; stake?: Stake;
 }
-export interface CV { tracks: Track[]; experience: Experience[]; projects: Project[] }
+export interface Education { school: string; degree?: string; years?: string }
+export interface CV { tracks: Track[]; experience: Experience[]; projects: Project[]; education?: Education[] }
 
 const data: Record<Locale, CV> = { en, ru, zh, ko, ja, ar } as unknown as Record<Locale, CV>;
 
@@ -43,17 +45,17 @@ const year = (s?: string) => {
 
 export interface MapTrack extends Track { rows: number }
 export interface Clip {
-  id: string; kind: 'role' | 'project'; title: string; role?: string; url?: string;
+  id: string; kind: 'role' | 'project' | 'edu'; stake: Stake; title: string; role?: string; url?: string;
   summary?: string; range: string; ongoing: boolean; track: MapTrack; row: number;
   start: number; end: number; x0: number; x1: number;
 }
 export interface ProjectMap { tracks: MapTrack[]; clips: Clip[]; ticks: { year: number; x: number; w: number }[] }
 
-export function buildProjectMap(cv: CV, nowLabel: string): ProjectMap {
+export function buildProjectMap(cv: CV, nowLabel: string, eduLabel: string): ProjectMap {
   const tracks: MapTrack[] = cv.tracks.map((t) => ({ ...t, rows: 1 }));
-  const trackFor = (id?: string) => {
+  const trackFor = (id?: string, label?: string) => {
     let t = tracks.find((x) => x.id === id);
-    if (!t) { t = { id: id || 'other', label: id || 'Other', rows: 1 }; tracks.push(t); }
+    if (!t) { t = { id: id || 'other', label: label ?? id ?? 'Other', rows: 1 }; tracks.push(t); }
     return t;
   };
   const used = new Map<string, number>();
@@ -68,7 +70,7 @@ export function buildProjectMap(cv: CV, nowLabel: string): ProjectMap {
     const endYear = Math.max(ongoing ? NOW_YEAR : year(e.end) ?? start, start);
     const a = String(start), b = ongoing ? nowLabel : String(endYear);
     draft.push({
-      id: uid(slug(`${e.org}-${start}`)), kind: 'role', title: e.org, role: e.role, url: e.url, summary: e.summary,
+      id: uid(slug(`${e.org}-${start}`)), kind: 'role', stake: e.stake ?? 'founder', title: e.org, role: e.role, url: e.url, summary: e.summary,
       range: a === b ? a : `${a} – ${b}`, ongoing, track: trackFor(e.track),
       start, end: Math.min(endYear + 1, Math.max(NOW_FRAC, start + 0.25)),
     });
@@ -80,9 +82,19 @@ export function buildProjectMap(cv: CV, nowLabel: string): ProjectMap {
     const ongoing = !!p.years && /present|now|current/i.test(p.years);
     const endYear = ongoing ? NOW_YEAR : Math.max(...yrs);
     draft.push({
-      id: uid(slug(`${p.name}-${start}`)), kind: 'project', title: p.name, url: p.url, summary: p.summary,
+      id: uid(slug(`${p.name}-${start}`)), kind: 'project', stake: p.stake ?? 'founder', title: p.name, url: p.url, summary: p.summary,
       range: start === endYear && !ongoing ? String(start) : `${start} – ${ongoing ? nowLabel : endYear}`,
       ongoing, track: trackFor(p.track), start, end: Math.min(endYear + 1, Math.max(NOW_FRAC, start + 0.25)),
+    });
+  }
+  for (const ed of cv.education ?? []) {
+    const yrs = ed.years?.match(/\d{4}/g)?.map(Number);
+    if (!yrs?.length) continue;
+    const start = Math.min(...yrs), endYear = Math.max(...yrs);
+    draft.push({
+      id: uid(slug(`${ed.school}-${start}`)), kind: 'edu', stake: 'none', title: ed.school.split(' (')[0], summary: ed.degree,
+      range: start === endYear ? String(start) : `${start} – ${endYear}`, ongoing: false,
+      track: trackFor('edu', eduLabel), start, end: endYear + 1,
     });
   }
 

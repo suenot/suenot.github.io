@@ -109,7 +109,8 @@
         "Next.js",
         "TypeScript",
         "Python"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Marketmaker.cc",
@@ -130,7 +131,8 @@
         "Rust",
         "QuestDB",
         "DuckDB"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Deep.foundation, Deep.memo",
@@ -150,7 +152,8 @@
         "Next.js",
         "GraphQL",
         "Hasura"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Shakeapp",
@@ -162,7 +165,8 @@
       "summary": "منصة مشاركة من نوع C2C وC2B لتأجير السيارات والمنازل.",
       "bullets": [
         "منتج للجوال والويب باستخدام Node.js وReact وNext.js وGraphQL وApollo Server وHasura، ببنية مدفوعة بالأحداث"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Kupi.net",
@@ -173,7 +177,8 @@
       "summary": "أداة لإنشاء المواقع.",
       "bullets": [
         "بُنيت باستخدام React وDjango"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Kupi.network",
@@ -185,7 +190,8 @@
       "bullets": [
         "منصة تغطي 130+ منصة تداول",
         "نسختان: الأولى باستخدام React بمكونات الأصناف وMobX، ثم Vue 2 وMobX"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Dolphin BI",
@@ -199,7 +205,8 @@
         "تحليل توجهات الأخبار في bitcointalk.org؛ وتحليل أساسي لعمليات ICO باستخدام المؤشرات ومراجعات الخبراء",
         "انطلق المشروع في هاكاثون waves.tech (المركز الأول (1)، 2016)؛ ثم التحق بمسرّعة Startupbootcamp في أمستردام",
         "أطلقنا ICO لم يبلغ هدفه؛ وطُوّرت الواجهة الأمامية باستخدام Vue 2"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Thermom",
@@ -210,7 +217,8 @@
       "summary": "شركة ناشئة شاركت في مسرّعة Bayer.",
       "bullets": [
         "تطوير الواجهة الأمامية باستخدام Vue 2، من يناير إلى مايو 2016"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "klava.org",
@@ -224,7 +232,8 @@
         "Catboard ونحو عشرة نماذج لاحقة من لوحات المفاتيح المريحة",
         "مجتمع صانعي لوحات المفاتيح t.me/klavaorgwork: 1,000 عضو نشط و600k+ رسالة",
         "لوحة مفاتيح Hlider على الشاشة لنظام Android (Kotlin) وiOS (Swift وSwiftUI وUIKit)"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Independent trading",
@@ -238,7 +247,8 @@
         "المراجحة والمضاربة السريعة منذ 2017، وخوارزميات الاتجاه منذ 2021، وإدارة المحافظ وعقود العملات المشفرة الآجلة منذ 2022",
         "محولات خاصة لـ 30 منصة تداول ونحو 100 أخرى عبر CCXT؛ ووسطاء أسهم Tinkoff وFreedom Finance وAlor؛ وحصلت على صفة مستثمر مؤهل في 2020",
         "منظومة البيانات: Node.js وPython وMongoDB وTarantool (لغة Lua داخل الذاكرة) وClickHouse"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "De-core.net",
@@ -251,18 +261,20 @@
         "نحو 200 موقع: ترميز الصفحات، والواجهات الأمامية، والنماذج الأولية، والتصميم",
         "webpack وBEM ومكونات الويب وAngular وReact وVue وMeteor وNode.js وIonic وCordova",
         "تصميم الواجهات باستخدام Sketch وFigma وInkscape وFireworks"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Early web",
       "role": "مطوّر ويب هاوٍ",
-      "start": "2005",
+      "start": "1998",
       "end": "2010",
       "track": "web",
       "summary": "مواقع ومنتديات باستخدام phpBB وvBulletin وJoomla.",
       "bullets": [
         "أنشأت أولى المواقع في 1998 باستخدام FrontPage وDreamweaver؛ ثم HTML وCSS وJavaScript وPHP"
-      ]
+      ],
+      "stake": "founder"
     }
   ],
   "projects": [
@@ -371,7 +383,8 @@
       "stack": [
         "React",
         "Next.js"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "name": "Tinkoff Bot Balancer",
@@ -656,7 +669,8 @@
     {
       "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
       "degree": "أنظمة التصميم بمساعدة الحاسوب (CAD)، كلية تقنيات المعلومات؛ أكملت 3 سنوات ولم أتخرج",
-      "years": "2008-2011"
+      "years": "2008-2011",
+      "stake": "none"
     }
   ],
   "courses": [

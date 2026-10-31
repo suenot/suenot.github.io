@@ -109,7 +109,8 @@
         "Next.js",
         "TypeScript",
         "Python"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Marketmaker.cc",
@@ -130,7 +131,8 @@
         "Rust",
         "QuestDB",
         "DuckDB"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Deep.foundation, Deep.memo",
@@ -150,7 +152,8 @@
         "Next.js",
         "GraphQL",
         "Hasura"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Shakeapp",
@@ -162,7 +165,8 @@
       "summary": "자동차와 주택 대여를 위한 C2C 및 C2B 공유 플랫폼.",
       "bullets": [
         "Node.js, React, Next.js, GraphQL, Apollo Server, Hasura 기반 이벤트 중심 모바일 및 웹 제품"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Kupi.net",
@@ -173,7 +177,8 @@
       "summary": "웹사이트 빌더.",
       "bullets": [
         "React와 Django로 구축"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Kupi.network",
@@ -185,7 +190,8 @@
       "bullets": [
         "130+개 거래소를 지원하는 터미널",
         "두 가지 버전: 클래스 컴포넌트와 MobX를 사용한 React 버전, 이후 Vue 2와 MobX 버전"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Dolphin BI",
@@ -199,7 +205,8 @@
         "bitcointalk.org 뉴스 감성 분석; 지표와 전문가 리뷰를 포함한 ICO 펀더멘털 분석",
         "waves.tech 해커톤에서 탄생(2016년 1st place); 암스테르담 Startupbootcamp 액셀러레이터",
         "목표액을 달성하지 못한 ICO를 진행; Vue 2 프런트엔드"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "org": "Thermom",
@@ -210,7 +217,8 @@
       "summary": "Bayer 액셀러레이터를 거친 스타트업.",
       "bullets": [
         "Vue 2 프런트엔드, 2016년 1월~5월"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "klava.org",
@@ -224,7 +232,8 @@
         "Catboard와 이후 제작한 인체공학 키보드 프로토타입 약 10종",
         "키보드 제작자 커뮤니티 t.me/klavaorgwork: 활동 회원 1,000명, 메시지 600k+개",
         "Android(Kotlin), iOS(Swift, SwiftUI, UIKit)용 화면 키보드 Hlider"
-      ]
+      ],
+      "stake": "partner"
     },
     {
       "org": "Independent trading",
@@ -238,7 +247,8 @@
         "2017년부터 차익거래와 스캘핑, 2021년부터 추세 알고리즘, 2022년부터 포트폴리오 관리 및 암호화폐 선물",
         "30개 거래소용 자체 어댑터와 CCXT를 통한 약 100개 거래소 지원; 주식 브로커 Tinkoff, Freedom Finance, Alor; 2020년 적격 투자자 자격 취득",
         "데이터 스택: Node.js, Python, MongoDB, Tarantool(메모리 내 Lua), ClickHouse"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "De-core.net",
@@ -251,18 +261,20 @@
         "약 200개 사이트: 마크업, 프런트엔드, 프로토타이핑 및 디자인",
         "webpack, BEM, 웹 컴포넌트, Angular, React, Vue, Meteor, Node.js, Ionic, Cordova",
         "Sketch, Figma, Inkscape, Fireworks를 활용한 인터페이스 디자인"
-      ]
+      ],
+      "stake": "founder"
     },
     {
       "org": "Early web",
       "role": "취미 웹 개발자",
-      "start": "2005",
+      "start": "1998",
       "end": "2010",
       "track": "web",
       "summary": "phpBB, vBulletin, Joomla 기반 사이트와 포럼.",
       "bullets": [
         "1998년 FrontPage와 Dreamweaver로 첫 사이트 제작; 이후 HTML, CSS, JavaScript, PHP 사용"
-      ]
+      ],
+      "stake": "founder"
     }
   ],
   "projects": [
@@ -371,7 +383,8 @@
       "stack": [
         "React",
         "Next.js"
-      ]
+      ],
+      "stake": "hired"
     },
     {
       "name": "Tinkoff Bot Balancer",
@@ -656,7 +669,8 @@
     {
       "school": "MIEM HSE (Moscow Institute of Electronics and Mathematics, Higher School of Economics)",
       "degree": "정보기술학부 컴퓨터 지원 설계(CAD) 시스템 전공; 3년 수료, 졸업하지 않음",
-      "years": "2008-2011"
+      "years": "2008-2011",
+      "stake": "none"
     }
   ],
   "courses": [
