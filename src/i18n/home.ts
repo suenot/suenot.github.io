@@ -32,6 +32,11 @@ export const home = {
       p3_prefix: 'Full-stack developer with deep expertise in ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. Based in Batumi, Georgia.',
+      career_prefix: "Writing code since ",
+      career_since: "1998",
+      career_mid: " (first my own websites), professionally since ",
+      career_pro: "2006",
+      career_suffix: ".",
       focus_eyebrow: 'Current focus',
       focus: [
         {
@@ -153,6 +158,11 @@ export const home = {
         'Contract & Freelance': 'Contract & Freelance',
         Graveyard: 'Graveyard',
         Publications: 'Publications',
+      },
+      roles: {
+        founder: "Founder",
+        hired: "Employee",
+        partner: "Partner",
       },
       status: {
         active: 'active',
@@ -368,6 +378,11 @@ export const home = {
       p3_prefix: 'Full-stack разработчик с глубокой экспертизой в ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. Живу в Батуми, Грузия.',
+      career_prefix: "Пишу код с ",
+      career_since: "1998",
+      career_mid: " года (сначала свои сайты), профессионально с ",
+      career_pro: "2006",
+      career_suffix: " года.",
       focus_eyebrow: 'Текущий фокус',
       focus: [
         {
@@ -489,6 +504,11 @@ export const home = {
         'Contract & Freelance': 'Контракты и фриланс',
         Graveyard: 'Кладбище',
         Publications: 'Публикации',
+      },
+      roles: {
+        founder: "Основатель",
+        hired: "Наемный",
+        partner: "Партнер",
       },
       status: {
         active: 'active',
@@ -708,6 +728,11 @@ export const home = {
       p3_prefix: '全栈开发者，精通 ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '。居住在格鲁吉亚巴统。',
+      career_prefix: "自 ",
+      career_since: "1998",
+      career_mid: " 年开始写代码（最初是自己的网站），自 ",
+      career_pro: "2006",
+      career_suffix: " 年起专业从事开发。",
       focus_eyebrow: '当前重点',
       focus: [
         {
@@ -829,6 +854,11 @@ export const home = {
         'Contract & Freelance': '合同与自由职业',
         Graveyard: '墓地',
         Publications: '出版物',
+      },
+      roles: {
+        founder: "创始人",
+        hired: "受雇",
+        partner: "合伙人",
       },
       status: {
         active: 'active',
@@ -1032,6 +1062,11 @@ export const home = {
       p3_prefix: '풀스택 개발자로 ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: ' 에 깊은 전문성을 보유. 조지아 바투미 거주.',
+      career_prefix: "",
+      career_since: "1998",
+      career_mid: "년부터 코드를 작성했습니다(처음엔 내 웹사이트). 전문 개발자로는 ",
+      career_pro: "2006",
+      career_suffix: "년부터입니다.",
       focus_eyebrow: '현재 집중 분야',
       focus: [
         {
@@ -1153,6 +1188,11 @@ export const home = {
         'Contract & Freelance': '계약 & 프리랜스',
         Graveyard: '무덤',
         Publications: '출판물',
+      },
+      roles: {
+        founder: "창업자",
+        hired: "고용",
+        partner: "파트너",
       },
       status: {
         active: 'active',
@@ -1361,6 +1401,11 @@ export const home = {
       p3_prefix: 'フルスタック開発者として ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: ' に深い専門性を持ちます。ジョージアのバトゥミ在住。',
+      career_prefix: "",
+      career_since: "1998",
+      career_mid: "年からコードを書いています（最初は自分のウェブサイト）。プロとしては",
+      career_pro: "2006",
+      career_suffix: "年からです。",
       focus_eyebrow: '現在のフォーカス',
       focus: [
         {
@@ -1482,6 +1527,11 @@ export const home = {
         'Contract & Freelance': '契約・フリーランス',
         Graveyard: 'グレイブヤード',
         Publications: '出版物',
+      },
+      roles: {
+        founder: "創業者",
+        hired: "雇用",
+        partner: "パートナー",
       },
       status: {
         active: 'active',
@@ -1690,6 +1740,11 @@ export const home = {
       p3_prefix: 'مطوّر full-stack بخبرة عميقة في ',
       p3_langs: 'TypeScript/JavaScript, Python, Go',
       p3_suffix: '. مقيم في باتومي، جورجيا.',
+      career_prefix: "أكتب الشيفرة منذ ",
+      career_since: "1998",
+      career_mid: " (بدأت بمواقعي الخاصة)، ومحترفًا منذ ",
+      career_pro: "2006",
+      career_suffix: ".",
       focus_eyebrow: 'التركيز الحالي',
       focus: [
         {
@@ -1811,6 +1866,11 @@ export const home = {
         'Contract & Freelance': 'العقود والعمل الحر',
         Graveyard: 'مقبرة المشاريع',
         Publications: 'المنشورات',
+      },
+      roles: {
+        founder: "مؤسس",
+        hired: "موظف",
+        partner: "شريك",
       },
       status: {
         active: 'active',

@@ -13,6 +13,7 @@ const ui = useTranslations(locale);
 type CategoryKey = keyof typeof t.categories;
 type StatusKey = keyof typeof t.status;
 type DescKey = keyof typeof t.descs;
+type Role = keyof typeof t.roles;
 
 interface Project {
   name: string;
@@ -22,6 +23,8 @@ interface Project {
   status: StatusKey;
   private?: boolean;
   years?: Years;
+  /** Defaults to 'founder'; set only where I was hired or a partner. */
+  role?: Role;
 }
 
 interface ProjectGroup {
@@ -86,10 +89,10 @@ const projects: ProjectGroup[] = [
       { name: 'aicommit', descKey: 'aicommit', tags: ['Rust', 'CLI', 'LLM'], url: 'https://github.com/suenot/aicommit', status: 'active', years: [2024, 'now'] },
       { name: 'Codex Jev Router', descKey: 'Codex Jev Router', tags: ['Codex', 'Node.js', 'Model Routing'], url: 'https://github.com/suenot/codex-jev-router', status: 'active', years: [2026] },
       { name: 'Codex Jev Router Benchmarks', descKey: 'Codex Jev Router Benchmarks', tags: ['Codex', 'Django', 'Benchmarks'], url: 'https://github.com/suenot/codex-jev-router-benchmarks', status: 'active', years: [2026] },
-      { name: 'SDKRouter', descKey: 'SDKRouter', tags: ['Python', 'Pydantic', 'OpenAI'], url: 'https://github.com/suenot', status: 'active', private: true },
-      { name: 'DjangoCFG', descKey: 'DjangoCFG', tags: ['Python', 'Django', 'Pydantic AI'], url: 'https://djangocfg.com', status: 'active', private: true },
+      { name: 'SDKRouter', descKey: 'SDKRouter', tags: ['Python', 'Pydantic', 'OpenAI'], url: 'https://github.com/suenot', status: 'active', private: true, role: 'partner' },
+      { name: 'DjangoCFG', descKey: 'DjangoCFG', tags: ['Python', 'Django', 'Pydantic AI'], url: 'https://djangocfg.com', status: 'active', private: true, role: 'partner' },
       { name: 'OpenScreenshot', descKey: 'OpenScreenshot', tags: ['Swift', 'macOS', 'LLM'], url: 'https://openscreenshot.suenot.com/', status: 'active', years: [2026] },
-      { name: 'cmdop-claude', descKey: 'cmdop-claude', tags: ['Python', 'Claude', 'PyPI'], url: 'https://pypi.org/project/cmdop-claude/', status: 'active' },
+      { name: 'cmdop-claude', descKey: 'cmdop-claude', tags: ['Python', 'Claude', 'PyPI'], url: 'https://pypi.org/project/cmdop-claude/', status: 'active', role: 'partner' },
       { name: 'local-llm-proxy', descKey: 'local-llm-proxy', tags: ['Python', 'MCP', 'LLM'], url: 'https://github.com/suenot', status: 'active', private: true, years: [2026] },
       { name: 'Open Agent Manager', descKey: 'Open Agent Manager', tags: ['Tauri', 'Rust', 'React'], url: 'http://open-agent-manager.suenot.com/', status: 'paused', years: [2026] },
     ],
@@ -106,7 +109,7 @@ const projects: ProjectGroup[] = [
       { name: 'auth-service', descKey: 'auth-service', tags: ['Go', 'Next.js', 'SSO', 'Traefik'], url: 'https://auth.marketmaker.cc', status: 'active' },
       { name: 'Backups', descKey: 'Backups', tags: ['Bun', 'restic', 'Infra'], url: 'https://backups.marketmaker.cc', status: 'active', private: true },
       { name: 'Researcher', descKey: 'Researcher', tags: ['Node.js', 'Meilisearch', 'Scrapers'], url: 'https://researcher.marketmaker.cc', status: 'active' },
-      { name: 'Hlider', descKey: 'Hlider', tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'], url: 'https://hlider.klava.org/', status: 'active', years: [2013, 'now'] },
+      { name: 'Hlider', descKey: 'Hlider', tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'], url: 'https://hlider.klava.org/', status: 'active', years: [2013, 'now'], role: 'partner' },
       { name: 'karabiner-visualizer', descKey: 'karabiner-visualizer', tags: ['TypeScript', 'React', 'Karabiner', 'macOS'], url: 'https://karabiner-visualizer.vercel.app/', status: 'active', years: [2026] },
       { name: 'distract-blocker', descKey: 'distract-blocker', tags: ['JavaScript', 'Chrome Extension', 'MV3', 'i18n'], url: 'https://distract-blocker.marketmaker.cc', status: 'active', years: [2026] },
       { name: 'MacChill', descKey: 'MacChill', tags: ['Swift', 'SwiftUI', 'macOS'], url: 'https://github.com/suenot/macchill', status: 'active', years: [2026] },
@@ -120,10 +123,10 @@ const projects: ProjectGroup[] = [
   {
     category: 'Contract & Freelance',
     items: [
-      { name: 'Deep.foundation & Deep.memo', descKey: 'Deep.foundation & Deep.memo', tags: ['Node.js', 'React', 'GraphQL', 'Hasura'], url: 'https://deep.foundation', status: 'paused', years: [2022, 2024] },
-      { name: 'Dolphin.bi', descKey: 'Dolphin.bi', tags: ['Vue', 'Python'], url: 'https://www.crunchbase.com/organization/dolphin-bi', status: 'rip', years: [2016, 2018] },
-      { name: 'Shakeapp', descKey: 'Shakeapp', tags: ['React', 'Node.js', 'GraphQL', 'Hasura'], url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app', status: 'rip', years: [2020, 2022] },
-      { name: 'centrum-air.com', descKey: 'centrum-air.com', tags: ['React', 'Next.js'], url: 'https://centrum-air.com', status: 'left', years: [2023] },
+      { name: 'Deep.foundation & Deep.memo', descKey: 'Deep.foundation & Deep.memo', tags: ['Node.js', 'React', 'GraphQL', 'Hasura'], url: 'https://deep.foundation', status: 'paused', years: [2022, 2024], role: 'hired' },
+      { name: 'Dolphin.bi', descKey: 'Dolphin.bi', tags: ['Vue', 'Python'], url: 'https://www.crunchbase.com/organization/dolphin-bi', status: 'rip', years: [2016, 2018], role: 'hired' },
+      { name: 'Shakeapp', descKey: 'Shakeapp', tags: ['React', 'Node.js', 'GraphQL', 'Hasura'], url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app', status: 'rip', years: [2020, 2022], role: 'hired' },
+      { name: 'centrum-air.com', descKey: 'centrum-air.com', tags: ['React', 'Next.js'], url: 'https://centrum-air.com', status: 'left', years: [2023], role: 'hired' },
     ],
   },
   {
@@ -131,11 +134,11 @@ const projects: ProjectGroup[] = [
     items: [
       { name: 'Kupi.network', descKey: 'Kupi.network', tags: ['React', 'Vue', 'MobX'], url: 'https://github.com/suenot/kupi-terminal', status: 'rip', years: [2018, 2019] },
       { name: 'Kupi.ru', descKey: 'Kupi.ru', tags: ['PHP', 'JavaScript'], url: 'https://github.com/suenot', status: 'rip', years: [2013] },
-      { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip', years: [2019, 2020] },
-      { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused', years: [2024, 2025] },
+      { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip', years: [2019, 2020], role: 'partner' },
+      { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused', years: [2024, 2025], role: 'hired' },
       { name: 'Bursa DEX', descKey: 'Bursa DEX', tags: ['Solidity', 'React', 'Django'], status: 'rip', years: [2017, 2018] },
       { name: 'de-core.net', descKey: 'de-core.net', tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'], url: 'https://github.com/suenot', status: 'rip', years: [2010, 2016] },
-      { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip', years: [2016] },
+      { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip', years: [2016], role: 'partner' },
       { name: 'AI form filling for websites', descKey: 'AI form filling for websites', tags: ['AI', 'Automation'], status: 'rip', years: [2025] },
     ],
   },
@@ -148,6 +151,15 @@ const projects: ProjectGroup[] = [
     ],
   },
 ];
+
+const roleOf = (project: Project): Role => project.role ?? 'founder';
+const allItems = projects.flatMap((group) => group.items);
+const roleCounts = {
+  founder: allItems.filter((project) => roleOf(project) === 'founder').length,
+  hired: allItems.filter((project) => roleOf(project) === 'hired').length,
+  partner: allItems.filter((project) => roleOf(project) === 'partner').length,
+};
+const roleKeys = ['founder', 'hired', 'partner'] as const;
 
 const statusStyles: Record<StatusKey, string> = {
   active: 'status--active',
@@ -173,6 +185,12 @@ const statusStyles: Record<StatusKey, string> = {
       </dl>
     </header>
 
+    <ul class="projects__roles" aria-label="Role legend" data-reveal>
+      {roleKeys.map((role) => (
+        <li class={`role role--${role}`}><span class="role__mark" aria-hidden="true"></span>{t.roles[role]}<span class="role__count">{String(roleCounts[role]).padStart(2, '0')}</span></li>
+      ))}
+    </ul>
+
     <div class="projects__archive">
       {projects.map((group, groupIndex) => (
         <section class="project-group">
@@ -189,7 +207,7 @@ const statusStyles: Record<StatusKey, string> = {
               const Row = project.url ? 'a' : 'div';
               return (
               <li data-reveal>
-                <Row class="project-row" {...(project.url ? { href: project.url, target: "_blank", rel: "noopener noreferrer" } : {})}>
+                <Row class={`project-row project-row--${roleOf(project)}`} data-role={roleOf(project)} {...(project.url ? { href: project.url, target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <div class="project-row__name">
                     <span class="project-row__id">{String(groupIndex + 1).padStart(2, '0')}.{String(projectIndex + 1).padStart(2, '0')}</span>
                     <h4>{project.name}</h4>
@@ -198,6 +216,7 @@ const statusStyles: Record<StatusKey, string> = {
                   <p>{t.descs[project.descKey]}</p>
                   <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
                   <div class="project-row__state">
+                    <span class={`role role--${roleOf(project)}`}><span class="role__mark" aria-hidden="true"></span>{t.roles[roleOf(project)]}</span>
                     <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
                     {project.years && <bdi class="project-row__years" data-years>{formatYears(project.years, ui('projects.present'))}</bdi>}
                   </div>
@@ -241,6 +260,14 @@ const statusStyles: Record<StatusKey, string> = {
   .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
   .project-row__status::before { content: ""; inline-size: .3rem; block-size: .3rem; border: 1px solid currentColor; }
   .status--active::before { border: 0; background: var(--terminal-signal); }.status--wip { color: var(--terminal-accent); }.status--rip { color: var(--terminal-dim); }
+  .projects__roles { display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .role { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+  .role__mark { inline-size: .45rem; block-size: .45rem; border: 1px solid currentColor; }
+  .role--founder { color: var(--terminal-accent); }
+  .role--founder .role__mark { background: currentColor; }
+  .role--partner .role__mark { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+  .role__count { color: var(--terminal-faint); }
+  .project-row--founder { box-shadow: inset 2px 0 0 var(--terminal-accent); }
   .project-row__arrow { color: var(--terminal-accent); font: .8rem/1 var(--font-mono, monospace); opacity: 0; }
   .project-group a:hover, .project-group a:focus-visible { background: var(--terminal-hover); }
   .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }

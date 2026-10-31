@@ -28,11 +28,6 @@ const links = [
   <div class="nav-shell">
     <a class="nav-identity" href={`${prefix}/`} aria-label="Suenot — home">
       <span>SUENOT</span>
-      <span class="nav-readout" data-readout aria-hidden="true" hidden>
-        <span data-readout-index>00/00</span>
-        <span class="nav-readout__code" data-readout-code></span>
-        <span class="nav-readout__depth" data-readout-depth>000%</span>
-      </span>
     </a>
 
     <ul class="nav-index" role="list" data-nav-index>
@@ -207,44 +202,6 @@ const links = [
     opacity: 1;
   }
 
-  /* Scroll readout: index / section code / depth. Fixed widths, no reflow. */
-  .nav-readout {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    min-width: 0;
-    margin-inline-start: auto;
-    overflow: hidden;
-    color: var(--terminal-dim);
-    font-size: 0.625rem;
-    letter-spacing: 0.08em;
-    font-variant-numeric: tabular-nums slashed-zero;
-    white-space: nowrap;
-  }
-
-  .nav-readout[hidden] {
-    display: none;
-  }
-
-  .nav-readout [data-readout-index] {
-    color: var(--terminal-accent);
-  }
-
-  .nav-readout__code {
-    display: inline-block;
-    inline-size: calc(14ch + 1.12em);
-    overflow: hidden;
-    color: var(--terminal-muted);
-  }
-
-  .nav-readout__code[hidden] {
-    display: none;
-  }
-
-  .nav-readout__depth {
-    color: var(--terminal-ink);
-  }
-
   /* Depth hairline along the top edge of the bar. */
   .nav-depth {
     position: absolute;
@@ -264,12 +221,6 @@ const links = [
   @media (prefers-reduced-motion: reduce) {
     .nav-index__cursor {
       transition: none;
-    }
-  }
-
-  @media (max-width: 48rem) {
-    .nav-readout__code {
-      display: none;
     }
   }
 

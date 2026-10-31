@@ -16,6 +16,9 @@ const t = getHome(locale).about;
     </header>
 
     <div class="about__statement">
+      <p data-reveal class="about__career">
+        {t.career_prefix}<strong>{t.career_since}</strong>{t.career_mid}<strong>{t.career_pro}</strong>{t.career_suffix}
+      </p>
       <p data-reveal>
         {t.p1_prefix}<strong>Marketmaker.cc</strong>{t.p1_marketmaker_suffix}<strong>Cmdop.com</strong>{t.p1_cmdop_suffix}
       </p>
@@ -57,6 +60,7 @@ const t = getHome(locale).about;
   .about__code { margin-block-start: auto; padding-block-start: 4rem; color: var(--terminal-accent); font: .62rem/1 var(--font-mono, monospace); letter-spacing: .13em; }
   .about__statement { display: grid; align-content: center; gap: 2rem; color: var(--terminal-muted, #969b97); font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.65; }
   .about__statement p { max-inline-size: 48rem; text-wrap: pretty; }
+  .about__career { color: var(--terminal-fg, #e7e9e3); }
   .about__statement strong { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
   .about__focus { padding-inline: 0; }
   .about__focus-head { display: flex; justify-content: space-between; gap: 1rem; padding: 0 1.5rem 1rem; color: var(--terminal-muted, #747a75); font: .6rem/1 var(--font-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }

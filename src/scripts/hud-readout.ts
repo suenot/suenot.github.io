@@ -1,33 +1,18 @@
 /**
- * Scroll readout in the nav: index of the section under the reading line,
- * its code, and scroll depth, plus a hairline depth bar and a cursor under the
- * matching nav link. It reports position only; it is not a recorder and shows
- * no timecode. Position is state, not motion, so it also runs under reduced
- * motion (the CSS drops the cursor transition there).
+ * Scroll position in the nav: a hairline depth bar and a cursor under the
+ * matching nav link. Position is state, not motion, so it also runs under
+ * reduced motion (the CSS drops the cursor transition there).
  */
-const CODES: Record<string, string> = { top: 'INDEX', tech: 'STACK' };
 const READING_LINE = 0.4;
 
-function codeFor(id: string) {
-  return CODES[id] ?? id.replace(/[-_]+/g, ' ').toUpperCase();
-}
-
 function init() {
-  const readout = document.querySelector<HTMLElement>('[data-readout]');
   const bar = document.querySelector<HTMLElement>('[data-readout-bar]');
-  if (!readout || !bar) return;
-  const indexEl = readout.querySelector<HTMLElement>('[data-readout-index]');
-  const codeEl = readout.querySelector<HTMLElement>('[data-readout-code]');
-  const depthEl = readout.querySelector<HTMLElement>('[data-readout-depth]');
+  if (!bar) return;
 
   const main = document.getElementById('main-content');
   const sections = main ? Array.from(main.querySelectorAll<HTMLElement>(':scope > section[id]')) : [];
   const headings = Array.from(document.querySelectorAll<HTMLElement>('main article h2[id]'));
   const marks = sections.length >= 2 ? sections : headings;
-  const coded = marks === sections;
-  const total = String(marks.length).padStart(2, '0');
-  if (!marks.length) indexEl?.setAttribute('hidden', '');
-  if (!coded) codeEl?.setAttribute('hidden', '');
 
   const navList = document.querySelector<HTMLElement>('[data-nav-index]');
   const cursor = navList?.querySelector<HTMLElement>('[data-nav-cursor]') ?? null;
@@ -37,9 +22,6 @@ function init() {
     if (url.pathname === location.pathname && url.hash.length > 1) navLinks.set(decodeURIComponent(url.hash.slice(1)), link);
   });
 
-  let shownIndex = '';
-  let shownCode = '';
-  let shownDepth = '';
   let activeId: string | null = null;
   let queued = false;
 
@@ -66,14 +48,6 @@ function init() {
 
     // Then writes.
     bar.style.transform = `scaleX(${progress})`;
-    const depth = `${String(Math.round(progress * 100)).padStart(3, '0')}%`;
-    if (depth !== shownDepth && depthEl) depthEl.textContent = shownDepth = depth;
-    if (marks.length) {
-      const index = `${String(current + 1).padStart(2, '0')}/${total}`;
-      if (index !== shownIndex && indexEl) indexEl.textContent = shownIndex = index;
-      const code = coded && id ? codeFor(id) : coded ? codeFor('top') : '';
-      if (code !== shownCode && codeEl) codeEl.textContent = shownCode = code;
-    }
     if (force || id !== activeId) {
       navLinks.forEach((candidate) => candidate.removeAttribute('data-active'));
       link?.setAttribute('data-active', '');
@@ -99,7 +73,6 @@ function init() {
     requestAnimationFrame(() => update());
   };
 
-  readout.hidden = false;
   update(true);
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', () => requestAnimationFrame(() => update(true)), { passive: true });
