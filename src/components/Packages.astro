@@ -1,0 +1,121 @@
+---
+import { defaultLocale, type Locale } from '../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = defaultLocale } = Astro.props;
+
+const copy: Record<Locale, { heading: string; own: string; hired: string; all: string }> = {
+  en: { heading: 'Published packages', own: 'own', hired: 'at Deep.foundation', all: 'all' },
+  ru: { heading: 'Опубликованные пакеты', own: 'свои', hired: 'в Deep.foundation', all: 'все' },
+  zh: { heading: '已发布的包', own: '自有', hired: 'Deep.foundation 任职期间', all: '全部' },
+  ko: { heading: '배포한 패키지', own: '개인', hired: 'Deep.foundation 재직 중', all: '전체' },
+  ja: { heading: '公開パッケージ', own: '自作', hired: 'Deep.foundation 在籍中', all: 'すべて' },
+  ar: { heading: 'الحزم المنشورة', own: 'خاصة', hired: 'أثناء العمل في Deep.foundation', all: 'الكل' },
+};
+const t = copy[locale] ?? copy.en;
+
+interface Pkg {
+  name: string;
+  url: string;
+}
+interface Registry {
+  name: string;
+  url: string;
+  /** Counts shown next to the registry name. */
+  total: number;
+  hired?: number;
+  packages: Pkg[];
+}
+
+const npm = (name: string): Pkg => ({ name, url: `https://www.npmjs.com/package/${name}` });
+const crate = (name: string): Pkg => ({ name, url: `https://crates.io/crates/${name}` });
+const image = (name: string): Pkg => ({ name, url: `https://hub.docker.com/r/suenot/${name}` });
+
+const registries: Registry[] = [
+  {
+    name: 'npm',
+    url: 'https://www.npmjs.com/~suenot',
+    total: 198,
+    hired: 148,
+    packages: [
+      npm('@suenot/aicommit'),
+      npm('@suenot/aicommit-mcp'),
+      npm('@marketmaker_cc/ui'),
+      npm('@marketmaker_cc/warehouse-mcp'),
+      npm('harness-analyzer'),
+      npm('@profitmaker/ui'),
+      npm('@suenot/jazzicon'),
+      npm('@deep-foundation/deeplinks'),
+      npm('@deep-foundation/deepcase'),
+    ],
+  },
+  {
+    name: 'crates.io',
+    url: 'https://crates.io/users/suenot',
+    total: 3,
+    packages: [crate('aicommit'), crate('contextify'), crate('gen_pass')],
+  },
+  {
+    name: 'Docker Hub',
+    url: 'https://hub.docker.com/u/suenot',
+    total: 7,
+    packages: [image('sentiments-highcharts'), image('coinindex-agency'), image('default-widgets'), image('sentiments-comments'), image('sentiments-line-chart')],
+  },
+  { name: 'PyPI', url: 'https://pypi.org/user/suenot/', total: 0, packages: [{ name: 'cmdop-claude', url: 'https://pypi.org/project/cmdop-claude/' }] },
+  { name: 'GitHub Packages', url: 'https://github.com/suenot?tab=packages', total: 0, packages: [] },
+];
+---
+
+<section id="packages" class="packages terminal-section" aria-labelledby="packages-heading">
+  <div class="terminal-container">
+    <header class="packages__header">
+      <p class="terminal-kicker">PACKAGE REGISTRIES</p>
+      <h2 id="packages-heading" class="terminal-heading">{t.heading}</h2>
+    </header>
+    <ul class="packages__list">
+      {registries.map((registry, index) => (
+        <li data-reveal>
+          <a class="packages__registry" href={registry.url} target="_blank" rel="noopener noreferrer">
+            <span class="packages__id">{String(index + 1).padStart(2, '0')}</span>
+            <strong>{registry.name}</strong>
+            {registry.total > 0 && (
+              <span class="packages__count">
+                {registry.total} {t.all}{registry.hired ? ` · ${registry.total - registry.hired} ${t.own} · ${registry.hired} ${t.hired}` : ''}
+              </span>
+            )}
+            <span aria-hidden="true">↗</span>
+          </a>
+          {registry.packages.length > 0 && (
+            <div class="packages__items">
+              {registry.packages.map((pkg) => (
+                <a href={pkg.url} target="_blank" rel="noopener noreferrer">{pkg.name}</a>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .packages { border-block-end: 1px solid var(--terminal-line, #303431); }
+  .packages__header { padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .packages__header .terminal-heading { max-inline-size: 14ch; margin-block-start: 1.25rem; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: .88; }
+  .packages__list li { display: grid; grid-template-columns: minmax(16rem, .8fr) 1.6fr; gap: 1.2rem; align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
+  .packages__registry { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .2rem .7rem; align-items: baseline; color: inherit; text-decoration: none; }
+  .packages__registry strong { color: var(--terminal-fg, #e7e9e3); font: 600 .8rem/1.35 var(--font-mono, monospace); }
+  .packages__registry > span:last-child { color: var(--terminal-accent); font: .8rem/1 var(--font-mono, monospace); }
+  .packages__id { color: var(--terminal-faint); font: .5rem/1.5 var(--font-mono, monospace); }
+  .packages__count { grid-column: 2 / -1; color: var(--terminal-muted, #747a75); font: .52rem/1.5 var(--font-mono, monospace); letter-spacing: .06em; }
+  .packages__items { display: flex; flex-wrap: wrap; gap: .35rem .9rem; font: .56rem/1.5 var(--font-mono, monospace); }
+  .packages__items a { color: var(--terminal-muted, #8b908c); text-decoration: none; }
+  .packages__items a::before { content: "["; margin-inline-end: .2rem; }
+  .packages__items a::after { content: "]"; margin-inline-start: .2rem; }
+  .packages__items a:hover, .packages__registry:hover strong { color: var(--terminal-accent); }
+  @media (max-width: 700px) {
+    .packages__list li { grid-template-columns: 1fr; }
+  }
+</style>

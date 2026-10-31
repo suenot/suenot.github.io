@@ -6,6 +6,7 @@ import Contributions from '../../components/Contributions.astro';
 import About from '../../components/About.astro';
 import TechStack from '../../components/TechStack.astro';
 import Projects from '../../components/Projects.astro';
+import Packages from '../../components/Packages.astro';
 import FrontierProjects from '../../components/FrontierProjects.astro';
 import Algotrading from '../../components/Algotrading.astro';
 import ProjectMap from '../../components/ProjectMap.astro';
@@ -27,6 +28,7 @@ const { locale } = Astro.params as { locale: Locale };
   <TechStack locale={locale} />
   <FrontierProjects locale={locale} />
   <Projects locale={locale} />
+  <Packages locale={locale} />
   <ProjectMap locale={locale} />
   <Communities locale={locale} />
   <Contact locale={locale} />
