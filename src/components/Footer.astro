@@ -94,6 +94,11 @@ const socialLinks = [
     overflow: hidden;
   }
 
+  :global(:root[data-theme='dark']) .site-footer {
+    --sprite-ink: #c9cdd2;
+    --sprite-screen: #1f2a24;
+  }
+
   .footer-shell {
     width: min(100%, var(--terminal-max));
     margin-inline: auto;
@@ -252,6 +257,7 @@ const socialLinks = [
   }
 
   @media (max-width: 38rem) {
+    .bot { inline-size: .26em; block-size: calc(.26em * 12 / 11); }
     .footer-strip { align-items: flex-start; flex-direction: column; }
   }
 </style>
