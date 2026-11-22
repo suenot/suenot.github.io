@@ -42,7 +42,6 @@ const communities: Community[] = [
     <header class="communities__header">
       <p class="terminal-kicker">{t.eyebrow}</p>
       <h2 id="communities-heading" class="terminal-heading">{t.heading}</h2>
-      <p aria-hidden="true" data-reveal>BROADCAST DIRECTORY<br />3 ACTIVE STREAMS</p>
     </header>
 
     <div class="communities__list">
@@ -50,8 +49,11 @@ const communities: Community[] = [
         <a href={community.url} target="_blank" rel="noopener noreferrer" data-reveal>
           <span class="community__index">0{index + 1}</span>
           <div class="community__identity">
-            <span>{community.platform} / {community.handle}</span>
-            <h3>{t.items[community.key].name}</h3>
+            <img class="community__avatar" src={`/communities/${community.key}.jpg`} alt="" width="64" height="64" loading="lazy" decoding="async" />
+            <div>
+              <span>{community.platform} / {community.handle}</span>
+              <h3>{t.items[community.key].name}</h3>
+            </div>
           </div>
           <p>{t.items[community.key].desc}</p>
           <span class="community__arrow" aria-hidden="true">↗</span>
@@ -66,11 +68,13 @@ const communities: Community[] = [
   .communities__layout { display: grid; grid-template-columns: minmax(17rem, .58fr) minmax(0, 1.42fr); }
   .communities__header { padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 3.5vw, 3.75rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
   .communities__header .terminal-heading { max-inline-size: 10ch; margin-block-start: 1.25rem; font-size: clamp(3.1rem, 5.2vw, 6rem); line-height: .85; }
-  .communities__header > p:last-child { margin-block-start: 5rem; color: var(--terminal-muted, #747a75); font: .75rem/1.7 var(--font-mono); letter-spacing: .1em; }
-  .communities__list a { display: grid; grid-template-columns: 2.5rem minmax(12rem, .8fr) 1.2fr auto; gap: 1.25rem; align-items: center; min-block-size: 9.5rem; padding: 1.5rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: inherit; text-decoration: none; }
+  .communities__list a { display: grid; grid-template-columns: 2.5rem minmax(16rem, .9fr) 1.1fr auto; gap: 1.25rem; align-items: center; min-block-size: 9.5rem; padding: 1.5rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: inherit; text-decoration: none; }
   .communities__list a:last-child { border-block-end: 0; }
   .community__index { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); }
-  .community__identity > span { color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .community__identity { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+  .community__avatar { flex: none; inline-size: clamp(3rem, 4.2vw, 4rem); block-size: clamp(3rem, 4.2vw, 4rem); border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--terminal-line); transition: transform 300ms var(--ease-out); }
+  .communities__list a:hover .community__avatar { transform: rotate(-6deg) scale(1.06); }
+  .community__identity span { color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
   .community__identity h3 { margin-block-start: .6rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.25rem, 2.2vw, 2.25rem); font-weight: 700; letter-spacing: -.035em; line-height: 1; }
   .communities__list a > p { max-inline-size: 55ch; color: var(--terminal-muted, #8b908c); font-size: .875rem; line-height: 1.55; }
   .community__arrow { color: var(--terminal-accent); font: 1.25rem/1 var(--font-sans); }
