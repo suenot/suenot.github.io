@@ -66,14 +66,14 @@ const frontier: FrontierProject[] = [
   .frontier__header .terminal-heading { max-inline-size: 12ch; margin-block-start: 1.25rem; font-size: clamp(3.5rem, 6.5vw, 7.5rem); line-height: .85; }
   .frontier__header > p { color: var(--terminal-muted, #8b908c); font: 1rem/1.65 var(--font-sans); }
   .frontier__header > span { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
-  .frontier__projects { display: grid; grid-template-columns: 1.12fr .88fr; }
-  .frontier__project { position: relative; min-width: 0; min-block-size: 34rem; padding: clamp(1.5rem, 3.5vw, 3.75rem); overflow: hidden; color: inherit; text-decoration: none; }
+  .frontier__projects { display: grid; grid-template-columns: 1fr 1fr; }
+  .frontier__project { position: relative; min-width: 0; min-block-size: 34rem; padding: clamp(1.5rem, 3.5vw, 3.75rem); overflow: hidden; color: inherit; text-decoration: none; container-type: inline-size; }
   .frontier__project:first-child { border-inline-end: 1px solid var(--terminal-line, #303431); }
   .project__meta { display: grid; grid-template-columns: 2rem 1fr auto; gap: 1rem; color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .09em; }
   .project__status { display: inline-flex; align-items: center; gap: .55rem; text-transform: uppercase; font-family: var(--font-mono); }
   .project__status i { inline-size: .35rem; block-size: .35rem; background: var(--terminal-signal); }
   .project__title-row { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-block-start: 5rem; }
-  .project__title-row h3 { display: flex; align-items: center; gap: clamp(.75rem, 1.4vw, 1.25rem); min-width: 0; color: var(--terminal-ink); font-size: clamp(2.25rem, 4.2vw, 4.25rem); font-weight: 800; letter-spacing: -.05em; line-height: .95; }
+  .project__title-row h3 { display: flex; align-items: center; gap: clamp(.75rem, 1.4vw, 1.25rem); min-width: 0; color: var(--terminal-ink); font-size: clamp(1.75rem, 8cqi, 4.5rem); font-weight: 800; letter-spacing: -.05em; line-height: .95; }
   .project__avatar { flex: none; inline-size: 1.1em; block-size: 1.1em; padding: .14em; border-radius: .24em; background: var(--terminal-panel); box-shadow: inset 0 0 0 1px var(--terminal-line); object-fit: contain; }
   .project__title-row > span { color: var(--terminal-accent); font: 2rem/1 var(--font-sans); }
   .project__role { margin-block-start: 1.5rem; color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
