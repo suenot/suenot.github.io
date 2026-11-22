@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { defaultLocale, isRtl, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 
@@ -28,375 +29,240 @@ try {
   // Build remains deterministic when GitHub is unavailable.
 }
 
-// The name is split into letters at build time so the kinetic reveal is pure
-// CSS: it plays without JS and is skipped under reduced motion.
-const nameWords = ['Eugen', 'Soloviov'];
-let letterIndex = 0;
-const nameLines = nameWords.map((word) => [...word].map((char) => ({ char, index: letterIndex++ })));
+// Latest blog note in this locale, shown as a card beside the intro.
+const posts = await getCollection('blog', ({ data, id }) => id.startsWith(`${locale}/`) && !data.draft);
+const latest = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
+const prefix = locale === defaultLocale ? '' : `/${locale}`;
+const latestSlug = latest ? latest.id.slice(locale.length + 1).replace('.md', '') : '';
+const latestHref = latest ? prefix + '/blog/' + latestSlug + '/' : '';
+const noteCopy: Record<Locale, { label: string; read: string }> = {
+  en: { label: 'Latest note', read: 'Read' },
+  ru: { label: 'Последняя заметка', read: 'Читать' },
+  zh: { label: '最新文章', read: '阅读' },
+  ko: { label: '최신 글', read: '읽기' },
+  ja: { label: '最新の記事', read: '読む' },
+  ar: { label: 'أحدث مقال', read: 'اقرأ' },
+};
+const note = noteCopy[locale] ?? noteCopy.en;
+const latestDate = latest ? new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(latest.data.pubDate) : '';
 
 const currentYear = new Date().getFullYear();
 const stats = [
-  { value: `${currentYear - 2006}+`, label: t.stat_dev, code: 'EXP/DEV' },
-  { value: `${currentYear - 2011}+`, label: t.stat_trading, code: 'EXP/MKT' },
-  { value: starCount, label: t.stat_stars, code: 'GH/STAR' },
-  { value: repoCount, label: t.stat_repos, code: 'GH/REPO' },
+  { value: `${currentYear - 2006}+`, label: t.stat_dev },
+  { value: `${currentYear - 2011}+`, label: t.stat_trading },
+  { value: starCount, label: t.stat_stars },
+  { value: repoCount, label: t.stat_repos },
 ];
+const arrow = isRtl(locale) ? '←' : '→';
 ---
 
 <section id="top" class="hero terminal-section" aria-labelledby="hero-title">
-  <div class="hero__frame terminal-container">
-    <div class="hero__primary">
-      <div class="hero__eyebrow terminal-kicker" aria-hidden="true"><span>PORTFOLIO / 2026</span><span>BUILD 26.08</span></div>
-      <div class="hero__name-block">
-        <span class="hero__rail" aria-hidden="true">C3 / 487</span>
-        <h1 id="hero-title" class="hero__name display-type">
-          <span class="sr-only">{nameWords.join(' ')}</span>
-          <span class="hero__name-visual" aria-hidden="true">
-            {nameLines.map((letters) => (
-              <span class="hero__name-line"><span class="hero__name-mask" dir="ltr">{letters.map((letter) => <span class="hero__char" style={`--i:${letter.index}`}>{letter.char}</span>)}</span></span>
-            ))}
-          </span>
-        </h1>
+  <div class="terminal-container">
+    <p class="terminal-kicker hero__kicker">{t.tagline}</p>
+    <h1 id="hero-title" class="hero__name display-type">
+      <span class="hero__line">Eugen</span>
+      <span class="hero__line hero__line--indent">Soloviov<span class="hero__dot" aria-hidden="true"></span></span>
+    </h1>
+
+    <div class="hero__below">
+      <div class="hero__intro">
+        <p class="hero__description">{t.description}</p>
+        <p class="hero__badge">{t.badge}</p>
+        <div class="hero__actions">
+          <a href="#projects" class="terminal-button terminal-button--primary">{t.cta_projects}<span aria-hidden="true">{arrow}</span></a>
+          <a href="#contact" class="terminal-link">{t.cta_contact}</a>
+        </div>
       </div>
-      <p class="hero__tagline">{t.tagline}</p>
-      <p class="hero__description">{t.description}</p>
-      <p class="hero__roles">┌ &nbsp;{t.badge}&nbsp; ┘</p>
-      <div class="hero__actions">
-        <a href="#projects" class="terminal-button hero__button"><span aria-hidden="true">{isRtl(locale) ? '←' : '→'}</span><span>[ {t.cta_projects} ]</span></a>
-        <a href="#contact" class="terminal-link hero__contact">{t.cta_contact} / COMM-LINK</a>
-      </div>
+
+      {latest && (
+        <a class="hero__note" href={latestHref}>
+          <span class="hero__note-meta"><span>{note.label}</span><time datetime={latest.data.pubDate.toISOString()}>{latestDate}</time></span>
+          <span class="hero__note-title">{latest.data.title}</span>
+          <span class="hero__note-read">{note.read} <span aria-hidden="true">{arrow}</span></span>
+        </a>
+      )}
     </div>
 
-    <aside class="hero__cube" aria-label="Interactive particle cube" data-particle-cube>
-      <div class="cube__header" aria-hidden="true"><span>OBJECT / C-27</span><span>PARTICLE MATRIX</span></div>
-      <canvas class="cube__canvas" data-cube-canvas role="img" tabindex="0" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Interactive particle Rubik cube. Drag or use the arrow keys to rotate it.">Interactive particle Rubik cube</canvas>
-      <div class="cube__footer" aria-hidden="true"><span>27 UNITS / UP TO 5,832 PTS</span><span>[ DRAG / ARROWS TO ROTATE ]</span></div>
-      <span class="cube__marker cube__marker--nw" aria-hidden="true">+</span>
-      <span class="cube__marker cube__marker--se" aria-hidden="true">+</span>
-    </aside>
-
-    <div class="hero__stats" aria-label="Career and GitHub statistics">
+    <dl class="hero__stats" aria-label="Career and GitHub statistics">
       {stats.map((stat, index) => (
-        <div class="hero__stat" style={`--s:${index}`}>
-          <span class="hero__stat-index">0{index + 1}</span>
-          <data value={stat.value} data-count data-count-intro={String(1000 + index * 70)}>{stat.value}</data>
-          <span>{stat.label}</span>
-          <samp>[ {stat.code} ]</samp>
+        <div class="hero__stat">
+          <dt>{stat.label}</dt>
+          <dd><data value={stat.value} data-count data-count-intro={String(600 + index * 70)}>{stat.value}</data></dd>
         </div>
       ))}
-    </div>
+    </dl>
   </div>
 </section>
 
-<script>
-  type Vec3 = [number, number, number];
-  type Mat3 = [number, number, number, number, number, number, number, number, number];
-  type Particle = { point: Vec3; normal: Vec3; accent: boolean };
-  type Cubie = { position: Vec3; orientation: Mat3; particles: Particle[] };
-  type Turn = { axis: 0 | 1 | 2; layer: number; direction: number; start: number };
-
-  const cubeCleanups = new WeakMap<Element, () => void>();
-  const identity = (): Mat3 => [1, 0, 0, 0, 1, 0, 0, 0, 1];
-  const multiply = (a: Mat3, b: Mat3): Mat3 => [
-    a[0] * b[0] + a[1] * b[3] + a[2] * b[6], a[0] * b[1] + a[1] * b[4] + a[2] * b[7], a[0] * b[2] + a[1] * b[5] + a[2] * b[8],
-    a[3] * b[0] + a[4] * b[3] + a[5] * b[6], a[3] * b[1] + a[4] * b[4] + a[5] * b[7], a[3] * b[2] + a[4] * b[5] + a[5] * b[8],
-    a[6] * b[0] + a[7] * b[3] + a[8] * b[6], a[6] * b[1] + a[7] * b[4] + a[8] * b[7], a[6] * b[2] + a[7] * b[5] + a[8] * b[8],
-  ];
-  const transform = (m: Mat3, v: Vec3): Vec3 => [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
-  const rotation = (axis: 0 | 1 | 2, angle: number): Mat3 => {
-    const c = Math.cos(angle); const s = Math.sin(angle);
-    return axis === 0 ? [1, 0, 0, 0, c, -s, 0, s, c] : axis === 1 ? [c, 0, s, 0, 1, 0, -s, 0, c] : [c, -s, 0, s, c, 0, 0, 0, 1];
-  };
-
-  function makeParticles(samples: number): Particle[] {
-    const result: Particle[] = [];
-    const faces: { normal: Vec3; u: Vec3; v: Vec3; accent: boolean }[] = [
-      { normal: [1, 0, 0], u: [0, 1, 0], v: [0, 0, 1], accent: true },
-      { normal: [-1, 0, 0], u: [0, 1, 0], v: [0, 0, 1], accent: false },
-      { normal: [0, 1, 0], u: [1, 0, 0], v: [0, 0, 1], accent: false },
-      { normal: [0, -1, 0], u: [1, 0, 0], v: [0, 0, 1], accent: false },
-      { normal: [0, 0, 1], u: [1, 0, 0], v: [0, 1, 0], accent: false },
-      { normal: [0, 0, -1], u: [1, 0, 0], v: [0, 1, 0], accent: false },
-    ];
-    const half = 0.43;
-    for (const face of faces) for (let y = 0; y < samples; y++) for (let x = 0; x < samples; x++) {
-      const a = -half + (x / (samples - 1)) * half * 2; const b = -half + (y / (samples - 1)) * half * 2;
-      result.push({ point: [face.normal[0] * half + face.u[0] * a + face.v[0] * b, face.normal[1] * half + face.u[1] * a + face.v[1] * b, face.normal[2] * half + face.u[2] * a + face.v[2] * b], normal: face.normal, accent: face.accent });
-    }
-    return result;
-  }
-
-  function startParticleCube(root: HTMLElement) {
-    cubeCleanups.get(root)?.();
-    const canvas = root.querySelector<HTMLCanvasElement>('[data-cube-canvas]');
-    const context = canvas?.getContext('2d');
-    if (!canvas || !context) return;
-    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const efficientMode = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
-    let reducedMotion = motionPreference.matches;
-    const minimumFrameTime = efficientMode ? 1000 / 30 : 0;
-    const template = makeParticles(efficientMode ? 4 : 6);
-    const neutralTemplate = template.map((particle) => ({ ...particle, accent: false }));
-    const cubies: Cubie[] = [];
-    for (let z = -1; z <= 1; z++) for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) cubies.push({ position: [x, y, z], orientation: identity(), particles: x === 1 ? template : neutralTemplate });
-
-    let width = 1; let height = 1; let dpr = 1; let yaw = -0.55; let pitch = -0.38;
-    let velocityX = 0; let velocityY = 0; let pointerId = -1; let previousX = 0; let previousY = 0;
-    let frameId = 0; let stopped = false; let visible = true; let lastFrame = performance.now(); let lastPaint = 0; let nextTurn = lastFrame + 2100; let turn: Turn | null = null; let moveIndex = 0;
-    // Intro: the 27 units fly in from a scattered cloud and lock into the cube.
-    const introDuration = 900; const introSpread = .35;
-    const introStart = reducedMotion ? -Infinity : performance.now() + 150;
-    const introOffsets: Vec3[] = cubies.map((cubie) => {
-      const [x, y, z] = cubie.position; const length = Math.hypot(x, y, z) || 1; const reach = 2.2 + Math.random() * 1.6;
-      const jitter = () => (Math.random() - .5) * 1.4;
-      return [x / length * reach + jitter(), y / length * reach + jitter(), z / length * reach + jitter()];
-    });
-    const introDelays = cubies.map(() => Math.random() * introSpread);
-    const moves: [0 | 1 | 2, number, number][] = [[1, 1, 1], [0, -1, -1], [2, 1, 1], [1, -1, -1], [2, 0, 1], [0, 1, 1]];
-
-    // Colors come from the theme tokens in global.css and follow theme changes.
-    const palette = { particle: '', accent: '', crosshair: '', glow: '' };
-    function readPalette() {
-      const style = getComputedStyle(document.documentElement);
-      palette.particle = style.getPropertyValue('--cube-particle').trim() || '#e7e9e3';
-      palette.accent = style.getPropertyValue('--cube-accent').trim() || '#ff493f';
-      palette.crosshair = style.getPropertyValue('--cube-crosshair').trim() || 'rgba(145,151,146,.10)';
-      palette.glow = style.getPropertyValue('--cube-glow').trim() || 'rgba(255,59,48,.65)';
-    }
-    readPalette();
-
-    function resize() {
-      const rect = canvas.getBoundingClientRect();
-      width = Math.max(1, rect.width); height = Math.max(1, rect.height); dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      draw(performance.now());
-    }
-
-    function finishTurn(active: Turn) {
-      const finalRotation = rotation(active.axis, active.direction * Math.PI / 2);
-      for (const cubie of cubies) if (Math.round(cubie.position[active.axis]) === active.layer) {
-        cubie.position = transform(finalRotation, cubie.position).map((value) => Math.round(value)) as Vec3;
-        cubie.orientation = multiply(finalRotation, cubie.orientation);
-      }
-      turn = null; nextTurn = performance.now() + 1700;
-    }
-
-    function draw(now: number) {
-      context.clearRect(0, 0, width, height);
-      context.save();
-      context.strokeStyle = palette.crosshair; context.lineWidth = 1;
-      context.beginPath(); context.moveTo(width * .5, height * .13); context.lineTo(width * .5, height * .87); context.moveTo(width * .13, height * .5); context.lineTo(width * .87, height * .5); context.stroke();
-      context.restore();
-
-      let activeRotation: Mat3 | null = null;
-      if (turn) {
-        const progress = Math.min(1, (now - turn.start) / 760);
-        const eased = progress < .5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-        activeRotation = rotation(turn.axis, turn.direction * Math.PI / 2 * eased);
-        if (progress === 1) finishTurn(turn);
-      }
-      const introProgress = (now - introStart) / introDuration;
-      const inIntro = introProgress < 1;
-      const introEase = inIntro ? 1 - Math.pow(1 - Math.min(1, Math.max(0, introProgress)), 3) : 1;
-      const view = multiply(rotation(1, yaw - (1 - introEase) * .9), rotation(0, pitch));
-      const projected: { x: number; y: number; z: number; radius: number; alpha: number; accent: boolean }[] = [];
-      const scale = Math.min(width, height) * .175; const camera = 6.8;
-      cubies.forEach((cubie, cubieIndex) => {
-        const inSlice = turn && Math.round(cubie.position[turn.axis]) === turn.layer;
-        const sliceRotation = inSlice ? activeRotation : null;
-        let center = sliceRotation ? transform(sliceRotation, cubie.position) : cubie.position;
-        let fade = 1;
-        if (inIntro) {
-          const local = Math.min(1, Math.max(0, (introProgress - introDelays[cubieIndex]) / (1 - introSpread)));
-          const settle = 1 - Math.pow(1 - local, 3); const away = 1 - settle; const offset = introOffsets[cubieIndex];
-          center = [center[0] + offset[0] * away, center[1] + offset[1] * away, center[2] + offset[2] * away];
-          fade = .1 + .9 * settle;
-        }
-        for (const particle of cubie.particles) {
-          let local = transform(cubie.orientation, particle.point); let normal = transform(cubie.orientation, particle.normal);
-          if (sliceRotation) { local = transform(sliceRotation, local); normal = transform(sliceRotation, normal); }
-          const world: Vec3 = [center[0] * 1.04 + local[0], center[1] * 1.04 + local[1], center[2] * 1.04 + local[2]];
-          const point = transform(view, world); const facing = transform(view, normal)[2];
-          if (facing < -.08) continue;
-          const perspective = camera / (camera - point[2]);
-          projected.push({ x: width / 2 + point[0] * scale * perspective, y: height / 2 + point[1] * scale * perspective, z: point[2], radius: Math.max(.55, perspective * 1.25), alpha: fade * Math.min(.94, .22 + Math.max(0, facing) * .7), accent: particle.accent });
-        }
-      });
-      projected.sort((a, b) => a.z - b.z);
-      for (const particle of projected) {
-        context.globalAlpha = particle.alpha;
-        context.fillStyle = particle.accent ? palette.accent : palette.particle;
-        context.shadowColor = palette.glow;
-        context.shadowBlur = particle.accent ? 4 : 0;
-        context.beginPath(); context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2); context.fill();
-      }
-      context.globalAlpha = 1; context.shadowBlur = 0;
-    }
-
-    function animate(now: number) {
-      if (stopped || document.hidden || !visible) return;
-      frameId = requestAnimationFrame(animate);
-      if (now - lastPaint < minimumFrameTime) return;
-      lastPaint = now;
-      const elapsed = Math.min(40, now - lastFrame); lastFrame = now;
-      if (pointerId < 0) {
-        yaw += (.000095 * elapsed) + velocityX * elapsed; pitch += (.000045 * elapsed) + velocityY * elapsed;
-        const decay = Math.exp(-elapsed / 650); velocityX *= decay; velocityY *= decay;
-        if (!turn && now >= nextTurn) { const move = moves[moveIndex++ % moves.length]; turn = { axis: move[0], layer: move[1], direction: move[2], start: now }; }
-      }
-      pitch = Math.max(-1.25, Math.min(1.25, pitch)); draw(now);
-    }
-
-    function resume() {
-      cancelAnimationFrame(frameId);
-      if (stopped || document.hidden || !visible || reducedMotion) { draw(performance.now()); return; }
-      lastFrame = performance.now(); frameId = requestAnimationFrame(animate);
-    }
-    function pointerDown(event: PointerEvent) {
-      pointerId = event.pointerId; previousX = event.clientX; previousY = event.clientY; velocityX = 0; velocityY = 0;
-      canvas.setPointerCapture(pointerId); canvas.classList.add('is-dragging');
-    }
-    function pointerMove(event: PointerEvent) {
-      if (event.pointerId !== pointerId) return;
-      const dx = event.clientX - previousX; const dy = event.clientY - previousY; previousX = event.clientX; previousY = event.clientY;
-      velocityX = dx * .00013; velocityY = dy * .00013; yaw += dx * .008; pitch = Math.max(-1.25, Math.min(1.25, pitch + dy * .008)); draw(performance.now());
-    }
-    function pointerUp(event: PointerEvent) {
-      if (event.pointerId !== pointerId) return;
-      pointerId = -1; canvas.classList.remove('is-dragging'); if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId); resume();
-    }
-    function lostPointerCapture(event: PointerEvent) {
-      if (event.pointerId !== pointerId) return;
-      pointerId = -1; canvas.classList.remove('is-dragging'); resume();
-    }
-    function keyDown(event: KeyboardEvent) {
-      const rotations: Record<string, [number, number]> = { ArrowLeft: [-.12, 0], ArrowRight: [.12, 0], ArrowUp: [0, -.12], ArrowDown: [0, .12] };
-      const change = rotations[event.key];
-      if (!change) return;
-      event.preventDefault(); yaw += change[0]; pitch = Math.max(-1.25, Math.min(1.25, pitch + change[1])); draw(performance.now());
-    }
-    const motionPreferenceChange = (event: MediaQueryListEvent) => { reducedMotion = event.matches; resume(); };
-    canvas.addEventListener('pointerdown', pointerDown); canvas.addEventListener('pointermove', pointerMove); canvas.addEventListener('pointerup', pointerUp); canvas.addEventListener('pointercancel', pointerUp); canvas.addEventListener('lostpointercapture', lostPointerCapture); canvas.addEventListener('keydown', keyDown);
-    motionPreference.addEventListener('change', motionPreferenceChange);
-    const resizeObserver = new ResizeObserver(resize);
-    const intersectionObserver = new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? true; resume(); }, { threshold: .01 });
-    const visibilityChange = () => resume();
-    const themeChange = () => { readPalette(); draw(performance.now()); };
-    function cleanup() {
-      stopped = true; cancelAnimationFrame(frameId); resizeObserver.disconnect(); intersectionObserver.disconnect();
-      canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove); canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', pointerUp); canvas.removeEventListener('lostpointercapture', lostPointerCapture); canvas.removeEventListener('keydown', keyDown);
-      motionPreference.removeEventListener('change', motionPreferenceChange);
-      document.removeEventListener('visibilitychange', visibilityChange); document.removeEventListener('hud:theme', themeChange); document.removeEventListener('astro:before-swap', cleanup); cubeCleanups.delete(root);
-    }
-    resizeObserver.observe(canvas); intersectionObserver.observe(root); document.addEventListener('visibilitychange', visibilityChange); document.addEventListener('hud:theme', themeChange); document.addEventListener('astro:before-swap', cleanup, { once: true });
-    resize(); resume(); cubeCleanups.set(root, cleanup);
-  }
-
-  function initializeParticleCubes() { document.querySelectorAll<HTMLElement>('[data-particle-cube]').forEach(startParticleCube); }
-  const cubeWindow = window as Window & typeof globalThis & { __particleCubePageLoad?: () => void };
-  if (cubeWindow.__particleCubePageLoad) document.removeEventListener('astro:page-load', cubeWindow.__particleCubePageLoad);
-  cubeWindow.__particleCubePageLoad = initializeParticleCubes;
-  initializeParticleCubes();
-  document.addEventListener('astro:page-load', initializeParticleCubes);
-</script>
-
 <style>
-  .hero { min-height: 100dvh; padding-block-start: 4.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .hero__frame { display: grid; grid-template-columns: minmax(0, .97fr) minmax(36rem, 1.03fr); }
-  .hero__primary { position: relative; min-width: 0; padding: clamp(1.5rem, 3.7vw, 4.5rem) clamp(1rem, 3.2vw, 3.5rem) 2.5rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .hero__eyebrow { display: flex; justify-content: space-between; color: var(--terminal-muted, #747a75); margin-block-end: clamp(2.8rem, 5vw, 5.5rem); }
-  .hero__name-block { position: relative; padding-inline-start: 2.7rem; }
-  .hero__rail { position: absolute; inset-block: 0; inset-inline-start: 0; writing-mode: vertical-rl; color: var(--terminal-accent); font: 600 .58rem/1 var(--font-mono, monospace); letter-spacing: .14em; border-inline-start: 2px solid var(--terminal-accent); padding-inline-start: .55rem; }
-  .hero__name { color: var(--terminal-fg, #e7e9e3); font-size: clamp(5.4rem, 9.2vw, 11rem); font-weight: 950; letter-spacing: -.082em; line-height: .76; text-transform: uppercase; text-wrap: nowrap; }
-  .hero__name-visual, .hero__name-line { display: block; }
-  /* Each line is a mask; padding gives the condensed caps room, the negative
-     margin keeps the original line box. */
-  .hero__name-mask { display: inline-block; overflow: clip; padding: .16em .12em .12em; margin: -.16em -.12em -.12em; vertical-align: top; }
-  .hero__char { display: inline-block; }
-  .hero__tagline { margin-block: 1.55rem 0; margin-inline: 2.7rem 0; color: var(--terminal-fg, #e7e9e3); font: 500 clamp(.78rem, 1.2vw, 1.1rem)/1.2 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .hero__description { max-inline-size: 39rem; margin-block: 1rem 0; margin-inline: 2.7rem 0; color: var(--terminal-muted, #929792); font: .76rem/1.55 var(--font-mono, monospace); letter-spacing: .035em; text-wrap: pretty; }
-  .hero__roles { margin-block: 1.2rem 0; margin-inline: 2.7rem 0; color: var(--terminal-muted, #8b908c); font: .64rem/1.6 var(--font-mono, monospace); letter-spacing: .11em; text-transform: uppercase; }
-  .hero__actions { display: flex; align-items: center; gap: 2rem; margin-block: 1.45rem 0; margin-inline: 2.7rem 0; }
-  .hero__button { display: inline-grid; grid-template-columns: 3.2rem auto; align-items: center; min-block-size: 3rem; padding: 0 1.1rem 0 0; border: 1px solid currentColor; color: var(--terminal-fg, #e7e9e3); font: 600 .65rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .hero__button > :first-child { display: grid; align-items: center; align-self: stretch; padding-inline: 1rem; border-inline-end: 1px solid currentColor; color: var(--terminal-accent); font-size: 1.5rem; }
-  .hero__button:hover { background: var(--terminal-fg, #e7e9e3); color: var(--terminal-bg, #0b0d0c); }
-  .hero__contact { color: var(--terminal-muted, #8b908c); font: .64rem/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: .45rem; }
-  .hero__contact:hover { color: var(--terminal-accent); }
-
-  .hero__cube { position: relative; align-self: stretch; min-width: 0; min-height: 38rem; margin: clamp(1.5rem, 3.7vw, 4.5rem) clamp(.8rem, 1.5vw, 1.5rem) 1.5rem; overflow: hidden; border: 1px solid var(--terminal-line, #303431); background: var(--terminal-bg); }
-  .cube__header, .cube__footer { position: absolute; z-index: 2; inset-inline: 0; display: flex; justify-content: space-between; gap: 1rem; padding: .68rem .8rem; color: var(--terminal-muted); font: .54rem/1 var(--font-mono, monospace); letter-spacing: .14em; pointer-events: none; }
-  .cube__header { inset-block-start: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .cube__footer { inset-block-end: 0; border-block-start: 1px solid var(--terminal-line, #303431); }
-  .cube__canvas { display: block; inline-size: 100%; block-size: 100%; min-block-size: 38rem; cursor: grab; touch-action: none; }
-  .cube__canvas.is-dragging { cursor: grabbing; }
-  .cube__marker { position: absolute; z-index: 3; color: var(--terminal-accent); font: .65rem/1 var(--font-mono, monospace); pointer-events: none; }
-  .cube__marker--nw { inset: 2.55rem auto auto .35rem; }
-  .cube__marker--se { inset: auto .35rem 2.55rem auto; }
-
-  .hero__stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); border-block-start: 1px solid var(--terminal-line, #303431); }
-  .hero__stat { display: grid; grid-template-columns: auto 1fr; min-block-size: 7.2rem; padding: 1rem 1.3rem; border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .hero__stat:last-child { border-inline-end: 0; }
-  .hero__stat-index { color: var(--terminal-muted, #747a75); font: .62rem/1 var(--font-mono, monospace); }
-  .hero__stat data { justify-self: end; color: var(--terminal-fg, #e7e9e3); font: 700 clamp(1.4rem, 2.4vw, 2.5rem)/.9 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
-  .hero__stat > span:not(.hero__stat-index), .hero__stat samp { align-self: end; color: var(--terminal-muted, #8b908c); font: .55rem/1.4 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
-  .hero__stat samp { justify-self: end; }
-  .hero a:focus-visible, .cube__canvas:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 4px; }
-
-  @media (max-width: 1180px) {
-    .hero__frame { grid-template-columns: 1fr; }
-    .hero__primary { border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }
-    .hero__name { font-size: clamp(5rem, 15vw, 10rem); }
-    .hero__cube { min-height: min(44rem, 76vw); }
-    .cube__canvas { min-block-size: min(44rem, 76vw); }
+  .hero {
+    padding-block: calc(var(--terminal-header) + clamp(2.5rem, 7vw, 6rem)) clamp(3rem, 6vw, 5rem);
   }
-  @media (max-width: 720px) {
-    .hero { padding-block-start: 3.75rem; }
-    .hero__primary { padding-block-start: 1.8rem; }
-    .hero__eyebrow { margin-block-end: 2.8rem; }
-    .hero__name-block { padding-inline-start: 1.5rem; }
-    .hero__rail { font-size: .48rem; }
-    .hero__name { font-size: clamp(3.35rem, 19.2vw, 6.4rem); line-height: .8; }
-    .hero__tagline, .hero__description, .hero__roles, .hero__actions { margin-inline-start: 1.5rem; }
-    .hero__actions { align-items: flex-start; flex-direction: column; gap: 1.4rem; }
-    .hero__cube { min-height: min(31rem, 112vw); margin: .8rem; }
-    .cube__canvas { min-block-size: min(31rem, 112vw); }
-    .cube__footer span:first-child { display: none; }
-    .cube__footer { justify-content: flex-end; }
-    .hero__stats { grid-template-columns: 1fr 1fr; }
-    .hero__stat { min-block-size: 6.6rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  }
-  @media (max-width: 390px) {
-    .hero__stat { padding-inline: .9rem; }
-    .hero__stat samp { display: none; }
-  }
-  @media (prefers-reduced-motion: reduce) { .cube__canvas { cursor: grab; } }
 
-  /* Intro, in reading order: frame, name, copy, object, readings. */
+  .hero__name {
+    display: grid;
+    margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
+    color: var(--terminal-ink);
+    font-size: clamp(3.75rem, 12.4vw, 12rem);
+    line-height: 0.88;
+  }
+
+  .hero__line--indent {
+    padding-inline-start: 0.62em;
+  }
+
+  .hero__dot {
+    display: inline-block;
+    inline-size: 0.15em;
+    block-size: 0.15em;
+    margin-inline-start: 0.04em;
+    background: var(--terminal-accent);
+  }
+
+  .hero__below {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+    margin-block-start: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .hero__description {
+    max-inline-size: 30ch;
+    margin: 0;
+    color: var(--terminal-ink-2);
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+
+  .hero__badge {
+    margin: 1.25rem 0 0;
+    color: var(--terminal-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 1.75rem;
+    margin-block-start: 2rem;
+  }
+
+  .hero__note {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.5rem 1.5rem 1.35rem;
+    border: 1px solid var(--terminal-line-strong);
+    background: var(--terminal-panel);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 160ms ease, transform 200ms ease;
+  }
+
+  .hero__note:hover {
+    border-color: var(--terminal-ink);
+  }
+
+  .hero__note-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--terminal-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .hero__note-title {
+    color: var(--terminal-ink);
+    font-size: clamp(1.125rem, 1.5vw, 1.3125rem);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .hero__note-read {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .hero__note:hover .hero__note-read {
+    color: var(--terminal-accent);
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    border-block: 1px solid var(--terminal-line-strong);
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    padding: 1.4rem 1.25rem 1.5rem 0;
+  }
+
+  .hero__stat + .hero__stat {
+    padding-inline-start: 1.25rem;
+    border-inline-start: 1px solid var(--terminal-line);
+  }
+
+  .hero__stat dt {
+    color: var(--terminal-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .hero__stat dd {
+    margin: 0;
+    color: var(--terminal-ink);
+    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    .hero__char { animation: hero-rise 820ms var(--ease-out) both; animation-delay: calc(140ms + var(--i) * 34ms); }
-    .hero__eyebrow { animation: hero-fade 500ms var(--ease-out) 60ms both; }
-    .hero__rail { animation: hero-fade 600ms var(--ease-out) 420ms both; }
-    .hero__tagline, .hero__description, .hero__roles, .hero__actions { animation: hero-lift 700ms var(--ease-out) both; }
-    .hero__tagline { animation-delay: 620ms; }
-    .hero__description { animation-delay: 690ms; }
-    .hero__roles { animation-delay: 760ms; }
-    .hero__actions { animation-delay: 830ms; }
-    .hero__cube { animation: hero-fade 700ms var(--ease-out) 120ms both; }
-    .cube__header, .cube__footer { animation: hero-fade 500ms var(--ease-out) 700ms both; }
-    .cube__marker--nw { animation: hero-marker-nw 600ms var(--ease-out) 760ms both; }
-    .cube__marker--se { animation: hero-marker-se 600ms var(--ease-out) 760ms both; }
-    .hero__stat { animation: hero-lift 700ms var(--ease-out) both; animation-delay: calc(900ms + var(--s) * 70ms); }
-    .hero__button { transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--ease-out); }
-    .hero__button:active { transform: scale(.97); }
+    .hero__kicker,
+    .hero__line,
+    .hero__below,
+    .hero__stats {
+      animation: hero-rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    .hero__line:nth-child(1) { animation-delay: 60ms; }
+    .hero__line:nth-child(2) { animation-delay: 140ms; }
+    .hero__below { animation-delay: 260ms; }
+    .hero__stats { animation-delay: 360ms; }
   }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .hero__button > :first-child { transition: transform 200ms var(--ease-out); }
-    .hero__button:hover > :first-child { transform: translate3d(calc(var(--dir, 1) * .2rem), 0, 0); }
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translate3d(0, 0.6rem, 0); }
+    to { opacity: 1; transform: none; }
   }
-  @keyframes hero-rise { from { transform: translate3d(0, 118%, 0); } }
-  @keyframes hero-fade { from { opacity: 0; } }
-  @keyframes hero-lift { from { opacity: 0; transform: translate3d(0, .9rem, 0); } }
-  @keyframes hero-marker-nw { from { opacity: 0; transform: translate3d(-.5rem, -.5rem, 0); } }
-  @keyframes hero-marker-se { from { opacity: 0; transform: translate3d(.5rem, .5rem, 0); } }
+
+  @media (max-width: 52rem) {
+    .hero__below { grid-template-columns: 1fr; }
+    .hero__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero__stat:nth-child(3) { padding-inline-start: 0; border-inline-start: 0; }
+    .hero__stat:nth-child(n + 3) { border-block-start: 1px solid var(--terminal-line); }
+  }
+
+  @media (max-width: 30rem) {
+    .hero__line--indent { padding-inline-start: 0; }
+  }
 </style>

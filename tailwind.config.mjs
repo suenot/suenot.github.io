@@ -4,16 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        accent: '#FF3B30',
-        'accent-light': '#FF6B62',
-        'surface': '#090B0A',
-        'surface-2': '#0D100E',
-        'surface-3': '#121512',
-        'muted': '#858B84',
+        accent: 'var(--terminal-accent)',
+        'accent-light': 'var(--terminal-accent-hover)',
+        'surface': 'var(--terminal-bg)',
+        'surface-2': 'var(--terminal-surface)',
+        'surface-3': 'var(--terminal-surface-2)',
+        'muted': 'var(--terminal-muted)',
       },
       fontFamily: {
-        sans: ['Arial Narrow', 'Roboto Condensed', 'Helvetica Neue Condensed', 'Arial', 'sans-serif'],
-        mono: ['SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', 'monospace'],
+        sans: ['"Schibsted Grotesk Variable"', '"Inter Tight Variable"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['"JetBrains Mono Variable"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

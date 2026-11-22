@@ -1,4 +1,4 @@
-// Visitor theme: dark (default) or light.
+// Visitor theme: light (default) or dark.
 // The inline script in Layout.astro's <head> applies the stored choice before
 // first paint; this module wires the toggles, saves the choice and tells
 // canvas-drawn parts (the hero cube) to recolor via a `hud:theme` event.
@@ -11,7 +11,7 @@ const FADE_MS = 180;
 const root = document.documentElement;
 let fadeTimer = 0;
 
-const current = (): Theme => (root.dataset.theme === 'light' ? 'light' : 'dark');
+const current = (): Theme => (root.dataset.theme === 'dark' ? 'dark' : 'light');
 
 function save(theme: Theme) {
   try {
@@ -48,8 +48,8 @@ document.addEventListener('click', (event) => {
 
 // Another tab changed the theme.
 window.addEventListener('storage', (event) => {
-  if (event.key === STORAGE_KEY) apply(event.newValue === 'light' ? 'light' : 'dark', false);
+  if (event.key === STORAGE_KEY) apply(event.newValue === 'dark' ? 'dark' : 'light', false);
 });
 
-if (!root.dataset.theme) root.dataset.theme = 'dark';
+if (!root.dataset.theme) root.dataset.theme = 'light';
 syncToggles();

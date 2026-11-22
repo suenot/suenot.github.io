@@ -23,6 +23,7 @@ const { locale } = Astro.params as { locale: Locale };
 
 <Layout locale={locale} footerCta={false}>
   <Hero locale={locale} />
+  <Contributions locale={locale} />
   <About locale={locale} />
   <Algotrading locale={locale} />
   <TechStack locale={locale} />
@@ -32,5 +33,4 @@ const { locale } = Astro.params as { locale: Locale };
   <ProjectMap locale={locale} />
   <Communities locale={locale} />
   <Contact locale={locale} />
-  <Contributions locale={locale} />
 </Layout>

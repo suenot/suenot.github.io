@@ -3,6 +3,7 @@ import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 import { useTranslations } from '../i18n/ui';
 import { formatYears, type Years } from '../i18n/utils';
+import projectIcons from '../data/project-icons.json';
 
 interface Props {
   locale?: Locale;
@@ -153,6 +154,13 @@ const projects: ProjectGroup[] = [
 ];
 
 const roleOf = (project: Project): Role => project.role ?? 'founder';
+// Avatar: the project's own site icon (fetched into public/projects), else a monogram.
+const iconOf = (project: Project): string | undefined => (projectIcons as Record<string, string>)[project.name];
+const hueOf = (name: string) => [...name].reduce((h, ch) => (h * 31 + ch.codePointAt(0)!) % 360, 7);
+const monogram = (name: string) => {
+  const words = name.replace(/[^\p{L}\p{N} ]+/gu, ' ').trim().split(/\s+/);
+  return (words.length > 1 ? words[0][0] + words[1][0] : words[0].slice(0, 2)).toUpperCase();
+};
 const allItems = projects.flatMap((group) => group.items);
 const roleCounts = {
   founder: allItems.filter((project) => roleOf(project) === 'founder').length,
@@ -175,7 +183,7 @@ const statusStyles: Record<StatusKey, string> = {
   <div class="terminal-container">
     <header class="projects__header">
       <div>
-        <p class="terminal-kicker">{t.eyebrow} / COMPLETE ARCHIVE</p>
+        <p class="terminal-kicker">{t.eyebrow}</p>
         <h2 id="projects-heading" class="terminal-heading">{t.heading}</h2>
       </div>
       <p data-reveal>{t.intro}</p>
@@ -197,23 +205,25 @@ const statusStyles: Record<StatusKey, string> = {
           <header class="project-group__header" data-reveal>
             <span>{String(groupIndex + 1).padStart(2, '0')}</span>
             <h3 class="display-type">{t.categories[group.category]}</h3>
-            <span>{String(group.items.length).padStart(2, '0')} RECORDS</span>
+            <span>{String(group.items.length).padStart(2, '0')}</span>
           </header>
-          <div class="project-group__columns" aria-hidden="true" data-reveal>
-            <span>ID / PROJECT</span><span>DESCRIPTION</span><span>STACK</span><span>STATE / YEARS</span>
-          </div>
           <ol>
             {group.items.map((project, projectIndex) => {
               const Row = project.url ? 'a' : 'div';
               return (
               <li data-reveal>
                 <Row class={`project-row project-row--${roleOf(project)}`} data-role={roleOf(project)} {...(project.url ? { href: project.url, target: "_blank", rel: "noopener noreferrer" } : {})}>
-                  <div class="project-row__name">
-                    <span class="project-row__id">{String(groupIndex + 1).padStart(2, '0')}.{String(projectIndex + 1).padStart(2, '0')}</span>
-                    <h4>{project.name}</h4>
-                    {project.url && <span class="project-row__access" title={project.private ? 'Private repository' : 'Public link'}>{project.private ? 'LOCK' : 'OPEN'}</span>}
+                  <span class="project-row__id">{String(projectIndex + 1).padStart(2, '0')}</span>
+                  <div class="project-row__main">
+                    <div class="project-row__name">
+                      {iconOf(project)
+                        ? <img class="project-row__avatar" src={iconOf(project)} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                        : <span class="project-row__avatar project-row__avatar--mono" style={`--hue:${hueOf(project.name)}`} aria-hidden="true">{monogram(project.name)}</span>}
+                      <h4>{project.name}</h4>
+                      {project.private && <span class="project-row__access" title="Private repository">Private</span>}
+                    </div>
+                    <p>{t.descs[project.descKey]}</p>
                   </div>
-                  <p>{t.descs[project.descKey]}</p>
                   <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
                   <div class="project-row__state">
                     <span class={`role role--${roleOf(project)}`}><span class="role__mark" aria-hidden="true"></span>{t.roles[roleOf(project)]}</span>
@@ -233,71 +243,68 @@ const statusStyles: Record<StatusKey, string> = {
 </section>
 
 <style>
-  .projects { border-block-end: 1px solid var(--terminal-line, #303431); }
-  .projects__header { display: grid; grid-template-columns: 1fr .55fr auto; gap: clamp(2rem, 5vw, 6rem); align-items: end; padding: clamp(3.5rem, 7vw, 7rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
-  .projects__header .terminal-heading { max-inline-size: 11ch; margin-block-start: 1.25rem; font-size: clamp(3.5rem, 6.6vw, 7.6rem); line-height: .84; }
-  .projects__header > p { max-inline-size: 48ch; color: var(--terminal-muted, #8b908c); font: .75rem/1.65 var(--font-mono, monospace); }
-  .projects__header dl { display: flex; gap: 1.6rem; }
-  .projects__header dl div { display: grid; gap: .5rem; }
-  .projects__header dt { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
-  .projects__header dd { color: var(--terminal-fg, #e7e9e3); font: 600 1.65rem/1 var(--font-mono, monospace); font-variant-numeric: tabular-nums; }
-  .project-group__header { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; min-block-size: 5.6rem; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
-  .project-group__header > span { color: var(--terminal-accent); font: .6rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
-  .project-group__header > span:last-child { color: var(--terminal-muted, #747a75); }
-  .project-group__header h3 { color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.6rem, 2.8vw, 3rem); font-weight: 750; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
-  .project-group__columns, .project-row { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(22rem, 1.2fr) minmax(12rem, .7fr) 6.5rem 1rem; gap: 1.2rem; }
-  .project-group__columns { padding: .7rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); color: var(--terminal-faint); font: .5rem/1 var(--font-mono, monospace); letter-spacing: .1em; }
-  .project-group li { border-block-end: 1px solid var(--terminal-line, #303431); }
-  .project-row { align-items: start; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); color: inherit; text-decoration: none; }
-  .project-row__name { display: grid; grid-template-columns: 2.3rem 1fr auto; gap: .7rem; align-items: start; min-width: 0; }
-  .project-row__id, .project-row__access { color: var(--terminal-faint); font: .5rem/1.5 var(--font-mono, monospace); }
-  .project-row__name h4 { color: var(--terminal-fg, #e7e9e3); font: 600 .72rem/1.35 var(--font-mono, monospace); overflow-wrap: anywhere; }
-  .project-row > p { color: var(--terminal-muted, #8b908c); font-size: .72rem; line-height: 1.5; text-wrap: pretty; }
-  .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: var(--terminal-muted, #747a75); font: .52rem/1.35 var(--font-mono, monospace); }
-  .project-row__tags span::before { content: "["; margin-inline-end: .2rem; }.project-row__tags span::after { content: "]"; margin-inline-start: .2rem; }
-  .project-row__state { display: grid; gap: .35rem; justify-items: start; }
-  .project-row__years { color: var(--terminal-fg, #e7e9e3); font: .52rem/1.3 var(--font-mono, monospace); font-variant-numeric: tabular-nums; letter-spacing: .04em; opacity: .75; }
-  .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .07em; text-transform: uppercase; }
-  .project-row__status::before { content: ""; inline-size: .3rem; block-size: .3rem; border: 1px solid currentColor; }
+  .projects { padding-block: clamp(4rem, 8vw, 7rem); }
+  .projects__header { display: grid; grid-template-columns: 1fr minmax(0, .8fr) auto; gap: clamp(2rem, 5vw, 5rem); align-items: end; padding-block-end: clamp(2rem, 4vw, 3rem); }
+  .projects__header .terminal-heading { margin-block-start: 1rem; }
+  .projects__header > p { max-inline-size: 46ch; margin: 0; color: var(--terminal-muted); font-size: var(--text-base); line-height: 1.6; }
+  .projects__header dl { display: flex; gap: 2rem; margin: 0; }
+  .projects__header dl div { display: grid; gap: .35rem; }
+  .projects__header dt { color: var(--terminal-muted); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
+  .projects__header dd { margin: 0; color: var(--terminal-ink); font: 800 2.25rem/1 var(--font-sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .projects__roles { display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; margin: 0; padding: 1rem 0; list-style: none; border-block: 1px solid var(--terminal-line); }
+  .project-group { margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .project-group__header { display: flex; align-items: baseline; gap: 1rem; padding-block-end: 1rem; border-block-end: 1px solid var(--terminal-line-strong); }
+  .project-group__header > span { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
+  .project-group__header > span:last-child { margin-inline-start: auto; color: var(--terminal-muted); }
+  .project-group__header h3 { margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .project-group ol { margin: 0; padding: 0; list-style: none; }
+  .project-group li { border-block-end: 1px solid var(--terminal-line); }
+  .project-row { position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1.6fr) minmax(0, .75fr) 8rem 1.25rem; gap: 1.5rem; align-items: start; padding: 1.5rem .75rem; color: inherit; text-decoration: none; transition: background-color 160ms ease; }
+  .project-row__id { padding-block-start: .7rem; color: var(--terminal-dim); font: .75rem/1 var(--font-mono); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+  .project-row__main { min-width: 0; }
+  .project-row__name { display: flex; align-items: center; gap: .85rem; min-width: 0; }
+  .project-row__avatar { flex: none; inline-size: 2.5rem; block-size: 2.5rem; border-radius: .6rem; object-fit: contain; background: var(--terminal-panel); box-shadow: inset 0 0 0 1px var(--terminal-line); }
+  img.project-row__avatar { padding: .3rem; }
+  .project-row__avatar--mono { display: grid; place-items: center; background: oklch(.56 .11 var(--hue)); color: #fff; font: 800 .9375rem/1 var(--font-sans); letter-spacing: -.02em; box-shadow: none; }
+  .project-row__name h4 { margin: 0; color: var(--terminal-ink); font: 800 clamp(1.25rem, 1.9vw, 1.625rem)/1.15 var(--font-sans); letter-spacing: -.03em; overflow-wrap: anywhere; }
+  .project-row__access { padding: .2rem .45rem; border: 1px solid var(--terminal-line-strong); color: var(--terminal-muted); font: .6875rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+  .project-row__main > p { max-inline-size: 60ch; margin: .65rem 0 0 3.35rem; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.55; text-wrap: pretty; }
+  .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .9rem; padding-block-start: .65rem; color: var(--terminal-muted); font: .75rem/1.4 var(--font-mono); letter-spacing: .02em; }
+  .project-row__state { display: grid; gap: .4rem; justify-items: start; padding-block-start: .6rem; }
+  .project-row__years { color: var(--terminal-muted); font: .75rem/1.3 var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+  .project-row__status { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted); font: .75rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .project-row__status::before { content: ""; inline-size: .4rem; block-size: .4rem; border-radius: 50%; border: 1px solid currentColor; }
+  .status--active { color: var(--terminal-ink); }
   .status--active::before { border: 0; background: var(--terminal-signal); }.status--wip { color: var(--terminal-accent); }.status--rip { color: var(--terminal-dim); }
-  .projects__roles { display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; padding: 1rem clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
-  .role { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted, #747a75); font: .52rem/1.3 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
-  .role__mark { inline-size: .45rem; block-size: .45rem; border: 1px solid currentColor; }
+  .role { display: inline-flex; align-items: center; gap: .45rem; color: var(--terminal-muted); font: .75rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .role__mark { inline-size: .5rem; block-size: .5rem; border: 1px solid currentColor; }
   .role--founder { color: var(--terminal-accent); }
   .role--founder .role__mark { background: currentColor; }
   .role--partner .role__mark { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
-  .role__count { color: var(--terminal-faint); }
-  .project-row--founder { box-shadow: inset 2px 0 0 var(--terminal-accent); }
-  .project-row__arrow { color: var(--terminal-accent); font: .8rem/1 var(--font-mono, monospace); opacity: 0; }
-  .project-group a:hover, .project-group a:focus-visible { background: var(--terminal-hover); }
+  .role__count { color: var(--terminal-dim); }
+  .project-row__arrow { padding-block-start: .55rem; color: var(--terminal-accent); font: 1.125rem/1 var(--font-sans); opacity: .35; transition: opacity 160ms ease; }
+  .project-group a:hover, .project-group a:focus-visible { background: var(--terminal-panel); }
   .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }
-  .project-group a:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -3px; }
-  /* Hover: an accent rail locks on at the inline start, the name steps forward,
-     the arrow arrives along its own diagonal. Pointer devices only. */
-  .project-row { position: relative; transition: background-color 160ms ease; }
-  .project-row::before { content: ""; position: absolute; inset-block: -1px; inset-inline-start: 0; inline-size: 2px; background: var(--terminal-accent); opacity: 0; transform: scaleY(.35); transition: opacity 180ms ease, transform 240ms var(--ease-out); }
-  .project-group a:hover::before, .project-group a:focus-visible::before { opacity: 1; transform: none; }
+  .project-group a:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -2px; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .project-row__name h4 { transition: transform 220ms var(--ease-out); }
-    .project-group a:hover .project-row__name h4 { transform: translate3d(calc(var(--dir, 1) * .3rem), 0, 0); }
-  }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (min-width: 761px) {
-    .project-row__arrow { transform: translate3d(-.3rem, .3rem, 0); transition: opacity 160ms ease, transform 240ms var(--ease-out); }
-    .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { transform: none; }
+    .project-row__name h4, .project-row__arrow { transition: transform 220ms var(--ease-out), opacity 160ms ease; }
+    .project-group a:hover .project-row__name h4 { transform: translate3d(calc(var(--dir, 1) * .25rem), 0, 0); }
+    .project-group a:hover .project-row__arrow { transform: translate3d(.15rem, -.15rem, 0); }
   }
   @media (max-width: 1050px) {
-    .project-group__columns { display: none; }
-    .project-row { grid-template-columns: minmax(12rem, .8fr) 1.2fr 6.5rem 1rem; }
-    .project-row__tags { grid-column: 2; }
+    .projects__header { grid-template-columns: 1fr; align-items: start; }
+    .project-row { grid-template-columns: 2rem minmax(0, 1fr) 7.5rem 1.25rem; }
+    .project-row__tags { grid-column: 2; grid-row: 2; padding-block-start: 0; padding-inline-start: 3.35rem; }
     .project-row__state { grid-column: 3; grid-row: 1; }
+    .project-row__arrow { grid-column: 4; grid-row: 1; }
   }
   @media (max-width: 760px) {
-    .projects__header { grid-template-columns: 1fr; }
-    .project-row { grid-template-columns: 1fr auto; gap: .8rem 1rem; }
-    .project-row__name { grid-column: 1; }
-    .project-row > p { grid-column: 1 / -1; }
-    .project-row__tags { grid-column: 1; }
-    .project-row__state { grid-column: 2; grid-row: 1; justify-items: end; }
-    .project-row__arrow { grid-column: 2; grid-row: 3; align-self: end; opacity: 1; }
+    .project-row { grid-template-columns: minmax(0, 1fr) auto; gap: .75rem 1rem; padding-inline: 0; }
+    .project-row__id { display: none; }
+    .project-row__main { grid-column: 1 / -1; }
+    .project-row__main > p { margin-inline-start: 0; }
+    .project-row__tags { grid-column: 1; grid-row: 2; padding-inline-start: 0; }
+    .project-row__state { grid-column: 1; grid-row: 3; display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding-block-start: 0; }
+    .project-row__arrow { grid-column: 2; grid-row: 3; opacity: 1; }
   }
 </style>

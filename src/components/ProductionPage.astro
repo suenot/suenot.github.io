@@ -1,0 +1,220 @@
+---
+import { defaultLocale, isRtl, type Locale } from '../i18n/config';
+import { getProduction } from '../i18n/production';
+
+interface Props { locale?: Locale; }
+const { locale = defaultLocale } = Astro.props;
+const t = getProduction(locale);
+const arrow = isRtl(locale) ? '←' : '→';
+const telegram = 'https://t.me/suenot';
+const examples = 'https://production.suenot.com';
+const pad = (n: number) => String(n).padStart(2, '0');
+let step = 0;
+---
+
+<section class="prod-hero terminal-section" aria-labelledby="prod-title">
+  <div class="terminal-container">
+    <p class="terminal-kicker prod-hero__kicker">{t.hero.kicker}</p>
+    <h1 id="prod-title" class="prod-hero__title display-type">
+      <span>{t.hero.title[0]}</span>
+      <span class="prod-hero__indent">{t.hero.title[1]}<span class="prod-hero__dot" aria-hidden="true"></span></span>
+    </h1>
+    <div class="prod-hero__below">
+      <p class="prod-hero__intro">{t.hero.intro}</p>
+      <div class="prod-hero__actions">
+        <a class="terminal-button terminal-button--primary" href={telegram} target="_blank" rel="noopener noreferrer">{t.hero.cta}<span aria-hidden="true">{arrow}</span></a>
+        <a class="terminal-link" href={examples} target="_blank" rel="noopener noreferrer">{t.hero.secondary} ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="prod-section terminal-section" aria-labelledby="services-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">01 · {t.services.kicker}</p>
+        <h2 id="services-heading" class="terminal-heading">{t.services.heading}</h2>
+      </div>
+      <p>{t.services.intro}</p>
+    </header>
+    <ol class="services" role="list">
+      {t.services.items.map((s, i) => (
+        <li class="service" data-reveal>
+          <div class="service__top">
+            <span class="service__num">{pad(i + 1)}</span>
+            <span class="service__price">{s.price}</span>
+          </div>
+          <h3>{s.name}</h3>
+          <p class="service__desc">{s.desc}</p>
+          <div class="service__term">
+            <span class="service__label">{t.services.termLabel}</span>
+            <span class="service__term-value">{s.term}</span>
+            <span class="service__cells" aria-hidden="true">
+              {Array.from({ length: 7 }, (_, c) => <i class={c < s.days ? 'is-on' : ''}></i>)}
+            </span>
+          </div>
+          <p class="service__label">{t.services.includedLabel}</p>
+          <ul class="service__included" role="list">
+            {s.included.map((item) => <li>{item}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section id="pipeline" class="prod-section terminal-section" aria-labelledby="pipeline-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">02 · {t.pipeline.kicker}</p>
+        <h2 id="pipeline-heading" class="terminal-heading">{t.pipeline.heading}</h2>
+      </div>
+      <p>{t.pipeline.intro}</p>
+    </header>
+    {t.pipeline.phases.map((phase, p) => (
+      <div class="phase">
+        <h3 class="phase__name"><span>{pad(p + 1)}</span>{phase.name}</h3>
+        <ol class="phase__steps" role="list">
+          {phase.steps.map((s) => {
+            step += 1;
+            return (
+              <li class="step" data-reveal>
+                <span class="step__num">{pad(step)}</span>
+                <div class="step__body">
+                  <h4>{s.title}</h4>
+                  <p>{s.text}</p>
+                  {s.chips && (
+                    <ul class="step__chips" role="list">
+                      {s.chips.map((c) => <li><strong>{c.label}</strong><span>{c.text}</span></li>)}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section id="pricing" class="prod-section terminal-section" aria-labelledby="pricing-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">03 · {t.pricing.kicker}</p>
+        <h2 id="pricing-heading" class="terminal-heading">{t.pricing.heading}</h2>
+      </div>
+      <p>{t.pricing.intro}</p>
+    </header>
+    <ol class="plans" role="list">
+      {t.pricing.plans.map((plan, i) => (
+        <li class:list={['plan', { 'plan--featured': i === 0 }]} data-reveal>
+          <p class="service__label">{plan.name}</p>
+          <p class="plan__price">{plan.price}</p>
+          <p class="plan__unit">{plan.unit}</p>
+          <p class="plan__text">{plan.text}</p>
+          <ul class="service__included" role="list">
+            {plan.items.map((item) => <li>{item}</li>)}
+          </ul>
+          <a class="terminal-link plan__cta" href={telegram} target="_blank" rel="noopener noreferrer">{t.pricing.cta} {arrow}</a>
+        </li>
+      ))}
+    </ol>
+    <p class="plans__note">{t.pricing.note}</p>
+  </div>
+</section>
+
+<section class="prod-cta terminal-section" aria-labelledby="prod-cta-heading">
+  <div class="terminal-container prod-cta__inner">
+    <h2 id="prod-cta-heading" class="terminal-heading">{t.contact.heading}</h2>
+    <div>
+      <p>{t.contact.text}</p>
+      <div class="prod-hero__actions">
+        <a class="terminal-button terminal-button--primary" href={telegram} target="_blank" rel="noopener noreferrer">Telegram @suenot<span aria-hidden="true">{arrow}</span></a>
+        <a class="terminal-link" href="mailto:suenot@gmail.com">suenot@gmail.com</a>
+      </div>
+      <a class="terminal-link prod-cta__examples" href={examples} target="_blank" rel="noopener noreferrer">{t.contact.examples} ↗</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prod-hero { padding-block: calc(var(--terminal-header) + clamp(2.5rem, 7vw, 6rem)) clamp(3rem, 6vw, 5rem); }
+  .prod-hero__title { display: grid; margin: clamp(1.25rem, 2.5vw, 2rem) 0 0; color: var(--terminal-ink); font-size: clamp(3rem, 8.6vw, 8.5rem); line-height: .92; }
+  .prod-hero__indent { padding-inline-start: .9em; }
+  .prod-hero__dot { display: inline-block; inline-size: .15em; block-size: .15em; margin-inline-start: .04em; background: var(--terminal-accent); }
+  .prod-hero__below { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: end; margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .prod-hero__intro { max-inline-size: 36ch; margin: 0; color: var(--terminal-ink-2); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.4; text-wrap: pretty; }
+  .prod-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 1.75rem; }
+
+  .prod-section { padding-block: clamp(4rem, 8vw, 7rem); border-block-start: 1px solid var(--terminal-line); }
+  .prod-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-block-end: clamp(2.5rem, 5vw, 4rem); }
+  .prod-head .terminal-heading { margin-block-start: 1rem; max-inline-size: 14ch; }
+  .prod-head > p { max-inline-size: 48ch; margin: 0; color: var(--terminal-muted); font-size: var(--text-base); line-height: 1.6; }
+
+  .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--terminal-line); border: 1px solid var(--terminal-line); }
+  .service { display: flex; flex-direction: column; gap: .9rem; padding: clamp(1.5rem, 2.4vw, 2rem); background: var(--terminal-bg); transition: background-color 160ms ease; }
+  .service:hover { background: var(--terminal-panel); }
+  .service__top { display: flex; justify-content: space-between; gap: 1rem; font: .75rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .service__num { color: var(--terminal-accent); }
+  .service__price { color: var(--terminal-ink); }
+  .service h3 { margin: .5rem 0 0; color: var(--terminal-ink); font-size: clamp(1.5rem, 2.2vw, 1.875rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .service__desc { margin: 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.5; }
+  .service__term { display: grid; grid-template-columns: auto 1fr; gap: .5rem 1rem; align-items: center; padding-block: .9rem; border-block: 1px solid var(--terminal-line); }
+  .service__label { margin: 0; color: var(--terminal-muted); font: .75rem/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .service__term-value { justify-self: end; color: var(--terminal-ink); font-size: .9375rem; font-weight: 650; }
+  .service__cells { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .service__cells i { block-size: .5rem; background: var(--terminal-line); }
+  .service__cells i.is-on { background: var(--terminal-accent); }
+  .service__included { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+  .service__included li { position: relative; padding-inline-start: 1.1rem; color: var(--terminal-ink-2); font-size: .9375rem; line-height: 1.45; }
+  .service__included li::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: .55em; inline-size: .4rem; block-size: .4rem; background: var(--terminal-ink); }
+
+  .phase { display: grid; grid-template-columns: minmax(12rem, .32fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); padding-block: clamp(1.5rem, 3vw, 2.5rem); border-block-start: 1px solid var(--terminal-line-strong); }
+  .phase__name { position: sticky; inset-block-start: calc(var(--terminal-header) + 1.5rem); align-self: start; display: grid; gap: .6rem; margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .phase__name span { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
+  .phase__steps { margin: 0; padding: 0; list-style: none; }
+  .step { display: grid; grid-template-columns: clamp(3.5rem, 6vw, 5.5rem) minmax(0, 1fr); gap: 1.25rem; padding-block: 1.5rem; border-block-end: 1px solid var(--terminal-line); }
+  .step:first-child { padding-block-start: 0; }
+  .step:last-child { border-block-end: 0; }
+  .step__num { color: var(--terminal-dim); font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .step h4 { margin: 0; color: var(--terminal-ink); font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 750; letter-spacing: -.025em; line-height: 1.2; }
+  .step p { max-inline-size: 62ch; margin: .5rem 0 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.6; }
+  .step__chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .step__chips li { display: grid; gap: .35rem; padding: .9rem 1rem; border: 1px solid var(--terminal-line-strong); background: var(--terminal-panel); }
+  .step__chips strong { color: var(--terminal-accent); font: 500 .75rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .step__chips span { color: var(--terminal-ink-2); font-size: .9375rem; line-height: 1.45; }
+
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .plan { display: flex; flex-direction: column; gap: .75rem; padding: clamp(1.5rem, 2.4vw, 2rem); border: 1px solid var(--terminal-line-strong); background: var(--terminal-panel); }
+  .plan--featured { border-color: var(--terminal-ink); }
+  .plan__price { margin: .5rem 0 0; color: var(--terminal-ink); font-size: clamp(2.75rem, 4.4vw, 3.75rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+  .plan__unit { margin: 0; color: var(--terminal-muted); font-size: .9375rem; }
+  .plan__text { margin: .25rem 0 .5rem; color: var(--terminal-ink); font-size: var(--text-base); font-weight: 600; line-height: 1.45; }
+  .plan__cta { margin-block-start: auto; padding-block-start: 1rem; align-self: flex-start; }
+  .plans__note { max-inline-size: 70ch; margin: 1.5rem 0 0; color: var(--terminal-muted); font-size: .9375rem; }
+
+  .prod-cta { padding-block: clamp(4rem, 8vw, 7rem); border-block-start: 1px solid var(--terminal-line); }
+  .prod-cta__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; }
+  .prod-cta__inner p { max-inline-size: 40ch; margin: 0 0 1.75rem; color: var(--terminal-ink-2); font-size: clamp(1.125rem, 1.5vw, 1.3125rem); line-height: 1.5; }
+  .prod-cta__examples { display: inline-block; margin-block-start: 1.5rem; }
+
+  @media (max-width: 64rem) {
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .plans { grid-template-columns: 1fr; }
+    .step__chips { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 52rem) {
+    .prod-hero__below, .prod-head, .prod-cta__inner { grid-template-columns: 1fr; align-items: start; }
+    .phase { grid-template-columns: 1fr; }
+    .phase__name { position: static; }
+  }
+  @media (max-width: 38rem) {
+    .services { grid-template-columns: 1fr; }
+    .prod-hero__indent { padding-inline-start: 0; }
+    .step { grid-template-columns: 2.75rem minmax(0, 1fr); gap: .9rem; }
+  }
+</style>

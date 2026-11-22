@@ -2,97 +2,113 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light is the default theme (also the no-JS look); dark is opt-in via
+   data-theme="dark" on <html>. Text colors hold at least 4.5:1 on every surface. */
 :root {
-  --terminal-bg: #090b0a;
-  --terminal-fg: #e7e9e3;
-  --terminal-panel: #0d100e;
-  --terminal-panel-strong: #121512;
-  --terminal-ink: #e7e9e3;
-  --terminal-muted: #858b84;
-  --terminal-dim: #4d534e;
-  --terminal-line: #292e2a;
-  --terminal-line-strong: #424943;
-  --terminal-accent: #ff3b30;
-  --terminal-accent-hover: #ff655d;
-  --terminal-surface: #0b0d0c;
-  --terminal-surface-2: #111411;
-  --terminal-hover: #151816;
-  --terminal-code-bg: #080a09;
-  --terminal-code-ink: #ff8b84;
-  --terminal-footer: #070908;
-  --terminal-faint: #5d625e;
-  --terminal-signal: #4af626;
+  --terminal-bg: #ecedef;
+  --terminal-fg: #111315;
+  --terminal-panel: #f7f7f8;
+  --terminal-panel-strong: #e2e4e7;
+  --terminal-ink: #111315;
+  --terminal-ink-2: #41464c;
+  --terminal-muted: #585e65;
+  --terminal-dim: #5f656c;
+  --terminal-line: rgba(10, 12, 14, 0.12);
+  --terminal-line-strong: rgba(10, 12, 14, 0.26);
+  --terminal-accent: #c8241a;
+  --terminal-accent-hover: #a11b12;
+  --terminal-accent-ink: #ffffff;
+  --terminal-surface: #f7f7f8;
+  --terminal-surface-2: #e2e4e7;
+  --terminal-hover: #e4e6e9;
+  --terminal-code-bg: #f7f7f8;
+  --terminal-code-ink: #a3241b;
+  --terminal-footer: #e2e4e7;
+  --terminal-faint: #5f656c;
+  --terminal-signal: #0b7a47;
+  --terminal-inverse-bg: #111315;
+  --terminal-inverse-ink: #ecedef;
   /* Channels for translucent tints: rgb(var(--ink-rgb) / 0.14). */
-  --ink-rgb: 231 233 227;
-  --accent-rgb: 255 59 48;
-  --bg-rgb: 9 11 10;
-  --surface-rgb: 11 13 12;
-  --glint-rgb: 255 255 255;
+  --ink-rgb: 17 19 21;
+  --accent-rgb: 200 36 26;
+  --bg-rgb: 236 237 239;
+  --surface-rgb: 247 247 248;
+  --glint-rgb: 17 19 21;
   /* Lowest alpha translucent ink / accent text may use; lifted in the light theme for contrast. */
-  --ink-floor: 0;
-  --accent-floor: 0;
-  --scanline: rgba(0, 0, 0, 0.12);
-  --backdrop: rgba(3, 4, 3, 0.78);
+  --ink-floor: 0.64;
+  --accent-floor: 1;
+  --scanline: transparent;
+  --backdrop: rgba(17, 19, 21, 0.32);
   /* Contribution calendar, empty to busiest. */
-  --cal-0: #222622;
-  --cal-1: #235e2c;
-  --cal-2: #2f8a3b;
-  --cal-3: #43b34f;
-  --cal-4: #70df61;
+  --cal-0: #d9dbde;
+  --cal-1: #a9cdb5;
+  --cal-2: #6fae85;
+  --cal-3: #2f8a55;
+  --cal-4: #0b7a47;
   /* Particle cube (read by Hero.astro on load and on theme change). */
-  --cube-particle: #e7e9e3;
-  --cube-accent: #ff493f;
-  --cube-crosshair: rgba(145, 151, 146, 0.1);
-  --cube-glow: rgba(255, 59, 48, 0.65);
-  --terminal-max: 100rem;
-  --terminal-header: 4.5rem;
-  --font-display: "DIN Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Noto Sans Condensed", "Liberation Sans Narrow", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", "Roboto Mono", "Noto Sans Mono", "Liberation Mono", monospace;
-  color-scheme: dark;
+  --cube-particle: #1b1e1b;
+  --cube-accent: #c8241a;
+  --cube-crosshair: rgba(17, 19, 21, 0.14);
+  --cube-glow: rgba(200, 36, 26, 0.3);
+  --terminal-max: 80rem;
+  --terminal-header: 4rem;
+  --font-sans: "Schibsted Grotesk Variable", "Inter Tight Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* Type scale. Body copy never goes below --text-base; mono labels never below --text-label. */
+  --text-label: 0.75rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.125rem, 1.4vw, 1.3125rem);
+  --text-h3: clamp(1.5rem, 2.2vw, 2rem);
+  --text-h2: clamp(2.5rem, 5.2vw, 4.5rem);
+  --text-display: clamp(3.5rem, 11vw, 10rem);
+  color-scheme: light;
   font-synthesis: none;
 }
 
-/* Light theme: paper and ink, same HUD. Set on <html> by the head script in Layout.astro.
-   Text colors hold at least 4.5:1 on every surface they sit on. */
-:root[data-theme='light'] {
-  --terminal-bg: #f3f1ea;
-  --terminal-fg: #121412;
-  --terminal-panel: #eceae2;
-  --terminal-panel-strong: #e4e2d9;
-  --terminal-ink: #121412;
-  --terminal-muted: #545953;
-  --terminal-dim: #60655f;
-  --terminal-line: #d6d3c9;
-  --terminal-line-strong: #aeaba0;
-  --terminal-accent: #bd281e;
-  --terminal-accent-hover: #941c14;
-  --terminal-surface: #eeece4;
-  --terminal-surface-2: #e9e7df;
-  --terminal-hover: #e6e4db;
-  --terminal-code-bg: #f9f8f4;
-  --terminal-code-ink: #a3241b;
-  --terminal-footer: #ebe9e1;
-  --terminal-faint: #60655f;
-  --terminal-signal: #1a7f2b;
-  --ink-rgb: 18 20 18;
-  --accent-rgb: 189 40 30;
-  --bg-rgb: 243 241 234;
-  --surface-rgb: 238 236 228;
-  --glint-rgb: 18 20 18;
-  --ink-floor: 0.64;
-  --accent-floor: 1;
-  --scanline: rgba(18, 20, 18, 0.05);
-  --backdrop: rgba(18, 20, 18, 0.32);
-  --cal-0: #e0ded4;
-  --cal-1: #b3dcab;
-  --cal-2: #6abd6e;
-  --cal-3: #2f9a45;
-  --cal-4: #17652b;
-  --cube-particle: #1b1e1b;
-  --cube-accent: #c8271c;
-  --cube-crosshair: rgba(18, 20, 18, 0.14);
-  --cube-glow: rgba(189, 40, 30, 0.3);
-  color-scheme: light;
+:root[data-theme='dark'] {
+  --terminal-bg: #0e0f10;
+  --terminal-fg: #ecedee;
+  --terminal-panel: #17191b;
+  --terminal-panel-strong: #202326;
+  --terminal-ink: #ecedee;
+  --terminal-ink-2: #b0b4b9;
+  --terminal-muted: #9a9fa5;
+  --terminal-dim: #8d9298;
+  --terminal-line: rgba(255, 255, 255, 0.1);
+  --terminal-line-strong: rgba(255, 255, 255, 0.22);
+  --terminal-accent: #ff5146;
+  --terminal-accent-hover: #ff7a71;
+  --terminal-accent-ink: #0b0c0d;
+  --terminal-surface: #17191b;
+  --terminal-surface-2: #202326;
+  --terminal-hover: #1b1d20;
+  --terminal-code-bg: #121416;
+  --terminal-code-ink: #ff8b84;
+  --terminal-footer: #17191b;
+  --terminal-faint: #8d9298;
+  --terminal-signal: #3bf686;
+  --terminal-inverse-bg: #ecedee;
+  --terminal-inverse-ink: #0e0f10;
+  --ink-rgb: 236 237 238;
+  --accent-rgb: 255 81 70;
+  --bg-rgb: 14 15 16;
+  --surface-rgb: 23 25 27;
+  --glint-rgb: 255 255 255;
+  --ink-floor: 0;
+  --accent-floor: 0;
+  --backdrop: rgba(3, 4, 3, 0.7);
+  --cal-0: #1d2023;
+  --cal-1: #1d4a30;
+  --cal-2: #237a47;
+  --cal-3: #2fb866;
+  --cal-4: #3bf686;
+  --cube-particle: #ecedee;
+  --cube-accent: #ff5146;
+  --cube-crosshair: rgba(145, 151, 146, 0.1);
+  --cube-glow: rgba(255, 81, 70, 0.6);
+  color-scheme: dark;
 }
 
 /* Theme switch cross-fade: colors only. theme.ts sets the attribute for the
@@ -118,53 +134,44 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--terminal-header) + 1.25rem);
   background: var(--terminal-bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   min-height: 100dvh;
   margin: 0;
   overflow-x: clip;
-  background:
-    linear-gradient(rgb(var(--glint-rgb) / 0.012) 1px, transparent 1px),
-    var(--terminal-bg);
-  background-size: 100% 4px;
+  background: var(--terminal-bg);
   color: var(--terminal-ink);
-  font-family: var(--font-mono);
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums slashed-zero;
-  line-height: 1.55;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-feature-settings: "ss01", "cv11";
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-body::before {
-  position: fixed;
-  z-index: 80;
-  inset: 0;
-  content: "";
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0,
-    transparent 2px,
-    var(--scanline) 2px,
-    var(--scanline) 4px
-  );
-  opacity: 0.42;
-}
-
-/* Code blocks: Shiki renders github-dark inline with github-light as --shiki-light. */
-:root[data-theme='light'] .astro-code {
+/* Code blocks: Shiki renders github-light inline with github-dark as --shiki-dark. */
+:root[data-theme='dark'] .astro-code {
   background-color: var(--terminal-code-bg) !important;
 }
 
-:root[data-theme='light'] .astro-code,
-:root[data-theme='light'] .astro-code span {
-  color: var(--shiki-light) !important;
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
 }
 
 ::selection {
   background: var(--terminal-accent);
-  color: var(--terminal-bg);
+  color: var(--terminal-accent-ink);
 }
 
 a,
@@ -198,9 +205,7 @@ input {
   border: 1px solid var(--terminal-accent);
   background: var(--terminal-bg);
   color: var(--terminal-ink);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
   transition: transform 160ms ease;
 }
 
@@ -208,77 +213,68 @@ input {
   transform: translateY(0);
 }
 
+/* Display type: heavy grotesk, tight tracking, sentence case. */
 .display-type {
   font-family: var(--font-display);
-  font-stretch: condensed;
-  font-weight: 900;
-  letter-spacing: -0.055em;
-  line-height: 0.8;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
   text-rendering: geometricPrecision;
-  text-transform: uppercase;
 }
 
 .terminal-container {
   width: min(100%, var(--terminal-max));
   margin-inline: auto;
-  padding-inline: clamp(1rem, 3vw, 3rem);
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
 .terminal-section {
   position: relative;
   scroll-margin-top: calc(var(--terminal-header) + 1.25rem);
-  border-block-start: 1px solid var(--terminal-line);
 }
 
-.terminal-section::before {
-  position: absolute;
-  inset-block-start: -0.35rem;
-  inset-inline-start: clamp(1rem, 3vw, 3rem);
-  width: 0.65rem;
-  height: 0.65rem;
-  content: "";
-  border: 1px solid var(--terminal-accent);
-  background: var(--terminal-bg);
-}
-
+/* Section eyebrow: "01 — Projects" in small mono caps. */
 .terminal-kicker {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  color: var(--terminal-muted);
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  line-height: 1.2;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--terminal-ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
   text-transform: uppercase;
-}
-
-.terminal-kicker::before {
-  width: 1.5rem;
-  height: 1px;
-  content: "";
-  background: var(--terminal-accent);
 }
 
 .terminal-heading {
   margin: 0;
   color: var(--terminal-ink);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 8rem);
-  font-stretch: condensed;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 0.84;
+  font-size: var(--text-h2);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
   text-rendering: geometricPrecision;
-  text-transform: uppercase;
   text-wrap: balance;
 }
 
 :lang(ar) .display-type,
 :lang(ar) .terminal-heading {
   font-family: "SF Arabic", "Noto Sans Arabic", Tahoma, ui-sans-serif, system-ui, sans-serif;
-  font-stretch: normal;
-  letter-spacing: -0.025em;
-  line-height: 0.92;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+:lang(zh) .display-type,
+:lang(zh) .terminal-heading,
+:lang(ja) .display-type,
+:lang(ja) .terminal-heading,
+:lang(ko) .display-type,
+:lang(ko) .terminal-heading {
+  letter-spacing: -0.02em;
+  line-height: 1.08;
 }
 
 .terminal-grid {
@@ -296,57 +292,57 @@ input {
 
 .terminal-label {
   color: var(--terminal-muted);
-  font-size: 0.6875rem;
-  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .terminal-value,
 data,
 output {
-  font-variant-numeric: tabular-nums slashed-zero;
+  font-variant-numeric: tabular-nums;
 }
 
 .terminal-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  border-block-end: 1px solid var(--terminal-line-strong);
+  gap: 0.5rem;
+  padding-block-end: 0.15rem;
+  border-block-end: 1.5px solid var(--terminal-accent);
   color: var(--terminal-ink);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
   text-decoration: none;
-  text-transform: uppercase;
-  transition: border-color 160ms ease, color 160ms ease;
+  transition: color 160ms ease, border-color 160ms ease;
 }
 
 .terminal-link:hover {
-  border-color: var(--terminal-accent);
   color: var(--terminal-accent);
 }
 
 .terminal-button {
   display: inline-flex;
-  min-height: 3.25rem;
+  min-height: 3rem;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.8rem 1.1rem;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
   border: 1px solid var(--terminal-line-strong);
   border-radius: 0;
   background: transparent;
   color: var(--terminal-ink);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
   text-decoration: none;
-  text-transform: uppercase;
   transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 120ms ease;
 }
 
 .terminal-button:hover {
-  border-color: var(--terminal-accent);
-  background: var(--terminal-accent);
-  color: var(--terminal-bg);
+  border-color: var(--terminal-ink);
 }
 
 .terminal-button:active {
@@ -356,12 +352,12 @@ output {
 .terminal-button--primary {
   border-color: var(--terminal-accent);
   background: var(--terminal-accent);
-  color: var(--terminal-bg);
+  color: var(--terminal-accent-ink);
 }
 
 .terminal-button--primary:hover {
-  background: var(--terminal-ink);
-  border-color: var(--terminal-ink);
+  border-color: var(--terminal-accent-hover);
+  background: var(--terminal-accent-hover);
 }
 
 .terminal-rule {
@@ -378,21 +374,21 @@ output {
   color: var(--terminal-accent);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (max-width: 48rem) {
   :root {
-    --terminal-header: 3.75rem;
-  }
-
-  body {
-    font-size: 0.875rem;
-  }
-
-  .terminal-container {
-    padding-inline: 1rem;
-  }
-
-  .terminal-section::before {
-    inset-inline-start: 1rem;
+    --terminal-header: 3.5rem;
   }
 }
 
