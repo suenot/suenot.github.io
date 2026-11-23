@@ -1,0 +1,536 @@
+---
+/**
+ * Clawd, the pixel critter. One instance per page, in a layer over the whole document.
+ * On pages with tour, it walks the visitor through the page: it waits on the heading of the
+ * section being read and jumps to the next one as it scrolls into view. Everywhere it ends on
+ * the footer wordmark, where it patrols the letters.
+ */
+interface Props {
+  /** Visit every h1/h2 in main before the footer. */
+  tour?: boolean;
+}
+
+const { tour = false } = Astro.props;
+
+/* 13 x 9 pixel frames: # body, e eye. */
+const frames = {
+  idle: [
+    '..#########..',
+    '..#########..',
+    '..##e###e##..',
+    '####e###e####',
+    '#############',
+    '..#########..',
+    '..#########..',
+    '..#.#...#.#..',
+    '..#.#...#.#..',
+  ],
+  jump: [
+    '..#########..',
+    '..#########..',
+    '####e###e####',
+    '####e###e####',
+    '..#########..',
+    '..#########..',
+    '..#########..',
+    '.#..#...#..#.',
+    '#...........#',
+  ],
+};
+
+/* Horizontal runs, a hair taller than a pixel so scaled frames show no seams between rows. */
+const runs = (rows: string[], test: (ch: string) => boolean) =>
+  rows
+    .flatMap((row, y) => [...row.matchAll(/./g)]
+      .reduce<{ x: number; n: number }[]>((acc, m) => {
+        const x = m.index ?? 0;
+        if (!test(m[0])) return acc;
+        const last = acc.at(-1);
+        if (last && last.x + last.n === x) last.n += 1;
+        else acc.push({ x, n: 1 });
+        return acc;
+      }, [])
+      .map(({ x, n }) => `M${x} ${y}h${n}v1.04h-${n}z`))
+    .join('');
+
+const art = Object.entries(frames).map(([name, rows]) => ({
+  name,
+  body: runs(rows, (ch) => ch !== '.'),
+  eyes: runs(rows, (ch) => ch === 'e'),
+}));
+---
+
+<div class="clawd-layer" data-clawd-layer data-tour={tour ? '' : undefined} aria-hidden="true">
+  <div class="clawd" data-clawd>
+    <div class="clawd__body">
+      {art.map((frame) => (
+        <svg class={`clawd__frame clawd__frame--${frame.name}`} viewBox="0 0 13 9" shape-rendering="crispEdges">
+          <path d={frame.body} fill="var(--clawd)" />
+          <path class="clawd__eyes" d={frame.eyes} fill="var(--clawd-eye)" />
+        </svg>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .clawd-layer {
+    --clawd: #d97757;
+    --clawd-eye: #141413;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: 100%;
+    height: 0;
+    overflow-x: clip;
+    pointer-events: none;
+  }
+
+  .clawd {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 52px;
+    height: 36px;
+    transform-origin: 50% 100%;
+    cursor: pointer;
+    pointer-events: auto;
+    will-change: transform;
+  }
+
+  .clawd:not([data-ready]) { visibility: hidden; }
+
+  .clawd__body {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 100%;
+    transition: transform 120ms ease-out;
+  }
+
+  .clawd__frame { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .clawd__frame--jump { visibility: hidden; }
+  .clawd[data-air] .clawd__frame--jump { visibility: visible; }
+  .clawd[data-air] .clawd__frame--idle { visibility: hidden; }
+  .clawd[data-flip] .clawd__body { scale: -1 1; }
+  .clawd[data-blink] .clawd__eyes { fill: var(--clawd); }
+
+  .clawd-spark {
+    position: absolute;
+    background: var(--clawd);
+    pointer-events: none;
+  }
+
+  @media (max-width: 43.75rem) {
+    .clawd { width: 39px; height: 27px; }
+  }
+</style>
+
+<script>
+  type Pt = { x: number; y: number; s: number; el?: HTMLElement };
+  type Kind = 'text' | 'box' | 'mark';
+  type Stop = { el: HTMLElement; kind: Kind; major: boolean; top: number; bottom: number; pts: Pt[] };
+  type Glyph = { l: number; r: number; top: number; el?: HTMLElement };
+
+  let stopClawd: (() => void) | undefined;
+
+  const initClawd = () => {
+    stopClawd?.();
+    const layer = document.querySelector<HTMLElement>('[data-clawd-layer]');
+    const bot = layer?.querySelector<HTMLElement>('[data-clawd]');
+    if (!layer || !bot) return;
+    const body = bot.querySelector<HTMLElement>('.clawd__body')!;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tour = layer.hasAttribute('data-tour') && !still;
+    const rtl = document.documentElement.dir === 'rtl';
+    const mark = document.querySelector<HTMLElement>('[data-wordmark]');
+    const ctx = document.createElement('canvas').getContext('2d');
+
+    let stops: Stop[] = [];
+    let cur: Stop | null = null;
+    let at = 0;
+    let dir = 1;
+    let pos: Pt = { x: 0, y: 0, s: 1 };
+    let busy = false;
+    let alive = true;
+    let timer = 0;
+    let raf = 0;
+    let letterTarget: number | null = null;
+    let dirty = false;
+    const visited = new WeakSet<HTMLElement>();
+
+    const W = () => bot.offsetWidth;
+    const H = () => bot.offsetHeight;
+
+    /* Ink top of every glyph on the first line of el, in document coordinates.
+       A text range box spans the font's ascent and descent; the canvas gives the same font's
+       ascent and the glyph's own ascent, so the ink top is box top + ascent - glyph ascent. */
+    const glyphs = (el: HTMLElement): Glyph[] => {
+      const out: Glyph[] = [];
+      const range = document.createRange();
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      let line = -Infinity;
+      for (let node = walker.nextNode() as Text | null; node; node = walker.nextNode() as Text | null) {
+        const parent = node.parentElement!;
+        if (parent.closest('[aria-hidden="true"]') && parent !== el && !parent.closest('[data-wordmark]')) continue;
+        const cs = getComputedStyle(parent);
+        if (ctx) ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const text = node.data;
+        for (let i = 0; i < text.length; i += 1) {
+          const ch = text[i];
+          if (!ch.trim()) continue;
+          range.setStart(node, i);
+          range.setEnd(node, i + 1);
+          const r = range.getBoundingClientRect();
+          if (!r.width) continue;
+          if (line === -Infinity) line = r.top;
+          if (r.top > line + r.height * .5) return out;
+          const m = ctx?.measureText(cs.textTransform === 'uppercase' ? ch.toUpperCase() : ch);
+          const top = m && m.fontBoundingBoxAscent
+            ? r.top + m.fontBoundingBoxAscent - m.actualBoundingBoxAscent
+            : r.top + r.height * .2;
+          out.push({ l: r.left + scrollX, r: r.right + scrollX, top: top + scrollY, el: parent });
+        }
+      }
+      return out;
+    };
+
+    /* Standing spots along a line of glyphs, about a body apart; feet rest on the tallest glyph under them. */
+    const spots = (list: Glyph[], s: number, every = 1.05) => {
+      const half = W() * s * .34;
+      const out: Pt[] = [];
+      let last = -Infinity;
+      [...list].sort((a, b) => a.l - b.l).forEach((g) => {
+        const x = (g.l + g.r) / 2;
+        if (x - last < W() * s * every) return;
+        const under = list.filter((o) => o.r > x - half && o.l < x + half);
+        out.push({ x, y: Math.min(...under.map((o) => o.top)), s });
+        last = x;
+      });
+      return rtl ? out.reverse() : out;
+    };
+
+    const measure = (st: Stop) => {
+      const r = st.el.getBoundingClientRect();
+      st.top = r.top + scrollY;
+      st.bottom = r.bottom + scrollY;
+      if (st.kind === 'box') {
+        /* Nudged toward the line end so its arms clear the glyph before the dot. */
+        st.pts = [{ x: r.left + r.width / 2 + scrollX + W() * .2 * (rtl ? -1 : 1), y: r.top + scrollY, s: 1 }];
+      } else if (st.kind === 'mark') {
+        const fs = parseFloat(getComputedStyle(st.el).fontSize);
+        const s = Math.min(2.2, Math.max(.6, (fs * (W() < 50 ? .32 : .26)) / W()));
+        st.pts = [...st.el.querySelectorAll<HTMLElement>('[data-letter]')].map((letter) => {
+          const g = glyphs(letter)[0];
+          const b = letter.getBoundingClientRect();
+          return g
+            ? { x: (g.l + g.r) / 2, y: g.top, s, el: letter }
+            : { x: b.left + b.width / 2 + scrollX, y: b.top + scrollY, s, el: letter };
+        });
+      } else {
+        st.pts = spots(glyphs(st.el), 1);
+      }
+      if (!st.pts.length) st.pts = [{ x: r.left + scrollX + W() / 2, y: r.top + scrollY, s: 1 }];
+    };
+
+    const stopOf = (el: HTMLElement, major: boolean): Stop => {
+      const box = el.querySelector<HTMLElement>('[data-clawd-stop]');
+      const st: Stop = { el: box ?? el, kind: box ? 'box' : 'text', major, top: 0, bottom: 0, pts: [] };
+      measure(st);
+      return st;
+    };
+
+    const shown = (el: HTMLElement) => el.getClientRects().length > 0 && !!el.textContent?.trim();
+
+    /* Section headings first; where two of them are more than a screen apart, smaller headings
+       in between (project names, timeline entries) fill the gap, so Clawd stays in sight. */
+    const collect = () => {
+      let list: Stop[] = [];
+      if (tour) {
+        const major = [...document.querySelectorAll<HTMLElement>('main :is(h1, h2)')].filter(shown).map((h) => stopOf(h, true));
+        const minor = [...document.querySelectorAll<HTMLElement>('main h3')].filter(shown).map((h) => stopOf(h, false));
+        const end = mark ? mark.getBoundingClientRect().top + scrollY : document.documentElement.scrollHeight;
+        const gap = innerHeight * .75;
+        list = [...major];
+        major.forEach((st, i) => {
+          const next = i + 1 < major.length ? major[i + 1].top : end;
+          let last = st.top;
+          minor
+            .filter((m) => m.top > st.top && m.top < next - innerHeight * .4)
+            .sort((a, b) => a.top - b.top)
+            .forEach((m) => { if (m.top - last >= gap) { list.push(m); last = m.top; } });
+        });
+      }
+      if (mark) {
+        const st: Stop = { el: mark, kind: 'mark', major: true, top: 0, bottom: 0, pts: [] };
+        measure(st);
+        list.push(st);
+      }
+      list.sort((a, b) => a.top - b.top);
+      stops = list;
+    };
+
+    /* The stop for the current scroll: the last one that has risen above 70% of the viewport;
+       at the bottom of the page, the footer. */
+    const pick = (): Stop | null => {
+      if (!stops.length) return null;
+      const doc = document.documentElement;
+      const last = stops[stops.length - 1];
+      if (scrollY + innerHeight >= doc.scrollHeight - 4) return last;
+      if (last.kind === 'mark' && last.bottom <= scrollY + innerHeight) return last;
+      if (scrollY < innerHeight * .15) return stops[0];
+      const line = scrollY + innerHeight * .7;
+      let best = stops[0];
+      for (const st of stops) if (st.top <= line) best = st;
+      return best;
+    };
+
+    const place = (p: Pt) => {
+      pos = p;
+      bot.style.transform = `translate3d(${p.x - W() / 2}px, ${p.y - H()}px, 0) scale(${p.s})`;
+    };
+
+    const squash = (k: number) => { body.style.transform = `scale(${1 + k * .18}, ${1 - k * .22})`; };
+
+    const blink = () => {
+      bot.setAttribute('data-blink', '');
+      window.setTimeout(() => bot.removeAttribute('data-blink'), 140);
+    };
+
+    const linear = (t: number) => t;
+
+    const flight = (a: Pt, b: Pt, peak: number, dur: number, ease = linear) => new Promise<void>((done) => {
+      if (Math.abs(b.x - a.x) > 1) bot.toggleAttribute('data-flip', b.x < a.x);
+      const t0 = performance.now();
+      squash(1);
+      const tick = (now: number) => {
+        if (!alive) return done();
+        const t = Math.min((now - t0) / dur, 1);
+        if (t > .08) { bot.setAttribute('data-air', ''); squash(t < .2 ? -.6 : 0); }
+        place({
+          x: a.x + (b.x - a.x) * t,
+          y: a.y + (b.y - a.y) * ease(t) - peak * 4 * t * (1 - t),
+          s: a.s + (b.s - a.s) * t,
+        });
+        if (t < 1) { raf = requestAnimationFrame(tick); return; }
+        bot.removeAttribute('data-air');
+        squash(1);
+        window.setTimeout(() => { squash(0); done(); }, 140);
+      };
+      raf = requestAnimationFrame(tick);
+    });
+
+    /* Pixel chips fly off where it lands: the critter is fixing the page. */
+    const sparks = (p: Pt) => {
+      const u = (W() / 13) * p.s;
+      for (let k = 0; k < 5; k += 1) {
+        const chip = document.createElement('i');
+        chip.className = 'clawd-spark';
+        chip.style.cssText = `left:${p.x - u / 2}px;top:${p.y - u}px;width:${u}px;height:${u}px`;
+        layer.append(chip);
+        const angle = Math.PI * (1 + (k + .5) / 5);
+        const reach = u * (3.5 + Math.random() * 3);
+        chip.animate(
+          [
+            { transform: 'translate(0, 0)', opacity: 1 },
+            { transform: `translate(${Math.cos(angle) * reach}px, ${Math.sin(angle) * reach}px)`, opacity: 0 },
+          ],
+          { duration: 380 + k * 50, easing: 'cubic-bezier(.2,.7,.3,1)' },
+        ).finished.finally(() => chip.remove());
+      }
+    };
+
+    const stomp = (st: Stop, p: Pt, chips = false) => {
+      const target = st.kind === 'mark' ? p.el : st.el;
+      if (st.kind === 'mark' && target) {
+        target.classList.remove('is-hit');
+        void target.offsetWidth;
+        target.classList.add('is-hit');
+      } else {
+        target?.animate([{ translate: '0 0' }, { translate: '0 .035em' }, { translate: '0 0' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      }
+      if (chips) sparks(p);
+    };
+
+    const onScreen = (p: Pt) => p.y > scrollY - H() && p.y - H() * p.s < scrollY + innerHeight;
+
+    const nearest = (st: Stop) => {
+      let best = 0;
+      st.pts.forEach((p, i) => { if (Math.abs(p.x - pos.x) < Math.abs(st.pts[best].x - pos.x)) best = i; });
+      return best;
+    };
+
+    /* Travel to another stop. Off-screen ends are pulled to the viewport edge,
+       so the jump is short and seen: it drops in from above or leaps out below. */
+    const go = async (st: Stop) => {
+      measure(st);
+      const first = !cur;
+      const idx = first ? 0 : nearest(st);
+      const b = st.pts[idx];
+      const top = scrollY;
+      const bottom = scrollY + innerHeight;
+      const side = (p: Pt) => (p.y < top ? -1 : p.y - H() * p.s > bottom ? 1 : 0);
+      let a = { ...pos };
+      if (first) {
+        if (!tour || side(b)) { place(b); bot.setAttribute('data-ready', ''); cur = st; at = idx; return; }
+        a = { ...b, y: top - 8 };
+        place(a);
+        bot.setAttribute('data-ready', '');
+      }
+      const sa = side(a);
+      const sb = side(b);
+      if (sa && sb) {
+        place(b);
+      } else {
+        const edge = (p: Pt, s: number, toward: Pt) => ({ ...p, x: p.x + (toward.x - p.x) * .5, y: s < 0 ? top - 8 : bottom + H() * p.s + 8 });
+        const a2 = sa ? edge(a, sa, b) : a;
+        const b2 = sb ? edge(b, sb, a) : b;
+        const dy = b2.y - a2.y;
+        const dist = Math.hypot(b2.x - a2.x, dy);
+        const long = Math.abs(dy) > innerHeight * .2;
+        const ease = !long ? linear : dy > 0 ? (t: number) => t * t : (t: number) => 1 - (1 - t) ** 2;
+        const peak = long ? H() * 1.4 : Math.min(H() * 3, Math.max(H() * .8, dist * .35));
+        await flight(a2, b2, peak, Math.min(950, 380 + dist * .45), ease);
+        if (sb) place(b);
+      }
+      cur = st;
+      at = idx;
+      if (!alive || sb) return;
+      const fresh = !visited.has(st.el);
+      visited.add(st.el);
+      stomp(st, b, true);
+      if (fresh && st.major && st.kind !== 'mark') {
+        /* Two quick taps on a heading it has not visited yet. */
+        for (let k = 0; k < 2 && alive; k += 1) {
+          await flight(b, b, H() * .28, 190);
+          stomp(st, b, true);
+        }
+      }
+    };
+
+    const patrol = async (st: Stop) => {
+      measure(st);
+      at = Math.min(at, st.pts.length - 1);
+      let to = at;
+      if (st.kind === 'mark' && letterTarget !== null && letterTarget !== at) {
+        to = letterTarget;
+        letterTarget = null;
+      } else if (st.pts.length > 1) {
+        if (at + dir < 0 || at + dir >= st.pts.length) dir = -dir;
+        to = at + dir;
+      } else if (Math.random() < .6) {
+        return;
+      }
+      const a = st.pts[at];
+      const b = st.pts[to];
+      const dist = Math.abs(b.x - a.x);
+      await flight(a, b, to === at ? H() * a.s * .5 : Math.max(H() * a.s * .6, dist * .3), 360 + dist * .6);
+      at = to;
+      if (alive) stomp(st, b);
+    };
+
+    const loop = async () => {
+      if (!alive) return;
+      window.clearTimeout(timer);
+      if (!busy && !document.hidden) {
+        busy = true;
+        try {
+          if (dirty) { dirty = false; collect(); }
+          const want = pick();
+          if (want && want !== cur) await go(want);
+          else if (cur && onScreen(pos)) await patrol(cur);
+        } finally {
+          busy = false;
+        }
+      }
+      if (!alive) return;
+      if (Math.random() < .25) blink();
+      timer = window.setTimeout(loop, pick() !== cur ? 40 : 700 + Math.random() * 900);
+    };
+
+    const settle = () => {
+      if (busy || !cur) return;
+      measure(cur);
+      at = Math.min(at, cur.pts.length - 1);
+      place(cur.pts[at]);
+    };
+
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        if (busy) return;
+        if (dirty) { dirty = false; collect(); }
+        if (pick() !== cur) loop();
+      });
+    };
+
+    let resizeTimer = 0;
+    const ro = new ResizeObserver(() => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (busy) { dirty = true; return; }
+        collect();
+        settle();
+      }, 120);
+    });
+
+    const letters = mark ? [...mark.querySelectorAll<HTMLElement>('[data-letter]')] : [];
+    const onLetter = (e: Event) => {
+      const i = letters.indexOf(e.currentTarget as HTMLElement);
+      if (i >= 0 && cur?.kind === 'mark') { letterTarget = i; if (!busy) loop(); }
+    };
+    const onClick = async () => {
+      if (busy || !cur || still) return;
+      busy = true;
+      const p = cur.pts[at] ?? pos;
+      try {
+        await flight(p, p, H() * p.s * 2.4, 760);
+        stomp(cur, p, true);
+      } finally {
+        busy = false;
+      }
+    };
+
+    const start = () => {
+      if (!alive) return;
+      collect();
+      const first = pick();
+      if (!first) return;
+      if (still || !tour) {
+        go(first);
+      } else {
+        busy = true;
+        window.setTimeout(() => {
+          go(first).finally(() => { busy = false; });
+        }, 700);
+      }
+      ro.observe(document.body);
+      if (!still) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        letters.forEach((l) => l.addEventListener('pointerenter', onLetter));
+        bot.addEventListener('click', onClick);
+        timer = window.setTimeout(loop, 1600);
+      }
+    };
+
+    if (document.fonts?.status === 'loaded') start();
+    else document.fonts.ready.then(start);
+
+    stopClawd = () => {
+      alive = false;
+      window.clearTimeout(timer);
+      window.clearTimeout(resizeTimer);
+      cancelAnimationFrame(raf);
+      cancelAnimationFrame(frame);
+      ro.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      letters.forEach((l) => l.removeEventListener('pointerenter', onLetter));
+      bot.removeEventListener('click', onClick);
+    };
+  };
+
+  initClawd();
+  document.addEventListener('astro:page-load', initClawd);
+</script>

@@ -14,7 +14,7 @@ const { kicker, title, intro, stats = [] } = Astro.props;
     <p class="terminal-kicker">{kicker}</p>
     <h1 id="page-title" class="phero__title display-type">
       <span>{title[0]}</span>
-      <span class="phero__indent">{title[1]}<span class="phero__dot" aria-hidden="true"></span></span>
+      <span class="phero__indent">{title[1]}<span class="phero__dot" aria-hidden="true" data-clawd-stop></span></span>
     </h1>
     <div class="phero__below">
       <p class="phero__intro">{intro}</p>

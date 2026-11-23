@@ -1,15 +1,20 @@
 ---
+import { getCollection } from 'astro:content';
 import { resumeUrl } from '../lib/cv';
-import { defaultLocale, type Locale } from '../i18n/config';
+import { defaultLocale, locales, localeNames, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
+import { localeUrl } from '../i18n/utils';
+import { featured, iconOf, monogram, hueOf } from '../data/projects';
 
 interface Props {
   locale?: Locale;
   /** Contact block; the homepage hides it because its Contact section is the one contact block. */
   cta?: boolean;
+  /** Locales this page exists in, for the language column. */
+  availableLocales?: readonly Locale[];
 }
 
-const { locale = defaultLocale, cta = true } = Astro.props;
+const { locale = defaultLocale, cta = true, availableLocales = locales } = Astro.props;
 const t = useTranslations(locale);
 const year = new Date().getFullYear();
 const prefix = locale === defaultLocale ? '' : `/${locale}`;
@@ -27,11 +32,30 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { label: 'GITHUB', href: 'https://github.com/suenot' },
-  { label: 'TELEGRAM', href: 'https://t.me/suenot' },
-  { label: 'LINKEDIN', href: 'https://www.linkedin.com/in/suenot/' },
+  { label: 'GitHub', href: 'https://github.com/suenot' },
+  { label: 'Telegram', href: 'https://t.me/suenot' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/suenot/' },
+  { label: 'suenot@gmail.com', href: 'mailto:suenot@gmail.com' },
   { label: 'RSS', href: rssHref },
 ];
+
+const dateFormat = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+const posts = (await getCollection('blog', ({ data, id }) => id.startsWith(`${locale}/`) && !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3)
+  .map((post) => ({
+    title: post.data.title,
+    date: post.data.pubDate,
+    href: `${blogHref}${post.id.slice(locale.length + 1).replace(/\.mdx?$/, '')}/`,
+  }));
+
+const languages = locales
+  .filter((code) => availableLocales.includes(code))
+  .map((code) => ({ code, name: localeNames[code], href: localeUrl(Astro.url.pathname, code) }));
+
+const external = (href: string) => href.startsWith('http')
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
 ---
 
 <footer class="site-footer">
@@ -44,40 +68,76 @@ const socialLinks = [
       </div>
     )}
 
-    <div class="footer-stage" data-stage>
-      <div class="footer-wordmark display-type" aria-label="Suenot" data-wordmark>
-        {'SUENOT'.split('').map((ch) => <span class="footer-letter" aria-hidden="true">{ch}</span>)}
-        <button type="button" class="bot" data-bot aria-label="Pixel critter: click to make it jump">
-          <span class="bot__body">
-            <svg class="bot__frame bot__frame--idle" viewBox="0 0 13 9" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="8" width="1.02" height="1.02" fill="var(--clawd)"/></svg>
-            <svg class="bot__frame bot__frame--jump" viewBox="0 0 13 9" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="8" width="1.02" height="1.02" fill="var(--clawd)"/></svg>
-          </span>
-        </button>
-      </div>
-    </div>
-
     <div class="footer-index">
-      <nav aria-label={t('footer.col_sitemap')}>
-        <span class="terminal-label">Site</span>
+      <nav class="footer-col footer-col--site" aria-labelledby="footer-col-site">
+        <h2 id="footer-col-site" class="footer-col__label terminal-label">{t('footer.col_sitemap')}</h2>
         <ul role="list">
-          {navLinks.map((link, index) => (
-            <li><a href={link.href}>{String(index + 1).padStart(2, '0')} {link.label}</a></li>
-          ))}
+          {navLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
         </ul>
       </nav>
 
-      <div>
-        <span class="terminal-label">Elsewhere</span>
+      <div class="footer-col footer-col--work">
+        <h2 class="footer-col__label terminal-label">{t('footer.col_products')}</h2>
         <ul role="list">
-          {socialLinks.map((link) => (
-            <li><a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}>{link.label} ↗</a></li>
+          {featured.map((project) => {
+            const icon = iconOf(project);
+            return (
+              <li>
+                <a class="footer-product" href={project.url} {...external(project.url)}>
+                  {icon
+                    ? <img src={icon} alt="" width="20" height="20" loading="lazy" decoding="async" />
+                    : <span class="footer-product__mono" style={`--hue:${hueOf(project.name)}`} aria-hidden="true">{monogram(project.name)}</span>}
+                  <span>{project.name}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col--writing">
+        <h2 class="footer-col__label terminal-label">{t('footer.work_articles')}</h2>
+        <ul role="list">
+          {posts.map((post) => (
+            <li>
+              <a class="footer-post" href={post.href}>
+                <span class="footer-post__title">{post.title}</span>
+                <time datetime={post.date.toISOString()}>{dateFormat.format(post.date)}</time>
+              </a>
+            </li>
           ))}
         </ul>
+      </div>
+
+      <div class="footer-col footer-col--connect">
+        <h2 class="footer-col__label terminal-label">{t('footer.col_connect')}</h2>
+        <ul role="list">
+          {socialLinks.map((link) => <li><a href={link.href} {...external(link.href)}>{link.label}</a></li>)}
+        </ul>
+      </div>
+
+      {languages.length > 1 && (
+        <nav class="footer-col footer-col--lang" aria-labelledby="footer-col-lang">
+          <h2 id="footer-col-lang" class="footer-col__label terminal-label">{t('footer.col_language')}</h2>
+          <ul role="list">
+            {languages.map((lang) => (
+              <li>
+                <a href={lang.href} lang={lang.code} hreflang={lang.code} aria-current={lang.code === locale ? 'page' : undefined}>{lang.name}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+
+    <div class="footer-stage">
+      <div class="footer-wordmark display-type" aria-label="Suenot" data-wordmark>
+        {'SUENOT'.split('').map((ch) => <span class="footer-letter" data-letter aria-hidden="true">{ch}</span>)}
       </div>
     </div>
 
     <div class="footer-strip">
-      <span>© {year} EUGEN SOLOVIOV</span>
+      <span>© {year} Eugen Soloviov</span>
       <span>{t('footer.tagline')}</span>
       <button type="button" id="footer-top">{t('footer.scroll_top')} ↑</button>
     </div>
@@ -134,6 +194,109 @@ const socialLinks = [
 
   .footer-tg:hover { color: var(--terminal-accent); }
 
+  .footer-index {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1px;
+    border-block-end: 1px solid var(--terminal-line);
+    background: var(--terminal-line);
+  }
+
+  .footer-contact + .footer-index {
+    margin-block-start: clamp(3.5rem, 7vw, 6rem);
+    border-block-start: 1px solid var(--terminal-line);
+  }
+
+  .footer-col {
+    grid-column: span 2;
+    min-width: 0;
+    padding: 1.75rem clamp(1.25rem, 2.2vw, 2rem) 2.25rem;
+    background: var(--terminal-footer);
+  }
+
+  .footer-col--work,
+  .footer-col--writing { grid-column: span 3; }
+
+  .footer-col__label { margin: 0; font-weight: 500; }
+
+  .footer-col ul {
+    display: grid;
+    gap: .7rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-col a {
+    color: var(--terminal-ink-2);
+    font-size: .95rem;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: color 160ms;
+  }
+
+  .footer-col a:hover { color: var(--terminal-accent); }
+  .footer-col a:focus-visible,
+  .footer-strip button:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 3px; }
+
+  .footer-col--lang a[aria-current] {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--terminal-ink);
+  }
+
+  /* One pixel of Clawd marks the current language. */
+  .footer-col--lang a[aria-current]::before {
+    content: '';
+    inline-size: .4rem;
+    block-size: .4rem;
+    background: var(--terminal-accent);
+  }
+
+  .footer-product {
+    display: flex;
+    inline-size: fit-content;
+    align-items: center;
+    gap: .65rem;
+  }
+
+  .footer-product img,
+  .footer-product__mono {
+    flex: none;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border-radius: .3rem;
+  }
+
+  .footer-product__mono {
+    display: grid;
+    place-items: center;
+    background: hsl(var(--hue) 45% 45%);
+    color: #fff;
+    font: 700 .55rem/1 var(--font-mono);
+  }
+
+  .footer-post {
+    display: grid;
+    gap: .3rem;
+  }
+
+  .footer-post__title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-wrap: pretty;
+  }
+
+  .footer-post time {
+    color: var(--terminal-muted);
+    font: 500 .7rem/1.2 var(--font-mono);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
   .footer-stage {
     container-type: inline-size;
     padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 4vw, 3rem) 2.2cqi;
@@ -144,7 +307,6 @@ const socialLinks = [
     display: flex;
     justify-content: space-between;
     color: var(--terminal-ink);
-    margin-block-start: .3em; /* sky for the bot: its hops stay inside the footer */
     font-size: 24.6cqi;
     letter-spacing: -.04em;
     line-height: .74;
@@ -165,76 +327,6 @@ const socialLinks = [
     100% { transform: translateY(0) scaleY(1); }
   }
 
-  .bot {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    z-index: 2;
-    inline-size: .26em;
-    block-size: calc(.26em * 9 / 13);
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    will-change: transform;
-    font-size: inherit;
-  }
-
-  .bot__body {
-    position: absolute;
-    inset: 0;
-    transform-origin: 50% 100%;
-  }
-
-  .bot__frame { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
-  .bot__frame--jump { visibility: hidden; }
-  .bot[data-air] .bot__frame--jump { visibility: visible; }
-  .bot[data-air] .bot__frame--idle { visibility: hidden; }
-  .bot[data-flip] .bot__body { scale: -1 1; }
-  .bot[data-blink] .eye { fill: var(--clawd); }
-  .bot:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 4px; }
-
-  .footer-index {
-    display: grid;
-    gap: 1px;
-    border-block-start: 1px solid var(--terminal-line);
-    border-block-end: 1px solid var(--terminal-line);
-    background: var(--terminal-line);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .footer-index > * {
-    min-width: 0;
-    padding: 1.5rem clamp(1.25rem, 4vw, 3rem);
-    background: var(--terminal-footer);
-  }
-
-  .footer-index ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem 1.15rem;
-    margin: 1.25rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .footer-index a,
-  .footer-strip button {
-    border: 0;
-    background: transparent;
-    color: var(--terminal-muted);
-    font-size: .75rem;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    text-transform: uppercase; font-family: var(--font-mono);
-  }
-
-  .footer-index a:hover,
-  .footer-strip button:hover {
-    color: var(--terminal-accent);
-  }
-
   .footer-strip {
     display: flex;
     align-items: center;
@@ -247,135 +339,36 @@ const socialLinks = [
     text-transform: uppercase; font-family: var(--font-mono);
   }
 
-  @media (max-width: 56rem) {
-    .footer-index { grid-template-columns: 1fr; }
+  .footer-strip button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--terminal-muted);
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .footer-strip button:hover { color: var(--terminal-accent); }
+
+  @media (max-width: 64rem) {
+    .footer-col { grid-column: span 4; }
+    .footer-col--work,
+    .footer-col--writing { grid-column: span 6; order: -1; }
   }
 
   @media (max-width: 38rem) {
-    .bot { inline-size: .32em; block-size: calc(.32em * 9 / 13); }
+    .footer-col { grid-column: span 6; }
+    .footer-col--work,
+    .footer-col--writing,
+    .footer-col--lang { grid-column: span 12; }
+    .footer-col--lang ul { display: flex; flex-wrap: wrap; gap: .7rem 1.25rem; }
     .footer-strip { align-items: flex-start; flex-direction: column; }
   }
 </style>
 
 <script>
-  /* A small pixel bot hops across the SUENOT letters. Letters dip when it lands.
-     Hover a letter to send it there; click the bot for a big jump. */
-  let stopBot: (() => void) | undefined;
-
-  const initBot = () => {
-    stopBot?.();
-    const mark = document.querySelector<HTMLElement>('[data-wordmark]');
-    const bot = mark?.querySelector<HTMLElement>('[data-bot]');
-    if (!mark || !bot) return;
-    const body = bot.querySelector<HTMLElement>('.bot__body')!;
-    const letters = [...mark.querySelectorAll<HTMLElement>('.footer-letter')];
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    let at = 0;
-    let dir = 1;
-    let target: number | null = null;
-    let busy = false;
-    let visible = false;
-    let timer = 0;
-    let raf = 0;
-    let alive = true;
-    const footer = mark.closest<HTMLElement>('.site-footer');
-
-    /* Where the bot stands on a letter: centered, feet on the cap line. */
-    const spot = (i: number) => {
-      const l = letters[i];
-      const fs = parseFloat(getComputedStyle(mark).fontSize);
-      const x = l.offsetLeft + l.offsetWidth / 2 - bot.offsetWidth / 2 + (i === 3 ? fs * .02 : 0);
-      const y = l.offsetTop - bot.offsetHeight + fs * 0.012;
-      return { x, y, fs };
-    };
-
-    const place = (x: number, y: number) => { bot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)'; };
-
-    const hit = (i: number) => {
-      const l = letters[i];
-      l.classList.remove('is-hit');
-      void l.offsetWidth;
-      l.classList.add('is-hit');
-    };
-
-    const squash = (k: number) => { body.style.transform = 'scale(' + (1 + k * .18) + ',' + (1 - k * .22) + ')'; };
-
-    const hop = (to: number, height = 1) => new Promise<void>((done) => {
-      busy = true;
-      const a = spot(at);
-      const b = spot(to);
-      if (b.x !== a.x) { if (b.x < a.x) bot.setAttribute('data-flip', ''); else bot.removeAttribute('data-flip'); }
-      const dist = Math.abs(to - at) || 1;
-      const dur = 420 + dist * 160 * Math.min(height, 1.4);
-      /* The footer clips overflow, so cap the arc a little below its top edge. */
-      const ceiling = footer ? footer.getBoundingClientRect().top - mark.getBoundingClientRect().top + a.fs * .03 : -Infinity;
-      const peak = Math.max(0, Math.min(a.fs * (.16 + .05 * dist) * height, Math.min(a.y, b.y) - ceiling));
-      const t0 = performance.now();
-      squash(1);
-      const tick = (now: number) => {
-        if (!alive) return;
-        const t = Math.min((now - t0) / dur, 1);
-        if (t > .08) { bot.setAttribute('data-air', ''); squash(t < .2 ? -.6 : 0); }
-        const x = a.x + (b.x - a.x) * t;
-        const y = a.y + (b.y - a.y) * t - peak * 4 * t * (1 - t);
-        place(x, y);
-        if (t < 1) { raf = requestAnimationFrame(tick); return; }
-        bot.removeAttribute('data-air');
-        squash(1);
-        hit(to);
-        at = to;
-        setTimeout(() => { squash(0); busy = false; done(); }, 140);
-      };
-      raf = requestAnimationFrame(tick);
-    });
-
-    const next = async () => {
-      if (!alive) return;
-      if (visible && !busy && !document.hidden) {
-        let to: number;
-        if (target !== null && target !== at) { to = target; target = null; }
-        else {
-          if (at + dir < 0 || at + dir >= letters.length) dir = -dir;
-          to = at + dir;
-        }
-        await hop(to);
-      }
-      if (Math.random() < .25) { bot.setAttribute('data-blink', ''); setTimeout(() => bot.removeAttribute('data-blink'), 140); }
-      timer = window.setTimeout(next, 700 + Math.random() * 900);
-    };
-
-    const reset = () => { const p = spot(at); place(p.x, p.y); };
-    reset();
-    bot.style.transition = 'none';
-    body.style.transition = 'transform 120ms ease-out';
-
-    const ro = new ResizeObserver(() => { if (!busy) reset(); });
-    ro.observe(mark);
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: .2 });
-    io.observe(mark);
-
-    const onEnter = (e: Event) => { const i = letters.indexOf(e.currentTarget as HTMLElement); if (i >= 0) target = i; };
-    letters.forEach((l) => l.addEventListener('pointerenter', onEnter));
-    const onClick = () => { if (!busy) hop(at, 2.6); };
-    bot.addEventListener('click', onClick);
-
-    if (!still) timer = window.setTimeout(next, 900);
-
-    stopBot = () => {
-      alive = false;
-      clearTimeout(timer);
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      io.disconnect();
-      letters.forEach((l) => l.removeEventListener('pointerenter', onEnter));
-      bot.removeEventListener('click', onClick);
-    };
-  };
-
-  initBot();
-  document.addEventListener('astro:page-load', initBot);
-
   document.getElementById('footer-top')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

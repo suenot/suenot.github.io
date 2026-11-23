@@ -3,6 +3,7 @@ import Analytics from '@vercel/analytics/astro';
 import SEO from '../components/SEO.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Clawd from '../components/Clawd.astro';
 import { type Locale, isRtl, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 import '@fontsource-variable/schibsted-grotesk/wght.css';
@@ -23,6 +24,8 @@ interface Props {
   availableLocales?: readonly Locale[];
   /** The footer contact block; off where the page has its own Contact section. */
   footerCta?: boolean;
+  /** Clawd walks the visitor from heading to heading on this page. */
+  guide?: boolean;
 }
 
 const {
@@ -36,6 +39,7 @@ const {
   tags,
   availableLocales = locales,
   footerCta = true,
+  guide = false,
 } = Astro.props;
 
 const dir = isRtl(locale) ? 'rtl' : 'ltr';
@@ -78,7 +82,8 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
     <main id="main-content">
       <slot />
     </main>
-    <Footer locale={locale} cta={footerCta} />
+    <Footer locale={locale} cta={footerCta} availableLocales={availableLocales} />
+    <Clawd tour={guide} />
     <Analytics />
     <script>
       import '../scripts/theme';

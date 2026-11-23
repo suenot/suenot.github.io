@@ -11,6 +11,6 @@ const { locale } = Astro.params as { locale: Locale };
 const t = getPages(locale).projects;
 ---
 
-<Layout title={t.meta.title} description={t.meta.description} locale={locale}>
+<Layout title={t.meta.title} description={t.meta.description} locale={locale} guide>
   <ProjectsPage locale={locale} />
 </Layout>

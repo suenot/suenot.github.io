@@ -21,6 +21,13 @@ export function getLocalizedPath(path: string, locale: Locale): string {
   return `${getLocalePrefix(locale)}${path}`;
 }
 
+/** The same page in another locale: swaps or drops the locale prefix of a pathname. */
+export function localeUrl(pathname: string, target: Locale): string {
+  const localePrefix = new RegExp(`^/(?:${locales.join('|')})(?=/|$)`);
+  const barePath = pathname.replace(localePrefix, '') || '/';
+  return target === defaultLocale ? barePath : `/${target}${barePath}`;
+}
+
 export function getStaticLocalePaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }

@@ -1,5 +1,6 @@
 ---
-import { locales, localeNames, defaultLocale, type Locale } from '../i18n/config';
+import { locales, localeNames, type Locale } from '../i18n/config';
+import { localeUrl } from '../i18n/utils';
 
 interface Props {
   currentLocale: Locale;
@@ -9,12 +10,7 @@ interface Props {
 const { currentLocale, availableLocales = locales } = Astro.props;
 const selectableLocales = locales.filter((locale) => availableLocales.includes(locale));
 
-function getLocaleUrl(targetLocale: Locale): string {
-  const pathname = Astro.url.pathname;
-  const localePrefix = new RegExp(`^/(?:${locales.join('|')})(?=/|$)`);
-  const barePath = pathname.replace(localePrefix, '') || '/';
-  return targetLocale === defaultLocale ? barePath : `/${targetLocale}${barePath}`;
-}
+const getLocaleUrl = (targetLocale: Locale) => localeUrl(Astro.url.pathname, targetLocale);
 ---
 
 {selectableLocales.length > 1 ? (
