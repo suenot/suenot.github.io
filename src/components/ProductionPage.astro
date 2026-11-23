@@ -17,7 +17,7 @@ let step = 0;
     <p class="terminal-kicker prod-hero__kicker">{t.hero.kicker}</p>
     <h1 id="prod-title" class="prod-hero__title display-type">
       <span>{t.hero.title[0]}</span>
-      <span class="prod-hero__indent">{t.hero.title[1]}<span class="prod-hero__dot" aria-hidden="true"></span></span>
+      <span class="prod-hero__indent">{t.hero.title[1]}<span class="title-dot" aria-hidden="true"></span></span>
     </h1>
     <div class="prod-hero__below">
       <p class="prod-hero__intro">{t.hero.intro}</p>
@@ -308,7 +308,6 @@ let step = 0;
   .prod-hero { padding-block: calc(var(--terminal-header) + clamp(2.5rem, 7vw, 6rem)) clamp(3rem, 6vw, 5rem); }
   .prod-hero__title { display: grid; margin: clamp(1.25rem, 2.5vw, 2rem) 0 0; color: var(--terminal-ink); font-size: clamp(3rem, 8.6vw, 8.5rem); line-height: .92; }
   .prod-hero__indent { padding-inline-start: .9em; }
-  .prod-hero__dot { display: inline-block; inline-size: .15em; block-size: .15em; margin-inline-start: .04em; background: var(--terminal-accent); }
   .prod-hero__below { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: end; margin-block-start: clamp(2.5rem, 5vw, 4rem); }
   .prod-hero__intro { max-inline-size: 36ch; margin: 0; color: var(--terminal-ink-2); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.4; text-wrap: pretty; }
   .prod-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 1.75rem; }

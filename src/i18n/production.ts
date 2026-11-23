@@ -67,7 +67,7 @@ const en: ProductionCopy = {
   },
   hero: {
     kicker: 'Production · sites and video',
-    title: ['Everything a business', 'needs online.'],
+    title: ['Everything a business', 'needs online'],
     intro: 'Viral Reels, edited video, social media, a website with online booking, a CRM and an AI agent that answers clients. I build it once, and AI agents run it every day.',
     cta: 'Discuss a project',
     secondary: 'See examples',
@@ -226,7 +226,7 @@ const ru: ProductionCopy = {
   },
   hero: {
     kicker: 'Продакшн · сайты и видео',
-    title: ['Все, что нужно', 'бизнесу в сети.'],
+    title: ['Все, что нужно', 'бизнесу в сети'],
     intro: 'Вирусные рилсы, монтаж, соцсети, сайт с онлайн-записью, CRM и AI-агент, который отвечает клиентам. Я собираю систему один раз, а дальше ее каждый день ведут AI-агенты.',
     cta: 'Обсудить проект',
     secondary: 'Смотреть примеры',

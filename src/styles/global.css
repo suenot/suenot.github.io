@@ -421,3 +421,12 @@ output {
     display: none !important;
   }
 }
+
+/* The accent square that ends a page title; it is the title's full stop, so titles carry no period of their own. */
+.title-dot {
+  display: inline-block;
+  inline-size: 0.15em;
+  block-size: 0.15em;
+  margin-inline-start: 0.04em;
+  background: var(--terminal-accent);
+}

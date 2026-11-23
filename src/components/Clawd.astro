@@ -340,12 +340,22 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       }
     };
 
+    /* The wordmark is painted orange letter by letter; once all are orange it is painted back to ink, and again. */
+    let painting = true;
+    const paint = (mark: HTMLElement, letter: HTMLElement) => {
+      letter.toggleAttribute('data-painted', painting);
+      const letters = mark.querySelectorAll('[data-letter]');
+      const done = mark.querySelectorAll('[data-letter][data-painted]').length;
+      if (painting ? done === letters.length : done === 0) painting = !painting;
+    };
+
     const stomp = (st: Stop, p: Pt, chips = false) => {
       const target = st.kind === 'mark' ? p.el : st.el;
       if (st.kind === 'mark' && target) {
         target.classList.remove('is-hit');
         void target.offsetWidth;
         target.classList.add('is-hit');
+        paint(st.el, target);
       } else {
         target?.animate([{ translate: '0 0' }, { translate: '0 .035em' }, { translate: '0 0' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
       }

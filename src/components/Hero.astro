@@ -61,7 +61,7 @@ const arrow = isRtl(locale) ? '←' : '→';
     <p class="terminal-kicker hero__kicker">{t.tagline}</p>
     <h1 id="hero-title" class="hero__name display-type">
       <span class="hero__line">Eugen</span>
-      <span class="hero__line hero__line--indent">Soloviov<span class="hero__dot" aria-hidden="true" data-clawd-stop></span></span>
+      <span class="hero__line hero__line--indent">Soloviov<span class="title-dot" aria-hidden="true" data-clawd-stop></span></span>
     </h1>
 
     <div class="hero__below">
@@ -109,14 +109,6 @@ const arrow = isRtl(locale) ? '←' : '→';
 
   .hero__line--indent {
     padding-inline-start: 0.62em;
-  }
-
-  .hero__dot {
-    display: inline-block;
-    inline-size: 0.15em;
-    block-size: 0.15em;
-    margin-inline-start: 0.04em;
-    background: var(--terminal-accent);
   }
 
   .hero__below {

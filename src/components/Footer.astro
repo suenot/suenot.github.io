@@ -316,10 +316,12 @@ const external = (href: string) => href.startsWith('http')
   .footer-letter {
     display: inline-block;
     transform-origin: 50% 100%;
-    transition: color 200ms;
+    transition: color 320ms;
   }
 
-  .footer-letter.is-hit { animation: letter-hit 420ms var(--ease-out, ease); color: var(--terminal-accent); }
+  .footer-letter.is-hit { animation: letter-hit 420ms var(--ease-out, ease); }
+  /* Clawd paints the letters orange one by one, then back to ink, round and round. */
+  .footer-letter[data-painted] { color: var(--terminal-accent); }
 
   @keyframes letter-hit {
     0% { transform: translateY(0) scaleY(1); }
