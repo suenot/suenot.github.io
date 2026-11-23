@@ -1,0 +1,16 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import AlgotradingPage from '../../components/AlgotradingPage.astro';
+import { locales, type Locale } from '../../i18n/config';
+import { getPages } from '../../i18n/pages';
+
+export const getStaticPaths = (() => locales.filter((l) => l !== 'en').map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const { locale } = Astro.params as { locale: Locale };
+const t = getPages(locale).algo;
+---
+
+<Layout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <AlgotradingPage locale={locale} />
+</Layout>

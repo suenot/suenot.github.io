@@ -1,0 +1,27 @@
+---
+/** /projects: the whole archive, then the published packages. */
+import PageHero from './PageHero.astro';
+import Projects from './Projects.astro';
+import Packages from './Packages.astro';
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getPages } from '../i18n/pages';
+import { projects, allProjects } from '../data/projects';
+
+interface Props { locale?: Locale; }
+const { locale = defaultLocale } = Astro.props;
+const t = getPages(locale).projects;
+---
+
+<PageHero
+  kicker={t.kicker}
+  title={t.title}
+  intro={t.intro}
+  stats={[
+    { label: t.stats.projects, value: allProjects.length },
+    { label: t.stats.groups, value: projects.length },
+    { label: t.stats.active, value: allProjects.filter((project) => project.status === 'active').length },
+  ]}
+/>
+
+<Projects locale={locale} showHeader={false} />
+<Packages locale={locale} />

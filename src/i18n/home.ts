@@ -130,24 +130,8 @@ export const home = {
         'DevOps & Infra': 'DevOps & Infra',
       },
     },
-    frontier: {
-      eyebrow: '04. frontier projects',
-      heading: "Where I'm leading",
-      intro: 'Two companies where I hold founding leadership roles.',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          'Algorithmic trading platform & scalping terminal. 60+ crypto exchanges, real-time data, backtesting engine.',
-        'Cmdop.com':
-          'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace. CTO and frontend developer since 2025.',
-      },
-    },
     projects: {
-      eyebrow: '05. projects',
+      eyebrow: '04. projects',
       heading: "What I'm building",
       intro:
         'Across my own products, open-source tools, and HFT infrastructure research.',
@@ -173,6 +157,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          'Algorithmic trading platform & scalping terminal. 60+ crypto exchanges, real-time data, backtesting engine.',
+        'Cmdop.com':
+          'Remote server management via AI agents. Telegram/Discord/Slack bots, browser automation, skills marketplace. CTO and frontend developer since 2025.',
+        'Reforms.ai':
+          'Runs client work from the Notion you already use: calls, website forms and follow-ups land in Notion. Nothing to move, nothing new to learn.',
+        'Scalper terminal':
+          'Fast desktop crypto trading terminal: real-time order books, several exchanges, charts and hotkey-driven execution.',
+        'Arena':
+          'Trading competition arena where human traders and AI agents compete: connect an exchange, climb the leaderboard, win competitions.',
+        'Insider Warehouse':
+          'Reads analysts across blogs, social networks and Telegram, extracts every trade signal and scores it against price history.',
+        'Manipulator Warehouse':
+          'Fingerprints of market bots and manipulators, collected in one warehouse.',
+        'Jev Bots Bench':
+          'Open benchmark of trading models: 1,382 weekly decisions on nine Binance pairs, returns after costs, accuracy and a comparison with plain holding.',
+        'Trading logos':
+          'Coin, exchange and AI logos for trading products: the full set to download or embed from a CDN.',
+        'Trading themes':
+          'UI themes of exchanges and trading products, light and dark, with live preview and CSS, JSON and Tailwind export.',
         ZigBolt:
           'High-performance messaging system in Zig — competitor to Aeron. Target: IPC RTT <100ns, 50M+ msg/sec.',
         'trading-ipc-bench':
@@ -335,7 +339,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. communities',
+      eyebrow: '05. communities',
       heading: 'My communities',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: 'My personal dev blog — notes on trading, HFT, AI tooling, and side projects.' },
@@ -345,7 +349,7 @@ export const home = {
     },
     contact: {
       cv: 'CV',
-      eyebrow: '07. contact',
+      eyebrow: '06. contact',
       heading: 'Get in touch',
       intro:
         'Open to interesting projects, collaboration, or just a chat about trading, HFT, or AI tooling.',
@@ -476,24 +480,8 @@ export const home = {
         'DevOps & Infra': 'DevOps и инфраструктура',
       },
     },
-    frontier: {
-      eyebrow: '04. флагманские проекты',
-      heading: 'Стою у руля',
-      intro: 'Сооснователь обеих компаний — CEO и CTO.',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          'Платформа алгоритмической торговли и скальпинг-терминал. 60+ крипто-бирж, данные в реальном времени, движок бэктестинга.',
-        'Cmdop.com':
-          'Удаленное управление серверами через AI-агентов. Telegram/Discord/Slack боты, автоматизация браузера, маркетплейс скиллов. CTO и фронтенд-разработчик с 2025 года.',
-      },
-    },
     projects: {
-      eyebrow: '05. проекты',
+      eyebrow: '04. проекты',
       heading: 'Над чем работаю',
       intro:
         'Собственные продукты, open-source инструменты и исследования HFT-инфраструктуры.',
@@ -519,6 +507,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          'Платформа алгоритмической торговли и скальпинг-терминал. 60+ крипто-бирж, данные в реальном времени, движок бэктестинга.',
+        'Cmdop.com':
+          'Удаленное управление серверами через AI-агентов. Telegram/Discord/Slack боты, автоматизация браузера, маркетплейс скиллов. CTO и фронтенд-разработчик с 2025 года.',
+        'Reforms.ai':
+          'Ведет работу с клиентами прямо в вашем Notion: звонки, заявки с сайта и напоминания попадают в Notion. Ничего не надо переносить и осваивать заново.',
+        'Scalper terminal':
+          'Быстрый десктопный терминал для торговли криптой: стаканы в реальном времени, несколько бирж, графики и управление с горячих клавиш.',
+        'Arena':
+          'Арена торговых соревнований, где трейдеры соревнуются с AI-агентами: подключаете биржу, поднимаетесь в рейтинге, выигрываете турниры.',
+        'Insider Warehouse':
+          'Читает аналитиков в блогах, соцсетях и Telegram, достает каждый торговый сигнал и проверяет его по истории цен.',
+        'Manipulator Warehouse':
+          'Отпечатки рыночных ботов и манипуляторов, собранные в одном хранилище.',
+        'Jev Bots Bench':
+          'Открытый бенчмарк торговых моделей: 1382 недельных решения на девяти парах Binance, доходность после издержек, точность и сравнение с простой покупкой и удержанием.',
+        'Trading logos':
+          'Логотипы монет, бирж и AI-сервисов для торговых продуктов: весь набор можно скачать или встроить с CDN.',
+        'Trading themes':
+          'Темы интерфейса бирж и торговых продуктов, светлые и темные, с предпросмотром и экспортом в CSS, JSON и Tailwind.',
         ZigBolt:
           'Высокопроизводительная система обмена сообщениями на Zig — конкурент Aeron. Цель: IPC RTT <100ns, 50M+ msg/sec.',
         'trading-ipc-bench':
@@ -685,7 +693,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. сообщества',
+      eyebrow: '05. сообщества',
       heading: 'Мои сообщества',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: 'Мой личный dev-блог — заметки о трейдинге, HFT, AI-инструментах и пет-проектах.' },
@@ -695,7 +703,7 @@ export const home = {
     },
     contact: {
       cv: 'Резюме',
-      eyebrow: '07. контакты',
+      eyebrow: '06. контакты',
       heading: 'Связаться со мной',
       intro:
         'Открыт к интересным проектам, сотрудничеству или просто к разговору о трейдинге, HFT или AI-инструментах.',
@@ -826,24 +834,8 @@ export const home = {
         'DevOps & Infra': 'DevOps 与基础设施',
       },
     },
-    frontier: {
-      eyebrow: '04. 旗舰项目',
-      heading: '我正在主导的',
-      intro: '我担任创始领导角色的两家公司。',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          '算法交易平台与剥头皮终端。60+ 加密交易所、实时数据、回测引擎。',
-        'Cmdop.com':
-          '通过 AI 代理远程管理服务器。Telegram/Discord/Slack 机器人、浏览器自动化、技能市场。自 2025 年起担任 CTO 并负责前端开发。',
-      },
-    },
     projects: {
-      eyebrow: '05. 项目',
+      eyebrow: '04. 项目',
       heading: '我正在构建的',
       intro:
         '涵盖我自己的产品、开源工具以及 HFT 基础设施研究。',
@@ -869,6 +861,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          '算法交易平台与剥头皮终端。60+ 加密交易所、实时数据、回测引擎。',
+        'Cmdop.com':
+          '通过 AI 代理远程管理服务器。Telegram/Discord/Slack 机器人、浏览器自动化、技能市场。自 2025 年起担任 CTO 并负责前端开发。',
+        'Reforms.ai':
+          '在你已经在用的 Notion 里管理客户工作：通话、网站表单和跟进都会进入 Notion。无需迁移，也无需学习新工具。',
+        'Scalper terminal':
+          '快速的桌面加密货币交易终端：实时订单簿、多交易所、图表和快捷键下单。',
+        'Arena':
+          '交易竞技场，人类交易者与 AI 代理同场竞技：连接交易所，冲上排行榜，赢得比赛。',
+        'Insider Warehouse':
+          '读取博客、社交网络和 Telegram 上的分析师观点，提取每一个交易信号，并用历史价格为其打分。',
+        'Manipulator Warehouse':
+          '市场机器人和操纵者的行为指纹，集中存放在一个数据仓库中。',
+        'Jev Bots Bench':
+          '交易模型的开放基准：九个 Binance 交易对上的 1382 个每周决策，扣除成本后的收益、准确率以及与单纯持有的对比。',
+        'Trading logos':
+          '面向交易产品的币种、交易所和 AI 标志：可下载全套，或通过 CDN 嵌入。',
+        'Trading themes':
+          '交易所和交易产品的界面主题，含浅色和深色，支持实时预览并可导出为 CSS、JSON 和 Tailwind。',
         ZigBolt:
           '基于 Zig 的高性能消息系统 —— Aeron 的竞争者。目标：IPC RTT <100ns，50M+ msg/sec。',
         'trading-ipc-bench':
@@ -1019,7 +1031,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. 社区',
+      eyebrow: '05. 社区',
       heading: '我的社区',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: '我的个人开发博客 — 关于交易、HFT、AI 工具与副业项目的笔记。' },
@@ -1029,7 +1041,7 @@ export const home = {
     },
     contact: {
       cv: '简历',
-      eyebrow: '07. 联系',
+      eyebrow: '06. 联系',
       heading: '联系方式',
       intro:
         '欢迎有趣的项目、合作机会，或就交易、HFT 或 AI 工具进行交流。',
@@ -1160,24 +1172,8 @@ export const home = {
         'DevOps & Infra': 'DevOps 및 인프라',
       },
     },
-    frontier: {
-      eyebrow: '04. 주요 프로젝트',
-      heading: '제가 이끄는 곳',
-      intro: '제가 창업 리더십을 맡고 있는 두 회사.',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          '알고리즘 트레이딩 플랫폼 & 스캘핑 터미널. 60+ 암호화폐 거래소, 실시간 데이터, 백테스팅 엔진.',
-        'Cmdop.com':
-          'AI 에이전트를 통한 원격 서버 관리. Telegram/Discord/Slack 봇, 브라우저 자동화, 스킬 마켓플레이스. 2025년부터 CTO 및 프런트엔드 개발 담당.',
-      },
-    },
     projects: {
-      eyebrow: '05. 프로젝트',
+      eyebrow: '04. 프로젝트',
       heading: '제가 만들고 있는 것',
       intro:
         '나만의 제품, 오픈소스 도구, HFT 인프라 연구 전반.',
@@ -1203,6 +1199,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          '알고리즘 트레이딩 플랫폼 & 스캘핑 터미널. 60+ 암호화폐 거래소, 실시간 데이터, 백테스팅 엔진.',
+        'Cmdop.com':
+          'AI 에이전트를 통한 원격 서버 관리. Telegram/Discord/Slack 봇, 브라우저 자동화, 스킬 마켓플레이스. 2025년부터 CTO 및 프런트엔드 개발 담당.',
+        'Reforms.ai':
+          '이미 쓰고 있는 Notion에서 고객 업무를 관리합니다. 통화, 웹사이트 문의, 후속 연락이 Notion에 바로 쌓입니다. 옮길 것도, 새로 배울 것도 없습니다.',
+        'Scalper terminal':
+          '빠른 데스크톱 암호화폐 트레이딩 터미널: 실시간 호가창, 여러 거래소, 차트, 단축키 주문.',
+        'Arena':
+          '사람 트레이더와 AI 에이전트가 겨루는 트레이딩 대회 아레나: 거래소를 연결하고 리더보드에 오르고 대회에서 우승하세요.',
+        'Insider Warehouse':
+          '블로그, 소셜 네트워크, Telegram의 애널리스트 글을 읽고 모든 매매 신호를 뽑아 과거 가격으로 채점합니다.',
+        'Manipulator Warehouse':
+          '시장 봇과 조작 세력의 지문을 한곳에 모은 저장소.',
+        'Jev Bots Bench':
+          '트레이딩 모델 공개 벤치마크: Binance 9개 페어에서 1,382건의 주간 결정, 비용 차감 후 수익률, 정확도, 단순 보유와의 비교.',
+        'Trading logos':
+          '트레이딩 제품용 코인, 거래소, AI 로고: 전체 세트를 내려받거나 CDN으로 임베드할 수 있습니다.',
+        'Trading themes':
+          '거래소와 트레이딩 제품의 UI 테마, 라이트와 다크 모드, 실시간 미리보기와 CSS, JSON, Tailwind 내보내기.',
         ZigBolt:
           'Zig 기반 고성능 메시징 시스템 — Aeron의 경쟁자. 목표: IPC RTT <100ns, 50M+ msg/sec.',
         'trading-ipc-bench':
@@ -1358,7 +1374,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. 커뮤니티',
+      eyebrow: '05. 커뮤니티',
       heading: '내 커뮤니티',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: '내 개인 개발 블로그 — 트레이딩, HFT, AI 도구, 사이드 프로젝트에 대한 메모.' },
@@ -1368,7 +1384,7 @@ export const home = {
     },
     contact: {
       cv: '이력서',
-      eyebrow: '07. 연락처',
+      eyebrow: '06. 연락처',
       heading: '연락하기',
       intro:
         '흥미로운 프로젝트, 협업, 또는 트레이딩 / HFT / AI 툴링에 관한 대화 모두 환영합니다.',
@@ -1499,24 +1515,8 @@ export const home = {
         'DevOps & Infra': 'DevOps・インフラ',
       },
     },
-    frontier: {
-      eyebrow: '04. 主要プロジェクト',
-      heading: '率いているプロジェクト',
-      intro: '創業メンバーとしてリーダーシップを担っている 2 社。',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          'アルゴリズム取引プラットフォーム & スキャルピングターミナル。60+ の暗号通貨取引所、リアルタイムデータ、バックテストエンジン。',
-        'Cmdop.com':
-          'AI エージェントによるリモートサーバー管理。Telegram/Discord/Slack bot、ブラウザ自動化、スキルマーケットプレイス。2025年から CTO とフロントエンド開発を担当。',
-      },
-    },
     projects: {
-      eyebrow: '05. プロジェクト',
+      eyebrow: '04. プロジェクト',
       heading: '構築しているもの',
       intro:
         '自分のプロダクト、オープンソースツール、HFT インフラの研究全般。',
@@ -1542,6 +1542,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          'アルゴリズム取引プラットフォーム & スキャルピングターミナル。60+ の暗号通貨取引所、リアルタイムデータ、バックテストエンジン。',
+        'Cmdop.com':
+          'AI エージェントによるリモートサーバー管理。Telegram/Discord/Slack bot、ブラウザ自動化、スキルマーケットプレイス。2025年から CTO とフロントエンド開発を担当。',
+        'Reforms.ai':
+          'いつもの Notion で顧客対応を回す。通話、サイトのフォーム、フォローアップがそのまま Notion に入ります。移行も新しい操作の習得も不要です。',
+        'Scalper terminal':
+          '高速なデスクトップ暗号資産トレーディング端末。リアルタイム板、複数取引所、チャート、ホットキー発注。',
+        'Arena':
+          '人間のトレーダーと AI エージェントが競うトレーディング大会のアリーナ。取引所をつなぎ、ランキングを上がり、大会で勝つ。',
+        'Insider Warehouse':
+          'ブログ、SNS、Telegram のアナリストを読み、すべての売買シグナルを抽出して過去の価格で採点します。',
+        'Manipulator Warehouse':
+          '市場ボットと相場操縦者の指紋を一か所に集めたデータ倉庫。',
+        'Jev Bots Bench':
+          'トレーディングモデルのオープンベンチマーク。Binance の 9 ペアで 1,382 回の週次判断、コスト控除後のリターン、精度、単純保有との比較。',
+        'Trading logos':
+          'トレーディング製品向けのコイン、取引所、AI のロゴ。全セットをダウンロードするか CDN から埋め込めます。',
+        'Trading themes':
+          '取引所とトレーディング製品の UI テーマ。ライトとダーク、ライブプレビュー、CSS・JSON・Tailwind への書き出し。',
         ZigBolt:
           'Zig 製の高性能メッセージングシステム — Aeron の競合。目標: IPC RTT <100ns、50M+ msg/sec。',
         'trading-ipc-bench':
@@ -1697,7 +1717,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. コミュニティ',
+      eyebrow: '05. コミュニティ',
       heading: 'マイコミュニティ',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: '個人開発ブログ — トレーディング、HFT、AI ツール、サイドプロジェクトのメモ。' },
@@ -1707,7 +1727,7 @@ export const home = {
     },
     contact: {
       cv: '履歴書',
-      eyebrow: '07. 連絡先',
+      eyebrow: '06. 連絡先',
       heading: 'お問い合わせ',
       intro:
         '面白いプロジェクトやコラボレーション、トレーディング・HFT・AI ツールに関する雑談、いつでも歓迎します。',
@@ -1838,24 +1858,8 @@ export const home = {
         'DevOps & Infra': 'DevOps والبنية التحتية',
       },
     },
-    frontier: {
-      eyebrow: '04. المشاريع الرائدة',
-      heading: 'حيث أقود',
-      intro: 'شركتان أحمل فيهما أدواراً قيادية تأسيسية.',
-      status_active: 'active',
-      roles: {
-        'Marketmaker.cc': 'CEO',
-        'Cmdop.com': 'CTO',
-      },
-      descs: {
-        'Marketmaker.cc':
-          'منصّة تداول خوارزمي وطرفية scalping. 60+ بورصة عملات رقمية، بيانات فورية، ومحرّك backtesting.',
-        'Cmdop.com':
-          'إدارة الخوادم عن بُعد عبر وكلاء AI. بوتات Telegram/Discord/Slack، أتمتة المتصفح، وسوق للمهارات. CTO ومطور الواجهة الأمامية منذ 2025.',
-      },
-    },
     projects: {
-      eyebrow: '05. المشاريع',
+      eyebrow: '04. المشاريع',
       heading: 'ما أبنيه',
       intro:
         'منتجاتي الخاصة، أدوات مفتوحة المصدر، وأبحاث بنية HFT التحتية.',
@@ -1881,6 +1885,26 @@ export const home = {
         rip: 'rip',
       },
       descs: {
+        'Marketmaker.cc':
+          'منصّة تداول خوارزمي وطرفية scalping. 60+ بورصة عملات رقمية، بيانات فورية، ومحرّك backtesting.',
+        'Cmdop.com':
+          'إدارة الخوادم عن بُعد عبر وكلاء AI. بوتات Telegram/Discord/Slack، أتمتة المتصفح، وسوق للمهارات. CTO ومطور الواجهة الأمامية منذ 2025.',
+        'Reforms.ai':
+          'إدارة عمل العملاء من Notion الذي تستخدمه بالفعل: المكالمات ونماذج الموقع والمتابعات تصل إلى Notion. لا شيء لنقله ولا شيء جديد لتتعلمه.',
+        'Scalper terminal':
+          'طرفية تداول عملات رقمية سريعة لسطح المكتب: دفاتر أوامر فورية، عدة بورصات، رسوم بيانية وتنفيذ بمفاتيح الاختصار.',
+        'Arena':
+          'ساحة مسابقات تداول يتنافس فيها المتداولون ووكلاء AI: اربط بورصتك، اصعد في لوحة الصدارة، واربح المسابقات.',
+        'Insider Warehouse':
+          'يقرأ المحللين في المدونات والشبكات الاجتماعية وTelegram، ويستخرج كل إشارة تداول ويقيّمها مقابل تاريخ الأسعار.',
+        'Manipulator Warehouse':
+          'بصمات بوتات السوق والمتلاعبين، مجموعة في مستودع واحد.',
+        'Jev Bots Bench':
+          'معيار مفتوح لنماذج التداول: 1382 قراراً أسبوعياً على تسعة أزواج في Binance، والعوائد بعد التكاليف، والدقة، ومقارنة مع الاحتفاظ البسيط.',
+        'Trading logos':
+          'شعارات العملات والبورصات وخدمات AI لمنتجات التداول: المجموعة كاملة للتنزيل أو للتضمين من CDN.',
+        'Trading themes':
+          'سمات واجهة للبورصات ومنتجات التداول، فاتحة وداكنة، مع معاينة حية وتصدير إلى CSS وJSON وTailwind.',
         ZigBolt:
           'نظام مراسلة عالي الأداء بـ Zig — منافس لـ Aeron. الهدف: IPC RTT <100ns و50M+ msg/sec.',
         'trading-ipc-bench':
@@ -2038,7 +2062,7 @@ export const home = {
       },
     },
     communities: {
-      eyebrow: '06. المجتمعات',
+      eyebrow: '05. المجتمعات',
       heading: 'مجتمعاتي',
       items: {
         suenot_dev: { name: 'suenot_dev', desc: 'مدونتي الشخصية للتطوير — ملاحظات عن التداول وHFT وأدوات الذكاء الاصطناعي والمشاريع الجانبية.' },
@@ -2048,7 +2072,7 @@ export const home = {
     },
     contact: {
       cv: 'السيرة الذاتية',
-      eyebrow: '07. اتصل',
+      eyebrow: '06. اتصل',
       heading: 'تواصل معي',
       intro:
         'منفتح على المشاريع المثيرة، أو التعاون، أو مجرّد دردشة عن التداول وHFT وأدوات الذكاء الاصطناعي.',

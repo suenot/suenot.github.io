@@ -2,166 +2,26 @@
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
 import { useTranslations } from '../i18n/ui';
-import { formatYears, type Years } from '../i18n/utils';
-import projectIcons from '../data/project-icons.json';
+import { formatYears } from '../i18n/utils';
+import { projects, roleOf, iconOf, hueOf, monogram, type ProjectGroup, type StatusKey } from '../data/projects';
 
 interface Props {
   locale?: Locale;
+  /** Defaults to the whole archive. */
+  groups?: ProjectGroup[];
+  /** Off on the pages, where the page hero already says what this is. */
+  showHeader?: boolean;
+  showRoles?: boolean;
+  id?: string;
 }
-const { locale = defaultLocale } = Astro.props;
+const { locale = defaultLocale, groups = projects, showHeader = true, showRoles = true, id = 'archive' } = Astro.props;
 const t = getHome(locale).projects;
 const ui = useTranslations(locale);
-type CategoryKey = keyof typeof t.categories;
-type StatusKey = keyof typeof t.status;
-type DescKey = keyof typeof t.descs;
-type Role = keyof typeof t.roles;
+// Without the section header the groups are the top level under the page h1.
+const GroupHeading = showHeader ? 'h3' : 'h2';
+const NameHeading = showHeader ? 'h4' : 'h3';
 
-interface Project {
-  name: string;
-  descKey: DescKey;
-  tags: string[];
-  url?: string;
-  status: StatusKey;
-  private?: boolean;
-  years?: Years;
-  /** Defaults to 'founder'; set only where I was hired or a partner. */
-  role?: Role;
-}
-
-interface ProjectGroup {
-  category: CategoryKey;
-  items: Project[];
-}
-
-const projects: ProjectGroup[] = [
-  {
-    category: 'Trading',
-    items: [
-      { name: 'ZigBolt', descKey: 'ZigBolt', tags: ['Zig', 'HFT', 'IPC'], url: 'https://github.com/suenot/zigbolt', status: 'active', years: [2026] },
-      { name: 'trading-ipc-bench', descKey: 'trading-ipc-bench', tags: ['Go', 'C++', 'Benchmarks'], url: 'https://github.com/suenot/trading-ipc-bench', status: 'active', years: [2026] },
-      { name: 'UI for Marketmaker.cc', descKey: 'UI for Marketmaker.cc', tags: ['React', 'TypeScript', 'Tailwind CSS'], url: 'https://ui.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'Portfolio Optimizer', descKey: 'Portfolio Optimizer', tags: ['Next.js', 'Rust'], url: 'https://portfolio-optimizer.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'MarketMaker Sandbox', descKey: 'MarketMaker Sandbox', tags: ['REST API', 'Trading', 'Testing'], url: 'https://sandbox.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'Trading Events Calendar', descKey: 'Trading Events Calendar', tags: ['Trading', 'Events'], url: 'https://events.marketmaker.cc/', status: 'active' },
-      { name: 'bingx-leverages', descKey: 'bingx-leverages', tags: ['Python', 'BingX'], url: 'https://github.com/suenot', status: 'active', private: true, years: [2025] },
-      { name: 'StockAPIs.com', descKey: 'StockAPIs.com', tags: ['Python', 'QuestDB', 'Parquet', 'Redis'], url: 'https://stockapis.com', status: 'wip', private: true },
-      { name: 'Profitmaker.cc', descKey: 'Profitmaker.cc', tags: ['TypeScript', 'React', 'Vite'], url: 'https://profitmaker.cc', status: 'wip', years: [2017, 'now'] },
-      { name: 'Trender', descKey: 'Trender', tags: ['Python', 'Zig', 'DuckDB', 'Numba'], url: 'https://trender.marketmaker.cc', status: 'wip', private: true, years: [2026] },
-      { name: 'PolyTracker', descKey: 'PolyTracker', tags: ['TypeScript', 'Python'], url: 'https://github.com/suenot', status: 'concept', private: true },
-      { name: 'Avellaneda-Stoikov', descKey: 'Avellaneda-Stoikov', tags: ['Python', 'HFT', 'Market Making'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
-      { name: 'Frontrunner', descKey: 'Frontrunner', tags: ['Go', 'Rust', 'fasthttp', 'HFT'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2024, 2026] },
-      { name: 'simple-fast-fix-scalper', descKey: 'simple-fast-fix-scalper', tags: ['C++', 'FIX Protocol', 'HFT'], url: 'https://github.com/suenot/simple-fast-fix-scalper', status: 'paused', years: [2025] },
-      { name: 'vector-arbitrage', descKey: 'vector-arbitrage', tags: ['C++', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
-      { name: 'solana-arbitrage', descKey: 'solana-arbitrage', tags: ['Rust', 'Solana', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
-      { name: 'Listing Monitor', descKey: 'Listing Monitor', tags: ['Rust', 'Zig', 'gRPC', 'Listing'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
-      { name: 'Binance Listing Rocket', descKey: 'Binance Listing Rocket', tags: ['Python', 'Listing', 'Binance'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025, 2026] },
-      { name: 'Calculate Listing Profit', descKey: 'Calculate Listing Profit', tags: ['Python', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
-      { name: 'Markowitz Portfolio', descKey: 'Markowitz Portfolio', tags: ['Python', 'Portfolio'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
-      { name: 'copytrader', descKey: 'copytrader', tags: ['TypeScript', 'gRPC'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'Pair Arbitrage (Binance)', descKey: 'Pair Arbitrage (Binance)', tags: ['Python', 'Binance', 'Arbitrage'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'deep-profitmaker', descKey: 'deep-profitmaker', tags: ['TypeScript', 'Deep.Foundation'], url: 'https://github.com/suenot/deep-profitmaker', status: 'paused', years: [2022, 2023] },
-      { name: 'Tinkoff ETF Balancer Bot', descKey: 'Tinkoff ETF Balancer Bot', tags: ['Python', 'Tinkoff'], url: 'https://github.com/suenot/tinkoff-invest-etf-balancer-bot', status: 'paused', years: [2022, 2025] },
-      { name: 'candle-trade-visualizer', descKey: 'candle-trade-visualizer', tags: ['TypeScript', 'Charts'], url: 'https://github.com/suenot/candle-trade-visualizer', status: 'paused', years: [2025] },
-      { name: 'benchmarks-trading', descKey: 'benchmarks-trading', tags: ['Go', 'Benchmarks', 'HFT'], url: 'https://github.com/suenot', status: 'paused', private: true },
-      { name: 'market-manipulator-detection', descKey: 'market-manipulator-detection', tags: ['Rust', 'Analytics'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2025] },
-      { name: 'candle_aggregator_benchmark', descKey: 'candle_aggregator_benchmark', tags: ['Rust', 'OHLCV'], url: 'https://github.com/suenot/candle_aggregator_benchmark', status: 'paused', years: [2025] },
-      { name: 'hyperliquid-c', descKey: 'hyperliquid-c', tags: ['C', 'HFT', 'Hyperliquid'], url: 'https://github.com/suenot/hyperliquid-c', status: 'paused', years: [2025] },
-      { name: 'listingapis.com', descKey: 'listingapis.com', tags: ['Next.js', 'Postgres', 'Listing'], url: 'https://listingapis.com', status: 'active', years: [2025, 'now'] },
-      { name: 'Warehouse', descKey: 'Warehouse', tags: ['Go', 'IPFS', 'Market Data'], url: 'https://warehouse.marketmaker.cc', status: 'active', years: [2024, 'now'] },
-      { name: 'Kimchi', descKey: 'Kimchi', tags: ['Postgres', 'Arbitrage', 'Spreads'], url: 'https://kimchi.marketmaker.cc', status: 'active' },
-      { name: 'Metrics', descKey: 'Metrics', tags: ['FastAPI', 'Next.js', 'Indicators'], url: 'https://metrics.marketmaker.cc', status: 'active', private: true },
-      { name: 'Visual', descKey: 'Visual', tags: ['React Flow', 'FastAPI', 'Next.js'], url: 'https://visual.marketmaker.cc', status: 'active', private: true },
-      { name: 'Popularity', descKey: 'Popularity', tags: ['Go', 'Next.js', 'Parsers'], url: 'https://popularity.marketmaker.cc', status: 'active', private: true, years: [2026] },
-      { name: 'CRM', descKey: 'CRM', tags: ['Next.js', 'Postgres', 'Telegram'], url: 'https://crm.marketmaker.cc', status: 'wip', private: true },
-    ],
-  },
-  {
-    category: 'AI',
-    items: [
-      { name: 'GPUs', descKey: 'GPUs', tags: ['Next.js', 'Elysia', 'Bun', 'Postgres'], url: 'https://gpu.marketmaker.cc', status: 'active', years: [2026] },
-      { name: 'Harness Analyzer', descKey: 'Harness Analyzer', tags: ['React', 'Hono', 'PostgreSQL'], url: 'https://harness-analyzer.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'Solver', descKey: 'Solver', tags: ['Python', 'FastAPI', 'MCP', 'Next.js'], url: 'https://solver.marketmaker.cc', status: 'active', private: true },
-      { name: 'Publisher suite', descKey: 'Publisher suite', tags: ['Python', 'Camoufox', 'SQLite'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
-      { name: 'Reference crawler', descKey: 'Reference crawler', tags: ['Python', 'FastAPI', 'yt-dlp', 'SQLite FTS5'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
-      { name: 'News warehouse', descKey: 'News warehouse', tags: ['Go', 'PostgreSQL', 'Docker'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
-      { name: 'AI video pipeline', descKey: 'AI video pipeline', tags: ['HyperFrames', 'FFmpeg', 'Python'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
-      { name: 'gaia', descKey: 'gaia', tags: ['Python', 'Camoufox', 'Gemini', 'Veo 3'], url: 'https://github.com/suenot/gaia', status: 'active', years: [2026] },
-      { name: 'Content factory', descKey: 'Content factory', tags: ['FFmpeg', 'Whisper', 'Python', 'Camoufox'], url: 'https://production.suenot.com', status: 'active', years: [2026] },
-      { name: 'aicommit', descKey: 'aicommit', tags: ['Rust', 'CLI', 'LLM'], url: 'https://github.com/suenot/aicommit', status: 'active', years: [2024, 'now'] },
-      { name: 'Codex Jev Router', descKey: 'Codex Jev Router', tags: ['Codex', 'Node.js', 'Model Routing'], url: 'https://github.com/suenot/codex-jev-router', status: 'active', years: [2026] },
-      { name: 'Codex Jev Router Benchmarks', descKey: 'Codex Jev Router Benchmarks', tags: ['Codex', 'Django', 'Benchmarks'], url: 'https://github.com/suenot/codex-jev-router-benchmarks', status: 'active', years: [2026] },
-      { name: 'SDKRouter', descKey: 'SDKRouter', tags: ['Python', 'Pydantic', 'OpenAI'], url: 'https://github.com/suenot', status: 'active', private: true, role: 'partner' },
-      { name: 'DjangoCFG', descKey: 'DjangoCFG', tags: ['Python', 'Django', 'Pydantic AI'], url: 'https://djangocfg.com', status: 'active', private: true, role: 'partner' },
-      { name: 'OpenScreenshot', descKey: 'OpenScreenshot', tags: ['Swift', 'macOS', 'LLM'], url: 'https://openscreenshot.suenot.com/', status: 'active', years: [2026] },
-      { name: 'cmdop-claude', descKey: 'cmdop-claude', tags: ['Python', 'Claude', 'PyPI'], url: 'https://pypi.org/project/cmdop-claude/', status: 'active', role: 'partner' },
-      { name: 'local-llm-proxy', descKey: 'local-llm-proxy', tags: ['Python', 'MCP', 'LLM'], url: 'https://github.com/suenot', status: 'active', private: true, years: [2026] },
-      { name: 'Open Agent Manager', descKey: 'Open Agent Manager', tags: ['Tauri', 'Rust', 'React'], url: 'http://open-agent-manager.suenot.com/', status: 'paused', years: [2026] },
-    ],
-  },
-  {
-    category: 'Pet Projects',
-    items: [
-      { name: 'asdf', descKey: 'asdf', tags: ['Go', 'Next.js', 'Postgres'], url: 'https://asdf.marketmaker.cc', status: 'active' },
-      { name: 'Pocket', descKey: 'Pocket', tags: ['Next.js', 'Go', 'SQLite'], url: 'https://pocket.marketmaker.cc/', status: 'active' },
-      { name: 'Vacation / Стыковка', descKey: 'Vacation / Стыковка', tags: ['Next.js', 'Elysia', 'PostgreSQL'], url: 'https://vacation.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'SyncSong', descKey: 'SyncSong', tags: ['Vue', 'Vite', 'WebSocket'], url: 'https://syncsong.marketmaker.cc/', status: 'active' },
-      { name: 'Slippage', descKey: 'Slippage', tags: ['Vite', 'Paper.js', 'Bun', 'WebSocket'], url: 'https://slippage.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'Curved Games', descKey: 'Curved Games', tags: ['JavaScript', 'Canvas'], url: 'https://curves.marketmaker.cc/', status: 'active', years: [2026] },
-      { name: 'auth-service', descKey: 'auth-service', tags: ['Go', 'Next.js', 'SSO', 'Traefik'], url: 'https://auth.marketmaker.cc', status: 'active' },
-      { name: 'Backups', descKey: 'Backups', tags: ['Bun', 'restic', 'Infra'], url: 'https://backups.marketmaker.cc', status: 'active', private: true },
-      { name: 'Researcher', descKey: 'Researcher', tags: ['Node.js', 'Meilisearch', 'Scrapers'], url: 'https://researcher.marketmaker.cc', status: 'active' },
-      { name: 'Hlider', descKey: 'Hlider', tags: ['Kotlin', 'Swift', 'SwiftUI', 'UIKit'], url: 'https://hlider.klava.org/', status: 'active', years: [2013, 'now'], role: 'partner' },
-      { name: 'karabiner-visualizer', descKey: 'karabiner-visualizer', tags: ['TypeScript', 'React', 'Karabiner', 'macOS'], url: 'https://karabiner-visualizer.vercel.app/', status: 'active', years: [2026] },
-      { name: 'distract-blocker', descKey: 'distract-blocker', tags: ['JavaScript', 'Chrome Extension', 'MV3', 'i18n'], url: 'https://distract-blocker.marketmaker.cc', status: 'active', years: [2026] },
-      { name: 'MacChill', descKey: 'MacChill', tags: ['Swift', 'SwiftUI', 'macOS'], url: 'https://github.com/suenot/macchill', status: 'active', years: [2026] },
-      { name: 'Sanctum', descKey: 'Sanctum', tags: ['TypeScript', 'AES-256-GCM'], url: 'https://github.com/suenot/sanctum', status: 'active', years: [2026] },
-      { name: 'OpenLastPass', descKey: 'OpenLastPass', tags: ['Rust', 'React', 'Tauri'], url: 'https://github.com/suenot', status: 'wip', private: true, years: [2026] },
-      { name: 'Vasya', descKey: 'Vasya', tags: ['TypeScript', 'Rust', 'Telegram'], url: 'https://github.com/suenot/vasya', status: 'paused', years: [2026] },
-      { name: 'macpurge', descKey: 'macpurge', tags: ['TypeScript', 'macOS'], url: 'https://github.com/suenot', status: 'paused', private: true, years: [2026] },
-      { name: 'deadline-in-days', descKey: 'deadline-in-days', tags: ['TypeScript'], url: 'https://github.com/suenot/deadline-in-days', status: 'paused', years: [2025] },
-    ],
-  },
-  {
-    category: 'Contract & Freelance',
-    items: [
-      { name: 'Deep.foundation & Deep.memo', descKey: 'Deep.foundation & Deep.memo', tags: ['Node.js', 'React', 'GraphQL', 'Hasura'], url: 'https://deep.foundation', status: 'paused', years: [2022, 2024], role: 'hired' },
-      { name: 'Dolphin.bi', descKey: 'Dolphin.bi', tags: ['Vue', 'Python'], url: 'https://www.crunchbase.com/organization/dolphin-bi', status: 'rip', years: [2016, 2018], role: 'hired' },
-      { name: 'Shakeapp', descKey: 'Shakeapp', tags: ['React', 'Node.js', 'GraphQL', 'Hasura'], url: 'https://play.google.com/store/apps/details?id=shakeapp.mobile.app', status: 'rip', years: [2020, 2022], role: 'hired' },
-      { name: 'centrum-air.com', descKey: 'centrum-air.com', tags: ['React', 'Next.js'], url: 'https://centrum-air.com', status: 'left', years: [2023], role: 'hired' },
-    ],
-  },
-  {
-    category: 'Graveyard',
-    items: [
-      { name: 'Kupi.network', descKey: 'Kupi.network', tags: ['React', 'Vue', 'MobX'], url: 'https://github.com/suenot/kupi-terminal', status: 'rip', years: [2018, 2019] },
-      { name: 'Kupi.ru', descKey: 'Kupi.ru', tags: ['PHP', 'JavaScript'], url: 'https://github.com/suenot', status: 'rip', years: [2013] },
-      { name: 'Kupi.net', descKey: 'Kupi.net', tags: ['React', 'Django'], url: 'https://github.com/suenot', status: 'rip', years: [2019, 2020], role: 'partner' },
-      { name: 'Deep chain', descKey: 'Deep chain', tags: ['Go', 'Cosmos SDK'], url: 'https://github.com/deep-foundation/deep-chain', status: 'paused', years: [2024, 2025], role: 'hired' },
-      { name: 'Bursa DEX', descKey: 'Bursa DEX', tags: ['Solidity', 'React', 'Django'], status: 'rip', years: [2017, 2018] },
-      { name: 'de-core.net', descKey: 'de-core.net', tags: ['HTML', 'CSS', 'JavaScript', 'Angular', 'React', 'Vue'], url: 'https://github.com/suenot', status: 'rip', years: [2010, 2016] },
-      { name: 'Thermom', descKey: 'Thermom', tags: ['Vue', 'Ionic'], url: 'https://github.com/suenot', status: 'rip', years: [2016], role: 'partner' },
-      { name: 'AI form filling for websites', descKey: 'AI form filling for websites', tags: ['AI', 'Automation'], status: 'rip', years: [2025] },
-    ],
-  },
-  {
-    category: 'Publications',
-    items: [
-      { name: 'The Algotrading Book', descKey: 'The Algotrading Book', tags: ['Content', 'Algotrading'], url: 'https://the-algotrading-book-website.vercel.app/', status: 'active', years: [2026] },
-      { name: 'Mathematics for Trading', descKey: 'Mathematics for Trading', tags: ['Book', 'Math', 'Trading'], url: 'https://github.com/suenot/mathematics-learning-for-trading', status: 'wip', years: [2025, 'now'] },
-      { name: 'Blog on Marketmaker.cc', descKey: 'Blog on Marketmaker.cc', tags: ['Blog', 'Backtesting', 'Analytics'], url: 'https://marketmaker.cc/en/blog/1/', status: 'active' },
-    ],
-  },
-];
-
-const roleOf = (project: Project): Role => project.role ?? 'founder';
-// Avatar: the project's own site icon (fetched into public/projects), else a monogram.
-const iconOf = (project: Project): string | undefined => (projectIcons as Record<string, string>)[project.name];
-const hueOf = (name: string) => [...name].reduce((h, ch) => (h * 31 + ch.codePointAt(0)!) % 360, 7);
-const monogram = (name: string) => {
-  const words = name.replace(/[^\p{L}\p{N} ]+/gu, ' ').trim().split(/\s+/);
-  return (words.length > 1 ? words[0][0] + words[1][0] : words[0].slice(0, 2)).toUpperCase();
-};
-const allItems = projects.flatMap((group) => group.items);
+const allItems = groups.flatMap((group) => group.items);
 const roleCounts = {
   founder: allItems.filter((project) => roleOf(project) === 'founder').length,
   hired: allItems.filter((project) => roleOf(project) === 'hired').length,
@@ -179,32 +39,32 @@ const statusStyles: Record<StatusKey, string> = {
 };
 ---
 
-<section id="projects" class="projects terminal-section" aria-labelledby="projects-heading">
+<section id={id} class:list={["projects terminal-section", !showHeader && "projects--bare"]} aria-labelledby={showHeader ? `${id}-heading` : undefined}>
   <div class="terminal-container">
-    <header class="projects__header">
+    {showHeader && <header class="projects__header">
       <div>
         <p class="terminal-kicker">{t.eyebrow}</p>
-        <h2 id="projects-heading" class="terminal-heading">{t.heading}</h2>
+        <h2 id={`${id}-heading`} class="terminal-heading">{t.heading}</h2>
       </div>
       <p data-reveal>{t.intro}</p>
       <dl aria-label="Archive summary" data-reveal>
-        <div><dt>GROUPS</dt><dd data-count>{projects.length.toString().padStart(2, '0')}</dd></div>
-        <div><dt>RECORDS</dt><dd data-count>{projects.reduce((sum, group) => sum + group.items.length, 0)}</dd></div>
+        <div><dt>GROUPS</dt><dd data-count>{groups.length.toString().padStart(2, '0')}</dd></div>
+        <div><dt>RECORDS</dt><dd data-count>{allItems.length}</dd></div>
       </dl>
-    </header>
+    </header>}
 
-    <ul class="projects__roles" aria-label="Role legend" data-reveal>
+    {showRoles && <ul class="projects__roles" aria-label="Role legend" data-reveal>
       {roleKeys.map((role) => (
         <li class={`role role--${role}`}><span class="role__mark" aria-hidden="true"></span>{t.roles[role]}<span class="role__count">{String(roleCounts[role]).padStart(2, '0')}</span></li>
       ))}
-    </ul>
+    </ul>}
 
     <div class="projects__archive">
-      {projects.map((group, groupIndex) => (
+      {groups.map((group, groupIndex) => (
         <section class="project-group">
           <header class="project-group__header" data-reveal>
             <span>{String(groupIndex + 1).padStart(2, '0')}</span>
-            <h3 class="display-type">{t.categories[group.category]}</h3>
+            <GroupHeading class="project-group__title display-type">{t.categories[group.category]}</GroupHeading>
             <span>{String(group.items.length).padStart(2, '0')}</span>
           </header>
           <ol>
@@ -219,14 +79,14 @@ const statusStyles: Record<StatusKey, string> = {
                       {iconOf(project)
                         ? <img class="project-row__avatar" src={iconOf(project)} alt="" width="40" height="40" loading="lazy" decoding="async" />
                         : <span class="project-row__avatar project-row__avatar--mono" style={`--hue:${hueOf(project.name)}`} aria-hidden="true">{monogram(project.name)}</span>}
-                      <h4>{project.name}</h4>
+                      <NameHeading class="project-row__title">{project.name}</NameHeading>
                       {project.private && <span class="project-row__access" title="Private repository">Private</span>}
                     </div>
                     <p>{t.descs[project.descKey]}</p>
                   </div>
                   <div class="project-row__tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
                   <div class="project-row__state">
-                    <span class={`role role--${roleOf(project)}`}><span class="role__mark" aria-hidden="true"></span>{t.roles[roleOf(project)]}</span>
+                    <span class={`role role--${roleOf(project)}`}><span class="role__mark" aria-hidden="true"></span>{project.title ?? t.roles[roleOf(project)]}</span>
                     <span class:list={["project-row__status", statusStyles[project.status]]}>{t.status[project.status]}</span>
                     {project.years && <bdi class="project-row__years" data-years>{formatYears(project.years, ui('projects.present'))}</bdi>}
                   </div>
@@ -244,6 +104,8 @@ const statusStyles: Record<StatusKey, string> = {
 
 <style>
   .projects { padding-block: clamp(4rem, 8vw, 7rem); }
+  .projects--bare { padding-block-start: 0; }
+  .projects--bare .project-group:first-of-type { margin-block-start: clamp(1.5rem, 3vw, 2.5rem); }
   .projects__header { display: grid; grid-template-columns: 1fr minmax(0, .8fr) auto; gap: clamp(2rem, 5vw, 5rem); align-items: end; padding-block-end: clamp(2rem, 4vw, 3rem); }
   .projects__header .terminal-heading { margin-block-start: 1rem; }
   .projects__header > p { max-inline-size: 46ch; margin: 0; color: var(--terminal-muted); font-size: var(--text-base); line-height: 1.6; }
@@ -256,7 +118,7 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group__header { display: flex; align-items: baseline; gap: 1rem; padding-block-end: 1rem; border-block-end: 1px solid var(--terminal-line-strong); }
   .project-group__header > span { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
   .project-group__header > span:last-child { margin-inline-start: auto; color: var(--terminal-muted); }
-  .project-group__header h3 { margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .project-group__title { margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
   .project-group ol { margin: 0; padding: 0; list-style: none; }
   .project-group li { border-block-end: 1px solid var(--terminal-line); }
   .project-row { position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1.6fr) minmax(0, .75fr) 8rem 1.25rem; gap: 1.5rem; align-items: start; padding: 1.5rem .75rem; color: inherit; text-decoration: none; transition: background-color 160ms ease; }
@@ -266,7 +128,7 @@ const statusStyles: Record<StatusKey, string> = {
   .project-row__avatar { flex: none; inline-size: 2.5rem; block-size: 2.5rem; border-radius: .6rem; object-fit: contain; background: var(--terminal-panel); box-shadow: inset 0 0 0 1px var(--terminal-line); }
   img.project-row__avatar { padding: .3rem; }
   .project-row__avatar--mono { display: grid; place-items: center; background: oklch(.56 .11 var(--hue)); color: #fff; font: 800 .9375rem/1 var(--font-sans); letter-spacing: -.02em; box-shadow: none; }
-  .project-row__name h4 { margin: 0; color: var(--terminal-ink); font: 800 clamp(1.25rem, 1.9vw, 1.625rem)/1.15 var(--font-sans); letter-spacing: -.03em; overflow-wrap: anywhere; }
+  .project-row__title { margin: 0; color: var(--terminal-ink); font: 800 clamp(1.25rem, 1.9vw, 1.625rem)/1.15 var(--font-sans); letter-spacing: -.03em; overflow-wrap: anywhere; }
   .project-row__access { padding: .2rem .45rem; border: 1px solid var(--terminal-line-strong); color: var(--terminal-muted); font: .6875rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
   .project-row__main > p { max-inline-size: 60ch; margin: .65rem 0 0 3.35rem; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.55; text-wrap: pretty; }
   .project-row__tags { display: flex; flex-wrap: wrap; gap: .35rem .9rem; padding-block-start: .65rem; color: var(--terminal-muted); font: .75rem/1.4 var(--font-mono); letter-spacing: .02em; }
@@ -287,8 +149,8 @@ const statusStyles: Record<StatusKey, string> = {
   .project-group a:hover .project-row__arrow, .project-group a:focus-visible .project-row__arrow { opacity: 1; }
   .project-group a:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: -2px; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .project-row__name h4, .project-row__arrow { transition: transform 220ms var(--ease-out), opacity 160ms ease; }
-    .project-group a:hover .project-row__name h4 { transform: translate3d(calc(var(--dir, 1) * .25rem), 0, 0); }
+    .project-row__title, .project-row__arrow { transition: transform 220ms var(--ease-out), opacity 160ms ease; }
+    .project-group a:hover .project-row__title { transform: translate3d(calc(var(--dir, 1) * .25rem), 0, 0); }
     .project-group a:hover .project-row__arrow { transform: translate3d(.15rem, -.15rem, 0); }
   }
   @media (max-width: 1050px) {

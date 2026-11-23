@@ -1,0 +1,67 @@
+---
+/** /algotrading: what the trading systems do, every marketmaker.cc product, then the smaller trading projects. */
+import PageHero from './PageHero.astro';
+import Algotrading from './Algotrading.astro';
+import ProjectCards from './ProjectCards.astro';
+import Projects from './Projects.astro';
+import { defaultLocale, type Locale } from '../i18n/config';
+import { getHome } from '../i18n/home';
+import { getPages } from '../i18n/pages';
+import { marketmakerProducts, sideTradingGroups } from '../data/projects';
+
+interface Props { locale?: Locale; }
+const { locale = defaultLocale } = Astro.props;
+const t = getPages(locale).algo;
+const cases = getHome(locale).algotrading.sections.length;
+const sideCount = sideTradingGroups.reduce((sum, group) => sum + group.items.length, 0);
+---
+
+<PageHero
+  kicker={t.kicker}
+  title={t.title}
+  intro={t.intro}
+  stats={[
+    { label: t.stats.products, value: marketmakerProducts.length },
+    { label: t.stats.projects, value: sideCount },
+    { label: t.stats.cases, value: cases },
+  ]}
+/>
+
+<Algotrading locale={locale} variant="full" kicker={t.casesKicker} />
+
+<section id="marketmaker" class="psec terminal-section" aria-labelledby="ecosystem-heading">
+  <div class="terminal-container">
+    <header class="psec__head">
+      <div>
+        <p class="terminal-kicker">{t.ecosystem.kicker}</p>
+        <h2 id="ecosystem-heading" class="terminal-heading">{t.ecosystem.heading}</h2>
+      </div>
+      <p data-reveal>{t.ecosystem.intro}</p>
+    </header>
+    <ProjectCards locale={locale} items={marketmakerProducts} spans={{ 'Marketmaker.cc': 8 }} />
+  </div>
+</section>
+
+<section id="side-projects" class="psec terminal-section" aria-labelledby="side-heading">
+  <div class="terminal-container">
+    <header class="psec__head">
+      <div>
+        <p class="terminal-kicker">{t.side.kicker}</p>
+        <h2 id="side-heading" class="terminal-heading">{t.side.heading}</h2>
+      </div>
+      <p data-reveal>{t.side.intro}</p>
+    </header>
+  </div>
+  <Projects locale={locale} groups={sideTradingGroups} showHeader={false} showRoles={false} id="side-list" />
+</section>
+
+<style>
+  .psec { padding-block: clamp(4rem, 8vw, 7rem) 0; border-block-start: 1px solid var(--terminal-line); }
+  #marketmaker { padding-block-end: clamp(4rem, 8vw, 7rem); }
+  .psec__head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-block-end: clamp(2rem, 4vw, 3rem); }
+  .psec__head .terminal-heading { margin-block-start: 1rem; max-inline-size: 16ch; }
+  .psec__head > p { max-inline-size: 46ch; margin: 0; color: var(--terminal-muted); font-size: var(--text-base); line-height: 1.6; text-wrap: pretty; }
+  @media (max-width: 900px) {
+    .psec__head { grid-template-columns: 1fr; align-items: start; }
+  }
+</style>

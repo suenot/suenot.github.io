@@ -1,0 +1,47 @@
+---
+/** The top of a standalone page: kicker, a two-line display title, intro and a few numbers. */
+interface Props {
+  kicker: string;
+  title: [string, string];
+  intro: string;
+  stats?: { label: string; value: number }[];
+}
+const { kicker, title, intro, stats = [] } = Astro.props;
+---
+
+<section class="phero terminal-section" aria-labelledby="page-title">
+  <div class="terminal-container">
+    <p class="terminal-kicker">{kicker}</p>
+    <h1 id="page-title" class="phero__title display-type">
+      <span>{title[0]}</span>
+      <span class="phero__indent">{title[1]}<span class="phero__dot" aria-hidden="true"></span></span>
+    </h1>
+    <div class="phero__below">
+      <p class="phero__intro">{intro}</p>
+      {stats.length > 0 && (
+        <dl class="phero__stats">
+          {stats.map((stat) => (
+            <div><dt>{stat.label}</dt><dd data-count>{String(stat.value).padStart(2, '0')}</dd></div>
+          ))}
+        </dl>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .phero { padding-block: calc(var(--terminal-header) + clamp(2.5rem, 7vw, 6rem)) clamp(3rem, 6vw, 5rem); }
+  .phero__title { display: grid; margin: clamp(1.25rem, 2.5vw, 2rem) 0 0; color: var(--terminal-ink); font-size: clamp(3rem, 8.6vw, 8.5rem); line-height: .92; }
+  .phero__indent { padding-inline-start: .9em; }
+  .phero__dot { display: inline-block; inline-size: .15em; block-size: .15em; margin-inline-start: .04em; background: var(--terminal-accent); }
+  .phero__below { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: end; margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .phero__intro { max-inline-size: 36ch; margin: 0; color: var(--terminal-ink-2); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.4; text-wrap: pretty; }
+  .phero__stats { display: flex; flex-wrap: wrap; gap: 1.5rem clamp(2rem, 4vw, 3.5rem); margin: 0; }
+  .phero__stats div { display: grid; gap: .5rem; }
+  .phero__stats dt { max-inline-size: 14ch; color: var(--terminal-muted); font: .75rem/1.3 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .phero__stats dd { order: -1; margin: 0; color: var(--terminal-ink); font: 800 clamp(2.5rem, 4.4vw, 3.75rem)/1 var(--font-sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  @media (max-width: 900px) {
+    .phero__below { grid-template-columns: 1fr; align-items: start; }
+    .phero__indent { padding-inline-start: 0; }
+  }
+</style>
