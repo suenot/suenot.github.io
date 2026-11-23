@@ -1,0 +1,507 @@
+---
+import { defaultLocale, isRtl, type Locale } from '../i18n/config';
+import { getProduction } from '../i18n/production';
+
+interface Props { locale?: Locale; }
+const { locale = defaultLocale } = Astro.props;
+const t = getProduction(locale);
+const arrow = isRtl(locale) ? '←' : '→';
+const telegram = 'https://t.me/suenot';
+const examples = 'https://production.suenot.com';
+const pad = (n: number) => String(n).padStart(2, '0');
+let step = 0;
+---
+
+<section class="prod-hero terminal-section" aria-labelledby="prod-title">
+  <div class="terminal-container">
+    <p class="terminal-kicker prod-hero__kicker">{t.hero.kicker}</p>
+    <h1 id="prod-title" class="prod-hero__title display-type">
+      <span>{t.hero.title[0]}</span>
+      <span class="prod-hero__indent">{t.hero.title[1]}<span class="prod-hero__dot" aria-hidden="true"></span></span>
+    </h1>
+    <div class="prod-hero__below">
+      <p class="prod-hero__intro">{t.hero.intro}</p>
+      <div class="prod-hero__actions">
+        <a class="terminal-button terminal-button--primary" href={telegram} target="_blank" rel="noopener noreferrer">{t.hero.cta}<span aria-hidden="true">{arrow}</span></a>
+        <a class="terminal-link" href={examples} target="_blank" rel="noopener noreferrer">{t.hero.secondary} ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="prod-section terminal-section" aria-labelledby="services-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">01 · {t.services.kicker}</p>
+        <h2 id="services-heading" class="terminal-heading">{t.services.heading}</h2>
+      </div>
+      <p>{t.services.intro}</p>
+    </header>
+    <ol class="services" role="list">
+      {t.services.items.map((s, i) => (
+        <li class="service" data-reveal>
+          <div class="service__top">
+            <span class="service__num">{pad(i + 1)}</span>
+            <span class="service__price">{s.price}</span>
+          </div>
+          <h3>{s.name}</h3>
+          <p class="service__desc">{s.desc}</p>
+          <div class="service__term">
+            <span class="service__label">{t.services.termLabel}</span>
+            <span class="service__term-value">{s.term}</span>
+            <span class="service__cells" aria-hidden="true">
+              {Array.from({ length: 7 }, (_, c) => <i class={c < s.days ? 'is-on' : ''}></i>)}
+            </span>
+          </div>
+          <p class="service__label">{t.services.includedLabel}</p>
+          <ul class="service__included" role="list">
+            {s.included.map((item) => <li>{item}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section id="work" class="prod-section terminal-section" aria-labelledby="work-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">02 · {t.works.kicker}</p>
+        <h2 id="work-heading" class="terminal-heading">{t.works.heading}</h2>
+      </div>
+      <p>{t.works.intro}</p>
+    </header>
+
+    <div class="styles">
+      {t.works.styles.map((s, i) => (
+        <article class="style-card" data-reveal>
+          <p class="service__label"><span class="service__num">{pad(i + 1)}</span> · {s.label}</p>
+          <h3>{s.name}</h3>
+          <p>{s.text}</p>
+          <p class="style-card__best">{s.best}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="works-row">
+      <h3 class="works-row__title">{t.works.reelsTitle}</h3>
+      <a class="terminal-link" href="https://www.youtube.com/@caribbeanawesome" target="_blank" rel="noopener noreferrer">{t.works.reelsMore} ↗</a>
+    </div>
+    <ul class="reels" role="list">
+      {t.works.reels.map((r) => (
+        <li data-reveal>
+          <a class="reel" href={'https://www.youtube.com/shorts/' + r.id} target="_blank" rel="noopener noreferrer">
+            <img src={'/production/video/' + r.id + '.jpg'} alt="" loading="lazy" decoding="async" width="360" height="640" />
+            <span class="reel__play" aria-hidden="true"></span>
+            <span class="reel__title">{r.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="edit" data-reveal>
+      <div class="edit__text">
+        <h3 class="works-row__title">{t.works.editTitle}</h3>
+        <p>{t.works.editText}</p>
+        <p class="edit__flow"><span>{t.works.editFrom}</span><b aria-hidden="true">{arrow}</b><span>{t.works.editTo}</span></p>
+      </div>
+      <ul class="cuts" role="list">
+        {t.works.cuts.map((c) => (
+          <li>
+            <a class="reel reel--small" href={'https://www.youtube.com/shorts/' + c.id} target="_blank" rel="noopener noreferrer">
+              <img src={'/production/video/' + c.id + '.jpg'} alt="" loading="lazy" decoding="async" width="360" height="640" />
+              <span class="reel__title">{c.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="works-row">
+      <h3 class="works-row__title">{t.works.sitesTitle}</h3>
+      <a class="terminal-link" href="https://batumi-sites.vercel.app/" target="_blank" rel="noopener noreferrer">{t.works.sitesMore} ↗</a>
+    </div>
+    <ul class="sites" role="list">
+      {t.works.sites.map((s) => (
+        <li data-reveal>
+          <a class="site" href={s.url} target="_blank" rel="noopener noreferrer">
+            <span class="site__frame"><img src={s.img} alt="" loading="lazy" decoding="async" width="720" height="378" /></span>
+            <span class="site__name">{s.name} <span aria-hidden="true">↗</span></span>
+            <span class="site__desc">{s.desc}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section id="bot" class="bot terminal-section" aria-labelledby="bot-heading">
+  <div class="terminal-container">
+    <p class="terminal-kicker bot__kicker">03 · {t.bot.kicker}</p>
+    <h2 id="bot-heading" class="bot__heading">{t.bot.heading}</h2>
+    <div class="bot__grid">
+      <div>
+        <p class="bot__pain">{t.bot.pain}</p>
+        <p class="bot__intro">{t.bot.intro}</p>
+        <ol class="bot__steps" role="list">
+          {t.bot.steps.map((s, i) => (
+            <li data-reveal><span>{pad(i + 1)}</span><div><h3>{s.title}</h3><p>{s.text}</p></div></li>
+          ))}
+        </ol>
+      </div>
+      <div class="chat" aria-hidden="true">
+        <div class="chat__bar"><span class="chat__avatar">S</span><span><b>Site bot</b><small>online</small></span></div>
+        <div class="chat__body">
+          <p class="msg msg--me" style="--i:0">{t.bot.chat.owner}</p>
+          <p class="msg" style="--i:1">{t.bot.chat.accepted}</p>
+          <p class="msg" style="--i:2">{t.bot.chat.progress}<span class="msg__bar"><i></i></span></p>
+          <div class="msg" style="--i:3">{t.bot.chat.ready}<span class="msg__link">↗ {t.bot.chat.preview}</span>
+            <span class="msg__actions">{t.bot.chat.actions.map((a, i) => <span class:list={[{ 'is-main': i === 1 }]}>{a}</span>)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ol class="bot__outcomes" role="list">
+      {t.bot.outcomes.map((o, i) => (
+        <li data-reveal><span>{['✎', '✓', '☎'][i]}</span><h3>{o.title}</h3><p>{o.text}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section id="publishing" class="prod-section terminal-section" aria-labelledby="publishing-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">04 · {t.publishing.kicker}</p>
+        <h2 id="publishing-heading" class="terminal-heading">{t.publishing.heading}</h2>
+      </div>
+      <p>{t.publishing.intro}</p>
+    </header>
+    <div class="pub">
+      <ol class="pub__steps" role="list">
+        {t.publishing.steps.map((s, i) => (
+          <li data-reveal><span class="step__num">{pad(i + 1)}</span><div><h3>{s.title}</h3><p>{s.text}</p></div></li>
+        ))}
+      </ol>
+      <div class="cal" data-reveal>
+        <div class="cal__head"><b>{t.publishing.calendarTitle}</b><span>✓ {t.publishing.calendarDone}</span></div>
+        <div class="cal__grid">
+          {t.publishing.days.map((d) => <span class="cal__dow">{d}</span>)}
+          {Array.from({ length: 28 }, (_, i) => {
+            const type = [0, 1, 2, 0, 3, 1, 4][(i * 3 + Math.floor(i / 7)) % 7];
+            return <span class={'cal__day cal__day--' + type}><small>{i + 1}</small>{t.publishing.types[type]}</span>;
+          })}
+        </div>
+        <div class="cal__legend">{t.publishing.types.map((ty, i) => <span class={'cal__key cal__day--' + i}>{ty}</span>)}</div>
+        <p class="service__label cal__platforms-label">{t.publishing.platformsLabel}</p>
+        <ul class="cal__platforms" role="list">{t.publishing.platforms.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline" class="prod-section terminal-section" aria-labelledby="pipeline-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">05 · {t.pipeline.kicker}</p>
+        <h2 id="pipeline-heading" class="terminal-heading">{t.pipeline.heading}</h2>
+      </div>
+      <p>{t.pipeline.intro}</p>
+    </header>
+    {t.pipeline.phases.map((phase, p) => (
+      <div class="phase">
+        <h3 class="phase__name"><span>{pad(p + 1)}</span>{phase.name}</h3>
+        <ol class="phase__steps" role="list">
+          {phase.steps.map((s) => {
+            step += 1;
+            return (
+              <li class="step" data-reveal>
+                <span class="step__num">{pad(step)}</span>
+                <div class="step__body">
+                  <h4>{s.title}</h4>
+                  <p>{s.text}</p>
+                  {s.chips && (
+                    <ul class="step__chips" role="list">
+                      {s.chips.map((c) => <li><strong>{c.label}</strong><span>{c.text}</span></li>)}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section id="pricing" class="prod-section terminal-section" aria-labelledby="pricing-heading">
+  <div class="terminal-container">
+    <header class="prod-head">
+      <div>
+        <p class="terminal-kicker">06 · {t.pricing.kicker}</p>
+        <h2 id="pricing-heading" class="terminal-heading">{t.pricing.heading}</h2>
+      </div>
+      <p>{t.pricing.intro}</p>
+    </header>
+    <ol class="plans" role="list">
+      {t.pricing.plans.map((plan, i) => (
+        <li class:list={['plan', { 'plan--featured': i === 0 }]} data-reveal>
+          <p class="service__label">{plan.name}</p>
+          <p class="plan__price">{plan.price}</p>
+          <p class="plan__unit">{plan.unit}</p>
+          <p class="plan__text">{plan.text}</p>
+          <ul class="service__included" role="list">
+            {plan.items.map((item) => <li>{item}</li>)}
+          </ul>
+          <a class="terminal-link plan__cta" href={telegram} target="_blank" rel="noopener noreferrer">{t.pricing.cta} {arrow}</a>
+        </li>
+      ))}
+    </ol>
+    <p class="plans__note">{t.pricing.note}</p>
+  </div>
+</section>
+
+<section id="faq" class="prod-section terminal-section" aria-labelledby="faq-heading">
+  <div class="terminal-container">
+    <div class="audience">
+      <p class="terminal-kicker">{t.audience.kicker}</p>
+      <h2 class="audience__heading">{t.audience.heading}</h2>
+      <ul class="audience__list" role="list">{t.audience.items.map((a) => <li>{a}</li>)}</ul>
+    </div>
+    <div class="faq">
+      <div>
+        <p class="terminal-kicker">07 · {t.faq.kicker}</p>
+        <h2 id="faq-heading" class="terminal-heading">{t.faq.heading}</h2>
+      </div>
+      <div class="faq__list">
+        {t.faq.items.map((f, i) => (
+          <details open={i === 0}>
+            <summary><span>{f.q}</span><i aria-hidden="true"></i></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="prod-cta terminal-section" aria-labelledby="prod-cta-heading">
+  <div class="terminal-container prod-cta__inner">
+    <h2 id="prod-cta-heading" class="terminal-heading">{t.contact.heading}</h2>
+    <div>
+      <p>{t.contact.text}</p>
+      <div class="prod-hero__actions">
+        <a class="terminal-button terminal-button--primary" href={telegram} target="_blank" rel="noopener noreferrer">Telegram @suenot<span aria-hidden="true">{arrow}</span></a>
+        <a class="terminal-link" href="mailto:suenot@gmail.com">suenot@gmail.com</a>
+      </div>
+      <a class="terminal-link prod-cta__examples" href={examples} target="_blank" rel="noopener noreferrer">{t.contact.examples} ↗</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prod-hero { padding-block: calc(var(--terminal-header) + clamp(2.5rem, 7vw, 6rem)) clamp(3rem, 6vw, 5rem); }
+  .prod-hero__title { display: grid; margin: clamp(1.25rem, 2.5vw, 2rem) 0 0; color: var(--terminal-ink); font-size: clamp(3rem, 8.6vw, 8.5rem); line-height: .92; }
+  .prod-hero__indent { padding-inline-start: .9em; }
+  .prod-hero__dot { display: inline-block; inline-size: .15em; block-size: .15em; margin-inline-start: .04em; background: var(--terminal-accent); }
+  .prod-hero__below { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: end; margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .prod-hero__intro { max-inline-size: 36ch; margin: 0; color: var(--terminal-ink-2); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.4; text-wrap: pretty; }
+  .prod-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 1.75rem; }
+
+  .prod-section { padding-block: clamp(4rem, 8vw, 7rem); border-block-start: 1px solid var(--terminal-line); }
+  .prod-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-block-end: clamp(2.5rem, 5vw, 4rem); }
+  .prod-head .terminal-heading { margin-block-start: 1rem; max-inline-size: 14ch; }
+  .prod-head > p { max-inline-size: 48ch; margin: 0; color: var(--terminal-muted); font-size: var(--text-base); line-height: 1.6; }
+
+  .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--terminal-line); border: 1px solid var(--terminal-line); }
+  .service { display: flex; flex-direction: column; gap: .9rem; padding: clamp(1.5rem, 2.4vw, 2rem); background: var(--terminal-bg); transition: background-color 160ms ease; }
+  .service:hover { background: var(--terminal-panel); }
+  .service__top { display: flex; justify-content: space-between; gap: 1rem; font: .75rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .service__num { color: var(--terminal-accent); }
+  .service__price { color: var(--terminal-ink); }
+  .service h3 { margin: .5rem 0 0; color: var(--terminal-ink); font-size: clamp(1.5rem, 2.2vw, 1.875rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .service__desc { margin: 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.5; }
+  .service__term { display: grid; grid-template-columns: auto 1fr; gap: .5rem 1rem; align-items: center; padding-block: .9rem; border-block: 1px solid var(--terminal-line); }
+  .service__label { margin: 0; color: var(--terminal-muted); font: .75rem/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .service__term-value { justify-self: end; color: var(--terminal-ink); font-size: .9375rem; font-weight: 650; }
+  .service__cells { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .service__cells i { block-size: .5rem; background: var(--terminal-line); }
+  .service__cells i.is-on { background: var(--terminal-accent); }
+  .service__included { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+  .service__included li { position: relative; padding-inline-start: 1.1rem; color: var(--terminal-ink-2); font-size: .9375rem; line-height: 1.45; }
+  .service__included li::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: .55em; inline-size: .4rem; block-size: .4rem; background: var(--terminal-ink); }
+
+  .phase { display: grid; grid-template-columns: minmax(12rem, .32fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); padding-block: clamp(1.5rem, 3vw, 2.5rem); border-block-start: 1px solid var(--terminal-line-strong); }
+  .phase__name { position: sticky; inset-block-start: calc(var(--terminal-header) + 1.5rem); align-self: start; display: grid; gap: .6rem; margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .phase__name span { color: var(--terminal-accent); font: .75rem/1 var(--font-mono); letter-spacing: .1em; }
+  .phase__steps { margin: 0; padding: 0; list-style: none; }
+  .step { display: grid; grid-template-columns: clamp(3.5rem, 6vw, 5.5rem) minmax(0, 1fr); gap: 1.25rem; padding-block: 1.5rem; border-block-end: 1px solid var(--terminal-line); }
+  .step:first-child { padding-block-start: 0; }
+  .step:last-child { border-block-end: 0; }
+  .step__num { color: var(--terminal-dim); font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .step h4 { margin: 0; color: var(--terminal-ink); font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 750; letter-spacing: -.025em; line-height: 1.2; }
+  .step p { max-inline-size: 62ch; margin: .5rem 0 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.6; }
+  .step__chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .step__chips li { display: grid; gap: .35rem; padding: .9rem 1rem; border: 1px solid var(--terminal-line-strong); background: var(--terminal-panel); }
+  .step__chips strong { color: var(--terminal-accent); font: 500 .75rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .step__chips span { color: var(--terminal-ink-2); font-size: .9375rem; line-height: 1.45; }
+
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .plan { display: flex; flex-direction: column; gap: .75rem; padding: clamp(1.5rem, 2.4vw, 2rem); border: 1px solid var(--terminal-line-strong); background: var(--terminal-panel); }
+  .plan--featured { border-color: var(--terminal-ink); }
+  .plan__price { margin: .5rem 0 0; color: var(--terminal-ink); font-size: clamp(2.75rem, 4.4vw, 3.75rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+  .plan__unit { margin: 0; color: var(--terminal-muted); font-size: .9375rem; }
+  .plan__text { margin: .25rem 0 .5rem; color: var(--terminal-ink); font-size: var(--text-base); font-weight: 600; line-height: 1.45; }
+  .plan__cta { margin-block-start: auto; padding-block-start: 1rem; align-self: flex-start; }
+  .plans__note { max-inline-size: 70ch; margin: 1.5rem 0 0; color: var(--terminal-muted); font-size: .9375rem; }
+
+  .prod-cta { padding-block: clamp(4rem, 8vw, 7rem); border-block-start: 1px solid var(--terminal-line); }
+  .prod-cta__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; }
+  .prod-cta__inner p { max-inline-size: 40ch; margin: 0 0 1.75rem; color: var(--terminal-ink-2); font-size: clamp(1.125rem, 1.5vw, 1.3125rem); line-height: 1.5; }
+  .prod-cta__examples { display: inline-block; margin-block-start: 1.5rem; }
+
+  /* Work */
+  .styles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block-end: clamp(3rem, 6vw, 5rem); }
+  .style-card { display: grid; gap: .75rem; align-content: start; padding: clamp(1.5rem, 2.4vw, 2rem); border: 1px solid var(--terminal-line-strong); background: var(--terminal-panel); }
+  .style-card h3 { margin: .25rem 0 0; color: var(--terminal-ink); font-size: clamp(1.75rem, 2.8vw, 2.5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+  .style-card p { margin: 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.55; }
+  .style-card .style-card__best { color: var(--terminal-muted); font-size: .9375rem; }
+  .works-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .75rem 2rem; margin-block: 0 1.25rem; }
+  .works-row__title { margin: 0; color: var(--terminal-ink); font-size: var(--text-h3); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; }
+  .reels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; margin: 0 0 clamp(3rem, 6vw, 5rem); padding: 0; list-style: none; }
+  .reel { position: relative; display: block; overflow: hidden; aspect-ratio: 9 / 16; border-radius: .75rem; background: var(--terminal-inverse-bg); color: #fff; text-decoration: none; isolation: isolate; }
+  .reel img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 500ms var(--ease-out, ease); }
+  .reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgb(0 0 0 / .78)); z-index: 1; }
+  .reel__title { position: absolute; inset-inline: .8rem; inset-block-end: .8rem; z-index: 2; font-size: .9375rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; }
+  .reel__play { position: absolute; inset-block-start: .75rem; inset-inline-end: .75rem; z-index: 2; inline-size: 2.25rem; block-size: 2.25rem; border-radius: 50%; background: rgb(255 255 255 / .92); transition: transform 240ms var(--ease-out, ease), background-color 240ms; }
+  .reel__play::before { content: ""; position: absolute; inset: 0; margin: auto; inline-size: 0; block-size: 0; translate: 2px 0; border-block: .38rem solid transparent; border-inline-start: .6rem solid #111; }
+  .reel:hover img { transform: scale(1.05); }
+  .reel:hover .reel__play { transform: scale(1.12); background: var(--terminal-accent); }
+  .reel:focus-visible, .site:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 3px; }
+  .edit { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.6fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; margin-block-end: clamp(3rem, 6vw, 5rem); padding: clamp(1.5rem, 3vw, 2.5rem); border: 1px solid var(--terminal-line-strong); }
+  .edit__text p { margin: .75rem 0 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.55; }
+  .edit__flow { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; font: 500 .8125rem/1.2 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+  .edit__flow span { padding: .45rem .6rem; border: 1px solid var(--terminal-line-strong); color: var(--terminal-ink); }
+  .edit__flow b { color: var(--terminal-accent); }
+  .cuts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; margin: 0; padding: 0; list-style: none; }
+  .reel--small { border-radius: .6rem; }
+  .reel--small .reel__title { font: 500 .6875rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .sites { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.25rem, 2vw, 1.75rem) 1rem; margin: 0; padding: 0; list-style: none; }
+  .site { display: grid; gap: .35rem; color: inherit; text-decoration: none; }
+  .site__frame { display: block; overflow: hidden; margin-block-end: .5rem; aspect-ratio: 720 / 378; border: 1px solid var(--terminal-line-strong); border-radius: .5rem; background: var(--terminal-panel); }
+  .site__frame img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 600ms var(--ease-out, ease); }
+  .site:hover .site__frame img { transform: scale(1.04); }
+  .site__name { color: var(--terminal-ink); font-size: 1.125rem; font-weight: 750; letter-spacing: -.02em; }
+  .site__name span { color: var(--terminal-accent); }
+  .site__desc { color: var(--terminal-muted); font-size: .9375rem; }
+
+  /* Bot: the accent section, inverted */
+  .bot { padding-block: clamp(4.5rem, 9vw, 8rem); background: var(--terminal-inverse-bg); color: var(--terminal-inverse-ink); }
+  .bot__kicker { color: color-mix(in oklab, var(--terminal-inverse-ink) 60%, transparent); }
+  .bot__heading { max-inline-size: 16ch; margin: 1.25rem 0 0; color: var(--terminal-inverse-ink); font-size: clamp(2.75rem, 6.4vw, 6rem); font-weight: 800; letter-spacing: -.055em; line-height: .92; text-wrap: balance; }
+  .bot__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .85fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .bot__pain { max-inline-size: 30ch; margin: 0; padding-inline-start: 1.25rem; border-inline-start: 3px solid var(--terminal-accent); color: var(--terminal-inverse-ink); font-size: clamp(1.375rem, 2.2vw, 1.875rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.25; }
+  .bot__intro { max-inline-size: 52ch; margin: 1.75rem 0 0; color: color-mix(in oklab, var(--terminal-inverse-ink) 72%, transparent); font-size: var(--text-base); line-height: 1.6; }
+  .bot__steps { display: grid; gap: 0; margin: 2.25rem 0 0; padding: 0; list-style: none; }
+  .bot__steps li { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding-block: 1.1rem; border-block-start: 1px solid color-mix(in oklab, var(--terminal-inverse-ink) 16%, transparent); }
+  .bot__steps li > span { color: var(--terminal-accent); font: 500 .8125rem/1.6 var(--font-mono); letter-spacing: .08em; }
+  .bot__steps h3 { margin: 0; color: var(--terminal-inverse-ink); font-size: 1.25rem; font-weight: 750; letter-spacing: -.02em; }
+  .bot__steps p { margin: .35rem 0 0; color: color-mix(in oklab, var(--terminal-inverse-ink) 68%, transparent); font-size: .9875rem; line-height: 1.55; }
+  .chat { position: sticky; inset-block-start: calc(var(--terminal-header) + 2rem); overflow: hidden; border-radius: 1.5rem; background: #f4f4f1; color: #16181a; box-shadow: 0 2rem 4rem -1.5rem rgb(0 0 0 / .55); }
+  .chat__bar { display: flex; align-items: center; gap: .75rem; padding: .9rem 1.1rem; background: #fff; border-block-end: 1px solid #e4e4e0; }
+  .chat__bar b { display: block; font-size: .9375rem; }
+  .chat__bar small { color: #2f8a4c; font-size: .75rem; }
+  .chat__avatar { display: grid; place-items: center; inline-size: 2.25rem; block-size: 2.25rem; border-radius: 50%; background: var(--terminal-accent); color: #fff; font-weight: 800; }
+  .chat__body { display: grid; gap: .65rem; padding: 1.25rem 1.1rem 1.5rem; background: radial-gradient(circle at 1px 1px, #dcdcd6 1px, transparent 0) 0 0 / 14px 14px; }
+  .msg { justify-self: start; max-inline-size: 86%; margin: 0; padding: .7rem .9rem; border-radius: 1rem 1rem 1rem .25rem; background: #fff; box-shadow: 0 1px 0 rgb(0 0 0 / .06); font-size: .9375rem; line-height: 1.4; }
+  .msg--me { justify-self: end; border-radius: 1rem 1rem .25rem 1rem; background: #dcf3c8; }
+  .msg__bar { display: block; overflow: hidden; block-size: 4px; margin-block-start: .6rem; border-radius: 2px; background: #e6e6e1; }
+  .msg__bar i { display: block; inline-size: 62%; block-size: 100%; background: var(--terminal-accent); }
+  .msg__link { display: block; margin-block-start: .5rem; padding: .55rem .7rem; border-radius: .5rem; background: #f0f0ec; color: #1d5fd0; font: 500 .8125rem/1.3 var(--font-mono); }
+  .msg__actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-block-start: .65rem; }
+  .msg__actions span { padding: .45rem .7rem; border: 1px solid #d6d6d0; border-radius: 999px; font-size: .8125rem; font-weight: 650; }
+  .msg__actions .is-main { border-color: var(--terminal-accent); background: var(--terminal-accent); color: #fff; }
+  @media (prefers-reduced-motion: no-preference) {
+    .chat .msg { animation: msg-in 520ms var(--ease-out, ease) both; animation-delay: calc(var(--i) * 700ms + 300ms); }
+    .msg__bar i { animation: bar 2.4s ease-in-out infinite alternate; }
+    @keyframes msg-in { from { opacity: 0; transform: translateY(.75rem) scale(.97); } }
+    @keyframes bar { from { inline-size: 18%; } to { inline-size: 92%; } }
+  }
+  .bot__outcomes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: clamp(3rem, 6vw, 5rem) 0 0; padding: 0; list-style: none; background: color-mix(in oklab, var(--terminal-inverse-ink) 16%, transparent); border: 1px solid color-mix(in oklab, var(--terminal-inverse-ink) 16%, transparent); }
+  .bot__outcomes li { padding: clamp(1.5rem, 2.4vw, 2rem); background: var(--terminal-inverse-bg); }
+  .bot__outcomes li > span { display: grid; place-items: center; inline-size: 2.5rem; block-size: 2.5rem; border-radius: 50%; background: var(--terminal-accent); color: #fff; font-size: 1.1rem; }
+  .bot__outcomes h3 { margin: 1.1rem 0 0; color: var(--terminal-inverse-ink); font-size: clamp(1.375rem, 2vw, 1.75rem); font-weight: 800; letter-spacing: -.03em; }
+  .bot__outcomes p { margin: .5rem 0 0; color: color-mix(in oklab, var(--terminal-inverse-ink) 68%, transparent); font-size: .9875rem; line-height: 1.55; }
+
+  /* Publishing */
+  .pub { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .pub__steps { margin: 0; padding: 0; list-style: none; }
+  .pub__steps li { display: grid; grid-template-columns: clamp(3.25rem, 5vw, 4.5rem) 1fr; gap: 1rem; padding-block: 1.25rem; border-block-end: 1px solid var(--terminal-line); }
+  .pub__steps li:first-child { padding-block-start: 0; }
+  .pub__steps h3 { margin: 0; color: var(--terminal-ink); font-size: 1.3125rem; font-weight: 750; letter-spacing: -.02em; }
+  .pub__steps p { margin: .4rem 0 0; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.55; }
+  .cal { position: sticky; inset-block-start: calc(var(--terminal-header) + 2rem); padding: clamp(1.25rem, 2vw, 1.75rem); border: 1px solid var(--terminal-line-strong); border-radius: 1rem; background: var(--terminal-panel); }
+  .cal__head { display: flex; justify-content: space-between; gap: 1rem; margin-block-end: 1rem; font-size: .9375rem; }
+  .cal__head span { color: #2f8a4c; font-weight: 650; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .35rem; }
+  .cal__dow { padding-block-end: .25rem; color: var(--terminal-muted); font: .6875rem/1 var(--font-mono); letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+  .cal__day { display: grid; align-content: space-between; min-block-size: 3.4rem; padding: .35rem .4rem; border-radius: .4rem; background: var(--c); color: var(--terminal-ink); font-size: .6875rem; font-weight: 650; overflow: hidden; }
+  .cal__day small { color: var(--terminal-muted); font: .625rem/1 var(--font-mono); }
+  .cal__day--0 { --c: color-mix(in oklab, var(--terminal-accent) 22%, var(--terminal-bg)); }
+  .cal__day--1 { --c: color-mix(in oklab, #3b6fd8 18%, var(--terminal-bg)); }
+  .cal__day--2 { --c: color-mix(in oklab, #d89a2b 22%, var(--terminal-bg)); }
+  .cal__day--3 { --c: color-mix(in oklab, #2f8a4c 20%, var(--terminal-bg)); }
+  .cal__day--4 { --c: color-mix(in oklab, #8a4bd8 18%, var(--terminal-bg)); }
+  .cal__legend { display: flex; flex-wrap: wrap; gap: .4rem; margin-block-start: 1rem; }
+  .cal__key { padding: .3rem .55rem; border-radius: 999px; background: var(--c); font-size: .75rem; font-weight: 650; }
+  .cal__platforms-label { margin-block-start: 1.25rem; }
+  .cal__platforms { display: flex; flex-wrap: wrap; gap: .4rem; margin: .6rem 0 0; padding: 0; list-style: none; }
+  .cal__platforms li { padding: .4rem .65rem; border: 1px solid var(--terminal-line-strong); font-size: .8125rem; font-weight: 600; }
+
+  /* Audience and FAQ */
+  .audience { margin-block-end: clamp(4rem, 8vw, 6rem); }
+  .audience__heading { max-inline-size: 20ch; margin: 1rem 0 0; color: var(--terminal-ink); font-size: var(--text-h2); font-weight: 800; letter-spacing: -.045em; line-height: 1; }
+  .audience__list { display: flex; flex-wrap: wrap; gap: .6rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+  .audience__list li { padding: .7rem 1.1rem; border: 1px solid var(--terminal-line-strong); border-radius: 999px; color: var(--terminal-ink); font-size: clamp(1rem, 1.3vw, 1.125rem); font-weight: 650; transition: background-color 160ms, color 160ms; }
+  .audience__list li:hover { background: var(--terminal-ink); color: var(--terminal-bg); }
+  .faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 5vw, 5rem); }
+  .faq .terminal-heading { margin-block-start: 1rem; max-inline-size: 12ch; }
+  .faq__list details { border-block-start: 1px solid var(--terminal-line-strong); }
+  .faq__list details:last-child { border-block-end: 1px solid var(--terminal-line-strong); }
+  .faq__list summary { display: flex; justify-content: space-between; gap: 1.5rem; padding-block: 1.25rem; color: var(--terminal-ink); font-size: clamp(1.125rem, 1.6vw, 1.3125rem); font-weight: 700; letter-spacing: -.015em; cursor: pointer; list-style: none; }
+  .faq__list summary::-webkit-details-marker { display: none; }
+  .faq__list summary i { position: relative; flex: none; inline-size: 1rem; block-size: 1rem; margin-block-start: .3rem; }
+  .faq__list summary i::before, .faq__list summary i::after { content: ""; position: absolute; inset: 0; margin: auto; inline-size: 100%; block-size: 2px; background: var(--terminal-accent); transition: transform 220ms var(--ease-out, ease); }
+  .faq__list summary i::after { transform: rotate(90deg); }
+  .faq__list details[open] summary i::after { transform: rotate(0); }
+  .faq__list details p { max-inline-size: 62ch; margin: 0; padding-block-end: 1.35rem; color: var(--terminal-ink-2); font-size: var(--text-base); line-height: 1.6; }
+
+  @media (max-width: 64rem) {
+    .reels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sites { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .bot__grid, .pub, .edit, .faq { grid-template-columns: 1fr; }
+    .chat, .cal { position: static; }
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .plans { grid-template-columns: 1fr; }
+    .step__chips { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 52rem) {
+    .prod-hero__below, .prod-head, .prod-cta__inner { grid-template-columns: 1fr; align-items: start; }
+    .phase { grid-template-columns: 1fr; }
+    .phase__name { position: static; }
+  }
+  @media (max-width: 38rem) {
+    .reels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sites, .styles, .bot__outcomes { grid-template-columns: 1fr; }
+    .cuts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cal__day { min-block-size: 2.6rem; font-size: .5625rem; }
+    .services { grid-template-columns: 1fr; }
+    .prod-hero__indent { padding-inline-start: 0; }
+    .step { grid-template-columns: 2.75rem minmax(0, 1fr); gap: .9rem; }
+  }
+</style>

@@ -20,6 +20,7 @@ const navLinks = [
   { label: t('nav.about'), href: `${prefix}/#about` },
   { label: t('nav.algotrading'), href: `${prefix}/#algotrading` },
   { label: t('nav.projects'), href: `${prefix}/#projects` },
+  { label: t('nav.production'), href: `${prefix}/production/` },
   { label: t('nav.blog'), href: blogHref },
   { label: t('nav.contact'), href: `${prefix}/#contact` },
   { label: t('nav.cv'), href: resumeUrl(locale) },
@@ -35,22 +36,29 @@ const socialLinks = [
 
 <footer class="site-footer">
   <div class="footer-shell">
-    {cta && <div class="footer-primary">
-      <div>
-        <div class="terminal-label">{t('footer.status_available')}</div>
-        <div class="footer-wordmark display-type" aria-hidden="true">SUENOT</div>
+    {cta && (
+      <div class="footer-contact">
+        <p class="terminal-label">{t('footer.status_available')}</p>
+        <a class="footer-email" href="mailto:suenot@gmail.com">suenot@gmail.com<span aria-hidden="true">↗</span></a>
+        <a class="footer-tg" href="https://t.me/suenot" target="_blank" rel="noopener noreferrer">Telegram @suenot ↗</a>
       </div>
-      <div class="footer-command">
-        <span class="terminal-label">[ DIRECT CHANNEL ]</span>
-        <a class="terminal-button terminal-button--primary" href="mailto:suenot@gmail.com">
-          SUENOT@GMAIL.COM <span aria-hidden="true">→</span>
-        </a>
+    )}
+
+    <div class="footer-stage" data-stage>
+      <div class="footer-wordmark display-type" aria-label="Suenot" data-wordmark>
+        {'SUENOT'.split('').map((ch) => <span class="footer-letter" aria-hidden="true">{ch}</span>)}
+        <button type="button" class="bot" data-bot aria-label="Pixel critter: click to make it jump">
+          <span class="bot__body">
+            <svg class="bot__frame bot__frame--idle" viewBox="0 0 13 9" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="8" width="1.02" height="1.02" fill="var(--clawd)"/></svg>
+            <svg class="bot__frame bot__frame--jump" viewBox="0 0 13 9" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="0" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="1" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="2" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="2" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="4" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="5" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect class="eye" x="8" y="3" width="1.02" height="1.02" fill="var(--clawd-eye)"/><rect x="9" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="3" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="4" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="5" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="2" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="3" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="5" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="6" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="7" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="9" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="10" y="6" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="1" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="4" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="8" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="11" y="7" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="0" y="8" width="1.02" height="1.02" fill="var(--clawd)"/><rect x="12" y="8" width="1.02" height="1.02" fill="var(--clawd)"/></svg>
+          </span>
+        </button>
       </div>
-    </div>}
+    </div>
 
     <div class="footer-index">
       <nav aria-label={t('footer.col_sitemap')}>
-        <span class="terminal-label">NAV / INDEX</span>
+        <span class="terminal-label">Site</span>
         <ul role="list">
           {navLinks.map((link, index) => (
             <li><a href={link.href}>{String(index + 1).padStart(2, '0')} {link.label}</a></li>
@@ -59,14 +67,13 @@ const socialLinks = [
       </nav>
 
       <div>
-        <span class="terminal-label">EXTERNAL / LINKS</span>
+        <span class="terminal-label">Elsewhere</span>
         <ul role="list">
           {socialLinks.map((link) => (
             <li><a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}>{link.label} ↗</a></li>
           ))}
         </ul>
       </div>
-
     </div>
 
     <div class="footer-strip">
@@ -79,8 +86,11 @@ const socialLinks = [
 
 <style>
   .site-footer {
+    --clawd: #d97757;
+    --clawd-eye: #141413;
     border-block-start: 1px solid var(--terminal-line);
     background: var(--terminal-footer);
+    overflow: hidden;
   }
 
   .footer-shell {
@@ -88,29 +98,101 @@ const socialLinks = [
     margin-inline: auto;
   }
 
-  .footer-primary {
+  .footer-contact {
     display: grid;
-    min-height: 26rem;
-    padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 3vw, 3rem) 0;
-    grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
-    gap: 2rem;
+    justify-items: start;
+    gap: 1.25rem;
+    padding: clamp(3.5rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem) 0;
+  }
+
+  .footer-email {
+    display: inline-flex;
+    align-items: baseline;
+    gap: .15em;
+    color: var(--terminal-ink);
+    font-size: clamp(2.25rem, 7.4vw, 7rem);
+    font-weight: 800;
+    letter-spacing: -.055em;
+    line-height: .95;
+    text-decoration: none;
+    background: linear-gradient(var(--terminal-accent), var(--terminal-accent)) no-repeat 0 100% / 0 .06em;
+    transition: background-size 420ms var(--ease-out, ease), color 200ms;
+  }
+
+  .footer-email span { color: var(--terminal-accent); font-size: .55em; transition: transform 300ms var(--ease-out, ease); }
+  .footer-email:hover { background-size: 100% .06em; }
+  .footer-email:hover span { transform: translate(.08em, -.08em); }
+  .footer-email:focus-visible, .footer-tg:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 4px; }
+
+  .footer-tg {
+    color: var(--terminal-ink-2);
+    font: 500 .875rem/1 var(--font-mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .footer-tg:hover { color: var(--terminal-accent); }
+
+  .footer-stage {
+    container-type: inline-size;
+    padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 4vw, 3rem) 2.2cqi;
   }
 
   .footer-wordmark {
-    margin-block-start: clamp(3rem, 9vw, 8rem);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
     color: var(--terminal-ink);
-    font-size: clamp(5.5rem, 17vw, 18rem);
-    white-space: nowrap;
+    font-size: 24.6cqi;
+    letter-spacing: -.04em;
+    line-height: .74;
+    user-select: none;
   }
 
-  .footer-command {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding-block-end: clamp(2.25rem, 5vw, 5rem);
+  .footer-letter {
+    display: inline-block;
+    transform-origin: 50% 100%;
+    transition: color 200ms;
   }
+
+  .footer-letter.is-hit { animation: letter-hit 420ms var(--ease-out, ease); color: var(--terminal-accent); }
+
+  @keyframes letter-hit {
+    0% { transform: translateY(0) scaleY(1); }
+    30% { transform: translateY(.045em) scaleY(.94); }
+    100% { transform: translateY(0) scaleY(1); }
+  }
+
+  .bot {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 2;
+    inline-size: .26em;
+    block-size: calc(.26em * 9 / 13);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    will-change: transform;
+    font-size: inherit;
+  }
+
+  .bot__body {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 100%;
+  }
+
+  .bot__frame { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+  .bot__frame--jump { visibility: hidden; }
+  .bot[data-air] .bot__frame--jump { visibility: visible; }
+  .bot[data-air] .bot__frame--idle { visibility: hidden; }
+  .bot[data-flip] .bot__body { scale: -1 1; }
+  .bot[data-blink] .eye { fill: var(--clawd); }
+  .bot:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 4px; }
 
   .footer-index {
     display: grid;
@@ -123,8 +205,8 @@ const socialLinks = [
 
   .footer-index > * {
     min-width: 0;
-    padding: 1.5rem clamp(1rem, 3vw, 3rem);
-    background: var(--terminal-bg);
+    padding: 1.5rem clamp(1.25rem, 4vw, 3rem);
+    background: var(--terminal-footer);
   }
 
   .footer-index ul {
@@ -141,10 +223,10 @@ const socialLinks = [
     border: 0;
     background: transparent;
     color: var(--terminal-muted);
-    font-size: 0.6875rem;
+    font-size: .75rem;
     letter-spacing: 0.08em;
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: uppercase; font-family: var(--font-mono);
   }
 
   .footer-index a:hover,
@@ -157,50 +239,139 @@ const socialLinks = [
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem clamp(1rem, 3vw, 3rem);
+    padding: 1rem clamp(1.25rem, 4vw, 3rem);
     color: var(--terminal-dim);
-    font-size: 0.625rem;
+    font-size: .75rem;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
+    text-transform: uppercase; font-family: var(--font-mono);
   }
 
   @media (max-width: 56rem) {
-    .footer-primary {
-      min-height: 22rem;
-      grid-template-columns: 1fr;
-    }
-
-    .footer-wordmark {
-      white-space: normal;
-    }
-
-    .footer-command {
-      justify-content: start;
-      padding-block-end: 2rem;
-    }
-
-    .footer-index {
-      grid-template-columns: 1fr;
-    }
+    .footer-index { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 38rem) {
-    .footer-primary {
-      min-height: 19rem;
-    }
-
-    .footer-wordmark {
-      font-size: clamp(4.5rem, 25vw, 8rem);
-    }
-
-    .footer-strip {
-      align-items: flex-start;
-      flex-direction: column;
-    }
+    .bot { inline-size: .32em; block-size: calc(.32em * 9 / 13); }
+    .footer-strip { align-items: flex-start; flex-direction: column; }
   }
 </style>
 
 <script>
+  /* A small pixel bot hops across the SUENOT letters. Letters dip when it lands.
+     Hover a letter to send it there; click the bot for a big jump. */
+  let stopBot: (() => void) | undefined;
+
+  const initBot = () => {
+    stopBot?.();
+    const mark = document.querySelector<HTMLElement>('[data-wordmark]');
+    const bot = mark?.querySelector<HTMLElement>('[data-bot]');
+    if (!mark || !bot) return;
+    const body = bot.querySelector<HTMLElement>('.bot__body')!;
+    const letters = [...mark.querySelectorAll<HTMLElement>('.footer-letter')];
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let at = 0;
+    let dir = 1;
+    let target: number | null = null;
+    let busy = false;
+    let visible = false;
+    let timer = 0;
+    let raf = 0;
+    let alive = true;
+
+    /* Where the bot stands on a letter: centered, feet on the cap line. */
+    const spot = (i: number) => {
+      const l = letters[i];
+      const fs = parseFloat(getComputedStyle(mark).fontSize);
+      const x = l.offsetLeft + l.offsetWidth / 2 - bot.offsetWidth / 2 + (i === 3 ? fs * .02 : 0);
+      const y = l.offsetTop - bot.offsetHeight + fs * 0.012;
+      return { x, y, fs };
+    };
+
+    const place = (x: number, y: number) => { bot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)'; };
+
+    const hit = (i: number) => {
+      const l = letters[i];
+      l.classList.remove('is-hit');
+      void l.offsetWidth;
+      l.classList.add('is-hit');
+    };
+
+    const squash = (k: number) => { body.style.transform = 'scale(' + (1 + k * .18) + ',' + (1 - k * .22) + ')'; };
+
+    const hop = (to: number, height = 1) => new Promise<void>((done) => {
+      busy = true;
+      const a = spot(at);
+      const b = spot(to);
+      if (b.x !== a.x) { if (b.x < a.x) bot.setAttribute('data-flip', ''); else bot.removeAttribute('data-flip'); }
+      const dist = Math.abs(to - at) || 1;
+      const dur = 420 + dist * 160 * Math.min(height, 1.4);
+      const peak = a.fs * (.16 + .05 * dist) * height;
+      const t0 = performance.now();
+      squash(1);
+      const tick = (now: number) => {
+        if (!alive) return;
+        const t = Math.min((now - t0) / dur, 1);
+        if (t > .08) { bot.setAttribute('data-air', ''); squash(t < .2 ? -.6 : 0); }
+        const x = a.x + (b.x - a.x) * t;
+        const y = a.y + (b.y - a.y) * t - peak * 4 * t * (1 - t);
+        place(x, y);
+        if (t < 1) { raf = requestAnimationFrame(tick); return; }
+        bot.removeAttribute('data-air');
+        squash(1);
+        hit(to);
+        at = to;
+        setTimeout(() => { squash(0); busy = false; done(); }, 140);
+      };
+      raf = requestAnimationFrame(tick);
+    });
+
+    const next = async () => {
+      if (!alive) return;
+      if (visible && !busy && !document.hidden) {
+        let to: number;
+        if (target !== null && target !== at) { to = target; target = null; }
+        else {
+          if (at + dir < 0 || at + dir >= letters.length) dir = -dir;
+          to = at + dir;
+        }
+        await hop(to);
+      }
+      if (Math.random() < .25) { bot.setAttribute('data-blink', ''); setTimeout(() => bot.removeAttribute('data-blink'), 140); }
+      timer = window.setTimeout(next, 700 + Math.random() * 900);
+    };
+
+    const reset = () => { const p = spot(at); place(p.x, p.y); };
+    reset();
+    bot.style.transition = 'none';
+    body.style.transition = 'transform 120ms ease-out';
+
+    const ro = new ResizeObserver(() => { if (!busy) reset(); });
+    ro.observe(mark);
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: .2 });
+    io.observe(mark);
+
+    const onEnter = (e: Event) => { const i = letters.indexOf(e.currentTarget as HTMLElement); if (i >= 0) target = i; };
+    letters.forEach((l) => l.addEventListener('pointerenter', onEnter));
+    const onClick = () => { if (!busy) hop(at, 2.6); };
+    bot.addEventListener('click', onClick);
+
+    if (!still) timer = window.setTimeout(next, 900);
+
+    stopBot = () => {
+      alive = false;
+      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      io.disconnect();
+      letters.forEach((l) => l.removeEventListener('pointerenter', onEnter));
+      bot.removeEventListener('click', onClick);
+    };
+  };
+
+  initBot();
+  document.addEventListener('astro:page-load', initBot);
+
   document.getElementById('footer-top')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

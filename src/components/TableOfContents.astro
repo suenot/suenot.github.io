@@ -50,7 +50,7 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
     gap: 1rem;
     color: rgb(var(--accent-rgb) / max(0.75, var(--accent-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.6rem;
+    font-size: .75rem;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.14em;
   }
@@ -58,10 +58,10 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
   .article-toc h2 {
     margin: 0.55rem 0 1.1rem;
     color: var(--terminal-ink);
-    font-size: 0.85rem;
+    font-size: .85rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
+    text-transform: uppercase; font-family: var(--font-mono);
   }
 
   .article-toc ol {
@@ -80,7 +80,7 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
     gap: 0.55rem;
     padding: 0.65rem 0;
     color: rgb(var(--ink-rgb) / max(0.62, var(--ink-floor)));
-    font-size: 0.72rem;
+    font-size: .875rem;
     line-height: 1.4;
     text-decoration: none;
     transition: color 160ms ease, padding-inline-start 160ms ease;
@@ -89,7 +89,7 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
   .article-toc a span:first-child {
     color: rgb(var(--ink-rgb) / max(0.23, var(--ink-floor)));
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.6rem;
+    font-size: .75rem;
     font-variant-numeric: tabular-nums;
   }
 

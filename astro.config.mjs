@@ -7,16 +7,18 @@ export default defineConfig({
   integrations: [tailwind(), sitemap()],
   markdown: {
     shikiConfig: {
-      // Dark stays inline (the default theme, also with JS off); light ships as
-      // --shiki-light variables that global.css applies under [data-theme='light'].
+      // Light stays inline (the default theme, also with JS off); dark ships as
+      // --shiki-dark variables that global.css applies under [data-theme='dark'].
       themes: { dark: 'github-dark', light: 'github-light' },
-      defaultColor: 'dark',
+      defaultColor: 'light',
     },
   },
   build: {
     inlineStylesheets: 'always',
   },
   vite: {
+    // Dev only: the contributions API is a Vercel function; read it from production.
+    server: { proxy: { '/api': { target: 'https://www.suenot.com', changeOrigin: true } } },
     plugins: [
       {
         name: 'html-charset',

@@ -19,7 +19,7 @@ const sectionTags = [
   <div class="terminal-container">
     <header class="trading__header">
       <div>
-        <p class="terminal-kicker">{t.eyebrow} / EXECUTION SYSTEMS</p>
+        <p class="terminal-kicker">{t.eyebrow}</p>
         <h2 id="trading-heading" class="terminal-heading">{t.heading}</h2>
       </div>
       <p data-reveal>{t.intro}</p>
@@ -67,8 +67,8 @@ const sectionTags = [
   .trading { border-block-end: 1px solid var(--terminal-line, #303431); }
   .trading__header { display: grid; grid-template-columns: 1.15fr .7fr .45fr; gap: clamp(2rem, 5vw, 6rem); align-items: end; padding: clamp(3.5rem, 7vw, 7rem) clamp(1rem, 3.5vw, 3.75rem); border-block-end: 1px solid var(--terminal-line, #303431); }
   .trading__header .terminal-heading { max-inline-size: 12ch; margin-block-start: 1.2rem; font-size: clamp(3.5rem, 6vw, 7rem); line-height: .86; }
-  .trading__header > p { max-inline-size: 48ch; color: var(--terminal-muted, #8b908c); font: .75rem/1.65 var(--font-mono, monospace); text-wrap: pretty; }
-  .trading__signal { color: var(--terminal-muted, #747a75); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .12em; }
+  .trading__header > p { max-inline-size: 48ch; color: var(--terminal-muted, #8b908c); font: 1rem/1.65 var(--font-sans); text-wrap: pretty; }
+  .trading__signal { color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .12em; }
   .trading__signal svg { display: block; inline-size: 100%; block-size: 3.5rem; margin-block-start: .8rem; border-block: 1px solid var(--terminal-line, #303431); }
   .trading__signal path { fill: none; stroke: var(--terminal-muted, #747a75); stroke-width: 1; vector-effect: non-scaling-stroke; }
   .trading__cases { counter-reset: cases; }
@@ -76,15 +76,15 @@ const sectionTags = [
   .trading__case:nth-child(even) .case__header { grid-column: 2; border-inline-end: 0; border-inline-start: 1px solid var(--terminal-line, #303431); }
   .trading__case:nth-child(even) .case__body { grid-column: 1; grid-row: 1; }
   .case__header { position: relative; min-block-size: 22rem; padding: 2rem clamp(1rem, 3vw, 3rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
-  .case__number { display: block; color: var(--terminal-accent); font: .75rem/1 var(--font-mono, monospace); }
-  .case__subtitle { margin-block-start: 3.5rem; color: var(--terminal-muted, #8b908c); font: .57rem/1 var(--font-mono, monospace); letter-spacing: .13em; text-transform: uppercase; }
-  .case__header h3 { max-inline-size: 12ch; margin-block-start: .65rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(2.1rem, 3.6vw, 4rem); font-weight: 800; letter-spacing: -.045em; line-height: .9; text-transform: uppercase; text-wrap: balance; }
-  .case__tags { position: absolute; inset-block-end: 2rem; inset-inline: clamp(1rem, 3vw, 3rem); display: flex; flex-wrap: wrap; gap: .75rem; color: var(--terminal-muted, #747a75); font: .56rem/1 var(--font-mono, monospace); letter-spacing: .06em; }
+  .case__number { display: block; color: var(--terminal-accent); font: 1rem/1 var(--font-sans); }
+  .case__subtitle { margin-block-start: 3.5rem; color: var(--terminal-muted, #8b908c); font: .75rem/1 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; }
+  .case__header h3 { max-inline-size: 12ch; margin-block-start: .65rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(2.1rem, 3.6vw, 4rem); font-weight: 800; letter-spacing: -.045em; line-height: .95; text-wrap: balance; }
+  .case__tags { position: absolute; inset-block-end: 2rem; inset-inline: clamp(1rem, 3vw, 3rem); display: flex; flex-wrap: wrap; gap: .75rem; color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .06em; }
   .case__body { align-self: stretch; padding: 2rem clamp(1rem, 4vw, 4.5rem); }
-  .case__meta { display: flex; justify-content: space-between; gap: 1rem; padding-block-end: 1rem; color: var(--terminal-muted, #666b67); font: .52rem/1 var(--font-mono, monospace); letter-spacing: .1em; border-block-end: 1px solid var(--terminal-line, #303431); }
+  .case__meta { display: flex; justify-content: space-between; gap: 1rem; padding-block-end: 1rem; color: var(--terminal-muted, #666b67); font: .75rem/1 var(--font-mono); letter-spacing: .1em; border-block-end: 1px solid var(--terminal-line, #303431); }
   .case__body > ul > li { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; padding-block: 1.25rem; border-block-end: 1px solid var(--terminal-line, #303431); }
-  .case__body li > span { color: var(--terminal-accent); font: .58rem/1.55 var(--font-mono, monospace); }
-  .case__body li p { max-inline-size: 85ch; color: var(--terminal-muted, #969b97); font-size: .83rem; line-height: 1.65; }
+  .case__body li > span { color: var(--terminal-accent); font: .75rem/1.55 var(--font-mono); }
+  .case__body li p { max-inline-size: 85ch; color: var(--terminal-muted, #969b97); font-size: 1rem; line-height: 1.65; }
   .case__body li :global(strong) { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
   @media (max-width: 900px) {
     .trading__header { grid-template-columns: 1fr 1fr; }

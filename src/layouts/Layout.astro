@@ -5,6 +5,9 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { type Locale, isRtl, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
+import '@fontsource-variable/schibsted-grotesk/wght.css';
+import '@fontsource-variable/inter-tight/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import '../styles/global.css';
 import '../styles/motion.css';
 
@@ -44,12 +47,12 @@ const rssHref = locale === defaultLocale ? '/blog/feed.xml' : `/${locale}/blog/f
 <html lang={locale} dir={dir}>
   <head>
     <meta charset="UTF-8" />
-    <!-- Theme before first paint: the stored choice, else dark (also the no-JS look). -->
+    <!-- Theme before first paint: the stored choice, else light (also the no-JS look). -->
     <script is:inline>
       (function () {
-        var theme = 'dark';
+        var theme = 'light';
         try {
-          if (localStorage.getItem('suenot-theme') === 'light') theme = 'light';
+          if (localStorage.getItem('suenot-theme') === 'dark') theme = 'dark';
         } catch (error) {}
         document.documentElement.setAttribute('data-theme', theme);
       })();
