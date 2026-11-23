@@ -1,4 +1,4 @@
-/** Skills shown in the Technologies section; the spark mark is drawn from them too (one ray per skill). */
+/** Skills shown in the Technologies section; its spark is drawn from them too (one ray per skill). */
 export interface TechItem { name: string; color: string }
 export interface TechCategory { name: string; primary?: boolean; items: TechItem[] }
 
@@ -127,8 +127,5 @@ export const sparkRays: SparkRay[] = (() => {
     return { name: tech.name, x: Math.cos(angle) * length, y: Math.sin(angle) * length, gx: Math.cos(angle), gy: Math.sin(angle) };
   }));
 })();
-/** Ray width for the big spark; small marks pass their own. */
+/** Ray width: thinner as skills are added. */
 export const sparkRayWidth = Math.min(10, Math.max(1.8, 200 / skillCount));
-export const SPARK_VIEWBOX = '-110 -110 220 220';
-/** All rays as one path, for the small marks (nav, favicon). */
-export const sparkPath = sparkRays.map((r) => `M0 0L${r.x.toFixed(1)} ${r.y.toFixed(1)}`).join('');

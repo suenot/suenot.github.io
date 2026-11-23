@@ -4,7 +4,6 @@ import ThemeToggle from './ThemeToggle.astro';
 import CvMenu from './CvMenu.astro';
 import { type Locale, defaultLocale, locales } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
-import { sparkPath, SPARK_VIEWBOX } from '../data/tech';
 
 interface Props {
   locale?: Locale;
@@ -29,7 +28,7 @@ const links = [
 <nav class="site-nav" aria-label="Primary navigation">
   <div class="nav-shell">
     <a class="nav-identity" href={`${prefix}/`} aria-label="Eugen Soloviov — home">
-      <svg class="nav-identity__mark" viewBox={SPARK_VIEWBOX} aria-hidden="true"><path d={sparkPath} /></svg>
+      <span class="nav-identity__mark" aria-hidden="true"></span>
       <span>Eugen Soloviov</span>
     </a>
 
@@ -136,26 +135,10 @@ const links = [
     white-space: nowrap;
   }
 
-  /* The skills spark from the Technologies section, small: thicker rays so it reads at 22px. */
   .nav-identity__mark {
-    flex: none;
-    inline-size: 1.375rem;
-    block-size: 1.375rem;
-    overflow: visible;
-    fill: none;
-    stroke: var(--terminal-accent);
-    stroke-width: 9;
-    stroke-linecap: round;
-    transition: rotate 700ms var(--ease-out, ease);
-  }
-
-  .nav-identity:hover .nav-identity__mark,
-  .nav-identity:focus-visible .nav-identity__mark {
-    rotate: 60deg;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nav-identity__mark { transition: none; }
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    background: var(--terminal-accent);
   }
 
   .nav-index {
