@@ -1,10 +1,20 @@
 ---
 import { defaultLocale, type Locale } from '../i18n/config';
 import { getHome } from '../i18n/home';
+import { getPages } from '../i18n/pages';
+import MoreLink from './MoreLink.astro';
 
-interface Props { locale?: Locale; }
-const { locale = defaultLocale } = Astro.props;
+interface Props {
+  locale?: Locale;
+  /** compact: the home page teaser that links to /algotrading; full: every case with its bullets. */
+  variant?: 'compact' | 'full';
+  /** Replaces the home page eyebrow ("02. algotrading") on the standalone page. */
+  kicker?: string;
+}
+const { locale = defaultLocale, variant = 'compact', kicker } = Astro.props;
 const t = getHome(locale).algotrading;
+const teaser = getPages(locale).algoTeaser;
+const prefix = locale === defaultLocale ? '' : `/${locale}`;
 
 const sectionTags = [
   ['Python', 'Zig', 'Optuna'],
@@ -15,11 +25,11 @@ const sectionTags = [
 ];
 ---
 
-<section id="algotrading" class="trading terminal-section" aria-labelledby="trading-heading">
+<section id={variant === 'compact' ? 'algotrading' : 'engineering'} class:list={['trading terminal-section', `trading--${variant}`]} aria-labelledby="trading-heading">
   <div class="terminal-container">
     <header class="trading__header">
       <div>
-        <p class="terminal-kicker">{t.eyebrow}</p>
+        <p class="terminal-kicker">{kicker ?? t.eyebrow}</p>
         <h2 id="trading-heading" class="terminal-heading">{t.heading}</h2>
       </div>
       <p data-reveal>{t.intro}</p>
@@ -31,7 +41,27 @@ const sectionTags = [
       </div>
     </header>
 
-    <ol class="trading__cases">
+    {variant === 'compact' && (
+      <ol class="trading__grid">
+        {t.sections.map((section, index) => (
+          <li class="tcell" data-reveal>
+            <span class="case__number">0{index + 1}</span>
+            <p class="tcell__subtitle">{section.subtitle}</p>
+            <h3 class="tcell__title display-type">{section.title}</h3>
+            <div class="tcell__tags">
+              {(sectionTags[index] ?? []).map((tag) => <span>[ {tag} ]</span>)}
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+    {variant === 'compact' && (
+      <div class="trading__more">
+        <MoreLink locale={locale} href={`${prefix}/algotrading/`} label={teaser.more} note={teaser.note} />
+      </div>
+    )}
+
+    {variant === 'full' && <ol class="trading__cases">
       {t.sections.map((section, index) => (
         <li class="trading__case">
           <header class="case__header" data-reveal>
@@ -59,7 +89,7 @@ const sectionTags = [
           </div>
         </li>
       ))}
-    </ol>
+    </ol>}
   </div>
 </section>
 
@@ -86,6 +116,19 @@ const sectionTags = [
   .case__body li > span { color: var(--terminal-accent); font: .75rem/1.55 var(--font-mono); }
   .case__body li p { max-inline-size: 85ch; color: var(--terminal-muted, #969b97); font-size: 1rem; line-height: 1.65; }
   .case__body li :global(strong) { color: var(--terminal-fg, #e7e9e3); font-weight: 600; }
+  .trading__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .tcell { display: flex; flex-direction: column; min-block-size: 19rem; padding: 2rem clamp(1rem, 2vw, 2rem); border-inline-end: 1px solid var(--terminal-line, #303431); }
+  .tcell:last-child { border-inline-end: 0; }
+  .tcell__subtitle { margin-block-start: 2.75rem; color: var(--terminal-muted, #8b908c); font: .75rem/1.3 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; }
+  .tcell__title { margin-block-start: .65rem; color: var(--terminal-fg, #e7e9e3); font-size: clamp(1.5rem, 2.1vw, 2.25rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; text-wrap: balance; }
+  .tcell__tags { display: flex; flex-wrap: wrap; gap: .5rem .75rem; margin-block-start: auto; padding-block-start: 2rem; color: var(--terminal-muted, #747a75); font: .75rem/1 var(--font-mono); letter-spacing: .06em; }
+  .trading__more { padding: 0 clamp(1rem, 3.5vw, 3.75rem) clamp(3rem, 6vw, 5rem); border-block-start: 1px solid var(--terminal-line, #303431); }
+  @media (max-width: 1100px) {
+    .trading__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tcell { min-block-size: 15rem; border-block-end: 1px solid var(--terminal-line, #303431); }
+    .tcell:nth-child(even) { border-inline-end: 0; }
+    .tcell:last-child { grid-column: 1 / -1; border-block-end: 0; }
+  }
   @media (max-width: 900px) {
     .trading__header { grid-template-columns: 1fr 1fr; }
     .trading__signal { display: none; }
@@ -93,6 +136,9 @@ const sectionTags = [
   }
   @media (max-width: 680px) {
     .trading__header { grid-template-columns: 1fr; }
+    .trading__grid { grid-template-columns: 1fr; }
+    .tcell { min-block-size: 0; border-inline-end: 0; }
+    .tcell__subtitle { margin-block-start: 1.5rem; }
     .trading__case { display: block; }
     .trading__case:nth-child(even) .case__header { border-inline-start: 0; }
     .case__header { min-block-size: 17rem; border-inline-end: 0; border-block-end: 1px solid var(--terminal-line, #303431); }

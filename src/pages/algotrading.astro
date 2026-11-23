@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AlgotradingPage from '../components/AlgotradingPage.astro';
+import { getPages } from '../i18n/pages';
+
+const locale = 'en';
+const t = getPages(locale).algo;
+---
+
+<Layout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <AlgotradingPage locale={locale} />
+</Layout>

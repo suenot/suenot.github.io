@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectsPage from '../components/ProjectsPage.astro';
+import { getPages } from '../i18n/pages';
+
+const locale = 'en';
+const t = getPages(locale).projects;
+---
+
+<Layout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <ProjectsPage locale={locale} />
+</Layout>

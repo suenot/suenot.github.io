@@ -1,0 +1,41 @@
+---
+/** A full-width row that sends the reader to a page with more: "All projects (78) →". */
+import { defaultLocale, isRtl, type Locale } from '../i18n/config';
+
+interface Props {
+  locale?: Locale;
+  href: string;
+  label: string;
+  note?: string;
+  count?: number;
+}
+const { locale = defaultLocale, href, label, note, count } = Astro.props;
+const arrow = isRtl(locale) ? '←' : '→';
+---
+
+<a class="more" href={href} data-reveal>
+  <span class="more__label">{label}{count !== undefined && <sup class="more__count">{count}</sup>}</span>
+  {note && <span class="more__note">{note}</span>}
+  <span class="more__arrow" aria-hidden="true">{arrow}</span>
+</a>
+
+<style>
+  .more { --dir: 1; }
+  :global([dir='rtl']) .more { --dir: -1; }
+  .more { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 1rem clamp(1.5rem, 4vw, 3rem); margin-block-start: clamp(1.5rem, 3vw, 2.5rem); padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1.25rem, 2.2vw, 2rem); border: 1px solid var(--terminal-line-strong); color: var(--terminal-ink); text-decoration: none; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease; }
+  .more__label { font: 800 clamp(1.75rem, 3.6vw, 3.25rem)/1 var(--font-sans); letter-spacing: -.04em; }
+  .more__count { margin-inline-start: .3em; color: var(--terminal-accent); font: 500 .3em/1 var(--font-mono); letter-spacing: .06em; vertical-align: super; transition: color 180ms ease; }
+  .more__note { color: var(--terminal-muted); font: .75rem/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; transition: color 180ms ease; }
+  .more__arrow { color: var(--terminal-accent); font: 400 clamp(1.75rem, 3.6vw, 3.25rem)/1 var(--font-sans); transition: transform 240ms var(--ease-out), color 180ms ease; }
+  .more:hover, .more:focus-visible { background: var(--terminal-ink); border-color: var(--terminal-ink); color: var(--terminal-bg); }
+  .more:hover .more__note, .more:focus-visible .more__note { color: var(--terminal-bg); opacity: .7; }
+  .more:hover .more__arrow, .more:focus-visible .more__arrow, .more:hover .more__count, .more:focus-visible .more__count { color: var(--terminal-bg); }
+  .more:focus-visible { outline: 2px solid var(--terminal-accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .more:hover .more__arrow { transform: translate3d(calc(var(--dir, 1) * .4rem), 0, 0); }
+  }
+  @media (max-width: 680px) {
+    .more { grid-template-columns: minmax(0, 1fr) auto; }
+    .more__note { grid-column: 1 / -1; grid-row: 2; }
+  }
+</style>
