@@ -144,6 +144,7 @@ const socialLinks = [
     display: flex;
     justify-content: space-between;
     color: var(--terminal-ink);
+    margin-block-start: .3em; /* sky for the bot: its hops stay inside the footer */
     font-size: 24.6cqi;
     letter-spacing: -.04em;
     line-height: .74;
@@ -278,6 +279,7 @@ const socialLinks = [
     let timer = 0;
     let raf = 0;
     let alive = true;
+    const footer = mark.closest<HTMLElement>('.site-footer');
 
     /* Where the bot stands on a letter: centered, feet on the cap line. */
     const spot = (i: number) => {
@@ -306,7 +308,9 @@ const socialLinks = [
       if (b.x !== a.x) { if (b.x < a.x) bot.setAttribute('data-flip', ''); else bot.removeAttribute('data-flip'); }
       const dist = Math.abs(to - at) || 1;
       const dur = 420 + dist * 160 * Math.min(height, 1.4);
-      const peak = a.fs * (.16 + .05 * dist) * height;
+      /* The footer clips overflow, so cap the arc a little below its top edge. */
+      const ceiling = footer ? footer.getBoundingClientRect().top - mark.getBoundingClientRect().top + a.fs * .03 : -Infinity;
+      const peak = Math.max(0, Math.min(a.fs * (.16 + .05 * dist) * height, Math.min(a.y, b.y) - ceiling));
       const t0 = performance.now();
       squash(1);
       const tick = (now: number) => {
