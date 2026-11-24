@@ -4,6 +4,9 @@
  * On pages with tour, it walks the visitor through the page: it waits on the heading of the
  * section being read and jumps to the next one as it scrolls into view. Everywhere it ends on
  * the footer wordmark, where it patrols the letters.
+ * Clicked, it hops in place, and every hop batters what it stands on: a title square is pressed in,
+ * tilts, hangs by a corner and falls off (Clawd puts a new one in); a heading sinks and tips; a
+ * footer letter sinks and leans. Once the clicking stops, Clawd mends it step by step.
  */
 interface Props {
   /** Visit every h1/h2 in main before the footer. */
@@ -97,6 +100,9 @@ const art = Object.entries(frames).map(([name, rows]) => ({
     cursor: pointer;
     pointer-events: auto;
     will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
   }
 
   .clawd:not([data-ready]) { visibility: hidden; }
@@ -127,10 +133,28 @@ const art = Object.entries(frames).map(([name, rows]) => ({
 </style>
 
 <script>
-  type Pt = { x: number; y: number; s: number; el?: HTMLElement };
+  type Pt = { x: number; y: number; s: number; r?: number; el?: HTMLElement };
   type Kind = 'text' | 'box' | 'mark';
   type Stop = { el: HTMLElement; kind: Kind; major: boolean; top: number; bottom: number; pts: Pt[] };
-  type Glyph = { l: number; r: number; top: number; el?: HTMLElement };
+  type Glyph = { l: number; r: number; top: number; b: number; el?: HTMLElement };
+  type Pose = { dy: number; sy: number; rot: number };
+  /* A target Clawd has battered: its untouched geometry (document coordinates), the pivot it gives
+     around, how many steps of damage it has taken and the pose it is in now. */
+  type Hurt = {
+    el: HTMLElement;
+    kind: Kind;
+    d: number;
+    pose: Pose;
+    job: number;
+    ox: number;
+    oy: number;
+    top: number;
+    bottom: number;
+    unit: number;
+    lever: number;
+    sign: number;
+    pts: Pt[];
+  };
 
   let stopClawd: (() => void) | undefined;
 
@@ -158,6 +182,10 @@ const art = Object.entries(frames).map(([name, rows]) => ({
     let letterTarget: number | null = null;
     let dirty = false;
     const visited = new WeakSet<HTMLElement>();
+    const hurts = new Map<HTMLElement, Hurt>();
+    let pounds = 0;
+    let healTimer = 0;
+    let air = false;
 
     const W = () => bot.offsetWidth;
     const H = () => bot.offsetHeight;
@@ -189,7 +217,7 @@ const art = Object.entries(frames).map(([name, rows]) => ({
           const top = m && m.fontBoundingBoxAscent
             ? r.top + m.fontBoundingBoxAscent - m.actualBoundingBoxAscent
             : r.top + r.height * .2;
-          out.push({ l: r.left + scrollX, r: r.right + scrollX, top: top + scrollY, el: parent });
+          out.push({ l: r.left + scrollX, r: r.right + scrollX, top: top + scrollY, b: r.bottom + scrollY, el: parent });
         }
       }
       return out;
@@ -210,7 +238,50 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       return rtl ? out.reverse() : out;
     };
 
+    /* Damage, one step per hop Clawd takes on it. A title square is pressed in, then tilts on the
+       corner that ties it to the word and hangs; one more hop and it falls off. A heading sinks, then
+       tips down on Clawd's side around the far end of its line. A footer letter sinks and leans. */
+    const MAX = 6;
+    const BOX_PRESS = [1, .9, .8, .74, .74, .74, .74];
+    const BOX_TILT = [0, 0, 0, 6, 14, 28, 44];
+    const TEXT_SINK = [0, .025, .05, .06, .06, .06, .06];
+    const TEXT_DROP = [0, 0, 0, .14, .28, .44, .6];
+    const LETTER_SINK = [0, .012, .024, .03, .03, .03, .03];
+    const LETTER_TILT = [0, 0, 0, 4, 9, 15, 21];
+
+    const poseOf = (h: Hurt): Pose => {
+      const d = Math.max(0, Math.min(h.d, MAX));
+      if (h.kind === 'box') return { dy: 0, sy: BOX_PRESS[d], rot: h.sign * BOX_TILT[d] };
+      if (h.kind === 'text') {
+        const tilt = Math.min(12, (Math.atan2(h.unit * TEXT_DROP[d], h.lever) * 180) / Math.PI);
+        return { dy: h.unit * TEXT_SINK[d], sy: 1, rot: h.sign * tilt };
+      }
+      return { dy: h.unit * LETTER_SINK[d], sy: 1, rot: h.sign * LETTER_TILT[d] };
+    };
+
+    /* Where a point of the untouched element is now: its translate, rotate and scale applied around
+       the pivot, in the order CSS applies them. Clawd leans with the surface it stands on, but only
+       so far: past ~26° he holds on rather than tipping with it. */
+    const warp = (h: Hurt, p: Pt): Pt => {
+      const a = (h.pose.rot * Math.PI) / 180;
+      const x = p.x - h.ox;
+      const y = (p.y - h.oy) * h.pose.sy;
+      return {
+        ...p,
+        x: h.ox + x * Math.cos(a) - y * Math.sin(a),
+        y: h.oy + h.pose.dy + x * Math.sin(a) + y * Math.cos(a),
+        r: Math.max(-26, Math.min(26, h.pose.rot)),
+      };
+    };
+
     const measure = (st: Stop) => {
+      const hurt = hurts.get(st.el);
+      if (hurt) {
+        st.top = hurt.top;
+        st.bottom = hurt.bottom;
+        st.pts = hurt.pts.map((p) => warp(hurt, p));
+        return;
+      }
       const r = st.el.getBoundingClientRect();
       st.top = r.top + scrollY;
       st.bottom = r.bottom + scrollY;
@@ -221,6 +292,8 @@ const art = Object.entries(frames).map(([name, rows]) => ({
         const fs = parseFloat(getComputedStyle(st.el).fontSize);
         const s = Math.min(2.2, Math.max(.6, (fs * (W() < 50 ? .32 : .26)) / W()));
         st.pts = [...st.el.querySelectorAll<HTMLElement>('[data-letter]')].map((letter) => {
+          const bent = hurts.get(letter);
+          if (bent) return warp(bent, bent.pts[0]);
           const g = glyphs(letter)[0];
           const b = letter.getBoundingClientRect();
           return g
@@ -287,7 +360,7 @@ const art = Object.entries(frames).map(([name, rows]) => ({
 
     const place = (p: Pt) => {
       pos = p;
-      bot.style.transform = `translate3d(${p.x - W() / 2}px, ${p.y - H()}px, 0) scale(${p.s})`;
+      bot.style.transform = `translate3d(${p.x - W() / 2}px, ${p.y - H()}px, 0) scale(${p.s}) rotate(${p.r ?? 0}deg)`;
     };
 
     const squash = (k: number) => { body.style.transform = `scale(${1 + k * .18}, ${1 - k * .22})`; };
@@ -299,10 +372,11 @@ const art = Object.entries(frames).map(([name, rows]) => ({
 
     const linear = (t: number) => t;
 
-    const flight = (a: Pt, b: Pt, peak: number, dur: number, ease = linear) => new Promise<void>((done) => {
+    const flight = (a: Pt, b: Pt, peak: number, dur: number, ease = linear, crouch = true) => new Promise<void>((done) => {
       if (Math.abs(b.x - a.x) > 1) bot.toggleAttribute('data-flip', b.x < a.x);
       const t0 = performance.now();
-      squash(1);
+      air = true;
+      if (crouch) squash(1);
       const tick = (now: number) => {
         if (!alive) return done();
         const t = Math.min((now - t0) / dur, 1);
@@ -311,8 +385,11 @@ const art = Object.entries(frames).map(([name, rows]) => ({
           x: a.x + (b.x - a.x) * t,
           y: a.y + (b.y - a.y) * ease(t) - peak * 4 * t * (1 - t),
           s: a.s + (b.s - a.s) * t,
+          /* Square to the surface at both ends, upright at the top of the arc. */
+          r: ((a.r ?? 0) + ((b.r ?? 0) - (a.r ?? 0)) * t) * Math.abs(1 - 2 * t),
         });
         if (t < 1) { raf = requestAnimationFrame(tick); return; }
+        air = false;
         bot.removeAttribute('data-air');
         squash(1);
         window.setTimeout(() => { squash(0); done(); }, 140);
@@ -356,10 +433,207 @@ const art = Object.entries(frames).map(([name, rows]) => ({
         void target.offsetWidth;
         target.classList.add('is-hit');
         paint(st.el, target);
-      } else {
-        target?.animate([{ translate: '0 0' }, { translate: '0 .035em' }, { translate: '0 0' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      } else if (target && !hurts.has(target)) {
+        /* A battered target already sits where it gave; this dip would snap it back for a moment. */
+        target.animate([{ translate: '0 0' }, { translate: '0 .035em' }, { translate: '0 0' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
       }
       if (chips) sparks(p);
+    };
+
+    const wait = (ms: number) => new Promise<void>((done) => window.setTimeout(done, ms));
+    const backOut = (t: number) => 1 + 2.70158 * (t - 1) ** 3 + 1.70158 * (t - 1) ** 2;
+
+    const targetOf = (st: Stop, i: number) => (st.kind === 'mark' ? st.pts[i]?.el : st.el) ?? null;
+    const basePt = (h: Hurt, i: number) => h.pts[h.kind === 'mark' ? 0 : Math.min(i, h.pts.length - 1)];
+    const riding = (h: Hurt) => !air && !!cur && targetOf(cur, at) === h.el;
+
+    const paintHurt = (h: Hurt) => {
+      h.el.style.translate = `0 ${h.pose.dy}px`;
+      h.el.style.rotate = `${h.pose.rot}deg`;
+      h.el.style.scale = `1 ${h.pose.sy}`;
+    };
+
+    const dropHurt = (h: Hurt) => {
+      h.job += 1;
+      h.el.style.translate = '';
+      h.el.style.rotate = '';
+      h.el.style.scale = '';
+      h.el.style.transformOrigin = '';
+      hurts.delete(h.el);
+    };
+
+    const resetHurts = () => {
+      hurts.forEach((h) => {
+        h.el.getAnimations().forEach((a) => a.cancel());
+        dropHurt(h);
+      });
+    };
+
+    /* The first hop on a target records its untouched geometry and the pivot it will give around. */
+    const hurtOf = (st: Stop, i: number): Hurt | null => {
+      const el = targetOf(st, i);
+      if (!el) return null;
+      const known = hurts.get(el);
+      if (known) return known;
+      const r = el.getBoundingClientRect();
+      const left = r.left + scrollX;
+      const right = r.right + scrollX;
+      const top = r.top + scrollY;
+      const bottom = r.bottom + scrollY;
+      const p = st.pts[i] ?? pos;
+      const unit = st.kind === 'box' ? r.height : parseFloat(getComputedStyle(el).fontSize);
+      /* The square hangs on the corner that touches the word. */
+      let ox = rtl ? right : left;
+      let oy = bottom;
+      let sign = rtl ? -1 : 1;
+      let lever = 1;
+      if (st.kind === 'text') {
+        /* Held at the far end of its first line, it tips down on Clawd's side. */
+        const line = glyphs(el);
+        const l = line.length ? Math.min(...line.map((g) => g.l)) : left;
+        const e = line.length ? Math.max(...line.map((g) => g.r)) : right;
+        const nearEnd = p.x - l > e - p.x;
+        ox = nearEnd ? l : e;
+        oy = line.length ? Math.max(...line.map((g) => g.b)) : bottom;
+        sign = nearEnd ? 1 : -1;
+        lever = Math.max(e - l, unit);
+      } else if (st.kind === 'mark') {
+        /* A letter leans to one side, on the bottom corner of that side. */
+        sign = Math.random() < .5 ? -1 : 1;
+        ox = sign > 0 ? right : left;
+      }
+      el.style.transformOrigin = `${ox - left}px ${oy - top}px`;
+      const h: Hurt = {
+        el,
+        kind: st.kind,
+        d: 0,
+        pose: { dy: 0, sy: 1, rot: 0 },
+        job: 0,
+        ox,
+        oy,
+        top,
+        bottom,
+        unit,
+        lever,
+        sign,
+        pts: (st.kind === 'mark' ? [p] : st.pts).map((q) => ({ ...q, r: 0 })),
+      };
+      hurts.set(el, h);
+      return h;
+    };
+
+    /* Moves a target from one pose to another; Clawd, standing on it, moves with it. */
+    const shift = (h: Hurt, to: Pose, dur: number, from: Pose = h.pose) => new Promise<void>((done) => {
+      h.job += 1;
+      const job = h.job;
+      const t0 = performance.now();
+      const step = (now: number) => {
+        if (!alive || h.job !== job) return done();
+        const t = Math.min((now - t0) / dur, 1);
+        const k = backOut(t);
+        h.pose = {
+          dy: from.dy + (to.dy - from.dy) * k,
+          sy: from.sy + (to.sy - from.sy) * k,
+          rot: from.rot + (to.rot - from.rot) * k,
+        };
+        paintHurt(h);
+        if (riding(h)) place(warp(h, basePt(h, at)));
+        if (t < 1) requestAnimationFrame(step);
+        else done();
+      };
+      step(t0);
+    });
+
+    /* The square gives way: it falls off the title, Clawd drops onto the baseline, then puts a new
+       square in, which grows under its feet and lifts it back up. */
+    const topple = async (h: Hurt) => {
+      h.job += 1;
+      const base = basePt(h, at);
+      const fall = h.el.animate(
+        [
+          { translate: `0 ${h.pose.dy}px`, rotate: `${h.pose.rot}deg`, scale: `1 ${h.pose.sy}`, opacity: 1 },
+          { translate: `${h.sign * h.unit * 2}px ${innerHeight * .6}px`, rotate: `${h.pose.rot + h.sign * 200}deg`, scale: `1 ${h.pose.sy}`, opacity: 0 },
+        ],
+        { duration: 900, easing: 'cubic-bezier(.45,0,.9,.5)', fill: 'forwards' },
+      );
+      bot.setAttribute('data-air', '');
+      await wait(240);
+      if (!alive) return;
+      const ground = { x: base.x, y: h.oy, s: base.s, r: 0 };
+      await flight(pos, ground, 0, 320, (t) => t * t, false);
+      if (!alive) return;
+      sparks(ground);
+      await wait(650);
+      if (!alive) return;
+      h.d = 0;
+      h.pose = { dy: 0, sy: 0, rot: 0 };
+      paintHurt(h);
+      fall.cancel();
+      await shift(h, { dy: 0, sy: 1, rot: 0 }, 420);
+      if (!alive) return;
+      sparks(pos);
+      dropHurt(h);
+    };
+
+    /* One hop's worth of damage: the target gives with a jolt and springs to its new pose. */
+    const batter = async (st: Stop, p: Pt) => {
+      const h = hurtOf(st, at);
+      if (!h) return;
+      h.d += 1;
+      if (h.kind === 'box' && h.d > MAX) { await topple(h); return; }
+      h.d = Math.min(h.d, MAX);
+      const kick = h.d > 3 ? h.sign * 2 : 0;
+      const jolt = h.kind === 'box'
+        ? { ...h.pose, sy: h.pose.sy - .12, rot: h.pose.rot + kick }
+        : h.kind === 'text'
+          ? { ...h.pose, dy: h.pose.dy + h.unit * .03, rot: h.pose.rot + kick / 2 }
+          : h.pose;
+      void shift(h, poseOf(h), 320, jolt);
+      if (st.kind === 'mark') stomp(st, p);
+      sparks(pos);
+    };
+
+    /* Clawd mends what it broke, a step at a time, once the clicking stops. */
+    const heal = async () => {
+      if (!alive || !hurts.size) return;
+      if (busy) { healTimer = window.setTimeout(heal, 400); return; }
+      busy = true;
+      try {
+        await Promise.all([...hurts.values()].map(async (h) => {
+          h.d = Math.min(h.d, MAX) - 1;
+          await shift(h, poseOf(h), 480);
+          if (h.d <= 0 && hurts.get(h.el) === h) dropHurt(h);
+        }));
+      } finally {
+        free();
+      }
+      if (alive && hurts.size && !busy) healTimer = window.setTimeout(heal, 420);
+    };
+
+    /* Hops in place while clicks are queued: one high hop, or quick low ones while more are waiting. */
+    const pound = async () => {
+      if (busy || !cur || !alive) return;
+      busy = true;
+      window.clearTimeout(healTimer);
+      try {
+        while (pounds > 0 && alive && cur) {
+          pounds -= 1;
+          measure(cur);
+          at = Math.min(at, cur.pts.length - 1);
+          const p = cur.pts[at] ?? pos;
+          const more = pounds > 0;
+          await flight(p, p, H() * p.s * (more ? 1.2 : 2.2), more ? 420 : 700);
+          if (alive) await batter(cur, p);
+        }
+      } finally {
+        busy = false;
+      }
+      if (alive && hurts.size) healTimer = window.setTimeout(heal, 3000);
+    };
+
+    const free = () => {
+      busy = false;
+      if (pounds && alive) void pound();
     };
 
     const onScreen = (p: Pt) => p.y > scrollY - H() && p.y - H() * p.s < scrollY + innerHeight;
@@ -445,12 +719,12 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       if (!busy && !document.hidden) {
         busy = true;
         try {
-          if (dirty) { dirty = false; collect(); }
+          if (dirty) { dirty = false; resetHurts(); collect(); }
           const want = pick();
           if (want && want !== cur) await go(want);
           else if (cur && onScreen(pos)) await patrol(cur);
         } finally {
-          busy = false;
+          free();
         }
       }
       if (!alive) return;
@@ -471,7 +745,7 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       frame = requestAnimationFrame(() => {
         frame = 0;
         if (busy) return;
-        if (dirty) { dirty = false; collect(); }
+        if (dirty) { dirty = false; resetHurts(); collect(); }
         if (pick() !== cur) loop();
       });
     };
@@ -481,6 +755,7 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         if (busy) { dirty = true; return; }
+        resetHurts();
         collect();
         settle();
       }, 120);
@@ -491,16 +766,11 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       const i = letters.indexOf(e.currentTarget as HTMLElement);
       if (i >= 0 && cur?.kind === 'mark') { letterTarget = i; if (!busy) loop(); }
     };
-    const onClick = async () => {
-      if (busy || !cur || still) return;
-      busy = true;
-      const p = cur.pts[at] ?? pos;
-      try {
-        await flight(p, p, H() * p.s * 2.4, 760);
-        stomp(cur, p, true);
-      } finally {
-        busy = false;
-      }
+    /* Each click is one more hop in place; clicks that come while it is busy wait their turn. */
+    const onClick = () => {
+      if (!cur || still) return;
+      pounds = Math.min(pounds + 1, 3);
+      if (!busy) void pound();
     };
 
     const start = () => {
@@ -513,7 +783,7 @@ const art = Object.entries(frames).map(([name, rows]) => ({
       } else {
         busy = true;
         window.setTimeout(() => {
-          go(first).finally(() => { busy = false; });
+          go(first).finally(free);
         }, 700);
       }
       ro.observe(document.body);
@@ -531,6 +801,8 @@ const art = Object.entries(frames).map(([name, rows]) => ({
     stopClawd = () => {
       alive = false;
       window.clearTimeout(timer);
+      window.clearTimeout(healTimer);
+      resetHurts();
       window.clearTimeout(resizeTimer);
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
