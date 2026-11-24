@@ -78,11 +78,21 @@ let skillIndex = 0;
       <p class="terminal-kicker">{t.eyebrow}</p>
       <h2 id="tech-heading" class="terminal-heading">{t.heading}</h2>
       <figure class="spark" data-spark aria-label={`${skillCount} skills`}>
-        <svg viewBox="-110 -110 220 220" aria-hidden="true">
-          {rays.map((ray, i) => (
-            <line class="spark__ray" data-ray={i} x1={0} y1={0} x2={ray.x.toFixed(2)} y2={ray.y.toFixed(2)} style={`--dx:${(ray.gx * 14).toFixed(2)}px;--dy:${(ray.gy * 14).toFixed(2)}px`} stroke-width={rayWidth} />
-          ))}
-        </svg>
+        <div class="spark__stage" data-spark-stage>
+          <svg class="spark__rays" viewBox="-110 -110 220 220" aria-hidden="true">
+            <g class="spark__body" data-spark-body>
+              {rays.map((ray, i) => (
+                <line class="spark__ray" data-ray={i} x1={0} y1={0} x2={ray.x.toFixed(2)} y2={ray.y.toFixed(2)} style={`--dx:${(ray.gx * 14).toFixed(2)}px;--dy:${(ray.gy * 14).toFixed(2)}px`} stroke-width={rayWidth} />
+              ))}
+            </g>
+          </svg>
+          {/* Poke the spark: eyes open; poke fast and it gets annoyed, then angry. */}
+          <svg class="spark__face" viewBox="-110 -110 220 220" aria-hidden="true">
+            <path class="spark__brows" d="M-27 -25L-9 -15M27 -25L9 -15" />
+            <rect class="spark__eye" x="-20" y="-11" width="9" height="15" />
+            <rect class="spark__eye" x="11" y="-11" width="9" height="15" />
+          </svg>
+        </div>
         <figcaption><span data-spark-name>{skillCount}</span> <span data-spark-label>skills</span></figcaption>
       </figure>
       <div class="tech__legend" aria-hidden="true" data-reveal>
@@ -127,17 +137,36 @@ let skillIndex = 0;
   .tech__legend span::before { content: "□"; margin-inline-end: .7rem; color: var(--terminal-accent); }
   .tech__matrix { min-width: 0; }
   .spark { margin: clamp(2rem, 4vw, 3.5rem) 0 6rem; inline-size: min(100%, 20rem); }
+  .spark { user-select: none; }
   .spark svg { display: block; inline-size: 100%; overflow: visible; }
-  .spark__ray { stroke: #d97757; stroke-linecap: round; transition: transform 260ms var(--ease-out), stroke 200ms, stroke-width 260ms var(--ease-out), opacity 200ms; }
+  .spark__stage { position: relative; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .spark__body { transform-box: fill-box; transform-origin: center; }
+  /* --heat (0..1) is how angry the spark is; it reddens the rays. */
+  .spark__ray { stroke: color-mix(in oklab, #d97757, #d42a1c calc(var(--heat, 0) * 100%)); stroke-linecap: round; transition: transform 260ms var(--ease-out), stroke 200ms, stroke-width 260ms var(--ease-out), opacity 200ms; }
   .spark.is-focus .spark__ray { opacity: .35; }
   .spark .spark__ray.is-on { opacity: 1; stroke: #c15f3c; stroke-width: calc(var(--w, 4) * 1px); transform: translate(var(--dx), var(--dy)); }
   .spark figcaption { margin-block-start: 1.25rem; color: var(--terminal-muted); font: .75rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
   .spark figcaption [data-spark-name] { color: var(--terminal-ink); }
+  .spark[data-mood="angry"] figcaption [data-spark-name] { color: #d42a1c; }
+  .spark__face { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 220ms; }
+  .spark[data-mood] .spark__face { opacity: 1; }
+  .spark__eye { fill: #141413; transform-box: fill-box; transform-origin: 50% 100%; transition: scale 160ms var(--ease-out, ease); }
+  .spark__brows { fill: none; stroke: #141413; stroke-width: 6; stroke-linecap: square; opacity: 0; transition: opacity 160ms; }
+  .spark[data-mood="annoyed"] .spark__eye { scale: 1 .4; }
+  .spark[data-mood="angry"] .spark__eye { scale: 1 .6; }
+  .spark[data-mood="angry"] .spark__brows { opacity: 1; }
   @media (prefers-reduced-motion: no-preference) {
-    .spark svg { animation: spark-spin 120s linear infinite; }
-    .spark.is-focus svg { animation-play-state: paused; }
+    .spark__rays { animation: spark-spin 120s linear infinite; }
+    .spark.is-focus .spark__rays { animation-play-state: paused; }
+    .spark[data-mood="angry"] .spark__stage { animation: spark-shake 110ms linear infinite; }
   }
   @keyframes spark-spin { to { rotate: 360deg; } }
+  @keyframes spark-shake {
+    0%, 100% { translate: 0 0; }
+    25% { translate: -2px 1px; }
+    50% { translate: 2px -1px; }
+    75% { translate: -1px -2px; }
+  }
   .tech__category { border-block-end: 1px solid var(--terminal-line, #303431); }
   .tech__category > header { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; padding: 1rem 1.4rem; color: var(--terminal-muted, #8b908c); font: .75rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
   .tech__category header h3 { color: var(--terminal-fg, #e7e9e3); font: inherit; }
@@ -196,6 +225,99 @@ let skillIndex = 0;
       });
     });
   };
+  /* Poke the spark: it looks at you; poke fast and it gets annoyed, then angry (red, bristling, spinning, shaking). It cools down on its own. */
+  const initPoke = () => {
+    const spark = document.querySelector<HTMLElement>('[data-spark]');
+    const stage = spark?.querySelector<HTMLElement>('[data-spark-stage]');
+    const body = spark?.querySelector<SVGGElement>('[data-spark-body]');
+    if (!spark || !stage || !body || stage.dataset.poke) return;
+    stage.dataset.poke = '1';
+    const name = spark.querySelector<HTMLElement>('[data-spark-name]')!;
+    const label = spark.querySelector<HTMLElement>('[data-spark-label]')!;
+    const total = name.textContent;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rays = [...body.querySelectorAll<SVGLineElement>('[data-ray]')].map((el) => {
+      const x = Number(el.getAttribute('x2'));
+      const y = Number(el.getAttribute('y2'));
+      const len = Math.hypot(x, y) || 1;
+      return { el, gx: x / len, gy: y / len };
+    });
+    const PER_POKE = .16;
+    const COOL_PER_S = .45;
+    let heat = 0;
+    let mood = '';
+    let frame = 0;
+    let last = 0;
+    let twitched = 0;
+    let poked = 0;
+    const LOOK_MS = 1200;
+
+    const kick = (ray: typeof rays[number], k: number, ms: number) => {
+      ray.el.animate(
+        [{ translate: '0 0' }, { translate: `${(ray.gx * k).toFixed(1)}px ${(ray.gy * k).toFixed(1)}px` }, { translate: '0 0' }],
+        { duration: ms, easing: 'cubic-bezier(.2,.7,.3,1)' },
+      );
+    };
+
+    const setMood = (next: string) => {
+      if (next === mood) return;
+      const was = mood;
+      mood = next;
+      if (next) spark.dataset.mood = next;
+      else delete spark.dataset.mood;
+      if (next === 'angry') {
+        name.textContent = '!!!';
+        label.textContent = '';
+        if (!still) rays.forEach((r) => kick(r, 24 + Math.random() * 18, 420 + Math.random() * 240));
+      } else if (was === 'angry') {
+        name.textContent = total;
+        label.textContent = 'skills';
+      }
+      /* Calmed down: one slow breath out. */
+      if (!next && was && was !== 'poked' && !still) {
+        body.animate([{ scale: 1 }, { scale: .95 }, { scale: 1 }], { duration: 1100, easing: 'ease-in-out' });
+      }
+    };
+
+    const tick = (now: number) => {
+      heat = Math.max(0, heat - ((now - last) / 1000) * COOL_PER_S);
+      last = now;
+      const h = Math.min(heat, 1);
+      spark.style.setProperty('--heat', h.toFixed(3));
+      stage.querySelector('.spark__rays')?.getAnimations().forEach((a) => a.updatePlaybackRate(1 + h * h * 70));
+      const looking = now - poked < LOOK_MS;
+      setMood(heat >= .75 ? 'angry' : heat >= .4 ? 'annoyed' : heat > .02 || looking ? 'poked' : '');
+      /* Angry: random rays keep bristling. */
+      if (mood === 'angry' && !still && now - twitched > 90) {
+        twitched = now;
+        for (let i = 0; i < 6; i++) kick(rays[(Math.random() * rays.length) | 0], 8 + Math.random() * 14, 220);
+      }
+      if (heat > 0 || looking) frame = requestAnimationFrame(tick);
+      else {
+        frame = 0;
+        spark.style.removeProperty('--heat');
+      }
+    };
+
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      heat = Math.min(1.25, heat + PER_POKE);
+      poked = performance.now();
+      if (!frame) {
+        last = performance.now();
+        frame = requestAnimationFrame(tick);
+      }
+      if (still) return;
+      const h = Math.min(heat, 1);
+      body.animate(
+        [{ scale: 1 }, { scale: .86 }, { scale: 1.05 + h * .12 }, { scale: 1 }],
+        { duration: 460, easing: 'cubic-bezier(.3,.7,.3,1)' },
+      );
+      rays.forEach((r) => kick(r, (3 + h * 16) * (.5 + Math.random()), 320 + Math.random() * 160));
+    });
+  };
+
   initSpark();
-  document.addEventListener('astro:page-load', initSpark);
+  initPoke();
+  document.addEventListener('astro:page-load', () => { initSpark(); initPoke(); });
 </script>
