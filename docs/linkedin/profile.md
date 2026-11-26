@@ -136,3 +136,16 @@ Later built sites and forums with phpBB, vBulletin, and Joomla, and worked with 
 - Skills: add top skills from cv.en.json.
 - Languages: English to Professional working proficiency (site: B2); Russian native; French kept.
 - Certifications and courses: unchanged.
+
+
+## Outcome (2026-11-26, saved on LinkedIn by Claude in Camoufox, owner approved "да, сохрани")
+- Headline and About: saved as above. Intro link text set to "suenot.com"; top-card company set to Marketmaker.cc.
+- Experience: 12 positions. Edited Kupi.net (Startup partner, Sep 2019 - Dec 2020), Kupi.network (Founder, full-stack developer, Jan 2018 - Dec 2019, kept the kupi-terminal GitHub link), Dolphin BI (Jan 2016 - Feb 2018), Thermom (Jan - May 2016). Added Cmdop, Marketmaker.cc, Deep.foundation/Deep.memo, Shakeapp, klava.org, Independent trading, De-core.net, Early web. Months not on the site are January (start) / December (end).
+- LinkedIn replaces the headline with the new position when a current position is added ("Partner, CTO в компании Cmdop"); there is no checkbox for it. The headline was typed back after all positions were added.
+- Network notifications stayed off; the "share your new position" prompts were skipped (no posts).
+- Education: MIEM HSE 2008-2011 (the edit form loses the school name; it has to be picked again before saving).
+- Honors: 5 awards with issuers (Waves, Waves, Yandex, Fablab, Lomonosov Moscow State University). waves.tech 2016 shows "Jan 2016" because LinkedIn fills the month.
+- Projects: 8 (profitmaker, Marketmaker.cc terminal (linked to the Marketmaker.cc position), gaia, aicommit, Bursa.dex, ICOFaces, Cosmos SDK chain, Tinkoff Bot Balancer), years only. The form has no URL field, so links are in the descriptions.
+- Skills: added TypeScript, React.js, Next.js, Go (Programming Language), Rust, Algorithmic Trading, High-Frequency Trading, Market Making, Backtesting, DevOps, Kubernetes, PostgreSQL, ClickHouse, Solidity, Blockchain, Full-Stack Development, AI Agents, Vue.js, Terraform. Docker skipped: the Russian UI offers it only as "Портовый грузчик".
+- Languages: English set to "Профессиональное владение" (Professional working; the Russian UI calls Limited working "Продвинутое владение"). Russian native, French elementary unchanged.
+- Not changed: industry ("Производство оборудования для промышленной автоматизации"), profile language (Русский), certifications, courses.
